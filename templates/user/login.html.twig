@@ -1,0 +1,27 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}ورود به پورتال{% endblock %}
+
+{% block pageBody %}
+    <div class="row justify-content-center">
+        <div class="col-5">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-light">
+                    ورود به پورتال
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4 pt-3 justify-content-center text-center">
+                            <img class="img-thumbnail" src="{{ asset('assets/images/LOGO.png') }}">
+                        </div>
+                        <div class="col-sm-12 col-md-8">
+                            {{ form_start(form) }}
+                            {{ form_widget(form) }}
+                            {{ form_end(form) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

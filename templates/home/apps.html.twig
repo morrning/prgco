@@ -1,0 +1,56 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}برنامه‌ها{% endblock %}
+
+{% block pageBody %}
+
+
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/automation.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            سامانه مکاتبات سازمانی
+                        </p>
+                        <a href="http://oas.prgco.ir/menu/" class="btn btn-sm btn-success">
+                            <i class="fal fa-external-link"></i>
+                            ورود به کارتابل
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/online_ding.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            سامانه مدیریت کارکنان
+                        </p>
+                        <a href="http://oas.prgco.ir/menu/" class="btn btn-sm btn-success">
+                            <i class="fal fa-external-link"></i>
+                            ورود به سامانه
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% if UserMGR.hasPermission('newsPublish') == true %}
+                <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                    <div class="card">
+                        <img class="card-img-top" src="{{ asset('assets/images/apps/e-publish.jpg') }}">
+                        <div class="card-body text-center">
+                            <p class="text-primary text-center">
+                                سامانه انتشار خبر
+                            </p>
+                            <a href="{{ path('newsDashboard') }}" class="btn btn-sm btn-success">
+                                اجرا برنامه
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

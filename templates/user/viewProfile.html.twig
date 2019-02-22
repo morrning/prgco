@@ -1,0 +1,58 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}پروفایل کاربری{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-8 card-center mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        نمایه شخصی
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-primary">اطلاعات فردی:</h4>
+                        <div class="row">
+                            <div class="col-6">
+                                نام / نام‌خانوادگی:
+                                {{ user.fullname }}
+                            </div>
+                            <div class="col-6">
+                                نام‌کاربری:
+                                {{ user.username }}
+                            </div>
+                        </div>
+                        <hr>
+                        <h4 class="text-primary">سمت‌ها و جایگاه‌ها</h4>
+                        <div class="row">
+                            <div class="col-12">
+                                <table class="table table-sm table-bordered table-responsive-lg table-hover">
+                                    <thead class="thead-light">
+                                    <tr>
+                                        <th class="text-center" scope="col">ردیف</th>
+                                        <th class="text-center" scope="col">نام سمت شغلی</th>
+                                        <th class="text-center" scope="col">امکانات</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for position in positions %}
+                                        <tr>
+                                            <th class="text-center" >{{ loop.index }}</th>
+                                            <th class="text-center" >{{ position.label }}</th>
+                                            <th class="text-center" >
+                                                <a class="btn btn-info btn-sm" href="{{ path('userChangePosition',{'id':position.id}) }}">انتخاب به عنوان سمت پیشفرض</a>
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <hr>
+                        <a class="btn btn-primary btn-sm" href="{{ path('userChangePassword') }}">تغییر کلمه عبور کاربری</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

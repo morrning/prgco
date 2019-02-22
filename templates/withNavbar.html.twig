@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block body %}
+    <nav class="navbar navbar-expand-lg navbar-light py-0 border-top border-bottom border-success" style="background-color: #c0e595">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse js-navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('home') }}">
+                        <i class="fas fa-home"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://oas.prgco.ir/menu">
+                        <i class="fal fa-envelope-open"></i>
+                        اتوماسیون اداری
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('apps') }}">
+                        <i class="fal fa-window-alt"></i>
+                        برنامه‌ها
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav mr-auto pl-5">
+                {% if UserMGR.isLogedIn() %}
+                    <!-- Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                            {{ UserMGR.currentPosition.publicLabel() }}
+                        </a>
+                        <div class="dropdown-menu">
+                            {% if UserMGR.hasPermission('superAdmin') == true %}
+                                <a class="dropdown-item text-danger" href="{{ path('adminDashboard') }}">
+                                    <i class="fal fa-toolbox"></i>
+                                    داشبورد مدیریت
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+                            <a class="dropdown-item text-success" href="{{ path('apps') }}">
+                                <i class="fal fa-window-alt"></i>
+                                برنامه‌ها
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userPositions') }}">
+                                <i class="fal fa-users"></i>
+                                سمت‌ها و جایگاه‌ها
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userViewProfile') }}">
+                                <i class="fal fa-sliders-h"></i>
+                                تنظیمات شخصی
+                            </a>
+                            <a class="dropdown-item" href="{{ path('userChangePassword') }}">
+                                <i class="fal fa-lock"></i>
+                                تغییر کلمه‌عبور
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#">
+                                <i class="fal fa-comment-alt"></i>
+                                پیام جدید
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fal fa-inbox-in"></i>
+                                پیام‌های دریافتی
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fal fa-inbox-out"></i>
+                                پیام‌های ارسالی
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userLogout') }}">
+                                <i class="fal fa-door-open"></i>
+                                خروج
+                            </a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('userLogin') }}">
+                            <i class="fas fa-user-tie"></i>
+                            ورود به پورتال
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+    <main role="main" style="padding-top: 1rem">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% block alert %}
+                        {% if alert is defined %}
+                            {% if alert|length != 0 %}
+                                {% for alt in alert %}
+                                    <div class="alert alert-{{ alt.type }}" role="alert">
+                                        {{ alt.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            {% block pageBody %}{% endblock %}
+        </div>
+    </main>
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom py-0">
+        <!-- Navbar text-->
+        <span class="navbar-text text-light">
+            تمام حقوق برای شرکت پدیده رویای قرن محفوظ است. طراحی واجرا:بابک علی زاده
+        </span>
+
+    </nav>
+{% endblock %}

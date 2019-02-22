@@ -1,0 +1,73 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block pageBody %}
+
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+        <div class="col-3 col-xs-12">
+            <div class="card">
+                <div class="card-header" style="max-height: 3rem">
+                    پدیده رویای قرن
+                </div>
+                <div class="card-body">
+                    <img class="img-fluid card-img-top" src="{{ asset('assets/images/LOGO.png') }}">
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-light">
+                    آخرین اطلاعیه‌ها
+                </div>
+                <div class="card-body">
+                    <ul class="">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header text-center bg-primary text-light">
+                    سامانه مدیریت پروژه پایش
+                </div>
+                <div class="card-body">
+                    <img class="img-fluid card-img-top" src="{{ asset('assets/images/public/brand.jpg') }}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="row p-3 rounded" style="background-color: lightgray">
+        <div class="col-sm-12 col-md-6">
+            <h4>گزارش پیشرفت عملیات اجرایی</h4>
+            <p>پروژه صحن حضرت زهرا(س) نجف</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-animated progress-bar-striped bg-success" role="progressbar" aria-valuenow="40"
+                     aria-valuemin="0" aria-valuemax="100" style="width:80%">
+                    80 درصد
+                </div>
+            </div>
+            <p>پروژه صحن عقیله بنی هاشم کربلا</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-animated progress-bar-striped bg-warning" role="progressbar" aria-valuenow="40"
+                     aria-valuemin="0" aria-valuemax="100" style="width:15%">
+                    15 درصد
+                </div>
+            </div>
+            <p>پروژه خدمات رفاهی کاظمین</p>
+            <div class="progress">
+                <div class="progress-bar progress-bar-animated progress-bar-striped bg-danger" role="progressbar" aria-valuenow="40"
+                     aria-valuemin="0" aria-valuemax="100" style="width:5%">
+                    5 درصد
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

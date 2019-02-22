@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fa">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-rtl.min.css') }}">
+    <!-- jquery UI css files -->
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
+    <!-- main CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+
+    <title>پدیده رویای قرن - {% block title %}{% endblock %}</title>
+
+    <!-- Optional JavaScript -->
+    <!-- Javascript JS Routing library -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{{ asset('assets/js/jquery-3.3.1.slim.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.alphanum.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core.js') }}"></script>
+
+
+    {% block stylesheets %}{% endblock %}
+
+</head>
+<body onload="jsCoreRun()">
+<div class="">
+    <div class="" id="modalPart"></div>
+</div>
+{% block body %}{% endblock %}
+{% block javascripts %}{% endblock %}
+<!-- jivochat script -->
+</body>
+</html>

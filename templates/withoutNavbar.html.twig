@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <main role="main" style="padding-top: 1rem">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    {% block alert %}
+                        {% if alert is defined %}
+                            {% if alert|length != 0 %}
+                                {% for alt in alert %}
+                                    <div class="alert alert-{{ alt.type }}" role="alert">
+                                        {{ alt.message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            {% block pageBody %}{% endblock %}
+        </div>
+    </main>
+{% endblock %}
