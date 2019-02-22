@@ -41,11 +41,6 @@ class SysUser
      */
     private $mobileNum;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $groups;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -107,18 +102,6 @@ class SysUser
     public function setMobileNum(?string $mobileNum): self
     {
         $this->mobileNum = $mobileNum;
-
-        return $this;
-    }
-
-    public function getGroups(): ?string
-    {
-        return $this->groups;
-    }
-
-    public function setGroups(?string $groups): self
-    {
-        $this->groups = $groups;
 
         return $this;
     }

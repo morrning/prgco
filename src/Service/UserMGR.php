@@ -90,7 +90,7 @@ class UserMGR
     public function hasPermission($permissionName,$bundle='CORE',$option=null)
     {
         if($this->isLogedIn()){
-            $groups = explode(',',$this->currentUser()->getGroups());
+            $groups = explode(',',$this->currentPosition()->getGroups());
             $params = [
                 'groupName'=>$permissionName,
                 'options'=>$option,

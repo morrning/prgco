@@ -12,7 +12,7 @@ class NewsController extends AbstractController
      */
     public function newsDashboard()
     {
-        return $this->render('news/index.html.twig', [
+        return $this->render('news/dashboard.html.twig', [
             'controller_name' => 'NewsController',
         ]);
     }
