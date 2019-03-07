@@ -1,0 +1,25 @@
+{% extends 'news/base.html.twig' %}
+
+{% block title %}خبر جدید{% endblock %}
+
+{% block pageBody %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{ form_label(form.title) }}
+            {{ form_widget(form.title) }}
+        </div>
+        <div class="col-sm-12 col-md-12">
+            {{ form_label(form.body) }}
+            {{ form_widget(form.body) }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-warning" href="{{ path('newsPosts') }}">بازگشت</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

@@ -6,3 +6,4 @@ twig:
     globals:
         UserMGR: "@UserMGR"
         EntityMGR:  "@EntityMGR"
+        Jdate:  "@Jdate"

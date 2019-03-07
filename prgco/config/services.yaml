@@ -33,3 +33,6 @@ services:
     UserMGR:
         class: App\Service\UserMGR
         arguments: [ "@EntityMGR"]
+
+    Jdate:
+        class: App\Service\Jdate

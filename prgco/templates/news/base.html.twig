@@ -1,0 +1,26 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}سامانه انتشار خبر{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('newsDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('newsNewPost') }}">
+                <i class="fas fa-plus"></i>
+                <span>خبر جدید</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('newsPosts') }}">
+                <i class="fas fa-archive"></i>
+                <span>آرشیو اخبار</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+

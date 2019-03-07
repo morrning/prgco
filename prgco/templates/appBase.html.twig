@@ -79,35 +79,12 @@
         </div>
     </nav>
     <div class="container-fluid ">
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-xs-12 col-md-1 sidebar border-left border-top">
                 <!-- Sidebar -->
-                <ul class="sidebar navbar-nav">
-                    <li class="nav-item border-bottom">
-                        <a class="nav-link" href="index.html">
-                            <i class="fas fa-chalkboard"></i>
-                            <span>داشبورد</span>
-                        </a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-fw fa-folder"></i>
-                            <span>برگه ها</span>
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                            <h6 class="dropdown-header">Login Screens:</h6>
-                            <a class="dropdown-item" href="login.html">Login</a>
-                            <a class="dropdown-item" href="register.html">Register</a>
-                            <a class="dropdown-item" href="forgot-password.html">Forgot Password</a>
-                            <div class="dropdown-divider"></div>
-                            <h6 class="dropdown-header">Other Pages:</h6>
-                            <a class="dropdown-item" href="404.html">404 Page</a>
-                            <a class="dropdown-item" href="blank.html">Blank Page</a>
-                        </div>
-                    </li>
-                </ul>
+                {% block appMenu %}{% endblock %}
             </div>
-            <div class="col-xs-12 col-md-10">
+            <div class="col-xs-12 col-md-11">
                 <ol class="breadcrumb my-1">
                     <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">برنامه‌ها</a></li>
                     <li class="breadcrumb-item">{{ block('appName') }}</li>

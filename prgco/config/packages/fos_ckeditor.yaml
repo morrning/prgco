@@ -3,3 +3,9 @@
 twig:
     form_themes:
         - '@FOSCKEditor/Form/ckeditor_widget.html.twig'
+
+fos_ck_editor:
+    default_config: my_config
+    configs:
+        my_config:
+            language: fa

@@ -1,0 +1,32 @@
+{% extends 'news/base.html.twig' %}
+
+{% block title %}آرشیو خبرها{% endblock %}
+
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>عنوان</th>
+                <th>تاریخ ارسال</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for post in posts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d',post.dateSubmit) }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{ path('newsEditPost',{'id':post.id}) }}">ویرایش</a>
+                        <a class="btn btn-danger" href="">حذف</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
