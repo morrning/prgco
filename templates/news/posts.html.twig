@@ -41,19 +41,30 @@
             </tr>
             </thead>
             <tbody class="">
-            {% for post in posts %}
-                <tr>
-                    <td>{{ loop.index }}</td>
-                    <td>{{ post.title }}</td>
-                    <td>{{ Jdate.jdate('Y/n/d',post.dateSubmit) }}</td>
-                    <td>
-                        <a class="btn btn-warning" href="{{ path('newsEditPost',{'id':post.id}) }}">ویرایش</a>
-                        <a class="btn btn-danger" onclick="showModal('deleteItem({{ post.id }})')">حذف</a>
-                    </td>
-                </tr>
-            {% endfor %}
+                {% for post in posts %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ post.title }}</td>
+                        <td>{{ Jdate.jdate('Y/n/d',post.dateSubmit) }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="{{ path('newsEditPost',{'id':post.id}) }}">ویرایش</a>
+                            <a class="btn btn-danger" onclick="showModal('deleteItem({{ post.id }})')">حذف</a>
+                        </td>
+                    </tr>
+                {% endfor %}
             </tbody>
         </table>
+        <ul class="pagination pagination-sm">
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('newsPosts',{'page':page-1}) }}" tabindex="-1" >برگه قبلی</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link">{{ page }} <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ path('newsPosts',{'page':page+1}) }}">برگه بعدی</a>
+            </li>
+        </ul>
     </div>
 
 {% endblock %}

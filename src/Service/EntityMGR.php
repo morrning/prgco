@@ -31,6 +31,11 @@ class EntityMGR
         return $this->em->getRepository($entityName)->find($id);
     }
 
+    public function findAll($entityName)
+    {
+        return $this->em->getRepository($entityName)->findAll();
+    }
+
     public function findBy($entity,$params = [],$orders =[])
     {
         return $this->em->getRepository($entity)->findBy($params,$orders);
@@ -68,6 +73,14 @@ class EntityMGR
         $this->em->flush();
     }
 
+    public function rowsCount($entityName){
+        return $this->em->createQueryBuilder('n')
+            ->select('COUNT(n.id)')
+            ->from($entityName,'n')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+    }
     // ENTITY MANAGER OBJ
     //------------------------------------------------
     public function getORM()

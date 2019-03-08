@@ -19,6 +19,13 @@ class NewsPostRepository extends ServiceEntityRepository
         parent::__construct($registry, NewsPost::class);
     }
 
+    public function countTable(){
+        return $this->createQueryBuilder('n')
+            ->getQuery()
+            ->getSingleScalarResult()
+            ;
+
+    }
     // /**
     //  * @return NewsPost[] Returns an array of NewsPost objects
     //  */

@@ -1,0 +1,26 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-md-8 card-center mx-auto">
+                <div class="card">
+                    <div class="card-header bg-secondary text-light">
+                        500 !
+                    </div>
+                    <div class="card-body text-center text-danger">
+                        <p>
+                            متاسفیم خطای غیر منتظره‌ای رخ داد.
+                        </p>
+                        <a href="{{ path('home')}}" class="btn btn-sm btn-success">
+                            <i class="fa fa-home"></i>
+                            بازگشت به صفحه نخست
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -13,15 +13,19 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 use App\Service;
 use App\Entity;
+
 class NewsController extends AbstractController
 {
     /**
      * @Route("/news/dashboard", name="newsDashboard")
      */
-    public function newsDashboard()
+    public function newsDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
+        if(! $userMGR->hasPermission('newsPublish'))
+            return $this->redirectToRoute('403');
+
         return $this->render('news/dashboard.html.twig', [
-            'controller_name' => 'NewsController',
+            'newsCount'=> $entityMGR->rowsCount('App:NewsPost')
         ]);
     }
 
@@ -96,7 +100,7 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/news/posts/{msg}/{page}", name="newsPosts")
+     * @Route("/news/posts/{page}/{msg}", name="newsPosts")
      */
     public function newsPosts($msg = 0, $page = 1,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
@@ -126,6 +130,8 @@ class NewsController extends AbstractController
             return $this->redirectToRoute('403');
 
         $entityMGR->remove('App:NewsPost',$id);
+        $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' Delete post ID:' . $id );
+
         return new Response(200);
     }
 
@@ -136,7 +142,7 @@ class NewsController extends AbstractController
     {
         $post = $entityMGR->find('App:NewsPost',$id);
        if(is_null($post))
-           return $this->redirectToRoute(404);
+           return $this->redirectToRoute('404');
 
         return $this->render('news/post.html.twig', [
             'post' => $post

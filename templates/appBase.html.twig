@@ -13,6 +13,12 @@
                 <li class="navbar-text">
                     {% block appName %}{% endblock %}
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('apps') }}">
+                        <i class="fal fa-window-alt"></i>
+                        برنامه‌ها
+                    </a>
+                </li>
             </ul>
             <ul class="navbar-nav mr-auto pl-5">
                 {% if UserMGR.isLogedIn() %}
@@ -86,7 +92,15 @@
             </div>
             <div class="col-xs-12 col-md-11">
                 <ol class="breadcrumb my-1">
-                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">برنامه‌ها</a></li>
+                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
+                            <i class="fas fa-home"></i>
+                            پورتال اصلی
+                        </a></li>
+                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
+                            <i class="fal fa-window-alt"></i>
+                            برنامه‌ها
+                        </a>
+                    </li>
                     <li class="breadcrumb-item">{{ block('appName') }}</li>
                     <li class="breadcrumb-item active">{{ block('title') }}</li>
                 </ol>

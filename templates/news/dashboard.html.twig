@@ -3,5 +3,21 @@
 {% block title %}داشبورد انتشار خبر{% endblock %}
 
 {% block pageBody %}
-    از پوشه
+    <div class="container">
+        <div class="row">
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/e-publish.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            تعداد کل اخبار منتشر شده:
+                            <span class="text-danger">
+                                {{ newsCount }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

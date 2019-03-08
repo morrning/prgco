@@ -26,6 +26,11 @@ class SysConfig
      */
     private $footerText;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $activeationCode;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,18 @@ class SysConfig
     public function setFooterText(?string $footerText): self
     {
         $this->footerText = $footerText;
+
+        return $this;
+    }
+
+    public function getActiveationCode(): ?string
+    {
+        return $this->activeationCode;
+    }
+
+    public function setActiveationCode(?string $activeationCode): self
+    {
+        $this->activeationCode = $activeationCode;
 
         return $this;
     }

@@ -35,7 +35,7 @@ class UserController extends AbstractController
                 $logger->notice('user ' . $data['username'] .' loged in.');
                 return $this->redirectToRoute('home');
             }
-            $logger->notice('login failor for user ' . $data['username'] );
+            $logger->alert('login failor for user ' . $data['username'] );
             $alert = [['message'=>'نام‌کاربری یا کلمه‌عبور اشتباه است.','type'=>'danger']];
         }
 

@@ -25,4 +25,34 @@ class AdminController extends AbstractController
             'controller_name' => 'AdminController',
         ]);
     }
+
+    /**
+     * @Route("/admin/settings", name="adminSettings")
+     */
+    public function adminSettings(Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $config = $configMGR->getConfig();
+        $form = $this->createFormBuilder($config)
+            ->add('siteName', TextType::class,['label'=>'نام شرکت'])
+            ->add('activeationCode', TextType::class,['label'=>'کد فعالسازی'])
+            ->add('footerText', TextType::class,['label'=>'پانویس پورتال'])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->update($form->getData());
+            $logger->notice('user ' . $userMgr->currentUser()->getUsername() . ' change system settings.');
+            $alerts = [['message'=>'تنظیمات با موفقیت ذخیره شد.','type'=>'success']];
+        }
+
+        return $this->render('admin/settings.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts
+        ]);
+    }
 }
