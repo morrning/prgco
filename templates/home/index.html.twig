@@ -3,11 +3,8 @@
 {% block title %}صفحه اصلی{% endblock %}
 
 {% block pageBody %}
-
-
 <!-- Page Content -->
 <div class="container">
-
     <div class="row">
         <div class="col-3 col-xs-12">
             <div class="card">
@@ -26,7 +23,10 @@
                 </div>
                 <div class="card-body">
                     <ul class="">
-
+                        {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                        {% for post in posts %}
+                            <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>

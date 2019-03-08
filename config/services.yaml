@@ -36,3 +36,7 @@ services:
 
     Jdate:
         class: App\Service\Jdate
+
+    ConfigMGR:
+        class: App\Service\ConfigMGR
+        arguments: [ "@EntityMGR"]

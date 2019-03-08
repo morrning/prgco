@@ -1,0 +1,44 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <b>
+                            {{ post.title }}
+                        </b>
+                    </div>
+                    <div class="card-body">
+                        {{ post.body | raw }}
+                    </div>
+                    <div class="card-footer">
+                        <a class="" href="{{ path('home') }}">بازگشت</a>
+                        |
+
+                        ارسال شده توسط
+                        {{ EntityMGR.find('App:SysPosition',post.submiter).publicLabel }}
+                        در تاریخ
+                        {{ Jdate.jdate('Y/m/d',post.dateSubmit) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-3">
+                <div class="card">
+                    <div class="card-header bg-success">جدیدترین اخبار</div>
+                    <div class="card-body">
+                        <ul class="">
+                            {% set posts = EntityMGR.findByPage('App:NewsPost',1,15) %}
+                            {% for post in posts %}
+                                <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,9 +1,36 @@
 {% extends 'news/base.html.twig' %}
 
 {% block title %}آرشیو خبرها{% endblock %}
+{% block javascripts%}
+    <script>
+        function deleteItem(id){
+            var url = Routing.generate('newsDeleteItem', {
+                'id': id.toString()
+            });
 
+            $.ajax({url: url, success: function(result){
+                    if(result == 200)
+                    {
+                        showModalNotification(
+                            'موفقیت',
+                            'خبر با موفقیت حذف شد.',
+                            'success',
+                            true
+                        )
+
+                    }
+                }});
+
+        }
+    </script>
+{% endblock %}
 {% block pageBody %}
+
     <div class="table-responsive">
+        <div class="">
+            صفحه :
+            {{ page }}
+        </div>
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="thead-dark">
             <tr>
@@ -21,7 +48,7 @@
                     <td>{{ Jdate.jdate('Y/n/d',post.dateSubmit) }}</td>
                     <td>
                         <a class="btn btn-warning" href="{{ path('newsEditPost',{'id':post.id}) }}">ویرایش</a>
-                        <a class="btn btn-danger" href="">حذف</a>
+                        <a class="btn btn-danger" onclick="showModal('deleteItem({{ post.id }})')">حذف</a>
                     </td>
                 </tr>
             {% endfor %}

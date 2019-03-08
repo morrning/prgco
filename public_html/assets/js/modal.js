@@ -1,5 +1,9 @@
-//writed by babak alizadeh for mamanbash system
-function showModal(title,body,type,onclick){
+//writed by babak alizadeh for rahkarbase system
+function showModal(onclick,type='info',title=null,body=null){
+    if(title == null)
+        title = 'پیام';
+    if(body == null)
+        body = 'آیا برای انجام این عملیات مطمئن هستید؟';
     var modalString =
         '<div class="modal" tabindex="-1" role="dialog">\n' +
         '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +

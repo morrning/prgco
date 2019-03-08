@@ -4,6 +4,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -50,7 +51,7 @@ class NewsController extends AbstractController
             $entityMGR->insertEntity($post);
 
             $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new post.' );
-            return $this->redirectToRoute('newsPosts',['msg'=>'1']);
+            return $this->redirectToRoute('newsPosts',['msg'=>'1','page'=>1]);
         }
 
         return $this->render('news/newPost.html.twig', [
@@ -85,7 +86,7 @@ class NewsController extends AbstractController
             $entityMGR->update($post);
 
             $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' update post ID:' . $id );
-            return $this->redirectToRoute('newsPosts',['msg'=>'1']);
+            return $this->redirectToRoute('newsPosts',['msg'=>'2','page'=>1]);
         }
 
         return $this->render('news/editPost.html.twig', [
@@ -95,15 +96,51 @@ class NewsController extends AbstractController
     }
 
     /**
-     * @Route("/news/posts/{page}", name="newsPosts")
+     * @Route("/news/posts/{msg}/{page}", name="newsPosts")
      */
-    public function newsPosts($page = 1,Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    public function newsPosts($msg = 0, $page = 1,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('newsPublish'))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'خبر با موفقیت منتشر شد.']];
+        elseif($msg == 2)
+            $alerts = [['type'=>'success','message'=>'خبر با موفقیت ویرایش شد.']];
+
+        return $this->render('news/posts.html.twig', [
+            'posts' => $entityMGR->findByPage('App:NewsPost',$page,20),
+            'page'=>$page,
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/news/delete/post/{id}", name="newsDeleteItem", options = { "expose" = true })
+     */
+    public function newsDeleteItem($id ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
         if(! $userMGR->hasPermission('newsPublish'))
             return $this->redirectToRoute('403');
 
-        return $this->render('news/posts.html.twig', [
-            'posts' => $entityMGR->findByPage('App:NewsPost',$page,20)
+        $entityMGR->remove('App:NewsPost',$id);
+        return new Response(200);
+    }
+
+    /**
+     * @Route("/news/{id}", name="newsShowPost")
+     */
+    public function showPost($id,Service\EntityMGR $entityMGR)
+    {
+        $post = $entityMGR->find('App:NewsPost',$id);
+       if(is_null($post))
+           return $this->redirectToRoute(404);
+
+        return $this->render('news/post.html.twig', [
+            'post' => $post
         ]);
     }
+
 }

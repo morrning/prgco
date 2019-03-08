@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
 
-    <title>پدیده رویای قرن - {% block title %}{% endblock %}</title>
+    <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
 
     <!-- Optional JavaScript -->
     <!-- Javascript JS Routing library -->
@@ -31,6 +31,7 @@
     <script src="{{ asset('assets/js/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
     <script src="{{ asset('assets/js/core.js') }}"></script>
+    <script src="{{ asset('assets/js/modal.js') }}"></script>
 
 
     {% block stylesheets %}{% endblock %}

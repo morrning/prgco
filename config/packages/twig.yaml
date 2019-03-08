@@ -7,3 +7,4 @@ twig:
         UserMGR: "@UserMGR"
         EntityMGR:  "@EntityMGR"
         Jdate:  "@Jdate"
+        ConfigMGR:  "@ConfigMGR"
