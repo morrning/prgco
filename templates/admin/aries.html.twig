@@ -1,0 +1,44 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}نواحی کاری{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-light">
+                        <b>افزودن ناحیه کاری</b>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>ناحیه</th>
+                            <th>توضیحات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for ara in aries %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ ara.areaName }}</td>
+                                <td>{{ ara.des }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

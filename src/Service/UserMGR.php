@@ -105,4 +105,33 @@ class UserMGR
         return false;
     }
 
+    public function positionsOfGroup($groupID)
+    {
+        $obj = $this->em->getORM();
+        return  $obj->getRepository('App:SysPosition')->createQueryBuilder('r')
+            ->Where('r.groups = :group')
+            ->orWhere('r.groups LIKE :group1')
+            ->orWhere('r.groups LIKE :group2')
+            ->orWhere('r.groups LIKE :group3')
+            ->setParameter('group',  $groupID)
+            ->setParameter('group1', '%,' . $groupID . ',%')
+            ->setParameter('group2', '%' . $groupID . ',%')
+            ->setParameter('group3', '%,' . $groupID . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function removeFromGroup($positionID,$groupID)
+    {
+        $position = $this->em->find('App:SysPosition',$positionID);
+        $arrayRolls = explode(',',$position->getGroups());
+        if(in_array($groupID,$arrayRolls)){
+            $itemKey = array_search($groupID,$arrayRolls);
+            unset($arrayRolls[$itemKey]);
+            $newGroupList = implode(',',$arrayRolls);
+            $position->setGroups($newGroupList);
+            $this->em->update($position);
+        }
+    }
+
 }

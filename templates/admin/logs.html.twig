@@ -1,0 +1,35 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}تاریخچه سیستم{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>توضیحات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for log in logs %}
+                            <tr {% if "app.ALERT" in log %}class="bg-danger text-light"{% endif %}>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ log }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

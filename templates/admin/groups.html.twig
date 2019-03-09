@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}گروه‌های دسترسی{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>کد ماشین</th>
+                            <th>نام گروه</th>
+                            <th>برنامه</th>
+                            <th>ناحیه کاربری</th>
+                            <th>توضیحات</th>
+                            <th>امکانات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for group in groups %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ group.groupName }}</td>
+                                <td>{{ group.label }}</td>
+                                <td>{{ group.bundle }}</td>
+                                <td>{{ group.pid }}</td>
+                                <td>{{ group.des }}</td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('adminPositionsofgroup',{'id':group.id}) }}">مشاهده اعضا</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% block autocomplete_widget %}
+    <script>
+        $(document).ready(function(){
+            $( ".autoComplete{{ form.vars.id }}" ).autocomplete({
+                source: function( request, response ) {
+                    $.ajax( {
+                        url: Routing.generate('SystemAutoCompleteLoad', { 'name':'{{ form.vars.attr.pattern }}','filter': request.term }),
+                        dataType: "json",
+                        success: function( data ) {
+                            if(data.length == 0)
+                            {
+                                $(".SysAutoComplete{{ form.vars.id }}").val(0);
+                            }
+                            response( data );
+                        }
+                    } );
+                },
+                select: function( event, ui ) {
+                    $(".SysAutoComplete{{ form.vars.id }}").val(ui.item.id);
+                },
+                autoFocus: true,
+                minLength: 0,
+                delay:500
+            });
+        });
+    </script>
+    <input class="autoComplete{{ form.vars.id }} form-control" placeholder="جست‌و‌جو...." >
+    <input class="SysAutoComplete{{ form.vars.id }}" type="hidden" {{ block('widget_attributes') }} >
+    <br>
+{% endblock %}

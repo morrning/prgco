@@ -21,7 +21,7 @@ class NewsController extends AbstractController
      */
     public function newsDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('newsPublish'))
+        if(! $userMGR->hasPermission('newsPublish','NEWS'))
             return $this->redirectToRoute('403');
 
         return $this->render('news/dashboard.html.twig', [
@@ -34,7 +34,7 @@ class NewsController extends AbstractController
      */
     public function newsNewPost(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('newsPublish'))
+        if(! $userMGR->hasPermission('newsPublish','NEWS'))
             return $this->redirectToRoute('403');
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
@@ -54,7 +54,7 @@ class NewsController extends AbstractController
             $post->setSubmiter($userMGR->currentPosition()->getId());
             $entityMGR->insertEntity($post);
 
-            $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new post.' );
+            $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new post.' );
             return $this->redirectToRoute('newsPosts',['msg'=>'1','page'=>1]);
         }
 
@@ -68,7 +68,7 @@ class NewsController extends AbstractController
      */
     public function newsEditPost($id, Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('newsPublish'))
+        if(! $userMGR->hasPermission('newsPublish','NEWS'))
             return $this->redirectToRoute('403');
         $post = $entityMGR->find('App:NewsPost',$id);
         if(is_null($post))
@@ -89,7 +89,7 @@ class NewsController extends AbstractController
             $post->setSubmiter($userMGR->currentPosition()->getId());
             $entityMGR->update($post);
 
-            $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' update post ID:' . $id );
+            $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' update post ID:' . $id );
             return $this->redirectToRoute('newsPosts',['msg'=>'2','page'=>1]);
         }
 
@@ -105,7 +105,7 @@ class NewsController extends AbstractController
     public function newsPosts($msg = 0, $page = 1,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
 
-        if(! $userMGR->hasPermission('newsPublish'))
+        if(! $userMGR->hasPermission('newsPublish','NEWS'))
             return $this->redirectToRoute('403');
 
         $alerts = null;
@@ -126,11 +126,11 @@ class NewsController extends AbstractController
      */
     public function newsDeleteItem($id ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('newsPublish'))
+        if(! $userMGR->hasPermission('newsPublish','NEWS'))
             return $this->redirectToRoute('403');
 
         $entityMGR->remove('App:NewsPost',$id);
-        $logger->notice('position with username ' . $userMGR->currentUser()->getUsername() . ' Delete post ID:' . $id );
+        $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' Delete post ID:' . $id );
 
         return new Response(200);
     }

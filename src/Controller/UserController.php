@@ -32,7 +32,7 @@ class UserController extends AbstractController
             $data = $form->getData();
             if($userMGR->login($data['username'],$data['password']))
             {
-                $logger->notice('user ' . $data['username'] .' loged in.');
+                $logger->info('user ' . $data['username'] .' loged in.');
                 return $this->redirectToRoute('home');
             }
             $logger->alert('login failor for user ' . $data['username'] );
@@ -50,7 +50,7 @@ class UserController extends AbstractController
      */
     public function logout(Request $request, Service\UserMGR $userMGR, LoggerInterface $logger)
     {
-        $logger->notice('user ' . $userMGR->currentUser()->getUsername() . ' logout.');
+        $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' logout.');
         $userMGR->logout();
         return $this->redirectToRoute('home');
     }
@@ -85,7 +85,7 @@ class UserController extends AbstractController
             {
                 $user->setPassword(md5($form->get('newPassword')->getData()));
                 $entityMgr->update($user);
-                $logger->notice('user ' . $userMgr->currentUser()->getUsername() . ' change own password.');
+                $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change own password.');
                 array_push($alert,['type'=>'success','message'=>'کلمه عبور با موفقیت تغییر کرد.']);
             }
         }
@@ -135,7 +135,7 @@ class UserController extends AbstractController
             $position->setIsDefault(1);
             $entityMGR->update($position);
 
-            $logger->notice('user ' . $userMgr->currentUser()->getUsername() . ' change active position');
+            $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change active position');
         }
         return $this->redirectToRoute('home');
     }

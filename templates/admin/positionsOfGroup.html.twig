@@ -1,0 +1,69 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}کاربران موجود در گروه دسترسی:{{ group.label }}{% endblock %}
+
+{% block javascripts%}
+    <script>
+        function deleteItem(gid,uid){
+            var url = Routing.generate('adminDeletePositionOfGroup', {
+                'GID': gid.toString(),
+                'UID': uid.toString()
+            });
+
+            $.ajax({url: url, success: function(result){
+                    if(result == 200)
+                    {
+                        showModalNotification(
+                            'موفقیت',
+                            'کاربر با موفقیت از این گروه دسترسی حذف شد.',
+                            'success',
+                            true
+                        )
+
+                    }
+                }});
+
+        }
+    </script>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-4">
+                <div class="card">
+                    <div class="card-header bg-secondary text-light">
+                        <b>افزودن کاربر به این گروه دسترسی</b>
+                    </div>
+                    <div class="card-body">
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>سمت کاربری</th>
+                            <th>امکانات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for position in positions %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ position.publicLabel }}</td>
+                                <td><a class="btn btn-danger" onclick="showModal('deleteItem( {{ group.id }}, {{ position.id }} )')">حذف</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
