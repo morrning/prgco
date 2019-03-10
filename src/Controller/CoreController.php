@@ -46,7 +46,7 @@ class CoreController extends AbstractController
     public function SystemAutoCompleteLoad($name,$filter,Service\EntityMGR $entityMgr)
     {
         $YmlFormat = Yaml::parse(file_get_contents(realpath(__DIR__.'/../') . '/AutocompletePattern/' . $name . '.yml'));
-        $em = $entityMgr->GetEntityManagerObject();
+        $em = $entityMgr->getORM();
         $result = $em->getRepository($YmlFormat['entity'])->createQueryBuilder('r')
             ->where('r.' . $YmlFormat['label'] . ' LIKE :filter')
             ->setParameter('filter', '%' . $filter . '%')

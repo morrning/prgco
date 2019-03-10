@@ -2,6 +2,7 @@
     <script>
         $(document).ready(function(){
             $( ".autoComplete{{ form.vars.id }}" ).autocomplete({
+
                 source: function( request, response ) {
                     $.ajax( {
                         url: Routing.generate('SystemAutoCompleteLoad', { 'name':'{{ form.vars.attr.pattern }}','filter': request.term }),

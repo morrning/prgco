@@ -13,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
 
-
 use App\Service;
 use App\Entity as Entity;
 use App\Form\Type as Type;
@@ -70,22 +69,25 @@ class AdminController extends AbstractController
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
-
+        $alerts = null;
+        $fileSystem = new Filesystem();
         $defaultData = ['message' => 'Type your message here'];
+
         $form = $this->createFormBuilder($defaultData)
             ->add('submit', SubmitType::class,['label'=>'حذف تاریخچه'])
             ->getForm();
         $form->handleRequest($request);
-        $alerts = null;
+
         if ($form->isSubmitted() && $form->isValid()) {
-            $fileSystem = new Filesystem();
+
             $fileSystem->remove(str_replace('src','var/log/prod.log',dirname(__DIR__)));
 
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' clear system log file.');
             $alerts = [['message'=>'تاریخچه با موفقیت پاک شد.','type'=>'success']];
         }
-
-        $logs = file(str_replace('src','var/log/prod.log',dirname(__DIR__)));
+        $logs=[];
+        if($fileSystem->exists(str_replace('src','var/log/prod.log',dirname(__DIR__))))
+            $logs = file(str_replace('src','var/log/prod.log',dirname(__DIR__)));
         return $this->render('admin/logs.html.twig', [
             'form' => $form->createView(),
             'alerts' => $alerts,
