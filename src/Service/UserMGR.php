@@ -134,4 +134,18 @@ class UserMGR
         }
     }
 
+    public function addToGroup($posionID,$groupID)
+    {
+        $obj = $this->em->getORM();
+        $position = $obj->getRepository('App:SysPosition')->find($posionID);
+        $groups = explode(',',$position->getGroups());
+        if(! array_search($groupID,$groups)){
+            array_push($groups,$groupID);
+            $newGroupList = implode(',',$groups);
+            $position->setGroups($newGroupList);
+            $obj->persist($position);
+            $obj->flush();
+        }
+    }
+
 }

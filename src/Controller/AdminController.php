@@ -22,13 +22,15 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="adminDashboard")
      */
-    public function index(Service\UserMGR $userMgr)
+    public function index(Service\UserMGR $userMgr,Service\EntityMGR $entityMGR)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
         return $this->render('admin/dashboard.html.twig', [
-            'controller_name' => 'AdminController',
+            'usersCount' => $entityMGR->rowsCount('App:SysUser'),
+            'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
+            'areaCount' => $entityMGR->rowsCount('App:SysArea'),
         ]);
     }
 
@@ -150,17 +152,24 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('403');
 
 
-        $area = new Entity\SysArea();
-        $form = $this->createFormBuilder($area)
-            ->add('areaName', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'positions']])
+        $data = ['message'=>'message'];
+        $form = $this->createFormBuilder($data)
+            ->add('PositionID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'positions']])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
         $form->handleRequest($request);
         $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityMGR->insertEntity($form->getData());
-            $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' clear system log file.');
-            $alerts = [['message'=>'ناحیه کاری با موفقیت افزوده شد.','type'=>'success']];
+            $position = $entityMGR->find('App:SysPosition',$form->get('PositionID')->getData());
+            if(is_null($position))
+            {
+                $alerts = [['message'=>'سمت شغلی یافت نشد.','type'=>'danger']];
+            }
+            else{
+                $alerts = [['message'=>'سمت شغلی با موفقیت افزوده شد.','type'=>'success']];
+                $userMgr->addToGroup($position->getId(),$id);
+                $logger->info(sprintf('user %s add position ID %s to group ID %s',$userMgr->currentUser()->getUsername(),$position->getId(),$id));
+            }
         }
 
         return $this->render('admin/positionsOfGroup.html.twig', [
@@ -186,6 +195,121 @@ class AdminController extends AbstractController
             $GID
         ));
         return new Response(200);
+    }
+
+    /**
+     * @Route("/admin/positions", name="adminPositions")
+     */
+    public function adminPositions(Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+
+        $data = ['message'=>'message'];
+        $form = $this->createFormBuilder($data)
+            ->add('PositionID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'positions']])
+            ->add('submit', SubmitType::class,['label'=>'افزودن'])
+            ->getForm();
+
+
+        return $this->render('admin/positions.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/users/{page}/{msg}", name="adminUsers")
+     */
+    public function adminUsers($page=1,$msg=0, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        if($msg==1)
+            $alerts = [['message'=>'کاربر با موفقیت اضافه شد.','type'=>'success']];
+
+        $users = $entityMGR->findByPage('App:SysUser',$page,30);
+
+
+        return $this->render('admin/users.html.twig', [
+            'users'=>$users,
+            'alerts' => $alerts,
+            'page'=>$page
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/add", name="adminNewUser")
+     */
+    public function adminNewUser(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        $user = new Entity\SysUser();
+        $form = $this->createFormBuilder($user)
+            ->add('fullName', TextType::class,['label'=>'نام و نام‌خانوادگی'])
+            ->add('username', TextType::class,['label'=>'نام کاربری'])
+            ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
+            ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
+            ->add('submit', SubmitType::class,['label'=>'افزودن'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $user->setPassword(md5($user->getPassword()));
+            $entityMGR->insertEntity($user);
+            $logger->info(sprintf('user %s add new user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
+            return $this->redirectToRoute('adminUsers',['msg'=>1]);
+
+        }
+
+        return $this->render('admin/userNew.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/user/change/password/{id}", name="adminUserChangepassword")
+     */
+    public function adminUserChangepassword($id,Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        $user = $entityMGR->find('App:SysUser',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        $form = $this->createFormBuilder($user)
+            ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
+            ->add('submit', SubmitType::class,['label'=>'تغییر کلمه عبور'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $user->setPassword(md5($user->getPassword()));
+            $entityMGR->update($user);
+            $logger->info(sprintf('user %s change password of user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
+            return $this->redirectToRoute('adminUsers',['msg'=>2]);
+
+        }
+
+        return $this->render('admin/userChangePassword.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
     }
 
 }

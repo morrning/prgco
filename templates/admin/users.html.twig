@@ -1,0 +1,58 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}کاربران{% endblock %}
+{% block javascripts%}
+
+{% endblock %}
+{% block pageBody %}
+
+    <div class="">
+        <a class="btn btn-success" href="{{ path('adminNewUser') }}">
+            <i class="far fa-plus-square"></i>
+            کاربر جدید
+        </a>
+    </div>
+    <hr>
+    <div class="table-responsive">
+        <div class="">
+            صفحه :
+            {{ page }}
+        </div>
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام کاربری</th>
+                <th>نام و نام‌خانوادگی</th>
+                <th>تلفن تماس</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for user in users %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.fullName }}</td>
+                    <td>{{ user.mobileNum }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{ path('adminUserChangepassword',{'id':user.id}) }}">تغییر کلمه عبور</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul class="pagination pagination-sm">
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                <a class="page-link" href="{{ path('adminUsers',{'page':page-1}) }}" tabindex="-1" >برگه قبلی</a>
+            </li>
+            <li class="page-item active" aria-current="page">
+                <a class="page-link">{{ page }} <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="{{ path('adminUsers',{'page':page+1}) }}">برگه بعدی</a>
+            </li>
+        </ul>
+    </div>
+
+{% endblock %}

@@ -5,7 +5,56 @@
 {% block pageBody %}
 <div class="container-fluid">
     <div class="row">
-
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    تعداد کاربران
+                </div>
+                <div class="card-body">
+                    <h1 class="text-center">
+                        <span class="badge badge-secondary">{{ usersCount }}</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    تعداد پست‌های سازمانی
+                </div>
+                <div class="card-body">
+                    <h1 class="text-center">
+                        <span class="badge badge-secondary">{{ positionsCount }}</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    تعداد نواحی کاری
+                </div>
+                <div class="card-body">
+                    <h1 class="text-center">
+                        <span class="badge badge-secondary">{{ areaCount }}</span>
+                    </h1>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    وضعیت فعال سازی نرم افزار
+                </div>
+                <div class="card-body">
+                    <h1 class="text-center text-success">
+                        <span class="badge badge-success">
+                            فعال - نامحدود
+                        </span>
+                    </h1>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

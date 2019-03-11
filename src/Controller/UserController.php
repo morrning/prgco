@@ -17,7 +17,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/login", name="userLogin")
      */
-    public function login(Request $request, Service\UserMGR $userMGR, LoggerInterface $logger)
+    public function login(Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger)
     {
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
@@ -32,11 +32,22 @@ class UserController extends AbstractController
             $data = $form->getData();
             if($userMGR->login($data['username'],$data['password']))
             {
-                $logger->info('user ' . $data['username'] .' loged in.');
-                return $this->redirectToRoute('home');
+
+                if(is_null($entityMGR->findOneBy('App:SysPosition',['userID'=>$userMGR->currentUser()->getId()])))
+                {
+                    $userMGR->logout();
+                    $alert = [['message'=>'هیچ پست سازمانی برای شما تعریف نشده است.','type'=>'danger']];
+                }
+                else{
+                    return $this->redirectToRoute('home');
+                    $logger->info('user ' . $data['username'] .' loged in.');
+                }
+
             }
-            $logger->alert('login failor for user ' . $data['username'] );
-            $alert = [['message'=>'نام‌کاربری یا کلمه‌عبور اشتباه است.','type'=>'danger']];
+            else{
+                $logger->alert('login failor for user ' . $data['username'] );
+                $alert = [['message'=>'نام‌کاربری یا کلمه‌عبور اشتباه است.','type'=>'danger']];
+            }
         }
 
         return $this->render('user/login.html.twig', [
