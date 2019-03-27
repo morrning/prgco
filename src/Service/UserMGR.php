@@ -97,6 +97,17 @@ class UserMGR
                 'bundle'=>$bundle
             ];
             $grp = $this->em->findOneBy('App:SysGroup',$params);
+            if(is_null($grp))
+            {
+                $grp = new Entity\SysGroup();
+                $grp->setBundle($bundle);
+                if(! is_null($option))
+                    $grp->setOptions($option);
+                $grp->setGroupName($permissionName);
+                $grp->setLabel($permissionName);
+                $this->em->insertEntity($grp);
+
+            }
             if(array_search($grp->getId(),$groups) !== false){
                 return true;
             }
