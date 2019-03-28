@@ -5,5 +5,41 @@
 
 {% endblock %}
 {% block pageBody %}
-
+    <div id="html1"></div>
+    <hr>
+    <a class="btn btnNewPosition btns btn-sm btn-success disabled" href="#">افزودن زیر مجموعه</a>
+    <a class="btn btnEditPosition btns btn-sm btn-warning disabled">ویرایش</a>
+    <span class="text-dark float-left">پست سازمانی انتخاب شده: <span class="text-danger selectedPosition"></span></span>
+    <script>
+        $(document).ready(function(){
+            // AJAX
+            var currentPosition = 0;
+            $('#html1').on('changed.jstree', function (e, data) {
+                var i, j, r = [];
+                for(i = 0, j = data.selected.length; i < j; i++) {
+                    r.push(data.instance.get_node(data.selected[i]).text);
+                    currentPosition = data.instance.get_node(data.selected[i]).id;
+                }
+                $('.btns').removeClass('disabled');
+                $('.selectedPosition').html('' + r[0]);
+                $(".btnNewPosition").prop("href", Routing.generate('adminNewPosition',{'PID':currentPosition}))
+                $(".btnEditPosition").prop("href", Routing.generate('adminEditPosition',{'PID':currentPosition}))
+            })
+                .jstree({
+                'core' : {
+                    'data' : {
+                        'url' : function (node) {
+                            return node.id === '#' ? Routing.generate('adminPositionTree', { 'PID':'1'}) : Routing.generate('adminPositionTree', { 'PID': node.id});
+                        },
+                        "dataType" : "json",
+                        'data' : function (node) {
+                            return {
+                                'id' : node.id ,
+                                'text' : node.id
+                            };
+                        }
+                    }
+                }});
+        })
+    </script>
 {% endblock %}

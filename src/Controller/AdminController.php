@@ -13,6 +13,12 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
 
+//json encoder classes
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+
 use App\Service;
 use App\Entity as Entity;
 use App\Form\Type as Type;
@@ -198,15 +204,18 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/positions", name="adminPositions")
+     * @Route("/admin/positions/{msg}", name="adminPositions")
      */
-    public function adminPositions(Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminPositions($msg=0, Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
         $alerts = [];
-
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'پست سازمانی مورد نظر با موفقیت ایجاد شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'پست سازمانی مورد نظر با موفقیت ویرایش شد.']);
         $data = ['message'=>'message'];
         $form = $this->createFormBuilder($data)
             ->add('PositionID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'positions']])
@@ -216,8 +225,38 @@ class AdminController extends AbstractController
 
         return $this->render('admin/positions.html.twig', [
             'form' => $form->createView(),
+            'nodes'=>$entityMGR->findBy('App:SysPosition',['upperID'=>0]),
             'alerts' => $alerts,
         ]);
+    }
+    /**
+     * @Route("/admin/positions/get/childs/{PID}", name="adminPositionTree", options = { "expose" = true })
+     */
+    public function adminPositionTree($PID ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+        if(! $userMGR->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $encoders = [new XmlEncoder(), new JsonEncoder()];
+        $normalizers = [new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $positions = $entityMGR->findAll('App:SysPosition');
+        $positionsArray = [];
+        foreach ($positions as $position) {
+            $item = [
+                'id'=>$position->getId(),
+                'parent'=>$position->getUpperID(),
+                'text'=>$position->getPublicLabel()
+            ];
+
+            array_push($positionsArray,$item);
+        }
+        $jsonContent = $serializer->serialize($positionsArray, 'json');
+        $response = new Response($jsonContent);
+        $response->headers->set('Content-Type', 'application/json; charset=utf-8');
+        return $response;
     }
 
     /**
@@ -239,6 +278,87 @@ class AdminController extends AbstractController
             'users'=>$users,
             'alerts' => $alerts,
             'page'=>$page
+        ]);
+    }
+
+    /**
+     * @Route("/admin/adminEditPosition/{PID}", name="adminEditPosition" , options = { "expose" = true })
+     */
+    public function adminEditPosition($PID, Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        $position = $entityMGR->find('App:SysPosition',$PID);
+        $form = $this->createFormBuilder($position)
+            ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
+            ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'position']])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            if(! is_null($form->get('userID')->getData()) && ! is_null($form->get('upperID')->getData()))
+            {
+                $user = $entityMGR->find('App:SysUser',$position->getUserID());
+                $position = $form->getData();
+                $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                $entityMGR->insertEntity($position);
+                $logger->info(sprintf('user %s edit position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
+                return $this->redirectToRoute('adminPositions',['msg'=>2]);
+            }
+            array_push($alerts,['type'=>'danger','message'=>'مسئول سمت یا پست سازمانی بالادستی انتخاب نشده است.']);
+
+        }
+
+        return $this->render('admin/positionEdit.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+            'parent'=>$entityMGR->find('App:SysPosition',$PID)
+        ]);
+    }
+
+
+    /**
+     * @Route("/admin/adminNewPosition/{PID}", name="adminNewPosition" , options = { "expose" = true })
+     */
+    public function adminNewPosition($PID, Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        $position = new Entity\SysPosition();
+        $form = $this->createFormBuilder($position)
+            ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
+            ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            if(! is_null($form->get('userID')->getData()))
+            {
+                $user = $entityMGR->find('App:SysUser',$position->getUserID());
+                $position = $form->getData();
+                $position->setUpperID($PID);
+                $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                $entityMGR->insertEntity($position);
+                $logger->info(sprintf('user %s add new position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
+                return $this->redirectToRoute('adminPositions',['msg'=>1]);
+            }
+            array_push($alerts,['type'=>'danger','message'=>'مسئول سمت انتخاب نشده است.']);
+
+        }
+
+        return $this->render('admin/positionNew.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+            'parent'=>$entityMGR->find('App:SysPosition',$PID)
         ]);
     }
 

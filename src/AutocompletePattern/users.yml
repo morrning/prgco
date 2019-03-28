@@ -1,0 +1,3 @@
+entity: "App:SysUser"
+label:  "fullname"
+value: "id"

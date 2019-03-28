@@ -22,7 +22,7 @@ class SysPosition
     private $label;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $upperID;
 
@@ -51,75 +51,101 @@ class SysPosition
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    /**
+     * @return mixed
+     */
+    public function getLabel()
     {
         return $this->label;
     }
 
-    public function setLabel(string $label): self
+    /**
+     * @param mixed $label
+     */
+    public function setLabel($label): void
     {
         $this->label = $label;
-
-        return $this;
     }
 
-    public function getUpperID(): ?int
+    /**
+     * @return mixed
+     */
+    public function getUpperID()
     {
         return $this->upperID;
     }
 
-    public function setUpperID(?int $upperID): self
+    /**
+     * @param mixed $upperID
+     */
+    public function setUpperID($upperID): void
     {
         $this->upperID = $upperID;
-
-        return $this;
     }
 
-    public function getUserID(): ?int
+    /**
+     * @return mixed
+     */
+    public function getUserID()
     {
         return $this->userID;
     }
 
-    public function setUserID(?int $userID): self
+    /**
+     * @param mixed $userID
+     */
+    public function setUserID($userID): void
     {
         $this->userID = $userID;
-
-        return $this;
     }
 
-    public function getPublicLabel(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPublicLabel()
     {
         return $this->publicLabel;
     }
 
-    public function setPublicLabel(string $publicLabel): self
+    /**
+     * @param mixed $publicLabel
+     */
+    public function setPublicLabel($publicLabel): void
     {
         $this->publicLabel = $publicLabel;
-
-        return $this;
     }
 
-    public function getIsDefault(): ?int
+    /**
+     * @return mixed
+     */
+    public function getisDefault()
     {
         return $this->isDefault;
     }
 
-    public function setIsDefault(?int $isDefault): self
+    /**
+     * @param mixed $isDefault
+     */
+    public function setIsDefault($isDefault): void
     {
         $this->isDefault = $isDefault;
-
-        return $this;
     }
 
-    public function getGroups(): ?string
+    /**
+     * @return mixed
+     */
+    public function getGroups()
     {
         return $this->groups;
     }
 
-    public function setGroups(?string $groups): self
+    /**
+     * @param mixed $groups
+     */
+    public function setGroups($groups): void
     {
         $this->groups = $groups;
-
-        return $this;
     }
+
+
 }

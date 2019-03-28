@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}ویرایش پست سازمانی{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                <span class="text-danger">پست سازمانی مورد ویرایش:{{ parent.publicLabel }}</span>
+            </div>
+            <hr>
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                {{ form_start(form) }}
+                {{ form_label(form.label) }}
+                {{ form_widget(form.label) }}
+                {{ form_label(form.userID) }}
+                {{ form_widget(form.userID) }}
+                {{ form_label(form.upperID) }}
+                {{ form_widget(form.upperID) }}
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_widget(form.submit) }}
+                        <a class="btn btn-secondary" href="{{ path('adminPositions') }}">انصراف</a>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

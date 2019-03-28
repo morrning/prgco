@@ -25,7 +25,7 @@
             });
         });
     </script>
-    <input class="autoComplete{{ form.vars.id }} form-control" placeholder="جست‌و‌جو...." >
-    <input class="SysAutoComplete{{ form.vars.id }}" type="hidden" {{ block('widget_attributes') }} >
+    <input class="autoComplete{{ form.vars.id }} form-control" placeholder="جست‌و‌جو...." value="{{ form.vars.data }}">
+    <input class="SysAutoComplete{{ form.vars.id }}" type="hidden" {{ block('widget_attributes') }} value="{{ form.vars.data }}">
     <br>
 {% endblock %}
