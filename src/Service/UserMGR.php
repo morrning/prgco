@@ -87,14 +87,15 @@ class UserMGR
     }
 
     //--------------- PERMISSION CONTROLL ---------------
-    public function hasPermission($permissionName,$bundle='CORE',$option=null)
+    public function hasPermission($permissionName,$bundle='CORE',$option=null,$pid = 1)
     {
         if($this->isLogedIn()){
             $groups = explode(',',$this->currentPosition()->getGroups());
             $params = [
                 'groupName'=>$permissionName,
                 'options'=>$option,
-                'bundle'=>$bundle
+                'bundle'=>$bundle,
+                'PID'=>$pid
             ];
             $grp = $this->em->findOneBy('App:SysGroup',$params);
             if(is_null($grp))
@@ -103,6 +104,8 @@ class UserMGR
                 $grp->setBundle($bundle);
                 if(! is_null($option))
                     $grp->setOptions($option);
+                if(! is_null($pid))
+                    $grp->setPID($pid);
                 $grp->setGroupName($permissionName);
                 $grp->setLabel($permissionName);
                 $this->em->insertEntity($grp);

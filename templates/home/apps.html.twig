@@ -52,5 +52,27 @@
                 </div>
             {% endif %}
         </div>
+        {% if UserMGR.isLogedIn() %}
+            <hr>
+            <h4 class="pb-2">ناحیه کاری: <span class="text-danger">{{ area.areaName }}</span> </h4>
+            <div class="row">
+                {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                    <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                        <div class="card">
+                            <img class="card-img-top" src="{{ asset('assets/images/apps/ict-request.jpg') }}">
+                            <div class="card-body text-center">
+                                <p class="text-primary text-center">
+                                    درخواست خدمات فناوری اطلاعات
+                                </p>
+                                <a href="{{ path('ictreqDashboard') }}" class="btn btn-sm btn-success">
+                                    اجرا برنامه
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+
     </div>
 {% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'ict/base.html.twig' %}
+
+{% block title %}درخواست جدید{% endblock %}
+
+{% block pageBody %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-sm-12 col-md-6 pb-2">
+            {{ form_label(form.requestType) }}
+            {{ form_widget(form.requestType) }}
+        </div>
+        <div class="col-sm-12 col-md-12">
+            {{ form_label(form.des) }}
+            {{ form_widget(form.des) }}
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-12">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-warning" href="{{ path('newsPosts') }}">بازگشت</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

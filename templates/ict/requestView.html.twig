@@ -1,0 +1,31 @@
+{% extends 'ict/base.html.twig' %}
+
+{% block title %}مشاهده درخواست{% endblock %}
+{% block pageBody %}
+    <div class="container">
+        <div class="row pb-2">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-info">
+                        اطلاعات مربوط به درخواست
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <p>درخواست کننده:{{ UserMGR.CurrentPosition.publicLabel }}</p>
+                                <p> تاریخ درخواست:{{ Jdate.jdate('Y/n/d در ساعت h:i',request.dateSubmit) }}</p>
+                                <p>وضعیت درخواست: {{ request.state }}</p>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6">
+                                <p>نوع درخواست:{{ request.requestType }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr>
+        <h5>اقدامات انجام شده:</h5>
+    </div>
+{% endblock %}

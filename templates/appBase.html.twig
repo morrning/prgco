@@ -54,19 +54,6 @@
                                 تغییر کلمه‌عبور
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">
-                                <i class="fal fa-comment-alt"></i>
-                                پیام جدید
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fal fa-inbox-in"></i>
-                                پیام‌های دریافتی
-                            </a>
-                            <a class="dropdown-item" href="#">
-                                <i class="fal fa-inbox-out"></i>
-                                پیام‌های ارسالی
-                            </a>
-                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ path('userLogout') }}">
                                 <i class="fal fa-door-open"></i>
                                 خروج
@@ -86,11 +73,11 @@
     </nav>
     <div class="container-fluid ">
         <div class="row mb-5">
-            <div class="col-xs-12 col-md-1 sidebar border-left border-top">
+            <div class="col-xs-12 col-md-2 sidebar border-left border-top">
                 <!-- Sidebar -->
                 {% block appMenu %}{% endblock %}
             </div>
-            <div class="col-xs-12 col-md-11">
+            <div class="col-xs-12 col-md-10">
                 <ol class="breadcrumb my-1">
                     <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
                             <i class="fas fa-home"></i>

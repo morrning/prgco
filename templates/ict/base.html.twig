@@ -1,0 +1,26 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}سامانه درخواست خدمات فناوری اطلاعات و ارتباطات{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictreqDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictreqNew') }}">
+                <i class="fas fa-plus"></i>
+                <span>درخواست جدید</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictreqArchive') }}">
+                <i class="fas fa-archive"></i>
+                <span>آرشیو درخواست‌ها</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+

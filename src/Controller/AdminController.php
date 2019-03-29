@@ -12,6 +12,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 //json encoder classes
 use Symfony\Component\Serializer\Serializer;
@@ -142,7 +144,8 @@ class AdminController extends AbstractController
         $alerts = null;
 
         $groups = $entityMGR->findAll('App:SysGroup');
-
+        foreach ($groups as $group)
+            $group->setPID($entityMGR->find('App:SysArea',$group->getPID())->getAreaName());
         return $this->render('admin/groups.html.twig', [
             'alerts' => $alerts,
             'groups' => $groups
@@ -293,19 +296,27 @@ class AdminController extends AbstractController
         $position = $entityMGR->find('App:SysPosition',$PID);
         $form = $this->createFormBuilder($position)
             ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
+            ->add('defaultArea', EntityType::class, [
+                'class'=>Entity\SysArea::class,
+                'choice_label'=>'areaName',
+                'choice_value' => 'id',
+                'label'=>'ناحیه کاری',
+                'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()),
+            ])
             ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
             ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'position']])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
         $form->handleRequest($request);
-        $alerts = [];
         if ($form->isSubmitted() && $form->isValid()) {
             if(! is_null($form->get('userID')->getData()) && ! is_null($form->get('upperID')->getData()))
             {
                 $user = $entityMGR->find('App:SysUser',$position->getUserID());
                 $position = $form->getData();
+                $position->setDefaultArea($position->getDefaultArea()->getId());
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+
                 $entityMGR->insertEntity($position);
                 $logger->info(sprintf('user %s edit position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>2]);
@@ -330,11 +341,15 @@ class AdminController extends AbstractController
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
-        $alerts = [];
+        $area = $entityMGR->findAll('App:SysArea');
         $position = new Entity\SysPosition();
         $form = $this->createFormBuilder($position)
             ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
             ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('defaultArea', ChoiceType::class, [
+                'choices'=>$area,'choice_label'=>'areaName','choice_value'=>'id',
+                'label'=>'ناحیه کاری'
+            ])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 

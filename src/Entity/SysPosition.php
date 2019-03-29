@@ -46,6 +46,11 @@ class SysPosition
      */
     private $groups;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $defaultArea;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -145,6 +150,22 @@ class SysPosition
     public function setGroups($groups): void
     {
         $this->groups = $groups;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefaultArea()
+    {
+        return $this->defaultArea;
+    }
+
+    /**
+     * @param mixed $defaultArea
+     */
+    public function setDefaultArea($defaultArea): void
+    {
+        $this->defaultArea = $defaultArea;
     }
 
 

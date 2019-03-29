@@ -1,0 +1,23 @@
+{% extends 'ict/base.html.twig' %}
+
+{% block title %}داشبورد خدمات انفورماتیک{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-request.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            تعداد درخواست‌های شما :
+                            <span class="text-danger">
+                                {{ reqCount }}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
