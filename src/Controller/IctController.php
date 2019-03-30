@@ -20,6 +20,100 @@ use App\Entity;
 class IctController extends AbstractController
 {
     /**
+     * @Route("/ictdoing/dashboard", name="ictDoingDashboard")
+     */
+    public function ictDoingDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        return $this->render('ict/dashboardDoing.html.twig', [
+            'reqCount'=> count($entityMGR->findBy('App:ICTRequest',['areaID'=>$userMGR->currentPosition()->getDefaultArea()]))
+        ]);
+    }
+
+    /**
+     * @Route("/ictdoing/archive/{msg}", name="ictDoingArchive")
+     */
+    public function ictDoingArchive($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'درخواست شما با موفقیت ثبت شد.به زودی درخواست شما بررسی خواهد شد.']];
+        $requests = $entityMGR->findBy('App:ICTRequest',[
+            'areaID'=>$userMGR->currentPosition()->getDefaultArea(),
+            'submitter'=>$userMGR->currentPosition()->getId()
+        ],[
+            'id'=>'DESC'
+        ]);
+        foreach ($requests as $request)
+            $request->setSubmitter($entityMGR->find('App:SysPosition',$request->getSubmitter())->getPublicLabel());
+        return $this->render('ict/requestsArchiveDoing.html.twig', [
+            'requests' => $requests,
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/ictdoing/requests/view/{rid}", name="ictdoingView")
+     */
+    public function ictdoingView($rid,Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        if(is_null($entityMGR->find('App:ICTRequest',$rid)))
+            return $this->redirectToRoute('404');
+        $default = ['message'=>'simple form'];
+        $form = $this->createFormBuilder($default)
+            ->add('requestType', EntityType::class,
+                [
+                    'label'=>'وضعیت درخواست',
+                    'class'=>Entity\ICTRequestState::class,
+                    'choice_value'=>'stateName',
+                    'choice_label'=>'stateName'
+                ]
+            )
+            ->add('des', TextareaType::class,['label'=>'شرح اقدام','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alert = null;
+        $req = $entityMGR->find('App:ICTRequest',$rid);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $doing = new Entity\ICTDoing();
+            $doing->setDateSubmit(time());
+            $doing->setSubmitter($userMGR->currentPosition()->getId());
+            $doing->setReqID($rid);
+            $doing->setDes($form->get('des')->getData());
+            $entityMGR->insertEntity($doing);
+            $req->setState($form->get('requestType')->getData()->getStateName());
+            $entityMGR->update($req);
+            $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new ICT Doing.' );
+            $alert = [['type'=>'success','message'=>'اقدام با موفقیت ثبت شد.']];
+        }
+
+        $replays = $entityMGR->findBy('App:ICTDoing',[
+            'reqID'=>$rid,
+        ],[
+            'id'=>'DESC'
+        ]);
+        foreach ($replays as $replay)
+            $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
+
+        return $this->render('ict/requestViewDoing.html.twig', [
+            'request' => $req,
+            'replays' => $replays,
+            'form'=>$form->createView(),
+            'alerts'=>$alert
+        ]);
+    }
+
+    /**
      * @Route("/ictreq/dashboard", name="ictreqDashboard")
      */
     public function ictreqDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
@@ -75,8 +169,8 @@ class IctController extends AbstractController
     }
 
     /**
- * @Route("/ictreq/requests/archive/{msg}", name="ictreqArchive")
- */
+     * @Route("/ictreq/requests/archive/{msg}", name="ictreqArchive")
+     */
     public function ictreqArchive($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
 
@@ -110,14 +204,18 @@ class IctController extends AbstractController
         $request = $entityMGR->find('App:ICTRequest',$rid);
         if($request->getSubmitter() != $userMGR->currentPosition()->getId())
             return $this->redirectToRoute('403');
-
+        $replays = $entityMGR->findBy('App:ICTDoing',[
+            'reqID'=>$rid,
+        ],[
+            'id'=>'DESC'
+        ]);
+        foreach ($replays as $replay)
+        {
+            $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
+        }
         return $this->render('ict/requestView.html.twig', [
             'request' => $request,
-            'replays' => $entityMGR->findBy('App:ICTDoing',[
-                'reqID'=>$rid,
-            ],[
-                'id'=>'DESC'
-            ])
+            'replays' => $replays
         ]);
     }
 

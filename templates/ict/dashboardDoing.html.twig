@@ -1,22 +1,22 @@
-{% extends 'ict/base.html.twig' %}
+{% extends 'ict/baseDoing.html.twig' %}
 
-{% block title %}داشبورد خدمات انفورماتیک{% endblock %}
+{% block title %}داشبورد مدیریت انفورماتیک{% endblock %}
 
 {% block pageBody %}
     <div class="container">
         <div class="row">
             <div class="col-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
-                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-request.jpg') }}">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-doing.jpg') }}">
                     <div class="card-body text-center">
                         <p class="text-primary text-center">
-                            تعداد درخواست‌های شما :
+                            تعداد درخواست‌های خدمات :
                             <span class="text-danger">
                                 {{ reqCount }}
                             </span>
                         </p>
                         <p class="text-center">
-                            <a class="btn btn-success" href="{{ path('ictreqArchive') }}">مشاهده درخواست‌ها</a>
+                            <a class="btn btn-success" href="{{ path('ictDoingArchive') }}">مشاهده درخواست‌ها</a>
                         </p>
                     </div>
                 </div>

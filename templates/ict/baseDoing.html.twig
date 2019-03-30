@@ -1,0 +1,21 @@
+{% extends 'appBase.html.twig' %}
+
+{% block appName %}سامانه مدیریت ICT{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictDoingDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictDoingArchive') }}">
+                <i class="fas fa-archive"></i>
+                <span>درخواست‌های خدمات</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+

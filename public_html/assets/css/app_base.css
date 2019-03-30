@@ -3,3 +3,6 @@
     background-color: #fffff0;
     min-height: calc(100vh - 56px);
 }
+.appNavbar{
+    background-color: #043a62; !important;
+}

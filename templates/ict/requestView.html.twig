@@ -12,20 +12,45 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-6">
+                                <p>شماره درخواست: {{ request.id }}</p>
                                 <p>درخواست کننده:{{ UserMGR.CurrentPosition.publicLabel }}</p>
                                 <p> تاریخ درخواست:{{ Jdate.jdate('Y/n/d در ساعت h:i',request.dateSubmit) }}</p>
-                                <p>وضعیت درخواست: {{ request.state }}</p>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6">
+                                <p>وضعیت درخواست: {{ request.state }}</p>
                                 <p>نوع درخواست:{{ request.requestType }}</p>
+                                <p>ناحیه کاری:{{ EntityMGR.find('App:SysArea',UserMGR.CurrentPosition.defaultArea).areaName }}</p>
                             </div>
                         </div>
+                        <hr>
+                        <h5 class="text-primary">شرح درخواست:</h5>
+                        <p>{{ request.des }}</p>
                     </div>
                 </div>
             </div>
 
         </div>
         <hr>
-        <h5>اقدامات انجام شده:</h5>
+        <h5 class="text-primary">اقدامات انجام شده:</h5>
+        <div class="row pb-2">
+            <div class="col-12">
+                {% for replay in replays %}
+                  <div class="card">
+                      <div class="card-header bg-secondary text-light">
+                          اقدام کننده:
+                          {{ replay.submitter }}
+                      </div>
+                      <div class="card-body">
+                          {{ replay.des }}
+                      </div>
+                      <div class="card-footer">
+                          تاریخ اقدام:
+                          {{ Jdate.jdate('Y/n/d در ساعت h:i',replay.dateSubmit) }}
+                      </div>
+                  </div>
+                {% endfor %}
+            </div>
+        </div>
+        <a class="btn btn-warning" href="{{ path('ictreqArchive') }}">بازگشت</a>
     </div>
 {% endblock %}
