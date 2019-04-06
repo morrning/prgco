@@ -38,7 +38,7 @@ class IctController extends AbstractController
     public function ictDoingArchive($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
 
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
         $alerts = null;
@@ -63,7 +63,7 @@ class IctController extends AbstractController
      */
     public function ictdoingView($rid,Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
         if(is_null($entityMGR->find('App:ICTRequest',$rid)))
             return $this->redirectToRoute('404');
