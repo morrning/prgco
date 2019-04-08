@@ -28,7 +28,9 @@ class IctController extends AbstractController
             return $this->redirectToRoute('403');
 
         return $this->render('ict/dashboardDoing.html.twig', [
-            'reqCount'=> count($entityMGR->findBy('App:ICTRequest',['areaID'=>$userMGR->currentPosition()->getDefaultArea()]))
+            'reqCount'=> count($entityMGR->findBy('App:ICTRequest',['AcceptDoing'=>null,'areaID'=>$userMGR->currentPosition()->getDefaultArea()])),
+            'reqArchiveCount' => count($entityMGR->findBy('App:ICTRequest',['AcceptDoing'=>'1','areaID'=>$userMGR->currentPosition()->getDefaultArea()])),
+            'DeviceCount'=> count($entityMGR->findBy('App:ICTMachine',['areaID'=>$userMGR->currentPosition()->getDefaultArea()]))
         ]);
     }
 
@@ -46,7 +48,7 @@ class IctController extends AbstractController
             $alerts = [['type'=>'success','message'=>'درخواست شما با موفقیت ثبت شد.به زودی درخواست شما بررسی خواهد شد.']];
         $requests = $entityMGR->findBy('App:ICTRequest',[
             'areaID'=>$userMGR->currentPosition()->getDefaultArea(),
-            'submitter'=>$userMGR->currentPosition()->getId()
+            'AcceptDoing'=>'1'
         ],[
             'id'=>'DESC'
         ]);
@@ -58,6 +60,31 @@ class IctController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ictdoing/activeworklist/{msg}", name="ictDoingActiveRequests")
+     */
+    public function ictDoingActiveRequests($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'درخواست شما با موفقیت ثبت شد.به زودی درخواست شما بررسی خواهد شد.']];
+        $requests = $entityMGR->findBy('App:ICTRequest',[
+            'areaID'=>$userMGR->currentPosition()->getDefaultArea(),
+            'AcceptDoing'=>null
+        ],[
+            'id'=>'DESC'
+        ]);
+        foreach ($requests as $request)
+            $request->setSubmitter($entityMGR->find('App:SysPosition',$request->getSubmitter())->getPublicLabel());
+        return $this->render('ict/requestsArchiveDoing.html.twig', [
+            'requests' => $requests,
+            'alerts'=>$alerts
+        ]);
+    }
     /**
      * @Route("/ictdoing/requests/view/{rid}", name="ictdoingView")
      */
@@ -92,6 +119,7 @@ class IctController extends AbstractController
             $doing->setDes($form->get('des')->getData());
             $entityMGR->insertEntity($doing);
             $req->setState($form->get('requestType')->getData()->getStateName());
+
             $entityMGR->update($req);
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new ICT Doing.' );
             $alert = [['type'=>'success','message'=>'اقدام با موفقیت ثبت شد.']];
@@ -104,6 +132,7 @@ class IctController extends AbstractController
         ]);
         foreach ($replays as $replay)
             $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
+        $req->setMachineID($entityMGR->find('App:ICTMachine',$req->getMachineID())->getMachineName());
 
         return $this->render('ict/requestViewDoing.html.twig', [
             'request' => $req,
@@ -144,6 +173,22 @@ class IctController extends AbstractController
                     'choice_label'=>'typeName'
                     ]
             )
+            ->add('EMSstate', EntityType::class,
+                [
+                    'label'=>'اولویت درخواست',
+                    'class'=>Entity\ICTRequestEMSState::class,
+                    'choice_value'=>'stateName',
+                    'choice_label'=>'stateName'
+                ]
+            )
+            ->add('machine', EntityType::class,
+                [
+                    'label'=>'دستگاه (رایانه, پرینتر و....)',
+                    'class'=>Entity\ICTMachine::class,
+                    'choice_value'=>'id',
+                    'choice_label'=>'machineName'
+                ]
+            )
             ->add('des', TextareaType::class,['label'=>'شرح درخواست'])
             ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
             ->getForm();
@@ -155,6 +200,8 @@ class IctController extends AbstractController
             $req->setDes($form->get('des')->getData());
             $req->setDateSubmit(time());
             $req->setRequestType($form->get('requestType')->getData()->getTypeName());
+            $req->setMachineID($form->get('machine')->getData()->getId());
+            $req->setEMS($form->get('EMSstate')->getData()->getStateName());
             $req->setSubmitter($userMGR->currentPosition()->getId());
             $req->setAreaID($userMGR->currentPosition()->getDefaultArea());
             $req->setState('در حال بررسی');
@@ -213,6 +260,7 @@ class IctController extends AbstractController
         {
             $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
         }
+        $request->setMachineID($entityMGR->find('App:ICTMachine',$request->getMachineID())->getMachineName());
         return $this->render('ict/requestView.html.twig', [
             'request' => $request,
             'replays' => $replays

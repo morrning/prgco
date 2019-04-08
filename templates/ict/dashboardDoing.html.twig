@@ -16,7 +16,39 @@
                             </span>
                         </p>
                         <p class="text-center">
-                            <a class="btn btn-success" href="{{ path('ictDoingArchive') }}">مشاهده درخواست‌ها</a>
+                            <a class="btn btn-success" href="{{ path('ictDoingActiveRequests') }}">مشاهده درخواست‌ها</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-devices.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            تعداد دستگاه ها :
+                            <span class="text-danger">
+                                {{ DeviceCount }}
+                            </span>
+                        </p>
+                        <p class="text-center">
+                            <a class="btn btn-success" href="{{ path('ictDoingArchive') }}">مشاهده دستگاه‌ها</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-archive.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            تعداد درخواست‌های بایگانی شده:
+                            <span class="text-danger">
+                                {{ reqArchiveCount }}
+                            </span>
+                        </p>
+                        <p class="text-center">
+                            <a class="btn btn-success" href="{{ path('ictDoingArchive') }}">بایگانی</a>
                         </p>
                     </div>
                 </div>

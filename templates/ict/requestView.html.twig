@@ -15,10 +15,12 @@
                                 <p>شماره درخواست: {{ request.id }}</p>
                                 <p>درخواست کننده:{{ UserMGR.CurrentPosition.publicLabel }}</p>
                                 <p> تاریخ درخواست:{{ Jdate.jdate('Y/n/d در ساعت h:i',request.dateSubmit) }}</p>
+                                <p>اولویت:{{ request.EMS }}</p>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6">
                                 <p>وضعیت درخواست: {{ request.state }}</p>
                                 <p>نوع درخواست:{{ request.requestType }}</p>
+                                <p>دستگاه:<span class="text-danger">{{ request.MachineID }}</span> </p>
                                 <p>ناحیه کاری:{{ EntityMGR.find('App:SysArea',UserMGR.CurrentPosition.defaultArea).areaName }}</p>
                             </div>
                         </div>

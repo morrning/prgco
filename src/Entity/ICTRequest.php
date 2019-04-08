@@ -46,6 +46,21 @@ class ICTRequest
      */
     private $des;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $machineID;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $EMS;
+
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $AcceptDoing;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -119,6 +134,42 @@ class ICTRequest
     public function setDes(?string $des): self
     {
         $this->des = $des;
+
+        return $this;
+    }
+
+    public function getMachineID(): ?string
+    {
+        return $this->machineID;
+    }
+
+    public function setMachineID(?string $machineID): self
+    {
+        $this->machineID = $machineID;
+
+        return $this;
+    }
+
+    public function getEMS(): ?string
+    {
+        return $this->EMS;
+    }
+
+    public function setEMS(?string $EMS): self
+    {
+        $this->EMS = $EMS;
+
+        return $this;
+    }
+
+    public function getAcceptDoing(): ?string
+    {
+        return $this->AcceptDoing;
+    }
+
+    public function setAcceptDoing(?string $AccesptDoing): self
+    {
+        $this->AcceptDoing = $AccesptDoing;
 
         return $this;
     }
