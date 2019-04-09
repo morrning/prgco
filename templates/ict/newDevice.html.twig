@@ -1,0 +1,67 @@
+{% extends 'ict/baseDoing.html.twig' %}
+
+{% block title %}دستگاه{% endblock %}
+
+{% block pageBody %}
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-toggle="tab" href="#menu1">رایانه و لپتاپ</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div class="tab-pane active container" id="menu1">
+            {{ form_start(form) }}
+            <div class="row pt-4">
+                <div class="col-sm-12 col-md-8 pb-2">
+                    {{ form_label(form.ownerID) }}
+                    {{ form_widget(form.ownerID) }}
+                </div>
+                <div class="col-sm-12 col-md-4 pb-2">
+                    {{ form_label(form.PCBrand) }}
+                    {{ form_widget(form.PCBrand) }}
+                </div>
+                <div class="col-sm-12 col-md-4 pb-2">
+                    {{ form_label(form.ProdectCode) }}
+                    {{ form_widget(form.ProdectCode) }}
+                </div>
+                <div class="col-sm-12 col-md-4 pb-2">
+                    {{ form_label(form.PCName) }}
+                    {{ form_widget(form.PCName) }}
+                </div>
+                <div class="col-sm-12 col-md-3 pb-2">
+                    {{ form_label(form.PCMainboard) }}
+                    {{ form_widget(form.PCMainboard) }}
+                </div>
+                <div class="col-sm-12 col-md-3 pb-2">
+                    {{ form_label(form.PCCpu) }}
+                    {{ form_widget(form.PCCpu) }}
+                </div>
+                <div class="col-sm-12 col-md-3 pb-2">
+                    {{ form_label(form.PCRam) }}
+                    {{ form_widget(form.PCRam) }}
+                </div>
+                <div class="col-sm-12 col-md-3 pb-4">
+                    {{ form_label(form.PCHard) }}
+                    {{ form_widget(form.PCHard) }}
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    {{ form_label(form.des) }}
+                    {{ form_widget(form.des) }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-warning" href="{{ path('ictDoingDashboard') }}">بازگشت</a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+
+        </div>
+    </div>
+
+{% endblock %}

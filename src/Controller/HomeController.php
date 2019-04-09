@@ -11,10 +11,13 @@ class HomeController extends AbstractController
     /**
      * @Route("/", name="home")
      */
-    public function home()
+    public function home(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
+        $area = null;
+        if($userMGR->isLogedIn())
+            $area = $entityMGR->find('App:SysArea',$userMGR->currentPosition()->getDefaultArea());
         return $this->render('home/index.html.twig', [
-
+            'area'=>$area
         ]);
     }
 

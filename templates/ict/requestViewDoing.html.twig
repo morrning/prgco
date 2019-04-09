@@ -24,6 +24,35 @@
                                 <p>ناحیه کاری:{{ EntityMGR.find('App:SysArea',UserMGR.CurrentPosition.defaultArea).areaName }}</p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12 pb-2">
+                                <p>وضعیت مشاهده:
+                                    {% if request.seenTime == null %}
+                                        <span class="text-danger">تاکنون مشاهده نشده است</span>
+                                    {% else %}
+                                        <span class="text-success">
+                                             اولین بار در تاریخ
+                                                {{ Jdate.jdate('Y/n/d در ساعت h:i',request.seenTime) }}
+                                            توسط
+                                                {{ EntityMGR.find('App:SysPosition',request.seenID).publicLabel }}
+                                        </span>
+                                    {% endif %}
+                                </p>
+                                <p>وضعیت تایید اقدامات:
+                                    {% if request.acceptDoing == null %}
+                                        <span class="text-danger">اقدامات انجام شده از سوی شما تایید نشده است.</span>
+                                    {% else %}
+                                        <span class="text-success">
+                                             اقدامات در
+                                                {{ Jdate.jdate('Y/n/d در ساعت h:i',request.seenTime) }}
+                                            توسط کاربر تایید شده است.
+
+                                        </span>
+                                    {% endif %}
+                                </p>
+                            </div>
+
+                        </div>
                         <hr>
                         <h5 class="text-primary">شرح درخواست:</h5>
                         <p>{{ request.des }}</p>

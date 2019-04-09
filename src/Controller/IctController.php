@@ -13,6 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use App\Form\Type as Type;
+
 
 use App\Service;
 use App\Entity;
@@ -111,6 +113,12 @@ class IctController extends AbstractController
         $form->handleRequest($request);
         $alert = null;
         $req = $entityMGR->find('App:ICTRequest',$rid);
+        if(is_null($req->getSeenTime()))
+        {
+            $req->setSeenTime(time());
+            $req->setSeenID($userMGR->currentPosition()->getId());
+            $entityMGR->update($req);
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $doing = new Entity\ICTDoing();
             $doing->setDateSubmit(time());
@@ -242,7 +250,7 @@ class IctController extends AbstractController
     /**
      * @Route("/ictreq/requests/view/{rid}", name="ictreqView")
      */
-    public function ictreqView($rid ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    public function ictreqView($rid, Request $req ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
         if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
@@ -260,11 +268,97 @@ class IctController extends AbstractController
         {
             $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
         }
+        $default = ['message'=>'simple form'];
+        $form = $this->createFormBuilder($default)
+            ->add('submit', SubmitType::class,['attr'=>['class'=>'btn-success'],'label'=>'در صورت تایید دریافت خدمت مورد اشاره اینجا کلیک کنید'])
+            ->getForm();
+        $form->handleRequest($req);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $request->setAcceptDoing(1);
+            $request->setAcceptDoingTime(time());
+            $entityMGR->update($request);
+            $alert=[['type'=>'success','message'=>'تایید اقدامات با موفقیت انجام شد.']];
+        }
+
         $request->setMachineID($entityMGR->find('App:ICTMachine',$request->getMachineID())->getMachineName());
+
+
         return $this->render('ict/requestView.html.twig', [
             'request' => $request,
-            'replays' => $replays
+            'replays' => $replays,
+            'form'=>$form->createView(),
+            'alerts'=>$alert
         ]);
     }
+
+    /**
+     * @Route("/ictreq/new/device", name="ictDoingNewDevice")
+     */
+    public function ictDoingNewDevice(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $default = ['message'=>'simple form'];
+        $form = $this->createFormBuilder($default)
+            ->add('ownerID', Type\AutocompleteType::class,['label'=>'تحویل گیرنده','attr'=>['pattern'=>'positions']])
+            ->add('PCBrand', TextType::class,['label'=>'برند'])
+            ->add('ProdectCode', TextType::class,['label'=>'کد اموال'])
+            ->add('PCName', TextType::class,['label'=>'نام نرم افزاری رایانه'])
+            ->add('PCCpu', EntityType::class,
+                [
+                    'label'=>'پردازنده',
+                    'class'=>Entity\ICTCpuType::class,
+                    'choice_value'=>'typeName',
+                    'choice_label'=>'typeName'
+                ]
+            )
+            ->add('PCRam', EntityType::class,
+                [
+                    'label'=>'رم',
+                    'class'=>Entity\ICTRamType::class,
+                    'choice_value'=>'typeName',
+                    'choice_label'=>'typeName'
+                ]
+            )
+            ->add('PCMainboard', TextType::class,['label'=>'برد اصلی'])
+            ->add('PCHard', TextType::class,['label'=>'هارد دیسک'])
+            ->add('des', TextareaType::class,['required'=>false,'label'=>'توضیحات بیشتر'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت دستگاه'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $position = $entityMGR->find('App:SysPosition',$form->get('ownerID')->getData());
+            if(is_null($position))
+            {
+                $alerts = [['message'=>'سمت شغلی یافت نشد.','type'=>'danger']];
+            }
+            else{
+                $machine = new Entity\ICTMachine();
+                $machine->setOwnerID($position->getId());
+                $machine->setAreaID($position->getDefaultArea());
+                $machine->setDes($form->get('des')->getData());
+                $machine->setPCBrand($form->get('PCBrand')->getData());
+                $machine->setPCCpu($form->get('PCCpu')->getData()->getTypeName());
+                $machine->setPCHard($form->get('PCHard')->getData());
+                $machine->setPCMainboard($form->get('PCMainboard')->getData());
+                $machine->setPCName($form->get('PCName')->getData());
+                $machine->setProdectCode($form->get('ProdectCode')->getData());
+                $machine->setMachineName('رایانه ثابت / همراه' . 'PC Name:' . $machine->getPCName() . ' کد اموال: ' . $machine->getProdectCode());
+                $entityMGR->insertEntity($machine);
+                $logger->info(sprintf('user %s add new device with id: %s',$userMGR->currentUser()->getUsername(),$machine->getId()));
+                return $this->redirectToRoute('ictDoingDashboard',['msg'=>'1']);
+
+            }
+        }
+
+        return $this->render('ict/newDevice.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
 }

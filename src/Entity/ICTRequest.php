@@ -61,6 +61,21 @@ class ICTRequest
      */
     private $AcceptDoing;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $seenTime;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $seenID;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $acceptDoingTime;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -170,6 +185,42 @@ class ICTRequest
     public function setAcceptDoing(?string $AccesptDoing): self
     {
         $this->AcceptDoing = $AccesptDoing;
+
+        return $this;
+    }
+
+    public function getSeenTime(): ?string
+    {
+        return $this->seenTime;
+    }
+
+    public function setSeenTime(?string $seenTime): self
+    {
+        $this->seenTime = $seenTime;
+
+        return $this;
+    }
+
+    public function getSeenID(): ?string
+    {
+        return $this->seenID;
+    }
+
+    public function setSeenID(?string $seenID): self
+    {
+        $this->seenID = $seenID;
+
+        return $this;
+    }
+
+    public function getAcceptDoingTime(): ?string
+    {
+        return $this->acceptDoingTime;
+    }
+
+    public function setAcceptDoingTime(?string $acceptDoingTime): self
+    {
+        $this->acceptDoingTime = $acceptDoingTime;
 
         return $this;
     }
