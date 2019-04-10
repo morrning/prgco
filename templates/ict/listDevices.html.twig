@@ -9,6 +9,7 @@
                 <th>ردیف</th>
                 <th>نوع دستگاه</th>
                 <th>کد اموال</th>
+                <th>نام رایانه</th>
                 <th>تحویل گیرنده</th>
                 <th>امکانات</th>
             </tr>
@@ -19,6 +20,7 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ machine.deviceType }}</td>
                     <td>{{ machine.ProdectCode }}</td>
+                    <td>{{ machine.PCName }}</td>
                     <td>{{ machine.ownerID }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ path('ictDoingViewDevice',{'id':machine.id}) }}">مشاهده</a>
