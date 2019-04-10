@@ -71,6 +71,11 @@ class ICTMachine
      */
     private $PCBrand;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $DeviceType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -204,6 +209,18 @@ class ICTMachine
     public function setPCBrand(?string $PCBrand): self
     {
         $this->PCBrand = $PCBrand;
+
+        return $this;
+    }
+
+    public function getDeviceType(): ?string
+    {
+        return $this->DeviceType;
+    }
+
+    public function setDeviceType(?string $DeviceType): self
+    {
+        $this->DeviceType = $DeviceType;
 
         return $this;
     }

@@ -8,7 +8,7 @@
     <!-- Page Content -->
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+            <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                 <div class="card">
                     <img class="card-img-top" src="{{ asset('assets/images/apps/automation.jpg') }}">
                     <div class="card-body text-center">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+            <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                 <div class="card">
                     <img class="card-img-top" src="{{ asset('assets/images/apps/online_ding.jpg') }}">
                     <div class="card-body text-center">
@@ -37,7 +37,7 @@
                 </div>
             </div>
             {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
-                <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+                <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                     <div class="card">
                         <img class="card-img-top" src="{{ asset('assets/images/apps/e-publish.jpg') }}">
                         <div class="card-body text-center">
@@ -57,7 +57,7 @@
             <h4 class="pb-2">ناحیه کاری: <span class="text-danger">{{ area.areaName }}</span> </h4>
             <div class="row">
                 {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
-                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                         <div class="card">
                             <img class="card-img-top" src="{{ asset('assets/images/apps/ict-request.jpg') }}">
                             <div class="card-body text-center">
@@ -72,7 +72,7 @@
                     </div>
                 {% endif %}
                 {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
-                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                         <div class="card">
                             <img class="card-img-top" src="{{ asset('assets/images/apps/ict-doing.jpg') }}">
                             <div class="card-body text-center">
@@ -87,7 +87,7 @@
                     </div>
                 {% endif %}
                 {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
-                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2 d-flex align-items-stretch">
+                    <div class="col-xs-12 col-sm-12 col-md-3 pb-2">
                         <div class="card">
                             <img class="card-img-top" src="{{ asset('assets/images/apps/pm.jpg') }}">
                             <div class="card-body text-center">

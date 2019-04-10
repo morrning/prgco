@@ -339,6 +339,7 @@ class IctController extends AbstractController
             else{
                 $machine = new Entity\ICTMachine();
                 $machine->setOwnerID($position->getId());
+                $machine->setDeviceType('رایانه ثابت / همراه');
                 $machine->setAreaID($position->getDefaultArea());
                 $machine->setDes($form->get('des')->getData());
                 $machine->setPCBrand($form->get('PCBrand')->getData());
@@ -357,6 +358,55 @@ class IctController extends AbstractController
 
         return $this->render('ict/newDevice.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/ictDoing/list/devices/{msg}", name="ictDoingListDevices")
+     */
+    public function ictDoingListDevices($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'دستگاه با موفقیت اضافه شد.']];
+
+        $machines = $entityMGR->findBy('App:ICTMachine',[
+            'areaID'=>$userMGR->currentPosition()->getDefaultArea()
+        ],[
+            'id'=>'DESC'
+        ]);
+        foreach ($machines as $machine)
+            $machine->setOwnerID($entityMGR->find('App:SysPosition',$machine->getOwnerID())->getPublicLabel());
+        return $this->render('ict/listDevices.html.twig', [
+            'machines' => $machines,
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/ictDoing/view/device/{id}", name="ictDoingViewDevice")
+     */
+    public function ictDoingViewDevice($id = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $machine = $entityMGR->find('App:ICTMachine',$id);
+
+        if(is_null($machine))
+            return $this->redirectToRoute('404');
+        if($machine->getAreaID() != $userMGR->currentPosition()->getDefaultArea())
+            return $this->redirectToRoute('404');
+
+        $machine->setOwnerID($entityMGR->find('App:SysPosition',$machine->getOwnerID())->getPublicLabel());
+
+        return $this->render('ict/viewDevice.html.twig', [
+            'machine' => $machine
         ]);
     }
 
