@@ -1,0 +1,35 @@
+{% extends 'project/base.html.twig' %}
+
+{% block title %}آرشیو پروژه ها{% endblock %}
+{% block pageBody %}
+    <a class="btn btn-success mb-2" href="{{ path('ProjectAdminNewProject') }}">
+        <i class="fas fa-plus"></i>
+        پروژه جدید
+    </a>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام پروژه</th>
+                <th>به روز رسانی</th>
+                <th>پیشرفت فیزیکی</th>
+                <th>پیشرفت برنامه ای</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for project in projects %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ project.areaName }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',project.lastUpdate) }}</td>
+                    <td>{{ project.Pprogress }}</td>
+                    <td>{{ project.Cprogress }}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

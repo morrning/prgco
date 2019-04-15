@@ -16,8 +16,17 @@ class HomeController extends AbstractController
         $area = null;
         if($userMGR->isLogedIn())
             $area = $entityMGR->find('App:SysArea',$userMGR->currentPosition()->getDefaultArea());
+
+        $projects = $entityMGR->getORM()->createQueryBuilder('p')
+            ->select(['p.id','a.areaName','p.lastUpdate','p.Pprogress','p.Cprogress'])
+            ->from('App:Project','p')
+            ->innerJoin('App:SysArea','a','WITH','p.areaID = a.id')
+            ->getQuery()
+            ->getResult();
+
         return $this->render('home/index.html.twig', [
-            'area'=>$area
+            'area'=>$area,
+            'projects'=>$projects
         ]);
     }
 
