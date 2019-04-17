@@ -21,6 +21,7 @@ class HomeController extends AbstractController
             ->select(['p.id','a.areaName','p.lastUpdate','p.Pprogress','p.Cprogress'])
             ->from('App:Project','p')
             ->innerJoin('App:SysArea','a','WITH','p.areaID = a.id')
+            ->orderBy('p.Pprogress','DESC')
             ->getQuery()
             ->getResult();
 

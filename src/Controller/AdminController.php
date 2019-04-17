@@ -169,12 +169,12 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $position = $entityMGR->find('App:SysPosition',$form->get('PositionID')->getData());
-            if(is_null($position))
+            if(is_null($form->get('PositionID')->getData()))
             {
                 $alerts = [['message'=>'سمت شغلی یافت نشد.','type'=>'danger']];
             }
             else{
+                $position = $entityMGR->find('App:SysPosition',$form->get('PositionID')->getData());
                 $alerts = [['message'=>'سمت شغلی با موفقیت افزوده شد.','type'=>'success']];
                 $userMgr->addToGroup($position->getId(),$id);
                 $logger->info(sprintf('user %s add position ID %s to group ID %s',$userMgr->currentUser()->getUsername(),$position->getId(),$id));

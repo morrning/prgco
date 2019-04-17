@@ -10,7 +10,7 @@
                         success: function( data ) {
                             if(data.length == 0)
                             {
-                                $(".SysAutoComplete{{ form.vars.id }}").val(0);
+                                $(".SysAutoComplete{{ form.vars.id }}").val(null);
                             }
                             response( data );
                         }

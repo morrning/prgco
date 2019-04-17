@@ -64,6 +64,12 @@
                         {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
                             <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('MostUsedFiles','MUF',null,area.id) == true %}
+                            <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-file-archive"></i>
+                                فرم های پرکاربرد
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
