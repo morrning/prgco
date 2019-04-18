@@ -1,0 +1,33 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}فرم های پر کاربرد{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            فرم های پرکاربرد
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover rounded text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for file in files %}
+                        <tr class="">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ file.title }}</td>
+                            <td>
+                                <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}">دریافت</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

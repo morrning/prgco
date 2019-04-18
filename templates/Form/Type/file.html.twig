@@ -1,0 +1,21 @@
+{% block file_widget %}
+    <script>
+        function openSelectfileDialog{{ form.vars.id }}(id) {
+            $('#' + id).trigger('click');
+        }
+
+        function changeTxtFile{{ form.vars.id }}() {
+            $('#txtFileInputName{{ form.vars.id }}').val($('.form-control-file{{ form.vars.id }}').val().replace(/.*(\/|\\)/, '')) ;
+        }
+
+    </script>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text btnSelectFile{{ form.vars.id }}" onclick="openSelectfileDialog{{ form.vars.id }}('{{ form.vars.id }}')">انتخاب فایل</div>
+        </div>
+        <input type="text" class="form-control" id="txtFileInputName{{ form.vars.id }}" placeholder="" readonly="readonly">
+    </div>
+
+    <input type="file" class="form-control-file{{ form.vars.id }}" onchange="changeTxtFile{{ form.vars.id }}();" {{ block('widget_attributes') }} hidden="hidden">
+
+{% endblock %}

@@ -1,0 +1,12 @@
+{% extends 'mostusedfiles/base.html.twig' %}
+
+{% block title %}فرم جدید{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

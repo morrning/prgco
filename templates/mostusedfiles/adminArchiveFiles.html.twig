@@ -7,14 +7,21 @@
             <thead class="thead-dark">
             <tr>
                 <th>ردیف</th>
-                <th>نوع درخواست</th>
-                <th>تاریخ ثبت</th>
-                <th>وضعیت</th>
+                <th>عنوان</th>
                 <th>امکانات</th>
             </tr>
             </thead>
             <tbody class="">
-
+            {% for file in files %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ file.title }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-success" href="{{ asset('files/' ~ file.fileID) }}">دریافت</a>
+                        <a class="btn btn-sm btn-danger" href="{{ path('mostusedfilesDeleteFile',{'id':file.id}) }}">حذف</a>
+                    </td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
     </div>

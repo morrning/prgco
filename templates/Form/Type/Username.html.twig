@@ -1,0 +1,62 @@
+{% block username_widget %}
+    <script>
+        function txtFilterBaseUsernames(txtValue) {
+            if(txtValue == "")
+            {
+                $('.TxtBaseUserNameForSearch').hide();
+            }
+            else
+            {
+                $.ajax({
+                    url: Routing.generate('ServiceGetBaseUserListXML', { 'filter': txtValue }),
+                    success: function(data) {
+                        var jsonData = JSON.parse(data);
+                        if(jsonData.length == 0)
+                        {
+                            $('.TxtBaseUserNameForSearch').hide();
+                        }
+                        else
+                        {
+                            $('.usernameOptions').remove();
+                            var opt = "";
+                            var node;
+                            for(node in jsonData)
+                            {
+                                opt = opt + '<option  class="usernameOptions" value="' + jsonData[node]['id'] + '">' + jsonData[node]['fullName'] + '</option>';
+                            }
+                            $('.selectUsername').append(opt);
+                            $('.selectUsername').removeAttr("hidden");
+                        }
+
+                    }
+                });
+                $('.TxtBaseUserNameForSearch').show();
+            }
+
+        }
+    </script>
+
+    {% spaceless %}
+        <div class="row">
+            <div class="col-4">
+                <input class="form-control form-control-sm" type="text" placeholder="جست و جوی کاربر..." onkeyup="txtFilterBaseUsernames(this.value);">
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <select  class="form-control TxtBaseUserNameForSearch selectUsername form-control-sm" {{ block('widget_attributes') }} autocomplete="off" hidden="hidden">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <hr>
+
+    {% endspaceless %}
+
+    <script>
+        $('.TxtBaseUserNameForSearch').hide();
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

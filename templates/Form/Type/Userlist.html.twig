@@ -1,0 +1,62 @@
+{% block userlist_widget %}
+    <script>
+        function txtFilterUsernames(txtValue , id) {
+            if(txtValue == "")
+            {
+                $('.TxtUserNameForSearch' + id).attr('hidden','hidden');
+            }
+            else
+            {
+                $.ajax({
+                    url: Routing.generate('ServiceGetUserListXML', { 'filter': txtValue }),
+                    success: function(data) {
+                            var jsonData = JSON.parse(data);
+                            if(jsonData.length == 0)
+                            {
+                                $('.TxtUserNameForSearch' + id).attr('hidden','hidden');
+                            }
+                            else
+                            {
+                                $('.RollOptions' + id).remove();
+                                var opt = "";
+                                var node;
+                                for(node in jsonData)
+                                {
+                                    opt = opt + '<option  class="RollOptions' + id +'" value="' + jsonData[node]['id'] + '">' + jsonData[node]['fullName'] + '</option>';
+                                }
+                                $('.TxtUserNameForSearch' + id).append(opt);
+                                $('.TxtUserNameForSearch' + id).removeAttr("hidden");
+                            }
+
+                    }
+                });
+                $('.TxtUserNameForSearch').show();
+            }
+
+        }
+    </script>
+
+    {% spaceless %}
+        <div class="row">
+            <div class="col-4">
+                <input class="form-control form-control-sm" type="text" placeholder="جست و جو..." onkeyup="txtFilterUsernames(this.value,'{{ form.vars.id }}');">
+            </div>
+            <div class="col-8">
+                <div class="form-group">
+                    <select  class="form-control TxtUserNameForSearch{{ form.vars.id }} form-control-sm" {{ block('widget_attributes') }} autocomplete="off" hidden="hidden">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+<br>
+    {% endspaceless %}
+
+    <script>
+        $('.TxtUserNameForSearch').hide();
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

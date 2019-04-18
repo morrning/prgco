@@ -1,0 +1,11 @@
+{% block money_widget %}
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text"><i class="material-icons">attach_money
+                </i></div>
+        </div>
+        <input type="text" class="MoneyInput form-control"  value="{{ form.vars.data }}" autocomplete="off" onkeyup="SysChangeValueMoney(this.value,'{{ form.vars.id }}')" >
+        <input type="text" class="MoneyInput{{ form.vars.id }} form-control"  value="{{ form.vars.data }}" {{ block('widget_attributes') }} hidden="hidden"  >
+    </div>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'withNavbar.html.twig' %}
+{% block pageBody %}
+    {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+    <!-- Page Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-3">
+                <div class="list-group">
+                    <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active">
+                        <i class="fas fa-bars"></i>
+                        سامانه‌ها
+                    </a>
+                    <a href="http://oas.prgco.ir/menu/" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-envelope"></i>
+                        سامانه مکاتبات سازمانی
+                    </a>
+                    <a href="http://pay.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-money-check-alt"></i>
+                        سامانه فیش حقوقی
+                    </a>
+                    <a href="http://pms.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fab fa-product-hunt"></i>
+                        سامانه مدیریت قراردادها
+                    </a>
+                    <a href="http://edari.prgco.ir:8091/Account/Login" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-user-alt"></i>
+                        سامانه مدیریت کارکنان
+                    </a>
+                    <a href="https://mail.prgco.ir/" class="list-group-item list-group-item-action" target="_blank">
+                        <i class="fas fa-inbox"></i>
+                        پست الکترونیکی
+                    </a>
+                    {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                        <a href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-newspaper"></i>
+                            سامانه انتشار خبر
+                        </a>
+                    {% endif %}
+                    {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                        <a href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-newspaper"></i>
+                            سامانه کنترل پروژه کل
+                        </a>
+                    {% endif %}
+                    {% if UserMGR.isLogedIn() %}
+                        <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
+                            ناحیه کاری:{{ area.areaName }}
+                        </a>
+                        {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                            <a href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-desktop"></i>
+                                درخواست خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
+                            <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-server"></i>
+                                مجری خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
+                            <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('MostUsedFiles','MUF',null,area.id) == true %}
+                            <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-box-alt"></i>
+                                مدیریت فرم های پرکاربرد
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box-alt"></i>
+                            فرم های پرکاربرد
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                {% block appBody %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

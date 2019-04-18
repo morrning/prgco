@@ -1,0 +1,37 @@
+{% block imagebox_widget %}
+    <script>
+        function openSelectfileDialog{{ form.vars.id }}(id) {
+            $('#' + id).trigger('click');
+        }
+
+        function changeTxtFile{{ form.vars.id }}() {
+            $('#txtFileInputName{{ form.vars.id }}').val($('.form-control-file{{ form.vars.id }}').val().replace(/.*(\/|\\)/, '')) ;
+        }
+        
+        function previewImage{{ form.vars.id }}(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function(e) {
+                    $('#TypeImagePreview').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    </script>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text btnSelectFile{{ form.vars.id }}" onclick="openSelectfileDialog{{ form.vars.id }}('{{ form.vars.id }}')">انتخاب فایل</div>
+        </div>
+        <input type="text" class="form-control" id="txtFileInputName{{ form.vars.id }}" placeholder="" readonly="readonly">
+    </div>
+    <p class="text-primary">
+        پیش نمایش تصویر
+    </p>
+    <img id="TypeImagePreview" class="img-thumbnail col-6" src="{{ asset('assets/images/public/default-prodect.png') }}" alt="uploaded picture"/>
+    <input type="file" accept=".png,.jpg,.gif" class="form-control-file{{ form.vars.id }}" onchange="changeTxtFile{{ form.vars.id }}(); previewImage{{ form.vars.id }}(this);" {{ block('widget_attributes') }} hidden="hidden">
+
+
+{% endblock %}

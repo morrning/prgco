@@ -1,0 +1,19 @@
+{% block numbermask_widget %}
+    <script>
+        $(document).ready(function(){
+            $('.NumbermaskInput{{ form.vars.id }}').numeric(
+                {
+                    allowMinus : false,  // Allow the - sign
+                    max : {{ form.vars.attr.maxValue }},
+                    min : {{ form.vars.attr.minValue }}
+                }
+            );
+        });
+    </script>
+    <div class="input-group mb-2">
+        <div class="input-group-prepend">
+            <div class="input-group-text">{{ form.vars.attr.label }}</div>
+        </div>
+        <input type="text" class="NumbermaskInput{{ form.vars.id }} form-control" value="{{ form.vars.data }}" {{ block('widget_attributes') }} autocomplete="off"  >
+    </div>
+{% endblock %}
