@@ -11,12 +11,24 @@
                     <thead class="thead-dark">
                     <tr>
                         <th>ردیف</th>
-                        <th>عنوان</th>
+                        <th>نام و نام خانوادگی</th>
+                        <th>شماره تلفن</th>
+                        <th>موبایل</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
                     <tbody class="">
-                    
+                    {% for num in nums %}
+                        <tr class="">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ num.username }}</td>
+                            <td style="direction: ltr">{{ num.tel1 }}</td>
+                            <td style="direction: ltr">{{ num.mobile1 }}</td>
+                            <td>
+                                <a class="btn btn-block btn-success" href="{{ asset('files/' ~ num.id) }}">نمایش</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>

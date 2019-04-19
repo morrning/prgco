@@ -30,11 +30,11 @@ class PhonebookController extends AbstractController
     /**
      * @Route("/phonebook", name="phonebook")
      */
-    public function index()
+    public function index(Service\EntityMGR $entityMGR)
     {
 
         return $this->render('phonebook/index.html.twig', [
-            'controller_name' => 'PhonebookController',
+            'nums' => $entityMGR->findAll('App:Phonebook'),
         ]);
     }
 }
