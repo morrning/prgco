@@ -28,7 +28,7 @@ use App\Form\Type as Type;
 class PhonebookController extends AbstractController
 {
     /**
-     * @Route("/phonebookarchive/{msg}/{search}", name="phonebook", requirements={"filter"=".+"})
+     * @Route("/archivephonebook/{msg}/{search}", name="phonebook", requirements={"filter"=".+"})
      */
     public function index(Request $request,$msg=0,$search = null, Service\EntityMGR $entityMGR)
     {
@@ -37,7 +37,7 @@ class PhonebookController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'مخاطب ذخیره شد']);
         elseif($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'مخاطب حذف شد.']);
-        if(is_null($search))
+        if(is_null($search) || $search == '0')
         {
             $nums = $entityMGR->findAll('App:Phonebook');
         }
@@ -57,7 +57,6 @@ class PhonebookController extends AbstractController
             ->add('submit', SubmitType::class,['label'=>'جست و جو'])
             ->getForm();
         $form->handleRequest($request);
-        $alerts = [];
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->redirectToRoute('phonebook',['msg'=>0, 'search'=>$form->get('search')->getData()]);
         }
