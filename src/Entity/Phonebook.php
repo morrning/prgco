@@ -32,7 +32,7 @@ class Phonebook
     private $tel2;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mobile1;
 

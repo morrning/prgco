@@ -28,13 +28,19 @@ use App\Form\Type as Type;
 class PhonebookController extends AbstractController
 {
     /**
-     * @Route("/phonebook", name="phonebook")
+     * @Route("/phonebook/archive/{msg}", name="phonebook")
      */
-    public function index(Service\EntityMGR $entityMGR)
+    public function index($msg=0, Service\EntityMGR $entityMGR)
     {
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'مخاطب ذخیره شد']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'مخاطب حذف شد.']);
 
         return $this->render('phonebook/index.html.twig', [
             'nums' => $entityMGR->findAll('App:Phonebook'),
+            'alerts' => $alerts,
         ]);
     }
 
@@ -46,22 +52,26 @@ class PhonebookController extends AbstractController
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
 
-        $area = new Entity\Phonebook();
-        $form = $this->createFormBuilder($area)
+        $phonebook = new Entity\Phonebook();
+        $form = $this->createFormBuilder($phonebook)
             ->add('username', TextType::class,['label'=>'نام'])
             ->add('tel1', TextType::class,['label'=>'تلفن 1:','required' => false])
             ->add('tel2', TextType::class,['label'=>'تلفن 1:','required' => false])
             ->add('mobile1', TextType::class,['label'=>'موبایل 1:','required' => false])
             ->add('mobile2', TextType::class,['label'=>'موبایل 2:','required' => false])
+            ->add('email', TextType::class,['label'=>'پست الکترونیکی:','required' => false])
             ->add('des', TextareaType::class,['label'=>'توضیحات','required' => false])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
         $form->handleRequest($request);
-        $alerts = null;
+        $alerts = [];
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityMGR->insertEntity($form->getData());
-            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' clear system log file.');
-            $alerts = [['message'=>'ناحیه کاری با موفقیت افزوده شد.','type'=>'success']];
+            $submittedData = $form->getData();
+            $submittedData->setSubmitter($userMGR->currentPosition()->getId());
+            $submittedData->setDateSubmit(time());
+            $entityMGR->insertEntity($submittedData);
+            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' add new phonebook with id:' . $phonebook->getId());
+            return $this->redirectToRoute('phonebook',['msg'=>1]);
         }
 
         return $this->render('phonebook/new.html.twig', [

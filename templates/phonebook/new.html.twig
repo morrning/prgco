@@ -8,19 +8,31 @@
         <div class="card-body">
             {{ form_start(form) }}
             <div class="row">
-                <div class="col-sm-12 col-md-6 pb-2">
+                <div class="col-sm-12 col-md-12 pb-2">
                     {{ form_label(form.username) }}
                     {{ form_widget(form.username) }}
                 </div>
                 <div class="col-sm-12 col-md-6 pb-2">
-                    {{ form_label(form.EMSstate) }}
-                    {{ form_widget(form.EMSstate) }}
+                    {{ form_label(form.tel1) }}
+                    {{ form_widget(form.tel1) }}
                 </div>
                 <div class="col-sm-12 col-md-6 pb-2">
-                    {{ form_label(form.machine) }}
-                    {{ form_widget(form.machine) }}
+                    {{ form_label(form.tel2) }}
+                    {{ form_widget(form.tel2) }}
                 </div>
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.mobile1) }}
+                    {{ form_widget(form.mobile1) }}
+                </div>
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.mobile2) }}
+                    {{ form_widget(form.mobile2) }}
+                </div>
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email) }}
+                </div>
+                <div class="col-sm-12 col-md-12 pb-2">
                     {{ form_label(form.des) }}
                     {{ form_widget(form.des) }}
                 </div>
@@ -29,7 +41,7 @@
             <div class="row">
                 <div class="col-12">
                     {{ form_widget(form.submit) }}
-                    <a class="btn btn-warning" href="{{ path('ictreqDashboard') }}">بازگشت</a>
+                    <a class="btn btn-warning" href="{{ path('phonebook') }}">بازگشت</a>
                 </div>
             </div>
             {{ form_end(form) }}
