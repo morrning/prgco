@@ -37,4 +37,36 @@ class PhonebookController extends AbstractController
             'nums' => $entityMGR->findAll('App:Phonebook'),
         ]);
     }
+
+    /**
+     * @Route("/phonebook/new", name="phonebookAddNew")
+     */
+    public function phonebookAddNew(Request $request,Service\EntityMGR $entityMGR,LoggerInterface $logger,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+
+        $area = new Entity\Phonebook();
+        $form = $this->createFormBuilder($area)
+            ->add('username', TextType::class,['label'=>'نام'])
+            ->add('tel1', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('tel2', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('mobile1', TextType::class,['label'=>'موبایل 1:','required' => false])
+            ->add('mobile2', TextType::class,['label'=>'موبایل 2:','required' => false])
+            ->add('des', TextareaType::class,['label'=>'توضیحات','required' => false])
+            ->add('submit', SubmitType::class,['label'=>'افزودن'])
+            ->getForm();
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($form->getData());
+            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' clear system log file.');
+            $alerts = [['message'=>'ناحیه کاری با موفقیت افزوده شد.','type'=>'success']];
+        }
+
+        return $this->render('phonebook/new.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
 }

@@ -27,7 +27,8 @@ class HomeController extends AbstractController
 
         return $this->render('home/index.html.twig', [
             'area'=>$area,
-            'projects'=>$projects
+            'projects'=>$projects,
+            'breadcrumb'=>true
         ]);
     }
 

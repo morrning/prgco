@@ -1,0 +1,38 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}دفترچه تلفن جدید{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            شماره تلفن جدید
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.username) }}
+                    {{ form_widget(form.username) }}
+                </div>
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.EMSstate) }}
+                    {{ form_widget(form.EMSstate) }}
+                </div>
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_label(form.machine) }}
+                    {{ form_widget(form.machine) }}
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    {{ form_label(form.des) }}
+                    {{ form_widget(form.des) }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-warning" href="{{ path('ictreqDashboard') }}">بازگشت</a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

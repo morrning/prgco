@@ -6,6 +6,9 @@
             دفترچه تلفن
         </div>
         <div class="card-body">
+            {% if UserMGR.isLogedIn() %}
+                <a class="btn btn-success mb-2" href="{{ path('phonebookAddNew') }}">شماره جدید</a>
+            {% endif %}
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover rounded text-center">
                     <thead class="thead-dark">

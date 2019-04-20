@@ -1,6 +1,5 @@
 {% extends 'withNavbar.html.twig' %}
 {% block pageBody %}
-    {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
     <!-- Page Content -->
     <div class="container-fluid">
         <div class="row">
@@ -47,6 +46,7 @@
                         </a>
                     {% endif %}
                     {% if UserMGR.isLogedIn() %}
+                        {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
                         <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
                             ناحیه کاری:{{ area.areaName }}
                         </a>
@@ -79,18 +79,21 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-md-8">
-                <ol class="breadcrumb my-2">
-                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
-                            <i class="fas fa-home"></i>
-                            پورتال اصلی
-                        </a></li>
-                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
-                            <i class="fal fa-window-alt"></i>
-                            برنامه‌ها
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active">{{ block('title') }}</li>
-                </ol>
+                {% if breadcrumb is not defined %}
+                    <ol class="breadcrumb my-2">
+                        <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
+                                <i class="fas fa-home"></i>
+                                پورتال اصلی
+                            </a></li>
+                        <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
+                                <i class="fal fa-window-alt"></i>
+                                برنامه‌ها
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ block('title') }}</li>
+                    </ol>
+                {% endif %}
+
                 {% block appBody %}{% endblock %}
             </div>
         </div>
