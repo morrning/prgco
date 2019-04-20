@@ -1,0 +1,55 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}
+    :مشاهده مخاطب
+    {{ user.username }}
+{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            :مشاهده مخاطب
+            {{ user.username }}
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-4">
+                    <img class="img-thumbnail img-fluid" src="{{ asset('assets/images/public/user.png') }}">
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-8">
+                    <h3>اطلاعات مخاطب</h3>
+                    <hr>
+                    <p>
+                        نام و نام خانوادگی:
+                        <span class="text-danger">{{ user.username }}</span>
+                    </p>
+                    <p>
+                        تلفن1:
+                        <span class="text-danger">{{ user.tel1 }}</span>
+                    </p>
+                    <p>
+                        تلفن2:
+                        <span class="text-danger">{{ user.tel2 }}</span>
+                    </p>
+                    <p>
+                        موبایل1:
+                        <span class="text-danger">{{ user.mobile1 }}</span>
+                    </p>
+                    <p>
+                        موبایل2:
+                        <span class="text-danger">{{ user.mobile2 }}</span>
+                    </p>
+                    <p>
+                        توضیحات:
+                        <span class="text-danger">{{ user.des }}</span>
+                    </p>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    <a class="btn btn-warning" href="{{ path('phonebook',{'msg':0,'search':0}) }}">بازگشت</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

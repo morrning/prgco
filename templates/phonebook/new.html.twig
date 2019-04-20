@@ -41,7 +41,7 @@
             <div class="row">
                 <div class="col-12">
                     {{ form_widget(form.submit) }}
-                    <a class="btn btn-warning" href="{{ path('phonebook') }}">بازگشت</a>
+                    <a class="btn btn-warning" href="{{ path('phonebook',{'msg':0,'search':0}) }}">بازگشت</a>
                 </div>
             </div>
             {{ form_end(form) }}

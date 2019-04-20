@@ -6,9 +6,23 @@
             دفترچه تلفن
         </div>
         <div class="card-body">
-            {% if UserMGR.isLogedIn() %}
-                <a class="btn btn-success mb-2" href="{{ path('phonebookAddNew') }}">شماره جدید</a>
-            {% endif %}
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-sm-12 col-md-6 pb-2">
+                    {{ form_widget(form.search) }}
+                </div>
+                <div class="col-sm-12 col-md-12 pb-2">
+                    {{ form_widget(form.submit) }}
+                    {% if UserMGR.isLogedIn() %}
+                        <a class="btn btn-success" href="{{ path('phonebookAddNew') }}">
+                            <i class="fas fa-user-plus"></i>
+                            شماره جدید
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            {{ form_end(form) }}
+            <hr>
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover rounded text-center">
                     <thead class="thead-dark">
@@ -28,7 +42,7 @@
                             <td style="direction: ltr">{{ num.tel1 }}</td>
                             <td style="direction: ltr">{{ num.mobile1 }}</td>
                             <td>
-                                <a class="btn btn-block btn-success" href="">نمایش</a>
+                                <a class="btn btn-block btn-success" href="{{ path('phonebookView',{'id':num.id}) }}">نمایش</a>
                             </td>
                         </tr>
                     {% endfor %}

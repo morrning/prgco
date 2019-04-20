@@ -28,27 +28,52 @@ use App\Form\Type as Type;
 class PhonebookController extends AbstractController
 {
     /**
-     * @Route("/phonebook/archive/{msg}", name="phonebook")
+     * @Route("/phonebookarchive/{msg}/{search}", name="phonebook", requirements={"filter"=".+"})
      */
-    public function index($msg=0, Service\EntityMGR $entityMGR)
+    public function index(Request $request,$msg=0,$search = null, Service\EntityMGR $entityMGR)
     {
         $alerts = [];
         if($msg == 1)
             array_push($alerts,['type'=>'success','message'=>'مخاطب ذخیره شد']);
         elseif($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'مخاطب حذف شد.']);
+        if(is_null($search))
+        {
+            $nums = $entityMGR->findAll('App:Phonebook');
+        }
 
+        else
+        {
+            $em = $entityMGR->getORM();
+            $nums = $em->getRepository('App:Phonebook')->createQueryBuilder('r')
+                ->where('r.username LIKE :filter')
+                ->setParameter('filter', '%' . $search . '%')
+                ->getQuery()
+                ->getResult();
+        }
+        $data = ['message'=>'message'];
+        $form = $this->createFormBuilder($data)
+            ->add('search', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'phonebook']])
+            ->add('submit', SubmitType::class,['label'=>'جست و جو'])
+            ->getForm();
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            return $this->redirectToRoute('phonebook',['msg'=>0, 'search'=>$form->get('search')->getData()]);
+        }
         return $this->render('phonebook/index.html.twig', [
-            'nums' => $entityMGR->findAll('App:Phonebook'),
-            'alerts' => $alerts,
+            'nums' => $nums,
+            'alert' => $alerts,
+            'form'=>$form->createView()
         ]);
     }
 
     /**
-     * @Route("/phonebook/new", name="phonebookAddNew")
+     * @Route("/newphonebook", name="phonebookAddNew")
      */
     public function phonebookAddNew(Request $request,Service\EntityMGR $entityMGR,LoggerInterface $logger,Service\UserMGR $userMGR)
     {
+
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
 
@@ -71,12 +96,26 @@ class PhonebookController extends AbstractController
             $submittedData->setDateSubmit(time());
             $entityMGR->insertEntity($submittedData);
             $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' add new phonebook with id:' . $phonebook->getId());
-            return $this->redirectToRoute('phonebook',['msg'=>1]);
+            return $this->redirectToRoute('phonebook',['msg'=>1,'search'=>0]);
         }
 
         return $this->render('phonebook/new.html.twig', [
             'form' => $form->createView(),
             'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/phonebookview/{id}", name="phonebookView")
+     */
+    public function phonebookView($id, Service\EntityMGR $entityMGR)
+    {
+        $user = $entityMGR->find('App:Phonebook',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        return $this->render('phonebook/view.html.twig', [
+            'user' => $user,
         ]);
     }
 }
