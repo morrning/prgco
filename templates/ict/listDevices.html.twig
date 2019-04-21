@@ -7,9 +7,9 @@
             <thead class="thead-dark">
             <tr>
                 <th>ردیف</th>
+                <th>نام و مدل دستگاه</th>
                 <th>نوع دستگاه</th>
                 <th>کد اموال</th>
-                <th>نام رایانه</th>
                 <th>تحویل گیرنده</th>
                 <th>امکانات</th>
             </tr>
@@ -18,10 +18,10 @@
             {% for machine in machines %}
                 <tr class="">
                     <td>{{ loop.index }}</td>
-                    <td>{{ machine.deviceType }}</td>
+                    <td>{{ machine.PCBrand }}</td>
+                    <td>{{ machine.DeviceType }}</td>
                     <td>{{ machine.ProdectCode }}</td>
-                    <td>{{ machine.PCName }}</td>
-                    <td>{{ machine.ownerID }}</td>
+                    <td>{{ machine.publicLabel }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ path('ictDoingViewDevice',{'id':machine.id}) }}">مشاهده</a>
                     </td>

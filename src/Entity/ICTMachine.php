@@ -29,11 +29,6 @@ class ICTMachine
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $areaID;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $ownerID;
 
     /**
@@ -101,18 +96,6 @@ class ICTMachine
     public function setDes(?string $des): self
     {
         $this->des = $des;
-
-        return $this;
-    }
-
-    public function getAreaID(): ?string
-    {
-        return $this->areaID;
-    }
-
-    public function setAreaID(string $areaID): self
-    {
-        $this->areaID = $areaID;
 
         return $this;
     }
