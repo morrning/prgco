@@ -272,6 +272,8 @@ class AdminController extends AbstractController
         $alerts = [];
         if($msg==1)
             $alerts = [['message'=>'کاربر با موفقیت اضافه شد.','type'=>'success']];
+        if($msg==2)
+            $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
 
         $users = $entityMGR->findByPage('App:SysUser',$page,30);
 
@@ -408,6 +410,39 @@ class AdminController extends AbstractController
         return $this->render('admin/userNew.html.twig', [
             'form' => $form->createView(),
             'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/usersedit/{id}", name="adminUserEditUser")
+     */
+    public function adminUserEditUser($id,Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        $user = $entityMGR->find('App:SysUser',$id);
+        $form = $this->createFormBuilder($user)
+            ->add('fullName', TextType::class,['label'=>'نام و نام‌خانوادگی'])
+            ->add('username', TextType::class,['label'=>'نام کاربری'])
+            ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $entityMGR->update($user);
+            $logger->info(sprintf('user %s edit user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
+            return $this->redirectToRoute('adminUsers',['msg'=>2]);
+
+        }
+
+        return $this->render('admin/userEdit.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+            'user'=>$user
         ]);
     }
 

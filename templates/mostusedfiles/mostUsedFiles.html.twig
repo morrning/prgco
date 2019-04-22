@@ -13,6 +13,7 @@
                         <th>ردیف</th>
                         <th>عنوان</th>
                         <th>شناسه ایزو</th>
+                        <th>تاریخ ایجاد</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -22,6 +23,12 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ file.title }}</td>
                             <td>{{ file.ISOCode }}</td>
+                            {% if file.dateSubmit is null %}
+                                <td>نامشخص</td>
+                            {% else %}
+                                    <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
+                            {% endif %}
+
                             <td>
                                 <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">دریافت</a>
                             </td>

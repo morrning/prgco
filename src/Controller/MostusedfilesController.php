@@ -102,6 +102,7 @@ class MostusedfilesController extends AbstractController
                     $muf->setTitle($form->get('title')->getData());
                     $muf->setSubmitter($userMGR->currentPosition()->getId());
                     $muf->setFileID($tempFileName);
+                    $muf->setDateSubmit(time());
                     $entityMGR->insertEntity($muf);
                     return $this->redirectToRoute('mostusedfilesDashboard',['msg'=>2]);
                 }

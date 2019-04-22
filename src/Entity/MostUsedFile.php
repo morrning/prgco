@@ -36,6 +36,11 @@ class MostUsedFile
      */
     private $ISOCode;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dateSubmit;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,18 @@ class MostUsedFile
     public function setISOCode(?string $ISOCode): self
     {
         $this->ISOCode = $ISOCode;
+
+        return $this;
+    }
+
+    public function getDateSubmit(): ?string
+    {
+        return $this->dateSubmit;
+    }
+
+    public function setDateSubmit(?string $dateSubmit): self
+    {
+        $this->dateSubmit = $dateSubmit;
 
         return $this;
     }

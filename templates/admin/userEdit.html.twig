@@ -1,6 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
-{% block title %}کاربر جدید{% endblock %}
+{% block title %}ویرایش کاربر:{{ user.Fullname }}{% endblock %}
 
 {% block pageBody %}
     <div class="container-fluid">
@@ -11,8 +11,6 @@
                 {{ form_widget(form.fullName) }}
                 {{ form_label(form.username) }}
                 {{ form_widget(form.username) }}
-                {{ form_label(form.password) }}
-                {{ form_widget(form.password) }}
                 {{ form_label(form.mobileNum) }}
                 {{ form_widget(form.mobileNum) }}
                 <hr>
