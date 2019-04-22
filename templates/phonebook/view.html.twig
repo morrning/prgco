@@ -51,7 +51,20 @@
             <br>
             <div class="row">
                 <div class="col-12">
-                    <a class="btn btn-warning" href="{{ path('phonebook',{'msg':0,'search':0}) }}">بازگشت</a>
+                    {% if UserMGR.hasPermission('phonebookAdmin','PHONEBOOK') == true %}
+                        <a class="btn btn-info" href="{{ path('phonebookEdit',{'id':user.id}) }}">
+                            <i class="fa fa-edit"></i>
+                            ویرایش
+                        </a>
+                        <a class="btn btn-danger" href="{{ path('phonebookRemove',{'id':user.id}) }}">
+                            <i class="fas fa-trash-alt"></i>
+                            حذف
+                        </a>
+                    {% endif %}
+                    <a class="btn btn-warning" href="{{ path('phonebook',{'msg':0,'search':0}) }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
                 </div>
             </div>
         </div>

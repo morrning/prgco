@@ -160,7 +160,6 @@ class AdminController extends AbstractController
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
-
         $data = ['message'=>'message'];
         $form = $this->createFormBuilder($data)
             ->add('PositionID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'positions']])

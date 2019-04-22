@@ -37,6 +37,9 @@ class PhonebookController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'مخاطب ذخیره شد']);
         elseif($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'مخاطب حذف شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'مخاطب ویرایش شد.']);
+
         if(is_null($search) || $search == '0')
         {
             $nums = $entityMGR->findAll('App:Phonebook');
@@ -73,7 +76,7 @@ class PhonebookController extends AbstractController
     public function phonebookAddNew(Request $request,Service\EntityMGR $entityMGR,LoggerInterface $logger,Service\UserMGR $userMGR)
     {
 
-        if(! $userMGR->isLogedIn())
+        if(! $userMGR->hasPermission('phonebookAdmin','PHONEBOOK'))
             return $this->redirectToRoute('403');
 
         $phonebook = new Entity\Phonebook();
@@ -117,4 +120,53 @@ class PhonebookController extends AbstractController
             'user' => $user,
         ]);
     }
+
+    /**
+     * @Route("/removephonebook/{id}", name="phonebookRemove")
+     */
+    public function phonebookRemove($id,Service\EntityMGR $entityMGR,LoggerInterface $logger,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->hasPermission('phonebookAdmin', 'PHONEBOOK'))
+            return $this->redirectToRoute('403');
+
+        $entityMGR->remove('App:Phonebook', $id);
+        return $this->redirectToRoute('phonebook', ['msg' => 2, 'search' => 0]);
+    }
+
+    /**
+     * @Route("/editphonebook/{id}", name="phonebookEdit")
+     */
+    public function phonebookEdit($id,Request $request,Service\EntityMGR $entityMGR,LoggerInterface $logger,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('phonebookAdmin','PHONEBOOK'))
+            return $this->redirectToRoute('403');
+
+        $phonebook = $entityMGR->find('App:Phonebook',$id);
+        $form = $this->createFormBuilder($phonebook)
+            ->add('username', TextType::class,['label'=>'نام'])
+            ->add('tel1', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('tel2', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('mobile1', TextType::class,['label'=>'موبایل 1:','required' => false])
+            ->add('mobile2', TextType::class,['label'=>'موبایل 2:','required' => false])
+            ->add('email', TextType::class,['label'=>'پست الکترونیکی:','required' => false])
+            ->add('des', TextareaType::class,['label'=>'توضیحات','required' => false])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
+            ->getForm();
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $submittedData = $form->getData();
+            $submittedData->setSubmitter($userMGR->currentPosition()->getId());
+            $submittedData->setDateSubmit(time());
+            $entityMGR->update($submittedData);
+            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' update phonebook with id:' . $phonebook->getId());
+            return $this->redirectToRoute('phonebook',['msg'=>3,'search'=>0]);
+        }
+
+        return $this->render('phonebook/new.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
+
 }
