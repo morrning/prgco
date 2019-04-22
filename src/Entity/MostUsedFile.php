@@ -32,9 +32,9 @@ class MostUsedFile
     private $submitter;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $areaID;
+    private $ISOCode;
 
     public function getId(): ?int
     {
@@ -77,15 +77,16 @@ class MostUsedFile
         return $this;
     }
 
-    public function getAreaID(): ?string
+    public function getISOCode(): ?string
     {
-        return $this->areaID;
+        return $this->ISOCode;
     }
 
-    public function setAreaID(string $areaID): self
+    public function setISOCode(?string $ISOCode): self
     {
-        $this->areaID = $areaID;
+        $this->ISOCode = $ISOCode;
 
         return $this;
     }
+    
 }

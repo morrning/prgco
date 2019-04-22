@@ -34,12 +34,8 @@ class MostusedfilesController extends AbstractController
      */
     public function mostusedfilesView(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->isLogedIn())
-            return $this->redirectToRoute('userLogin');
-
-
         return $this->render('mostusedfiles/mostUsedFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:MostUsedFile',['areaID'=>$userMGR->currentPosition()->getDefaultArea()]),
+            'files' => $entityMGR->findBy('App:MostUsedFile'),
         ]);
     }
 
@@ -48,7 +44,7 @@ class MostusedfilesController extends AbstractController
      */
     public function mostusedfilesDashboard($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('MostUsedFiles','MUF',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('MostUsedFiles','MUF'))
             return $this->redirectToRoute('403');
 
         $alerts = [];
@@ -58,7 +54,7 @@ class MostusedfilesController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت اضافه شد.']);
 
         return $this->render('mostusedfiles/adminArchiveFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:MostUsedFile',['areaID'=>$userMGR->currentPosition()->getDefaultArea()]),
+            'files' => $entityMGR->findBy('App:MostUsedFile'),
             'alerts' => $alerts
         ]);
     }
@@ -68,7 +64,7 @@ class MostusedfilesController extends AbstractController
      */
     public function mostusedfilesDeleteFile($id = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('MostUsedFiles','MUF',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('MostUsedFiles','MUF'))
             return $this->redirectToRoute('403');
 
         $entityMGR->remove('App:MostUsedFile',$id);
@@ -80,7 +76,7 @@ class MostusedfilesController extends AbstractController
      */
     public function mostusedfilesNewFile(Request $request, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('MostUsedFiles','MUF',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('MostUsedFiles','MUF'))
             return $this->redirectToRoute('403');
 
         $alerts = [];
@@ -88,6 +84,7 @@ class MostusedfilesController extends AbstractController
         $data = ['message'=>'message'];
         $form = $this->createFormBuilder($data)
             ->add('title', TextType::class,['label'=>'عنوان:'])
+            ->add('isoCode', TextType::class,['label'=>'شناسه ایزو:'])
             ->add('fileID',FileType::class,['label'=>'فایل:'])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
@@ -101,7 +98,7 @@ class MostusedfilesController extends AbstractController
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
                     $muf = new Entity\MostUsedFile();
-                    $muf->setAreaID($userMGR->currentPosition()->getDefaultArea());
+                    $muf->setISOCode($form->get('isoCode')->getData());
                     $muf->setTitle($form->get('title')->getData());
                     $muf->setSubmitter($userMGR->currentPosition()->getId());
                     $muf->setFileID($tempFileName);

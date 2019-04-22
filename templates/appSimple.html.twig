@@ -45,6 +45,16 @@
                             سامانه کنترل پروژه کل
                         </a>
                     {% endif %}
+                    {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                        <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box-alt"></i>
+                            مدیریت فرم های پرکاربرد
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
+                        <i class="fas fa-box-alt"></i>
+                        فرم های پرکاربرد
+                    </a>
                     {% if UserMGR.isLogedIn() %}
                         {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
                         <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
@@ -65,16 +75,6 @@
                         {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
                             <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
                         {% endif %}
-                        {% if UserMGR.hasPermission('MostUsedFiles','MUF',null,area.id) == true %}
-                            <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-box-alt"></i>
-                                مدیریت فرم های پرکاربرد
-                            </a>
-                        {% endif %}
-                        <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-box-alt"></i>
-                            فرم های پرکاربرد
-                        </a>
                     {% endif %}
                 </div>
             </div>
