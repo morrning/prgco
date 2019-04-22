@@ -333,6 +333,34 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/admin/system/update", name="adminSystemUpdate" , options = { "expose" = true })
+     */
+    public function adminSystemUpdate(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if (!$userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('submit', SubmitType::class,['label'=>'بزن بریم آپدیت ...'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        $out = '';
+        if ($form->isSubmitted() && $form->isValid()) {
+            $out = shell_exec('git pull origin master --exec-path=../');
+        }
+
+        return $this->render('admin/systemUpdate.html.twig',[
+            'output'=>$out,
+            'form'=>$form->createView(),
+            'alert'=>$alerts
+        ]);
+
+
+    }
 
     /**
      * @Route("/admin/adminNewPosition/{PID}", name="adminNewPosition" , options = { "expose" = true })
@@ -397,7 +425,6 @@ class AdminController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
-        $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $user->setPassword(md5($user->getPassword()));
@@ -465,7 +492,6 @@ class AdminController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
-        $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $user->setPassword(md5($user->getPassword()));
