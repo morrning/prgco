@@ -348,9 +348,11 @@ class AdminController extends AbstractController
 
         $form->handleRequest($request);
         $alerts = [];
-        $out = '';
+        $out = [];
         if ($form->isSubmitted() && $form->isValid()) {
-            $out = shell_exec('git pull origin master --exec-path=../');
+            $out['git'] = shell_exec('git pull origin master --exec-path=../');
+            $out['cache'] = shell_exec('php ../bin/console cache:clear');
+            $out['db'] = shell_exec('php ../bin/console doctrine:schema:update --force');
         }
 
         return $this->render('admin/systemUpdate.html.twig',[
