@@ -295,6 +295,8 @@ class AdminController extends AbstractController
 
         $alerts = [];
         $position = $entityMGR->find('App:SysPosition',$PID);
+        $oldUID = $position->getUserID();
+
         $form = $this->createFormBuilder($position)
             ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
             ->add('defaultArea', EntityType::class, [
@@ -314,10 +316,29 @@ class AdminController extends AbstractController
             if(! is_null($form->get('userID')->getData()) && ! is_null($form->get('upperID')->getData()))
             {
                 $user = $entityMGR->find('App:SysUser',$position->getUserID());
+                $allPos = $entityMGR->findBy('App:SysPosition',['userID'=>$user->getId()]);
+                //disable all user positions
+                foreach ($allPos as $allPo){
+                    $allPo->setIsDefault(null);
+                    $entityMGR->update($allPo);
+                }
                 $position = $form->getData();
                 $position->setDefaultArea($position->getDefaultArea()->getId());
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                $position->setIsDefault('1');
 
+                if($oldUID != $user->getId())
+                {
+                    $oldUserPos = $entityMGR->findBy('App:SysPosition',['userID'=>$oldUID]);
+                    foreach ($oldUserPos as $key => $oldUserPo)
+                    {
+                        if ($key === array_key_first($oldUserPos))
+                            $oldUserPo->setIsDefault(1);
+                        else
+                            $oldUserPo->setIsDefault(null);
+                        $entityMGR->update($oldUserPo);
+                    }
+                }
                 $entityMGR->insertEntity($position);
                 $logger->info(sprintf('user %s edit position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>2]);
@@ -393,6 +414,7 @@ class AdminController extends AbstractController
                 $position = $form->getData();
                 $position->setUpperID($PID);
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                $position->setDefaultArea($position->getDefaultArea()->getId());
                 $entityMGR->insertEntity($position);
                 $logger->info(sprintf('user %s add new position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>1]);
