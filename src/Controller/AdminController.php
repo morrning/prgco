@@ -350,7 +350,7 @@ class AdminController extends AbstractController
         $alerts = [];
         $out = [];
         if ($form->isSubmitted() && $form->isValid()) {
-            $out['git'] = shell_exec('git pull origin master --exec-path=../');
+            $out['git'] = shell_exec('git pull origin master');
             $out['cache'] = shell_exec('php ../bin/console cache:clear');
             $out['db'] = shell_exec('php ../bin/console doctrine:schema:update --force');
         }
@@ -463,6 +463,15 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
             $entityMGR->update($user);
+
+            //update position labels
+            $positions = $entityMGR->findBy('App:SysPosition',['userID'=>$user->getId()]);
+            foreach ($positions as $position)
+            {
+                $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                $entityMGR->update($position);
+            }
+
             $logger->info(sprintf('user %s edit user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
             return $this->redirectToRoute('adminUsers',['msg'=>2]);
 

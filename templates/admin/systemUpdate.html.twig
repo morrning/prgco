@@ -9,15 +9,21 @@
     {{ form_start(form) }}
     {{ form_widget(form) }}
     {{ form_end(form) }}
-    <hr>
-    <h4> پاسخ سرویس دهنده ... </h4>
-    <pre style="direction: ltr; text-align: left">
-        {{ output.git }}
-    </pre>
-    <pre style="direction: ltr; text-align: left">
-        {{ output.cache }}
-    </pre>
-    <pre style="direction: ltr; text-align: left">
-        {{ output.db }}
-    </pre>
+    {% if output|length > 0 %}
+        <hr>
+        <h4> پاسخ سرویس دهنده ... </h4>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-danger" style="font-family: Tahoma">دریافت فایل های به روز رسانی</b>
+            {{ output.git }}
+        </pre>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-danger" style="font-family: Tahoma">پاکسازی حافظه موقت سیستم</b>
+            {{ output.cache }}
+        </pre>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-danger" style="font-family: Tahoma">به روز رسانی بانک اطلاعاتی</b>
+            {{ output.db }}
+            <b class="text-success" style="font-family: Tahoma">همه چی اوکی شد.</b>
+        </pre>
+    {% endif %}
 {% endblock %}
