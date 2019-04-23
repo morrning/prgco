@@ -82,8 +82,8 @@ class PhonebookController extends AbstractController
         $phonebook = new Entity\Phonebook();
         $form = $this->createFormBuilder($phonebook)
             ->add('username', TextType::class,['label'=>'نام'])
-            ->add('tel1', TextType::class,['label'=>'تلفن 1:','required' => false])
-            ->add('tel2', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('tel1', TextType::class,['label'=>'تلفن:','required' => false])
+            ->add('tel2', TextType::class,['label'=>'داخلی:','required' => false])
             ->add('mobile1', TextType::class,['label'=>'موبایل 1:','required' => false])
             ->add('mobile2', TextType::class,['label'=>'موبایل 2:','required' => false])
             ->add('email', TextType::class,['label'=>'پست الکترونیکی:','required' => false])
@@ -144,8 +144,8 @@ class PhonebookController extends AbstractController
         $phonebook = $entityMGR->find('App:Phonebook',$id);
         $form = $this->createFormBuilder($phonebook)
             ->add('username', TextType::class,['label'=>'نام'])
-            ->add('tel1', TextType::class,['label'=>'تلفن 1:','required' => false])
-            ->add('tel2', TextType::class,['label'=>'تلفن 1:','required' => false])
+            ->add('tel1', TextType::class,['label'=>'تلفن:','required' => false])
+            ->add('tel2', TextType::class,['label'=>'داخلی:','required' => false])
             ->add('mobile1', TextType::class,['label'=>'موبایل 1:','required' => false])
             ->add('mobile2', TextType::class,['label'=>'موبایل 2:','required' => false])
             ->add('email', TextType::class,['label'=>'پست الکترونیکی:','required' => false])
