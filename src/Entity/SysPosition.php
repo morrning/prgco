@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -50,6 +52,16 @@ class SysPosition
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $defaultArea;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\NewsPost", mappedBy="submitter")
+     */
+    private $newsPosts;
+
+    public function __construct()
+    {
+        $this->newsPosts = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -168,5 +180,35 @@ class SysPosition
         $this->defaultArea = $defaultArea;
     }
 
+    /**
+     * @return Collection|NewsPost[]
+     */
+    public function getNewsPosts(): Collection
+    {
+        return $this->newsPosts;
+    }
+
+    public function addNewsPost(NewsPost $newsPost): self
+    {
+        if (!$this->newsPosts->contains($newsPost)) {
+            $this->newsPosts[] = $newsPost;
+            $newsPost->setSubmitter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNewsPost(NewsPost $newsPost): self
+    {
+        if ($this->newsPosts->contains($newsPost)) {
+            $this->newsPosts->removeElement($newsPost);
+            // set the owning side to null (unless already changed)
+            if ($newsPost->getSubmitter() === $this) {
+                $newsPost->setSubmitter(null);
+            }
+        }
+
+        return $this;
+    }
 
 }

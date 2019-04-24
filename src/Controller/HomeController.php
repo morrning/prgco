@@ -41,7 +41,7 @@ class HomeController extends AbstractController
             'breadcrumb'=>true,
             'pn'=>$projectNames,
             'pp'=>$pprogress,
-            'cp'=>$cprogress,
+            'cp'=>$cprogress
         ]);
     }
 

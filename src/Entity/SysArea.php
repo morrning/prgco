@@ -26,6 +26,11 @@ class SysArea
      */
     private $des;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Project", mappedBy="areaID", cascade={"persist", "remove"})
+     */
+    private $project;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -51,6 +56,23 @@ class SysArea
     public function setDes(?string $des): self
     {
         $this->des = $des;
+
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(Project $project): self
+    {
+        $this->project = $project;
+
+        // set the owning side of the relation if necessary
+        if ($this !== $project->getAreaID()) {
+            $project->setAreaID($this);
+        }
 
         return $this;
     }

@@ -51,7 +51,7 @@ class NewsController extends AbstractController
             $post->setTitle($data['title']);
             $post->setBody($data['body']);
             $post->setDateSubmit(time());
-            $post->setSubmiter($userMGR->currentPosition()->getId());
+            $post->setSubmitter($userMGR->currentPosition());
             $entityMGR->insertEntity($post);
 
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new post.' );
@@ -83,12 +83,8 @@ class NewsController extends AbstractController
         $form->handleRequest($request);
         $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $post->setTitle($data->getTitle());
-            $post->setBody($data->getBody());
-            $post->setSubmiter($userMGR->currentPosition()->getId());
+            $post->setSubmitter($userMGR->currentPosition());
             $entityMGR->update($post);
-
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' update post ID:' . $id );
             return $this->redirectToRoute('newsPosts',['msg'=>'2','page'=>1]);
         }

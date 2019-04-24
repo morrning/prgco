@@ -26,7 +26,9 @@
                     <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',project.lastUpdate) }}</td>
                     <td>{{ project.Pprogress }}</td>
                     <td>{{ project.Cprogress }}</td>
-                    <td></td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('ProjectAdminEditProject',{'id':project.id}) }}">ویرایش</a>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>

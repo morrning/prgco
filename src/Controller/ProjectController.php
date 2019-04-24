@@ -76,8 +76,8 @@ class ProjectController extends AbstractController
         if(! $userMGR->hasPermission('projectAdmin','PROJECT'))
             return $this->redirectToRoute('403');
 
-        $defaultData = ['message' => 'Type your message here'];
-        $form = $this->createFormBuilder($defaultData)
+        $project = new Entity\Project();
+        $form = $this->createFormBuilder($project)
             ->add('areaID', EntityType::class,
                 [
                     'label'=>'ناحیه کاری',
@@ -94,10 +94,10 @@ class ProjectController extends AbstractController
         $form->handleRequest($request);
         $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            if(is_null($entityMGR->findOneBy('App:Project',['areaID'=>$form->get('areaID')->getData()->getId()])))
+            if(is_null($entityMGR->findOneBy('App:Project',['areaID'=>$form->get('areaID')->getData()])))
             {
               $project = new Entity\Project();
-              $project->setAreaID($form->get('areaID')->getData()->getId());
+              $project->setAreaID($form->get('areaID')->getData());
               $project->setLastUpdate(time());
               $project->setPprogress($form->get('pprogress')->getData());
               $project->setCprogress($form->get('cprogress')->getData());
@@ -105,12 +105,51 @@ class ProjectController extends AbstractController
               return $this->redirectToRoute('ProjectAdminProjects',['msg'=>1]);
               $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new Project.' );
             }
-            $alerts = [['type'=>'success','message'=>'این ناحیه کاری قبلا اضافه شده است']];
+            $alert = [['type'=>'warning','message'=>'این ناحیه کاری قبلا اضافه شده است']];
         }
 
         return $this->render('project/newProject.html.twig', [
             'form' => $form->createView(),
             'alerts'=>$alert
+        ]);
+    }
+
+    /**
+     * @Route("/progect/adminEdit/Project/{id}", name="ProjectAdminEditProject")
+     */
+    public function ProjectAdminEditProject($id,Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+        if (!$userMGR->hasPermission('projectAdmin', 'PROJECT'))
+            return $this->redirectToRoute('403');
+
+        $project = $entityMGR->find('App:Project',$id);
+        $form = $this->createFormBuilder($project)
+            ->add('areaID', EntityType::class,
+                [
+                    'label' => 'ناحیه کاری',
+                    'class' => Entity\SysArea::class,
+                    'choice_value' => 'id',
+                    'choice_label' => 'areaName'
+                ]
+            )
+            ->add('pprogress', NumberType::class, ['label' => 'پیشرفت فیزیکی'])
+            ->add('cprogress', NumberType::class, ['label' => 'پیشرفت برنامه ای'])
+            ->add('submit', SubmitType::class, ['label' => 'ذخیره تغییرات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $project->setLastUpdate(time());
+            $entityMGR->update($project);
+            return $this->redirectToRoute('ProjectAdminProjects', ['msg' => 2]);
+            $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' update Project data with id:' . $project->getId());
+            $alerts = [['type' => 'success', 'message' => 'این ناحیه کاری قبلا اضافه شده است']];
+        }
+
+        return $this->render('project/newProject.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alert
         ]);
     }
 

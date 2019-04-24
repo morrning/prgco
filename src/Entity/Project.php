@@ -19,11 +19,6 @@ class Project
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $areaID;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $lastUpdate;
 
     /**
@@ -36,21 +31,15 @@ class Project
      */
     private $Cprogress;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\SysArea", inversedBy="project", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $areaID;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAreaID(): ?string
-    {
-        return $this->areaID;
-    }
-
-    public function setAreaID(string $areaID): self
-    {
-        $this->areaID = $areaID;
-
-        return $this;
     }
 
     public function getLastUpdate(): ?string
@@ -85,6 +74,18 @@ class Project
     public function setCprogress(?string $Cprogress): self
     {
         $this->Cprogress = $Cprogress;
+
+        return $this;
+    }
+
+    public function getAreaID(): ?SysArea
+    {
+        return $this->areaID;
+    }
+
+    public function setAreaID(SysArea $areaID): self
+    {
+        $this->areaID = $areaID;
 
         return $this;
     }

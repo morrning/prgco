@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -21,10 +23,6 @@ class NewsPost
      */
     private $dateSubmit;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $submiter;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -35,6 +33,16 @@ class NewsPost
      * @ORM\Column(type="text", nullable=true)
      */
     private $body;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="newsPosts")
+     */
+    private $submitter;
+
+    public function __construct()
+    {
+        $this->submitter = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -52,19 +60,7 @@ class NewsPost
 
         return $this;
     }
-
-    public function getSubmiter(): ?string
-    {
-        return $this->submiter;
-    }
-
-    public function setSubmiter(string $submiter): self
-    {
-        $this->submiter = $submiter;
-
-        return $this;
-    }
-
+    
     public function getTitle(): ?string
     {
         return $this->title;
@@ -85,6 +81,18 @@ class NewsPost
     public function setBody(?string $body): self
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    public function getSubmitter(): ?SysPosition
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(?SysPosition $submitter): self
+    {
+        $this->submitter = $submitter;
 
         return $this;
     }
