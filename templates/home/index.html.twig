@@ -62,6 +62,48 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 pb-2">
+            <div class="card mb-2">
+                <div class="card-header">
+                    نمودار پیشرفت
+                </div>
+                <div class="card-body">
+                    <p>
+                        <span style="color: red">پیشرفت فیزیکی</span>
+                        |
+                        <span style="color: lightcoral">پیشرفت برنامه‌ای</span>
+                    </p>
+                    <div class="ct-chart" id="chart2"></div>
+
+                    <script>
+                        var data = {
+                            labels: {{ pn | json_encode | raw }},
+                            series: [
+                                {{ pp | json_encode | raw }},
+                                {{ cp | json_encode | raw}}
+                            ]
+                        };
+
+                        var options = {
+                            seriesBarDistance: 10,
+                            height: '50%'
+                        };
+
+                        var responsiveOptions = [
+                            ['screen and (max-width: 640px)', {
+                                seriesBarDistance: 5,
+                                axisX: {
+                                    labelInterpolationFnc: function (value) {
+                                        return value[0];
+                                    }
+                                }
+                            }]
+                        ];
+
+                        new Chartist.Bar('.ct-chart', data, options, responsiveOptions);
+                    </script>
+                </div>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     گزارش پیشرفت عملیات اجرایی

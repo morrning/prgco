@@ -24,11 +24,24 @@ class HomeController extends AbstractController
             ->orderBy('p.Pprogress','DESC')
             ->getQuery()
             ->getResult();
+        $projectNames=[];
+        $pprogress=[];
+        $cprogress=[];
+
+        foreach ($projects as $project)
+        {
+            array_push($projectNames, $project['areaName']);
+            array_push($pprogress,$project['Pprogress']);
+            array_push($cprogress,$project['Cprogress'] );
+        }
 
         return $this->render('home/index.html.twig', [
             'area'=>$area,
             'projects'=>$projects,
-            'breadcrumb'=>true
+            'breadcrumb'=>true,
+            'pn'=>$projectNames,
+            'pp'=>$pprogress,
+            'cp'=>$cprogress,
         ]);
     }
 
