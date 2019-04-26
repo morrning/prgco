@@ -29,11 +29,6 @@ class SysPosition
     private $upperID;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
-    private $userID;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $publicLabel;
@@ -49,18 +44,29 @@ class SysPosition
     private $groups;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $defaultArea;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\NewsPost", mappedBy="submitter")
      */
     private $newsPosts;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMPassenger", mappedBy="submitter")
+     */
+    private $cMPassengers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysUser", inversedBy="sysPositions")
+     */
+    private $userID;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysArea", inversedBy="sysPositions")
+     */
+    private $defaultArea;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
+        $this->cMPassengers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,22 +104,6 @@ class SysPosition
     public function setUpperID($upperID): void
     {
         $this->upperID = $upperID;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUserID()
-    {
-        return $this->userID;
-    }
-
-    /**
-     * @param mixed $userID
-     */
-    public function setUserID($userID): void
-    {
-        $this->userID = $userID;
     }
 
     /**
@@ -165,22 +155,6 @@ class SysPosition
     }
 
     /**
-     * @return mixed
-     */
-    public function getDefaultArea()
-    {
-        return $this->defaultArea;
-    }
-
-    /**
-     * @param mixed $defaultArea
-     */
-    public function setDefaultArea($defaultArea): void
-    {
-        $this->defaultArea = $defaultArea;
-    }
-
-    /**
      * @return Collection|NewsPost[]
      */
     public function getNewsPosts(): Collection
@@ -207,6 +181,61 @@ class SysPosition
                 $newsPost->setSubmitter(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMPassenger[]
+     */
+    public function getCMPassengers(): Collection
+    {
+        return $this->cMPassengers;
+    }
+
+    public function addCMPassenger(CMPassenger $cMPassenger): self
+    {
+        if (!$this->cMPassengers->contains($cMPassenger)) {
+            $this->cMPassengers[] = $cMPassenger;
+            $cMPassenger->setSubmitter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMPassenger(CMPassenger $cMPassenger): self
+    {
+        if ($this->cMPassengers->contains($cMPassenger)) {
+            $this->cMPassengers->removeElement($cMPassenger);
+            // set the owning side to null (unless already changed)
+            if ($cMPassenger->getSubmitter() === $this) {
+                $cMPassenger->setSubmitter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getUserID(): ?SysUser
+    {
+        return $this->userID;
+    }
+
+    public function setUserID(?SysUser $userID): self
+    {
+        $this->userID = $userID;
+
+        return $this;
+    }
+
+    public function getDefaultArea(): ?SysArea
+    {
+        return $this->defaultArea;
+    }
+
+    public function setDefaultArea(?SysArea $defaultArea): self
+    {
+        $this->defaultArea = $defaultArea;
 
         return $this;
     }

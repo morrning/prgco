@@ -75,6 +75,12 @@
                         {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
                             <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
+                            <a href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه درخواست تشریفات
+                            </a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>

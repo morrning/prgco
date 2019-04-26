@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -40,6 +42,16 @@ class SysUser
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $mobileNum;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SysPosition", mappedBy="userID")
+     */
+    private $sysPositions;
+
+    public function __construct()
+    {
+        $this->sysPositions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +114,37 @@ class SysUser
     public function setMobileNum(?string $mobileNum): self
     {
         $this->mobileNum = $mobileNum;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SysPosition[]
+     */
+    public function getSysPositions(): Collection
+    {
+        return $this->sysPositions;
+    }
+
+    public function addSysPosition(SysPosition $sysPosition): self
+    {
+        if (!$this->sysPositions->contains($sysPosition)) {
+            $this->sysPositions[] = $sysPosition;
+            $sysPosition->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSysPosition(SysPosition $sysPosition): self
+    {
+        if ($this->sysPositions->contains($sysPosition)) {
+            $this->sysPositions->removeElement($sysPosition);
+            // set the owning side to null (unless already changed)
+            if ($sysPosition->getUserID() === $this) {
+                $sysPosition->setUserID(null);
+            }
+        }
 
         return $this;
     }

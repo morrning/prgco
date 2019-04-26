@@ -1,0 +1,26 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}داشبورد درخواست تشریفات{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <img class="card-img-top" src="{{ asset('assets/images/apps/ict-request.jpg') }}">
+                    <div class="card-body text-center">
+                        <p class="text-primary text-center">
+                            تعداد درخواست‌های شما :
+                            <span class="text-danger">
+
+                            </span>
+                        </p>
+                        <p class="text-center">
+                            <a class="btn btn-success" href="{{ path('ictreqArchive') }}">مشاهده درخواست‌ها</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

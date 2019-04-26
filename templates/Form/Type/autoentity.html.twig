@@ -1,0 +1,45 @@
+{% block autoentity_widget %}
+    <script>
+        $(document).ready(function(){
+            $( ".autoComplete{{ form.vars.id }}" ).autocomplete({
+
+                source: function( request, response ) {
+                    $.ajax( {
+                        url: Routing.generate('SystemAutoCompleteLoad', { 'name':'{{ form.vars.attr.pattern }}','filter': request.term }),
+                        dataType: "json",
+                        success: function( data ) {
+                            if(data.length == 0)
+                            {
+                                $(".SysAutoComplete{{ form.vars.id }}").val(null);
+                            }
+                            response( data );
+                        }
+                    } );
+                },
+                select: function( event, ui ) {
+                    $(".SysAutoComplete{{ form.vars.id }}").val(ui.item.id).change();
+                },
+                autoFocus: true,
+                minLength: 0,
+                delay:500
+            });
+        });
+    </script>
+    <input class="autoComplete{{ form.vars.id }} form-control" placeholder="جست‌و‌جو....">
+    <div class="form-group" hidden="hidden">
+        <select class="form-control SysAutoComplete{{ form.vars.id }}" {{ block('widget_attributes') }}{% if multiple %} multiple="multiple"{% endif %}>
+            {%- if placeholder is not none -%}
+                <option value=""{% if required and value is empty %} selected="selected"{% endif %}>{{ placeholder != '' ? (translation_domain is same as(false) ? placeholder : placeholder|trans({}, translation_domain)) }}</option>
+            {%- endif -%}
+            {%- if preferred_choices|length > 0 -%}
+                {% set options = preferred_choices %}
+                {{- block('choice_widget_options') -}}
+                {%- if choices|length > 0 and separator is not none -%}
+                    <option disabled="disabled">{{ separator }}</option>
+                {%- endif -%}
+            {%- endif -%}
+            {%- set options = choices -%}
+            {{- block('choice_widget_options') -}}
+        </select>
+    </div>
+{% endblock %}

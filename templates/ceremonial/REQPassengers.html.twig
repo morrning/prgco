@@ -1,0 +1,35 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}لیست مسافران{% endblock %}
+{% block pageBody %}
+    <a class="btn btn-success mb-1" href="">
+        <i class="fa fa-plus"></i>
+        مسافر جدید
+    </a>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام و نام‌خانوادگی</th>
+                <th>نام پدر</th>
+                <th>تاریخ تولد</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for passenger in passengers %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ passenger.pname }} {{ passenger.pfamily }}</td>
+                    <td>{{ passenger.pfather }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d',passenger.pbirthday) }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('ictDoingViewDevice',{'id':passenger.id}) }}">مشاهده</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

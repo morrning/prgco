@@ -304,10 +304,10 @@ class AdminController extends AbstractController
                 'choice_label'=>'areaName',
                 'choice_value' => 'id',
                 'label'=>'ناحیه کاری',
-                'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()),
+                'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()->getId()),
             ])
-            ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
-            ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'position']])
+            ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
@@ -323,13 +323,13 @@ class AdminController extends AbstractController
                     $entityMGR->update($allPo);
                 }
                 $position = $form->getData();
-                $position->setDefaultArea($position->getDefaultArea()->getId());
+                $position->setDefaultArea($position->getDefaultArea());
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
                 $position->setIsDefault('1');
 
-                if($oldUID != $user->getId())
+                if($oldUID->getId() != $user->getId())
                 {
-                    $oldUserPos = $entityMGR->findBy('App:SysPosition',['userID'=>$oldUID]);
+                    $oldUserPos = $entityMGR->findBy('App:SysPosition',['userID'=>$oldUID->getId()]);
                     foreach ($oldUserPos as $key => $oldUserPo)
                     {
                         if ($key === array_key_first($oldUserPos))
@@ -393,13 +393,12 @@ class AdminController extends AbstractController
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
-        $area = $entityMGR->findAll('App:SysArea');
         $position = new Entity\SysPosition();
         $form = $this->createFormBuilder($position)
             ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
-            ->add('userID', Type\AutocompleteType::class,['label'=>'نام کاربر','attr'=>['pattern'=>'users']])
-            ->add('defaultArea', ChoiceType::class, [
-                'choices'=>$area,'choice_label'=>'areaName','choice_value'=>'id',
+            ->add('userID', Type\AutoentityType::class,['class'=>Entity\SysUser::class,'choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('defaultArea', EntityType::class, [
+                'class'=>Entity\SysArea::class,'choice_label'=>'areaName',
                 'label'=>'ناحیه کاری'
             ])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
@@ -411,16 +410,14 @@ class AdminController extends AbstractController
             if(! is_null($form->get('userID')->getData()))
             {
                 $user = $entityMGR->find('App:SysUser',$position->getUserID());
-                $position = $form->getData();
                 $position->setUpperID($PID);
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
-                $position->setDefaultArea($position->getDefaultArea()->getId());
+                $position->setDefaultArea($position->getDefaultArea());
                 $entityMGR->insertEntity($position);
                 $logger->info(sprintf('user %s add new position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>1]);
             }
             array_push($alerts,['type'=>'danger','message'=>'مسئول سمت انتخاب نشده است.']);
-
         }
 
         return $this->render('admin/positionNew.html.twig', [

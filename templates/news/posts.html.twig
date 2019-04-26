@@ -36,6 +36,7 @@
             <tr>
                 <th>ردیف</th>
                 <th>عنوان</th>
+                <th>ارسال کننده</th>
                 <th>تاریخ ارسال</th>
                 <th>امکانات</th>
             </tr>
@@ -45,6 +46,7 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>{{ post.title }}</td>
+                        <td>{{ post.submitter.publicLabel }}</td>
                         <td>{{ Jdate.jdate('Y/n/d',post.dateSubmit) }}</td>
                         <td>
                             <a class="btn btn-warning" href="{{ path('newsEditPost',{'id':post.id}) }}">ویرایش</a>

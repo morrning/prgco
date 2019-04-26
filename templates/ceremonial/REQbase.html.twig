@@ -1,0 +1,18 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}درخواست تشریفات{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ceremonialREQDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+            <a class="nav-link" href="{{ path('ceremonialREQpasengers') }}">
+                <i class="fas fa-user-alt"></i>
+                <span>مسافران</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+
