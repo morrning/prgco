@@ -64,11 +64,6 @@ class CMPassenger
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $lbirthday;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
     private $passNO;
 
     /**
@@ -190,18 +185,6 @@ class CMPassenger
     public function setLfather(?string $lfather): self
     {
         $this->lfather = $lfather;
-
-        return $this;
-    }
-
-    public function getLbirthday(): ?string
-    {
-        return $this->lbirthday;
-    }
-
-    public function setLbirthday(?string $lbirthday): self
-    {
-        $this->lbirthday = $lbirthday;
 
         return $this;
     }

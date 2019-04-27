@@ -4,7 +4,8 @@ twig:
     strict_variables: '%kernel.debug%'
     form_themes: ['bootstrap_4_layout.html.twig','@FOSCKEditor/Form/ckeditor_widget.html.twig',
                   'Form/Type/autocomplete.html.twig',
-                  'Form/Type/autoentity.html.twig']
+                  'Form/Type/autoentity.html.twig',
+                  'Form/Type/Jdate.html.twig']
     globals:
         UserMGR: "@UserMGR"
         EntityMGR:  "@EntityMGR"

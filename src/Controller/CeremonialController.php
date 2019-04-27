@@ -76,22 +76,25 @@ class CeremonialController extends AbstractController
 
         $passenger = new Entity\CMPassenger();
         $form = $this->createFormBuilder($passenger)
-            ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
-            ->add('defaultArea', EntityType::class, [
-                'class'=>Entity\SysArea::class,
-                'choice_label'=>'areaName',
-                'choice_value' => 'id',
-                'label'=>'ناحیه کاری',
-                'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()->getId()),
-            ])
-            ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
-            ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->add('pname', TextType::class,['label'=>'نام'])
+            ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
+            ->add('pfather', TextType::class,['label'=>' نام پدر'])
+            ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
+            ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
+            ->add('pcodemeli', TextType::class,['label'=>'کد ملی'])
+            ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
+            ->add('passNo', TextType::class,['label'=>'Passport Number:'])
+            ->add('lname', TextType::class,['label'=>'Name:'])
+            ->add('lfamily', TextType::class,['label'=>'Family:'])
+            ->add('lfather', TextType::class,['label'=>'Father Name:', 'required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $passenger->setSubmitter($userMGR->currentPosition());
+            $entityMGR->insertEntity($passenger);
+            //return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>1]);
         }
         return $this->render('ceremonial/newPasenger.html.twig', [
             'form' => $form->createView()

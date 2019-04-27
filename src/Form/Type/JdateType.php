@@ -12,11 +12,16 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+use App\Service as Service;
+
 class JdateType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
 
+        $resolver->setNormalizer('data', function (Options $options, $value) {
+            return 12;
+        });
     }
 
     public function getParent()
