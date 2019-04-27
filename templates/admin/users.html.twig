@@ -34,7 +34,7 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.fullName }}</td>
-                    <td>{{ user.mobileNum }}</td>
+                    <td style="direction: ltr">{{ user.mobileNum }}</td>
                     <td>
                         <a class="btn btn-info" href="{{ path('adminUserEditUser',{'id':user.id}) }}">ویرایش</a>
                         <a class="btn btn-warning" href="{{ path('adminUserChangepassword',{'id':user.id}) }}">تغییر کلمه عبور</a>

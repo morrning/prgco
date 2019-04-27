@@ -153,12 +153,16 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/positionsofgroup/{id}", name="adminPositionsofgroup")
+     * @Route("/admin/positionsofgroup/{id}/{msg}", name="adminPositionsofgroup")
      */
-    public function adminPositionsofgroup($id,Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminPositionsofgroup($id,$msg=0,Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
+
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'کاربر از گروه دسترسی حذف شد.']);
 
         $data = ['message'=>'message'];
         $form = $this->createFormBuilder($data)
@@ -166,7 +170,6 @@ class AdminController extends AbstractController
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
         $form->handleRequest($request);
-        $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
             if(is_null($form->get('PositionID')->getData()))
             {
@@ -202,7 +205,7 @@ class AdminController extends AbstractController
             $UID,
             $GID
         ));
-        return new Response(200);
+        return $this->redirectToRoute('adminPositionsofgroup',['id'=>$GID,'msg'=>1]);
     }
 
     /**

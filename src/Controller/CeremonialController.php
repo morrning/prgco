@@ -27,7 +27,7 @@ class CeremonialController extends AbstractController
      */
     public function ceremonialREQDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
         return $this->render('ceremonial/REQDashboard.html.twig', [
@@ -40,11 +40,61 @@ class CeremonialController extends AbstractController
      */
     public function ceremonialREQpasengers(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
         return $this->render('ceremonial/REQPassengers.html.twig', [
             'passengers' => $userMGR->currentPosition()->getcMPassengers()
+        ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/pasenger/view/{id}", name="ceremonialREQpasengerView")
+     */
+    public function ceremonialREQpasengerView($id,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $passenger = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($passenger))
+            return $this->redirectToRoute('404');
+        elseif ($passenger->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        return $this->render('ceremonial/viewPassengerInfo.html.twig', [
+            'passenger' => $passenger
+        ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/pasenger/new", name="ceremonialREQpasengerNew")
+     */
+    public function ceremonialREQpasengerNew(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $passenger = new Entity\CMPassenger();
+        $form = $this->createFormBuilder($passenger)
+            ->add('label', TextType::class,['label'=>'عنوان پست سازمانی'])
+            ->add('defaultArea', EntityType::class, [
+                'class'=>Entity\SysArea::class,
+                'choice_label'=>'areaName',
+                'choice_value' => 'id',
+                'label'=>'ناحیه کاری',
+                'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()->getId()),
+            ])
+            ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
+            ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+        }
+        return $this->render('ceremonial/newPasenger.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 

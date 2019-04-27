@@ -1,0 +1,64 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}اطلاعات مسافر:{{ passenger.pname ~ ' ' ~ passenger.pfamily }}{% endblock %}
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <p>
+                    نام:
+                    <span class="text-danger">{{ passenger.pname }}</span>
+                </p>
+                <p>
+                    نام خانوادگی:
+                    <span class="text-danger">{{ passenger.pfamily }}</span>
+                </p>
+                <p>
+                    نام پدر:
+                    <span class="text-danger">{{ passenger.pfather }}</span>
+                </p>
+                <p>
+                    شماره شناسنامه:
+                    <span class="text-danger">{{ passenger.pshenasname }}</span>
+                </p>
+                <p>
+                    کد ملی:
+                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                </p>
+
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <p>
+                    Name:
+                    <span class="text-danger">{{ passenger.lname }}</span>
+                </p>
+                <p>
+                    FamilyName:
+                    <span class="text-danger">{{ passenger.lfamily }}</span>
+                </p>
+                <p>
+                    Father Name:
+                    <span class="text-danger">{{ passenger.lfather }}</span>
+                </p>
+                <p>
+                    National Code:
+                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                </p>
+                <p>
+                    Visa Number:
+                    <span class="text-danger">{{ passenger.VisaNo }}</span>
+                </p>
+                <p>
+                    Passport Number:
+                    <span class="text-danger">{{ passenger.PassNo }}</span>
+                </p>
+
+            </div>
+        </div>
+    </div>
+
+    <a class="btn btn-info" href="{{ path('ceremonialREQpasengers') }}">
+        <i class="fa fa-undo"></i>
+        بازگشت
+    </a>
+{% endblock %}

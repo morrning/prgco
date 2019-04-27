@@ -1,32 +1,6 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}کاربران موجود در گروه دسترسی:{{ group.label }}{% endblock %}
-
-{% block javascripts%}
-    <script>
-        function deleteItem(gid,uid){
-            var url = Routing.generate('adminDeletePositionOfGroup', {
-                'GID': gid.toString(),
-                'UID': uid.toString()
-            });
-
-            $.ajax({url: url, success: function(result){
-                    if(result == 200)
-                    {
-                        showModalNotification(
-                            'موفقیت',
-                            'کاربر با موفقیت از این گروه دسترسی حذف شد.',
-                            'success',
-                            true
-                        )
-
-                    }
-                }});
-
-        }
-    </script>
-{% endblock %}
-
 {% block pageBody %}
     <div class="container-fluid">
         <div class="row">
@@ -57,7 +31,7 @@
                             <tr>
                                 <td>{{ loop.index }}</td>
                                 <td>{{ position.publicLabel }}</td>
-                                <td><a class="btn btn-danger" onclick="showModal('deleteItem( {{ group.id }}, {{ position.id }} )')">حذف</a></td>
+                                <td><a class="btn btn-danger" href="{{ path('adminDeletePositionOfGroup',{'GID':group.id,'UID':position.id}) }}">حذف</a></td>
                             </tr>
                         {% endfor %}
                         </tbody>
