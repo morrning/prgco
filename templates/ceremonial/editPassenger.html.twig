@@ -1,0 +1,46 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}ویرایش مسافر{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        <div class="col-sm-12 col-md-6">
+            {{ form_start(form) }}
+            {{ form_label(form.pname) }}
+            {{ form_widget(form.pname) }}
+            {{ form_label(form.pfamily) }}
+            {{ form_widget(form.pfamily) }}
+            {{ form_label(form.pfather) }}
+            {{ form_widget(form.pfather) }}
+            {{ form_label(form.pbirthday) }}
+            {{ form_widget(form.pbirthday) }}
+            {{ form_label(form.pshenasname) }}
+            {{ form_widget(form.pshenasname) }}
+            {{ form_label(form.pcodemeli) }}
+            {{ form_widget(form.pcodemeli) }}
+
+        </div>
+        <div class="col-sm-12 col-md-6 text-left"  style="direction: ltr; !important;">
+            {{ form_start(form) }}
+            {{ form_label(form.lname) }}
+            {{ form_widget(form.lname) }}
+            {{ form_label(form.lfamily) }}
+            {{ form_widget(form.lfamily) }}
+            {{ form_label(form.lfather) }}
+            {{ form_widget(form.lfather) }}
+            {{ form_label(form.visaNo) }}
+            {{ form_widget(form.visaNo) }}
+            {{ form_label(form.passNo) }}
+            {{ form_widget(form.passNo) }}
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="col-12">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-info" href="{{ path('ceremonialREQpasengers') }}">
+                <i class="fa fa-undo"></i>
+                بازگشت
+            </a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

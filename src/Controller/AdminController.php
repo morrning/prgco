@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Yaml\Yaml;
 
 //json encoder classes
 use Symfony\Component\Serializer\Serializer;
@@ -39,6 +40,7 @@ class AdminController extends AbstractController
             'usersCount' => $entityMGR->rowsCount('App:SysUser'),
             'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
             'areaCount' => $entityMGR->rowsCount('App:SysArea'),
+            'SystemVersion'=>Yaml::parseFile('../config/sarkesh.yaml')['version']
         ]);
     }
 
@@ -365,6 +367,21 @@ class AdminController extends AbstractController
         if (!$userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'https://raw.githubusercontent.com/morrning/prgco/master/config/sarkesh.yaml');
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $urlData = curl_exec($ch);
+        curl_close($ch);
+
+        try {
+            $urlConfig = Yaml::parse($urlData);
+        } catch (ParseException $exception) {
+            printf('Unable to parse the YAML string: %s', $exception->getMessage());
+        }
+
+        $localConfig= Yaml::parseFile('../config/sarkesh.yaml');
+
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
             ->add('submit', SubmitType::class,['label'=>'بزن بریم آپدیت ...'])
@@ -382,7 +399,9 @@ class AdminController extends AbstractController
         return $this->render('admin/systemUpdate.html.twig',[
             'output'=>$out,
             'form'=>$form->createView(),
-            'alert'=>$alerts
+            'alert'=>$alerts,
+            'currentVer'=>$urlConfig['version'],
+            'localVer'=>$localConfig['version']
         ]);
 
 

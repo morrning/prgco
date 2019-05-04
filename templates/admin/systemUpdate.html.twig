@@ -3,12 +3,29 @@
 {% block title %}به روز رسانی سیستم{% endblock %}
 
 {% block pageBody %}
-    <p>
+    <p class="alert alert-info">
+        <i class="fas fa-info"></i>
         جهت به روز رسانی سیستم ابتدا از اتصال اینترنت روی سرویس دهنده مطمئن شوید.سپس از دیتابیس نسخه پشتیبان تهیه کنید و به روز رسانی را شروع کنید.
     </p>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    {% if localVer < currentVer %}
+        <p>
+            <i class="fas fa-archive"></i>
+            نسخه کنونی:
+            <span class="text-warning">{{ localVer }}</span>
+        </p>
+        <p>
+            <i class="fas fa-download"></i>
+            آخرین نسخه منتشر شده:
+            <span class="text-success">{{ currentVer }}</span>
+        </p>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    {% else %}
+        <p class="text-success">
+            تبریک ! شما از آخرین نسخه این نرم افزار استفاده می کنید.
+        </p>
+    {% endif %}
     {% if output|length > 0 %}
         <hr>
         <h4> پاسخ سرویس دهنده ... </h4>

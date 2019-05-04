@@ -13,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
 
@@ -36,16 +38,36 @@ class CeremonialController extends AbstractController
     }
 
     /**
-     * @Route("/ceremonial/req/pasengers", name="ceremonialREQpasengers")
+     * @Route("/ceremonial/req/pasengers/{msg}", name="ceremonialREQpasengers")
      */
-    public function ceremonialREQpasengers(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialREQpasengers($msg=0, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر اضافه شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر ویرایش شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر حذف شد.']);
 
         return $this->render('ceremonial/REQPassengers.html.twig', [
-            'passengers' => $userMGR->currentPosition()->getcMPassengers()
+            'passengers' => $userMGR->currentPosition()->getcMPassengers(),
+            'alerts' => $alerts,
         ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/pasenger/delete/{id}", name="ceremonialREQpasengerDelete")
+     */
+    public function ceremonialREQpasengerDelete($id, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        $passenger = $entityMGR->find('App:CMPassenger',$id);
+        if($userMGR->currentPosition()->getId() != $passenger->getSubmitter()->getId())
+            return $this->redirectToRoute('403');
+        $entityMGR->remove('App:CMPassenger',$id);
+        return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>3]);
     }
 
     /**
@@ -91,15 +113,53 @@ class CeremonialController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
+        $jdate = new Service\Jdate();
         if ($form->isSubmitted() && $form->isValid()) {
             $passenger->setSubmitter($userMGR->currentPosition());
+            $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
             $entityMGR->insertEntity($passenger);
-            //return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>1]);
+            return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>1]);
         }
         return $this->render('ceremonial/newPasenger.html.twig', [
             'form' => $form->createView()
         ]);
     }
 
+    /**
+     * @Route("/ceremonial/req/pasenger/edit/{id}", name="ceremonialREQpasengerEdit")
+     */
+    public function ceremonialREQpasengerEdit($id, Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $passenger = $entityMGR->find('App:CMPassenger',$id);
+        $form = $this->createFormBuilder($passenger)
+            ->add('pname', TextType::class,['label'=>'نام'])
+            ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
+            ->add('pfather', TextType::class,['label'=>' نام پدر'])
+            ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
+            ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
+            ->add('pcodemeli', TextType::class,['label'=>'کد ملی'])
+            ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
+            ->add('passNo', TextType::class,['label'=>'Passport Number:'])
+            ->add('lname', TextType::class,['label'=>'Name:'])
+            ->add('lfamily', TextType::class,['label'=>'Family:'])
+            ->add('lfather', TextType::class,['label'=>'Father Name:', 'required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $jdate = new Service\Jdate();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $passenger->setSubmitter($userMGR->currentPosition());
+            $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
+            $entityMGR->insertEntity($passenger);
+            return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>2]);
+        }
+        return $this->render('ceremonial/editPassenger.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 
 }
