@@ -19,9 +19,9 @@
             <span class="text-success">{{ currentVer }}</span>
         </p>
         <h3>یاداشت های انتشار داده شده توسط توسعه دهنده:</h3>
-        <pre>
+        <p class="text-danger">
             {{ note | raw }}
-        </pre>
+        </p>
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
