@@ -19,7 +19,7 @@ class JdateType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver)
     {
-        
+         
     }
 
     public function getParent()

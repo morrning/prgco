@@ -40,7 +40,8 @@ class AdminController extends AbstractController
             'usersCount' => $entityMGR->rowsCount('App:SysUser'),
             'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
             'areaCount' => $entityMGR->rowsCount('App:SysArea'),
-            'SystemVersion'=>Yaml::parseFile('../config/sarkesh.yaml')['version']
+            'SystemVersion'=>Yaml::parseFile('../config/sarkesh.yaml')['version'],
+            'currentTime'=>time()
         ]);
     }
 
