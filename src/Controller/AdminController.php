@@ -422,6 +422,8 @@ class AdminController extends AbstractController
         $ch2 = curl_init();
         curl_setopt($ch2, CURLOPT_URL, 'https://raw.githubusercontent.com/morrning/prgco/master/note.txt');
         curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch2, CURLOPT_FOLLOWLOCATION, TRUE);
+        curl_setopt($ch2, CURLOPT_AUTOREFERER, TRUE);
         curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
         $note = curl_exec($ch2);
         curl_close($ch2);

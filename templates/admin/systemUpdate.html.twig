@@ -18,10 +18,11 @@
             آخرین نسخه منتشر شده:
             <span class="text-success">{{ currentVer }}</span>
         </p>
-        <h3>یاداشت های انتشار داده شده توسط توسعه دهنده:</h3>
+        <h5>یاداشت های انتشار داده شده توسط توسعه دهنده:</h5>
         <p class="text-danger">
             {{ note | raw }}
         </p>
+        <hr>
         {{ form_start(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
