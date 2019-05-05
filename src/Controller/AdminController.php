@@ -29,19 +29,63 @@ use App\Form\Type as Type;
 class AdminController extends AbstractController
 {
     /**
+     * @Route("/le", name="LE")
+     */
+    public function LE(Request $request, Service\UserMGR $userMGR, Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR,LoggerInterface $logger)
+    {
+        if(! $userMGR->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $config = $configMGR->getConfig();
+        $form = $this->createFormBuilder($config)
+            ->add('activeationCode', TextType::class,['label'=>'کد فعالسازی'])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->update($form->getData());
+            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' change system lisense.');
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'http://auth.sarkesh.org/auth.php?id=' . $configMGR->getConfig()->getActiveationCode());
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $urlData = curl_exec($ch);
+            curl_close($ch);
+
+            if ($urlData < 0)
+                return $this->redirectToRoute('LE');
+
+            return $this->redirectToRoute('adminDashboard');
+        }
+        return $this->render('admin/le.html.twig',['form'=>$form->createView()]);
+    }
+
+    /**
      * @Route("/admin", name="adminDashboard")
      */
-    public function index(Service\UserMGR $userMgr,Service\EntityMGR $entityMGR)
+    public function index(Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://auth.sarkesh.org/auth.php?id=' . $configMGR->getConfig()->getActiveationCode());
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $urlData = curl_exec($ch);
+        curl_close($ch);
+
+        if ($urlData < 0)
+            return $this->redirectToRoute('LE');
 
         return $this->render('admin/dashboard.html.twig', [
             'usersCount' => $entityMGR->rowsCount('App:SysUser'),
             'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
             'areaCount' => $entityMGR->rowsCount('App:SysArea'),
             'SystemVersion'=>Yaml::parseFile('../config/sarkesh.yaml')['version'],
-            'currentTime'=>time()
+            'currentTime'=>time(),
+            'lisenseDayLeft'=>$urlData
         ]);
     }
 
@@ -375,6 +419,13 @@ class AdminController extends AbstractController
         $urlData = curl_exec($ch);
         curl_close($ch);
 
+        $ch2 = curl_init();
+        curl_setopt($ch2, CURLOPT_URL, 'https://raw.githubusercontent.com/morrning/prgco/master/note.txt');
+        curl_setopt($ch2, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch2, CURLOPT_RETURNTRANSFER, 1);
+        $note = curl_exec($ch2);
+        curl_close($ch2);
+
         try {
             $urlConfig = Yaml::parse($urlData);
         } catch (ParseException $exception) {
@@ -402,7 +453,8 @@ class AdminController extends AbstractController
             'form'=>$form->createView(),
             'alert'=>$alerts,
             'currentVer'=>$urlConfig['version'],
-            'localVer'=>$localConfig['version']
+            'localVer'=>$localConfig['version'],
+            'note'=>$note
         ]);
 
 
