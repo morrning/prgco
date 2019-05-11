@@ -1,0 +1,14 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}ثبت درخواست جدید در صندوق انتقدات و پیشنهادات{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            ثبت درخواست جدید در صندوق انتقدات و پیشنهادات
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
