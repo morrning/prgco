@@ -5,9 +5,39 @@
         <div class="card-header bg-info text-light">
             ثبت درخواست جدید در صندوق انتقدات و پیشنهادات
         </div>
+
         <div class="card-body">
+            <div class="alert alert-success">
+                <span class="fa fa-info-circle"></span>
+                ارائه اطلاعات هویتی شما اختیاری می‌باشد.می توانید به صورت ناشناس پیام خود را ارسال فرمایید.
+            </div>
             {{ form_start(form) }}
-            {{ form_widget(form) }}
+            <div class="row pb-1">
+                <div class="col-sm-12 col-md-4">
+                    {{ form_label(form.fullname) }}
+                    {{ form_widget(form.fullname) }}
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    {{ form_label(form.tel) }}
+                    {{ form_widget(form.tel) }}
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email) }}
+                </div>
+            </div>
+            <div class="row pb-1">
+                <div class="col-12">
+                    {{ form_label(form.comment) }}
+                    {{ form_widget(form.comment) }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-b"
+                </div>
+            </div>
             {{ form_end(form) }}
         </div>
     </div>
