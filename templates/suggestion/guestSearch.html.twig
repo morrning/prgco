@@ -1,0 +1,33 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}پیگیری درخواست قبلی در صندوق انتقدات و پیشنهادات{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            پیگیری درخواست قبلی
+        </div>
+
+        <div class="card-body">
+            <div class="alert alert-success">
+                <span class="fa fa-info-circle"></span>
+                جهت پیگیری درخواست قبلی خود کد رهگیری خود را در کادر زیر وارد کنید.
+            </div>
+            {{ form_start(form) }}
+            <div class="row pt-1">
+                <div class="col-sm-12 col-md-4">
+                    {{ form_label(form.SID) }}
+                    {{ form_widget(form.SID) }}
+                </div>
+            </div>
+            <div class="row pt-1">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-secondary" href="{{ path('suggestion') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

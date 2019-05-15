@@ -164,12 +164,12 @@ class Suggestion
 
     public function getStype(): ?string
     {
-        return $this->type;
+        return $this->Stype;
     }
 
     public function setStype(string $type): self
     {
-        $this->type = $type;
+        $this->Stype = $type;
 
         return $this;
     }

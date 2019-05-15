@@ -1,0 +1,28 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}ثبت درخواست جدید در صندوق انتقدات و پیشنهادات{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+             درخواست در صندوق انتقدات و پیشنهادات
+        </div>
+        <div class="card-body">
+            <div class="alert alert-success">
+                <span class="fa fa-info-circle"></span>
+                درخواست شما با موفقیت ثبت شد. شماره پیگیری درخواست شما به شرح ذیل می باشد.
+            </div>
+            <div class="row text-center">
+                <div class="col-12">
+                    <h1><span class="badge badge-warning"><span class="fa fa-arrow-alt-circle-left"></span> {{ id }}</span></h1>
+                </div>
+            </div>
+            <div class="row pt-1">
+                <div class="col-12">
+                    <a class="btn btn-secondary" href="{{ path('suggestion') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

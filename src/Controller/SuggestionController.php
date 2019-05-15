@@ -26,12 +26,31 @@ use App\Entity;
 class SuggestionController extends AbstractController
 {
     /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+
+    /**
      * @Route("/suggestion", name="suggestion")
      */
-    public function index()
+    public function suggestion()
     {
         return $this->render('suggestion/guestDashboard.html.twig', [
             'controller_name' => 'SuggestionController',
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/success/{id}", name="suggestionSubmitSuccess")
+     */
+    public function suggestionSubmitSuccess($id)
+    {
+        return $this->render('suggestion/guestSubmitSuccess.html.twig', [
+            'id' => $id,
         ]);
     }
 
@@ -40,26 +59,71 @@ class SuggestionController extends AbstractController
      */
     public function suggestionSubmitNew(Request $request,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
-        $passenger = new Entity\Suggestion();
-        $form = $this->createFormBuilder($passenger)
-            ->add('fullname', TextType::class,['label'=>'نام و نام‌خانوادگی'])
-            ->add('email', TextType::class,['label'=>' پست الکترونیکی'])
-            ->add('tel', TextType::class,['label'=>'تلفن تماس'])
+        $suggestion = new Entity\Suggestion();
+        $form = $this->createFormBuilder($suggestion)
+            ->add('Stype', ChoiceType::class,['label'=>'نوع درخواست','choices'=>['انتقاد'=>'1','پیشنهاد و راهکار'=>'2']])
+            ->add('fullname', TextType::class,['label'=>'نام و نام‌خانوادگی','required'=>false])
+            ->add('email', TextType::class,['label'=>' پست الکترونیکی','required'=>false])
+            ->add('tel', TextType::class,['label'=>'تلفن تماس','required'=>false])
             ->add('comment',TextareaType::class,['label'=>'متن:'])
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 
         $form->handleRequest($request);
-        $jdate = new Service\Jdate();
         if ($form->isSubmitted() && $form->isValid()) {
-            $passenger->setSubmitter($userMGR->currentPosition());
-            $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
-            $entityMGR->insertEntity($passenger);
-            return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>1]);
+            $suggestion->setDateSubmit(time());
+            $suggestion->setParrentID('#');
+            $suggestion->setSID($this->RandomString(8));
+
+            $entityMGR->insertEntity($suggestion);
+            return $this->redirectToRoute('suggestionSubmitSuccess',['id'=>$suggestion->getSID()]);
         }
 
         return $this->render('suggestion/submitNew.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/search", name="suggestionSearch")
+     */
+    public function suggestionSearch(Request $request,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        $suggestion = new Entity\Suggestion();
+        $form = $this->createFormBuilder($suggestion)
+            ->add('SID', TextType::class,['label'=>'کد پیگیری'])
+            ->add('submit', SubmitType::class,['label'=>'جست و جو'])
+            ->getForm();
+        $alerts =[];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$form->get('SID')->getData()]);
+            if(! is_null($res))
+            {
+                return $this->redirectToRoute('suggestionView',['id'=>$res->getSID()]);
+            }
+            $alerts = [['message'=>'درخواست مورد نظر در سامانه موجود نیست.لطفا مجددا سعی کنید.','type'=>'danger']];
+
+        }
+
+        return $this->render('suggestion/guestSearch.html.twig', [
+            'form' => $form->createView(),
+            'alert'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/view/{id}", name="suggestionView")
+     */
+    public function suggestionView($id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$id]);
+        if(is_null($res))
+            return $this->redirectToRoute('404');
+
+        return $this->render('suggestion/suggestionView.html.twig', [
+            'req' => $res,
+            'doing'=>$entityMGR->findBy('App:Suggestion',['parrentID'=>$res->getId()])
         ]);
     }
 }

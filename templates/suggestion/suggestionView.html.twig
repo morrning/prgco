@@ -1,0 +1,65 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %} مشاهده درخواست صندوق انتقادات و پیشنهادات{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            مشاهده درخواست
+        </div>
+        <div class="card-body">
+            <div class="row pt-1">
+                <div class="col-12">
+                    <h3 class="text-danger">جزئیات درخواست</h3>
+                    <hr>
+                    <p class="">
+                        <b>
+                            شماره پیگیری:
+                            <span class="text-success">{{ req.SID }}</span>
+                        </b>
+                    </p>
+                    <p class="">
+                        <b>
+                            نوع درخواست:
+                            <span class="text-success">
+                            {% if req.Stype == 1 %}
+                                انتقاد
+                            {% else %}
+                                پیشنهاد و راهکار
+                            {% endif %}
+                        </span>
+                        </b>
+                    </p>
+                    <p class="">
+                        نام و نام خانوادگی:
+                        <span class="text-danger">{{ req.fullname }}</span>
+                    </p>
+                    <p class="">
+                        تلفن تماس:
+                        <span class="text-danger">{{ req.tel }}</span>
+                    </p>
+                    <p class="">
+                        پست الکترونیکی:
+                        <span class="text-danger">{{ req.email }}</span>
+                    </p>
+                    <hr>
+                    <p><b>متن درخواست:</b></p>
+                    <p>{{ req.comment }}</p>
+                    <hr>
+                    {% if doing | length > 0 %}
+                        <h3>اقدامات انجام شده:</h3>
+                    {% else %}
+                        <h3 class="text-danger">تاکنون اقدامی صورت نگرفته است</h3>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row pt-1">
+                <div class="col-12">
+                    <a class="btn btn-secondary" href="{{ path('suggestion') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

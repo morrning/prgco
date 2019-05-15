@@ -12,7 +12,13 @@
                 ارائه اطلاعات هویتی شما اختیاری می‌باشد.می توانید به صورت ناشناس پیام خود را ارسال فرمایید.
             </div>
             {{ form_start(form) }}
-            <div class="row pb-1">
+            <div class="row pt-1">
+                <div class="col-sm-12 col-md-4">
+                    {{ form_label(form.Stype) }}
+                    {{ form_widget(form.Stype) }}
+                </div>
+            </div>
+            <div class="row py-1">
                 <div class="col-sm-12 col-md-4">
                     {{ form_label(form.fullname) }}
                     {{ form_widget(form.fullname) }}
@@ -32,10 +38,13 @@
                     {{ form_widget(form.comment) }}
                 </div>
             </div>
-            <div class="row">
+            <div class="row pt-1">
                 <div class="col-12">
                     {{ form_widget(form.submit) }}
-                    <a class="btn btn-b"
+                    <a class="btn btn-secondary" href="{{ path('suggestion') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
                 </div>
             </div>
             {{ form_end(form) }}

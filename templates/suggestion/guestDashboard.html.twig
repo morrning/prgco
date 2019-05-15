@@ -6,20 +6,31 @@
             صندوق انتقادات و پیشنهادات
         </div>
         <div class="card-body">
-            <p class="alert alert-info">
-                <i class="fa fa-info-circle"></i>
-                به بخش صندوق پیشنهادات و انتقادات خوش آمدید.کلیه اطلاعات هویتی شما محرمانه بوده و به هیچ وجه ذخیره نمی شود.
-            </p>
-            <p>
-                <a class="btn btn-success" href="{{ path('suggestionSubmitNew') }}">
-                    <i class="fa fa-plus"></i>
-                    ثبت مورد جدید
-                </a>
-                <a class="btn btn-info" href="">
-                    <i class="fa fa-search"></i>
-                    پیگیری درخواست قبلی
-                </a>
-            </p>
+            <div class="row">
+                <div class="col-sm-12 col-md-8">
+                    <p class="alert alert-success">
+                        <i class="fa fa-info-circle"></i>
+                        به بخش صندوق پیشنهادات و انتقادات خوش آمدید.
+                    </p>
+                    <p class="alert alert-info">
+                        <i class="fa fa-info-circle"></i>
+                        کلیه اطلاعات هویتی شما محرمانه بوده و به هیچ وجه در سامانه ذخیره نمی شود.
+                    </p>
+                    <p>
+                        <a class="btn btn-success" href="{{ path('suggestionSubmitNew') }}">
+                            <i class="fa fa-plus"></i>
+                            ثبت مورد جدید
+                        </a>
+                        <a class="btn btn-info" href="{{ path('suggestionSearch') }}">
+                            <i class="fa fa-search"></i>
+                            پیگیری درخواست قبلی
+                        </a>
+                    </p>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <img src="{{ asset('assets/images/public/suggestionbox.jpg') }}" class="img-fluid img-thumbnail">
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
