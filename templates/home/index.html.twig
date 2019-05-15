@@ -4,22 +4,7 @@
 
 {% block appBody %}
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-4 pb-2">
-            <div class="card">
-                <div class="card-header text-center bg-primary text-light">
-                    تابلو اعلانات
-                </div>
-                <div class="card-body">
-                    <ul class="">
-                        {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
-                        {% for post in posts %}
-                            <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-8 pb-2">
+        <div class="col-xs-12 col-sm-12 col-md-12 pb-2">
             <div class="bd-example">
                 <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
                     <ol class="carousel-indicators">
