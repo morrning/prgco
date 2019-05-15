@@ -5,7 +5,14 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-3">
                 <div class="row">
-                    <div class="col-12 pb-2">
+                    <div class="col-12 pb-1">
+                        <div class="card mb-1">
+                            <div class="card-header bg-success text-light">
+                                <span class="fa fa-clock"></span>
+                                امروز
+                                {{ Jdate.jdate('l , Y/n/d ساعت h:i','now'|date('U')) }}
+                            </div>
+                        </div>
                         <div class="list-group">
                             <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active">
                                 <i class="fas fa-bars"></i>
