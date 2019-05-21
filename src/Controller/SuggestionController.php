@@ -61,11 +61,11 @@ class SuggestionController extends AbstractController
     {
         $suggestion = new Entity\Suggestion();
         $form = $this->createFormBuilder($suggestion)
-            ->add('Stype', ChoiceType::class,['label'=>'نوع درخواست','choices'=>['انتقاد'=>'1','پیشنهاد و راهکار'=>'2']])
+            ->add('Stype', ChoiceType::class,['label'=>'نوع درخواست','choices'=>['پیشنهاد و راهکار'=>'2','انتقاد'=>'1']])
             ->add('fullname', TextType::class,['label'=>'نام و نام‌خانوادگی','required'=>false])
-            ->add('email', TextType::class,['label'=>' پست الکترونیکی','required'=>false])
-            ->add('tel', TextType::class,['label'=>'تلفن تماس','required'=>false])
-            ->add('comment',TextareaType::class,['label'=>'متن:'])
+            ->add('email', TextType::class,['label'=>' پست الکترونیکی','required'=>false,'attr'=>['placeholder'=>'youremail@example.com']])
+            ->add('tel', TextType::class,['label'=>'تلفن تماس','required'=>false,'attr'=>['placeholder'=>'09181234567']])
+            ->add('comment',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>12]])
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 

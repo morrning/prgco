@@ -33,12 +33,17 @@ class UserController extends AbstractController
             if($userMGR->login($data['username'],$data['password']))
             {
 
-                if(is_null($entityMGR->findOneBy('App:SysPosition',['userID'=>$userMGR->currentUser()->getId()])))
+                $positions = $entityMGR->findOneBy('App:SysPosition',['userID'=>$userMGR->currentUser()]);
+                if(is_null($positions))
                 {
                     $userMGR->logout();
                     $alert = [['message'=>'هیچ پست سازمانی برای شما تعریف نشده است.','type'=>'danger']];
                 }
                 else{
+                    if(is_null($entityMGR->findOneBy('App:SysPosition',['userID'=>$userMGR->currentUser(),'isDefault'=>'1']))){
+                        $positions[0]->setIsDefault(1);
+                        $entityMGR->update($positions[0]);
+                    }
                     return $this->redirectToRoute('home');
                     $logger->info('user ' . $data['username'] .' loged in.');
                 }

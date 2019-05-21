@@ -490,6 +490,8 @@ class AdminController extends AbstractController
                 $position->setUpperID($PID);
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
                 $position->setDefaultArea($position->getDefaultArea());
+                if(is_null($entityMGR->findBy('App:SysPosition',['isDefault'=>'1' , 'userID'=>$user])));
+                    $position->setIsDefault(1);
                 $entityMGR->insertEntity($position);
                 $logger->info(sprintf('user %s add new position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>1]);
