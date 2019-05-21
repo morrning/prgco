@@ -7,10 +7,6 @@
         </div>
 
         <div class="card-body">
-            <div class="alert alert-success">
-                <span class="fa fa-info-circle"></span>
-                ارائه اطلاعات هویتی شما اختیاری می‌باشد.می توانید به صورت ناشناس پیام خود را ارسال فرمایید.
-            </div>
             {{ form_start(form) }}
             <div class="row pt-1">
                 <div class="col-sm-12 col-md-4">
@@ -23,11 +19,11 @@
                     {{ form_label(form.fullname) }}
                     {{ form_widget(form.fullname) }}
                 </div>
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-md-3">
                     {{ form_label(form.tel) }}
                     {{ form_widget(form.tel) }}
                 </div>
-                <div class="col-sm-12 col-md-4">
+                <div class="col-sm-12 col-md-5">
                     {{ form_label(form.email) }}
                     {{ form_widget(form.email) }}
                 </div>
