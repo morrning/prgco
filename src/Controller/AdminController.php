@@ -312,9 +312,9 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/users/{page}/{msg}", name="adminUsers")
+     * @Route("/admin/users/{msg}", name="adminUsers")
      */
-    public function adminUsers($page=1,$msg=0, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminUsers($msg=0, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -325,13 +325,11 @@ class AdminController extends AbstractController
         if($msg==2)
             $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
 
-        $users = $entityMGR->findByPage('App:SysUser',$page,30);
-
+        $users = $entityMGR->findAll('App:SysUser');
 
         return $this->render('admin/users.html.twig', [
             'users'=>$users,
             'alerts' => $alerts,
-            'page'=>$page
         ]);
     }
 
