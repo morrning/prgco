@@ -6,6 +6,15 @@
             فرم های پرکاربرد
         </div>
         <div class="card-body">
+            <script>
+                $(document).ready(function() {
+                    $('.table').DataTable({
+                        "language": {
+                            "url": "{{ asset('assets/datatable/farsi.json') }}"
+                        }
+                    });
+                } );
+            </script>
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover rounded text-center">
                     <thead class="thead-dark">
@@ -13,7 +22,7 @@
                         <th>ردیف</th>
                         <th>عنوان</th>
                         <th>شناسه ایزو</th>
-                        <th>تاریخ ایجاد</th>
+                        <th>دسته بندی</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -23,14 +32,22 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ file.title }}</td>
                             <td>{{ file.ISOCode }}</td>
-                            {% if file.dateSubmit is null %}
-                                <td>نامشخص</td>
-                            {% else %}
-                                    <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
-                            {% endif %}
+                            <td>{{ file.cat.catName }}</td>
 
                             <td>
-                                <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">دریافت</a>
+                                {% if file.fileExt == 'docx' %}
+                                    <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-word"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'xlsx' %}
+                                    <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-excel"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'pdf' %}
+                                    <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-pdf"></i>
+                                        دریافت</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

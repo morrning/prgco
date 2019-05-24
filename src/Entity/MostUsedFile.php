@@ -41,6 +41,16 @@ class MostUsedFile
      */
     private $dateSubmit;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $fileExt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\MostUsedFileCat", inversedBy="mostUsedFiles")
+     */
+    private $cat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +112,30 @@ class MostUsedFile
     public function setDateSubmit(?string $dateSubmit): self
     {
         $this->dateSubmit = $dateSubmit;
+
+        return $this;
+    }
+
+    public function getFileExt(): ?string
+    {
+        return $this->fileExt;
+    }
+
+    public function setFileExt(string $fileExt): self
+    {
+        $this->fileExt = $fileExt;
+
+        return $this;
+    }
+
+    public function getCat(): ?MostUsedFileCat
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?MostUsedFileCat $cat): self
+    {
+        $this->cat = $cat;
 
         return $this;
     }

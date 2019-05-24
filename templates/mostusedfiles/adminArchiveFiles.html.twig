@@ -2,6 +2,15 @@
 
 {% block title %}آرشیو فرم ها{% endblock %}
 {% block pageBody %}
+    <script>
+        $(document).ready(function() {
+            $('.table').DataTable({
+                "language": {
+                    "url": "{{ asset('assets/datatable/farsi.json') }}"
+                }
+            });
+        } );
+    </script>
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="thead-dark">
