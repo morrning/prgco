@@ -1,0 +1,23 @@
+{
+  "sEmptyTable":   	"Keine Daten in der Tabelle vorhanden",
+  "sInfo":         	"نمایش نتایج _START_ تا _END_ از مجموع _TOTAL_ نتیجه",
+  "sInfoEmpty":    	"0 bis 0 von 0 Einträgen",
+  "sInfoFiltered": 	"(gefiltert von _MAX_ Einträgen)",
+  "sInfoPostFix":  	"",
+  "sInfoThousands":  	".",
+  "sLengthMenu":   	" تعداد نتایج در صفحه:_MENU_",
+  "sLoadingRecords": 	"لطفا صبر کنید...",
+  "sProcessing":   	"در حال پردازش...",
+  "sSearch":       	"جست و جو",
+  "sZeroRecords":  	"نتیجه ای یافت نشد.",
+  "oPaginate": {
+    "sFirst":    	"اولین",
+    "sPrevious": 	"قبلی",
+    "sNext":     	"بعدی",
+    "sLast":     	"آخرین"
+  },
+  "oAria": {
+    "sSortAscending":  ": aktivieren, um Spalte aufsteigend zu sortieren",
+    "sSortDescending": ": aktivieren, um Spalte absteigend zu sortieren"
+  }
+}

@@ -35,7 +35,7 @@ class MostusedfilesController extends AbstractController
     public function mostusedfilesView(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         return $this->render('mostusedfiles/mostUsedFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:MostUsedFile'),
+            'files' => $entityMGR->findBy('App:MostUsedFile')
         ]);
     }
 
@@ -81,11 +81,12 @@ class MostusedfilesController extends AbstractController
 
         $alerts = [];
 
-        $data = ['message'=>'message'];
+        $data = new Entity\MostUsedFile();
         $form = $this->createFormBuilder($data)
             ->add('title', TextType::class,['label'=>'عنوان:'])
+            ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\MostUsedFileCat::class,'choice_label'=>'catName','choice_value'=>'id'])
             ->add('isoCode', TextType::class,['label'=>'شناسه ایزو:'])
-            ->add('fileID',FileType::class,['label'=>'فایل:'])
+            ->add('fileID',FileType::class,['label'=>'فایل :'])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
 
@@ -93,17 +94,15 @@ class MostusedfilesController extends AbstractController
         $file = $form->get('fileID')->getData();
         $guid = $this->RandomString(32);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx'){
+            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xlsx'){
                 if($file->getSize() < 2097152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
-                    $muf = new Entity\MostUsedFile();
-                    $muf->setISOCode($form->get('isoCode')->getData());
-                    $muf->setTitle($form->get('title')->getData());
-                    $muf->setSubmitter($userMGR->currentPosition()->getId());
-                    $muf->setFileID($tempFileName);
-                    $muf->setDateSubmit(time());
-                    $entityMGR->insertEntity($muf);
+                    $data->setSubmitter($userMGR->currentPosition()->getId());
+                    $data->setFileID($tempFileName);
+                    $data->setDateSubmit(time());
+                    $data->setFileExt($file->getClientOriginalExtension());
+                    $entityMGR->insertEntity($data);
                     return $this->redirectToRoute('mostusedfilesDashboard',['msg'=>2]);
                 }
                 else{
@@ -111,7 +110,7 @@ class MostusedfilesController extends AbstractController
                 }
             }
             else{
-                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل pdf,docx  ارسال فرمایید.']);
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,xls,pdf,docx  ارسال فرمایید.']);
             }
 
         }

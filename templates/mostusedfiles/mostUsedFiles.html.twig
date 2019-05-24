@@ -6,6 +6,15 @@
             فرم های پرکاربرد
         </div>
         <div class="card-body">
+            <script>
+                $(document).ready(function() {
+                    $('.table').DataTable({
+                        "language": {
+                            "url": "{{ asset('assets/datatable/farsi.json') }}"
+                        }
+                    });
+                } );
+            </script>
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover rounded text-center">
                     <thead class="thead-dark">
@@ -30,7 +39,19 @@
                             {% endif %}
 
                             <td>
-                                <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">دریافت</a>
+                                {% if file.fileExt == 'docx' %}
+                                    <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-word"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'xlsx' %}
+                                    <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-excel"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'pdf' %}
+                                    <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-pdf"></i>
+                                        دریافت</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
