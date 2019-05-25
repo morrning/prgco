@@ -1,8 +1,8 @@
 {
-  "sEmptyTable":   	"Keine Daten in der Tabelle vorhanden",
+  "sEmptyTable":   	"اطلاعاتی جهت نمایش وجود ندارد.",
   "sInfo":         	"نمایش نتایج _START_ تا _END_ از مجموع _TOTAL_ نتیجه",
-  "sInfoEmpty":    	"0 bis 0 von 0 Einträgen",
-  "sInfoFiltered": 	"(gefiltert von _MAX_ Einträgen)",
+  "sInfoEmpty":    	"هیچ نتیجه ای یافت نشد.",
+  "sInfoFiltered": 	"(فیلتر شده با _MAX_ فیلتر)",
   "sInfoPostFix":  	"",
   "sInfoThousands":  	".",
   "sLengthMenu":   	" تعداد نتایج در صفحه:_MENU_",

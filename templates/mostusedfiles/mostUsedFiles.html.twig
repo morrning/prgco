@@ -22,7 +22,7 @@
                         <th>ردیف</th>
                         <th>عنوان</th>
                         <th>شناسه ایزو</th>
-                        <th>تاریخ ایجاد</th>
+                        <th>دسته بندی</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -32,11 +32,7 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ file.title }}</td>
                             <td>{{ file.ISOCode }}</td>
-                            {% if file.dateSubmit is null %}
-                                <td>نامشخص</td>
-                            {% else %}
-                                    <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
-                            {% endif %}
+                            <td>{{ file.cat.catName }}</td>
 
                             <td>
                                 {% if file.fileExt == 'docx' %}
