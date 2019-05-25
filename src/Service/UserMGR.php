@@ -167,7 +167,7 @@ class UserMGR
     {
         if(! $this->isLogedIn())
             return 0;
-        return count($this->currentPosition()->getSysNotifications());
+        return count($this->em->findBy('App:SysNotification',['userID'=>$this->currentPosition(),'viewed'=>null]));
     }
 
     public function lastNotifications($count=10)

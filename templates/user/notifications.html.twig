@@ -37,7 +37,7 @@
                                         <th class="text-center" >{{ notifi.des }}</th>
                                         <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',notifi.dateSubmit) }}</td>
                                         <th class="text-center" >
-                                            <a class="btn btn-primary" href="{{ notifi.linktarget }}">
+                                            <a class="btn btn-primary" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
                                                 <span class="fa fa-arrow-left"></span>
                                             </a>
                                         </th>

@@ -182,8 +182,49 @@ class UserController extends AbstractController
 
         return $this->render('user/notifications.html.twig',
             [
-                'positions' => $entityMGR->findBy('App:SysPosition',['userID'=>$userMgr->currentUser()->getId()])
+                'notifis' => $userMgr->currentPosition()->getSysNotifications()
             ]
         );
+    }
+
+    /**
+     * @Route("user/clear/notifications" ,name="userClearNotifications")
+     */
+    public function userClearNotifications(Request $request, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('userLogin');
+
+        $nots = $entityMGR->findBy('App:SysNotification',['userID'=>$userMgr->currentPosition(),'viewed'=>null]);
+        foreach ($nots as $not)
+        {
+            $not->setViewed('1');
+            $not->setDateSubmit(time());
+            $entityMGR->update($not);
+        }
+        return $this->redirect($request->server->get('HTTP_REFERER'));
+
+    }
+
+    /**
+     * @Route("user/notification/jump/{id}" ,name="userJumpNotification")
+     */
+    public function userJumpNotification($id,Request $request, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('userLogin');
+
+        $noti = $entityMGR->find('App:SysNotification',$id);
+        if(is_null($noti))
+            return $this->redirectToRoute('404');
+        if($noti->getUserID()->getId() != $userMgr->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        $noti->setViewed(1);
+        $noti->setDateSubmit(time());
+        $entityMGR->update($noti);
+
+        return $this->redirect($noti->getLinkTarget());
+
     }
 }
