@@ -171,4 +171,19 @@ class UserController extends AbstractController
             ]
         );
     }
+
+    /**
+     * @Route("user/notifications" ,name="userNotifications")
+     */
+    public function userNotifications( Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('userLogin');
+
+        return $this->render('user/notifications.html.twig',
+            [
+                'positions' => $entityMGR->findBy('App:SysPosition',['userID'=>$userMgr->currentUser()->getId()])
+            ]
+        );
+    }
 }

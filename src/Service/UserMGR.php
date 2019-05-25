@@ -162,4 +162,24 @@ class UserMGR
         }
     }
 
+    //--------------- NOTIFICATION CONTROLL ---------------
+    public function notificationCount()
+    {
+        if(! $this->isLogedIn())
+            return 0;
+        return count($this->currentPosition()->getSysNotifications());
+    }
+
+    public function lastNotifications($count=10)
+    {
+        $orm = $this->em->getORM();
+        return $orm->createQueryBuilder('q')
+            ->select('q')
+            ->from('App:SysNotification','q')
+            ->setMaxResults($count)
+            ->orderBy('q.id','DESC')
+            ->getQuery()
+            ->execute();
+    }
+
 }

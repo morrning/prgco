@@ -2,7 +2,7 @@
   "sEmptyTable":   	"اطلاعاتی جهت نمایش وجود ندارد.",
   "sInfo":         	"نمایش نتایج _START_ تا _END_ از مجموع _TOTAL_ نتیجه",
   "sInfoEmpty":    	"هیچ نتیجه ای یافت نشد.",
-  "sInfoFiltered": 	"(فیلتر شده با _MAX_ فیلتر)",
+  "sInfoFiltered": 	"(از _MAX_ رکورد)",
   "sInfoPostFix":  	"",
   "sInfoThousands":  	".",
   "sLengthMenu":   	" تعداد نتایج در صفحه:_MENU_",
