@@ -18,6 +18,7 @@
                 <th>ردیف</th>
                 <th>عنوان</th>
                 <th>شناسه ایزو</th>
+                <th>دسته بندی</th>
                 <th>امکانات</th>
             </tr>
             </thead>
@@ -27,8 +28,9 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ file.title }}</td>
                     <td>{{ file.ISOCode }}</td>
+                    <td>{{ file.cat.catName }}</td>
                     <td>
-                        <a class="btn btn-sm btn-success" href="{{ asset('files/' ~ file.fileID) }}">دریافت</a>
+                        <a class="btn btn-success" href="{{ asset('files/' ~ file.fileID) }}">دریافت</a>
                         <a class="btn btn-sm btn-danger" href="{{ path('mostusedfilesDeleteFile',{'id':file.id}) }}">حذف</a>
                     </td>
                 </tr>

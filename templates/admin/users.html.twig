@@ -14,10 +14,15 @@
     </div>
     <hr>
     <div class="table-responsive">
-        <div class="">
-            صفحه :
-            {{ page }}
-        </div>
+        <script>
+            $(document).ready(function() {
+                $('.table').DataTable({
+                    "language": {
+                        "url": "{{ asset('assets/datatable/farsi.json') }}"
+                    }
+                });
+            } );
+        </script>
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="thead-dark">
             <tr>
@@ -43,17 +48,6 @@
             {% endfor %}
             </tbody>
         </table>
-        <ul class="pagination pagination-sm">
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="{{ path('adminUsers',{'page':page-1}) }}" tabindex="-1" >برگه قبلی</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link">{{ page }} <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="{{ path('adminUsers',{'page':page+1}) }}">برگه بعدی</a>
-            </li>
-        </ul>
     </div>
 
 {% endblock %}
