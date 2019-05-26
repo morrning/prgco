@@ -182,4 +182,13 @@ class UserMGR
             ->execute();
     }
 
+    public function addNotification($user,$des,$url){
+        $notification = new Entity\SysNotification();
+        $notification->setDateSubmit(time());
+        $notification->setUserID($user);
+        $notification->setViewed(null);
+        $notification->setDes($des);
+        $notification->setLinkTarget($url);
+        return $this->em->insertEntity($notification);
+    }
 }
