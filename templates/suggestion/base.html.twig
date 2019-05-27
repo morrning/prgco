@@ -1,0 +1,26 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}نظام پیشنهادات و انتقادات{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictreqDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        {% if UserMGR.hasPermission('suggestionInbox','CORE') == true %}
+            <li class="nav-item border-bottom">
+                <a class="nav-link" href="{{ path('suggestionInbox') }}">
+                    <i class="fas fa-inbox"></i>
+                    <span>صندوق دریافتی</span>
+                </a>
+            </li>
+        {% endif %}
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ictreqNew') }}">
+                <i class="fas fa-list-alt"></i>
+                <span>آرشیو ارجاعات</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}

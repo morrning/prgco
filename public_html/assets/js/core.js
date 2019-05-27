@@ -12,6 +12,13 @@ var SysIsModalOn = false;
 $(document).ready(function(){
     $('.JdateInput').mask('0000/00/00');
     $('.MoneyInput').mask('000,000,000,000,000',{reverse: true})
+    //create datatable
+    $('.table').DataTable({
+        "language": {
+            "url": "..//datatable/farsi.json"
+        }
+    });
+
 });
 
 function SysChangeValueMoney(value,id)

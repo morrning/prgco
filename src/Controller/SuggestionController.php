@@ -126,4 +126,33 @@ class SuggestionController extends AbstractController
             'doing'=>$entityMGR->findBy('App:Suggestion',['parrentID'=>$res->getId()])
         ]);
     }
+
+    /**
+     * @Route("/suggestion/admin", name="suggestionAdmin")
+     */
+    public function suggestionAdmin()
+    {
+        return $this->render('suggestion/adminDashboard.html.twig', [
+            'controller_name' => 'SuggestionController',
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/admin/inbox/{msg}", name="suggestionInbox")
+     */
+    public function suggestionInbox($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('suggestionInbox','CORE'))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'درخواست شما با موفقیت ثبت شد.به زودی درخواست شما بررسی خواهد شد.']];
+
+        return $this->render('suggestion/adminInbox.html.twig', [
+            'reqs' => $entityMGR->findAll('App:Suggestion'),
+            'alerts'=>$alerts
+        ]);
+    }
 }
