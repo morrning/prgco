@@ -51,5 +51,16 @@
 </div>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
+<script>
+    $(document).ready(function(){
+        //create datatable
+        $('.table').DataTable({
+            "language": {
+                "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
+            }
+        });
+
+    });
+</script>
 </body>
 </html>

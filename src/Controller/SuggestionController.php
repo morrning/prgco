@@ -74,8 +74,11 @@ class SuggestionController extends AbstractController
             $suggestion->setDateSubmit(time());
             $suggestion->setParrentID('#');
             $suggestion->setSID($this->RandomString(8));
-
             $entityMGR->insertEntity($suggestion);
+            //send notification to admins
+            $des = 'یک درخواست جدید در صندوق پیشنهادات و انتقادات ثبت شد.';
+            $url = $this->generateUrl('suggestionInbox');
+            $userMGR->addNotificationForGroup('suggestionInbox','SUGGESTION',$des,$url);
             return $this->redirectToRoute('suggestionSubmitSuccess',['id'=>$suggestion->getSID()]);
         }
 
