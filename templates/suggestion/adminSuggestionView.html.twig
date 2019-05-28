@@ -8,14 +8,15 @@
         <li class="nav-item">
             <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ارجاعات</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-ref" data-toggle="tab" href="#ref" role="tab" aria-controls="profile" aria-selected="false">ارجاع</a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="row pt-1">
                 <div class="col-12">
-                    <h3 class="text-danger">جزئیات درخواست</h3>
-                    <hr>
-                    <p class="">
+                    <p class="pt-2">
                         <b>
                             شماره پیگیری:
                             <span class="text-success">{{ req.SID }}</span>
@@ -91,7 +92,11 @@
             {% endfor %}
 
         </div>
-
+        <div class="tab-pane fade" id="ref" role="tabpanel" aria-labelledby="home-tab">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
     </div>
 
     <hr>

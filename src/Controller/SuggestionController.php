@@ -146,7 +146,7 @@ class SuggestionController extends AbstractController
     public function suggestionInbox($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
 
-        if(! $userMGR->hasPermission('suggestionInbox','CORE'))
+        if(! $userMGR->hasPermission('suggestionInbox','SUGGESTION'))
             return $this->redirectToRoute('403');
 
         $alerts = null;
@@ -162,15 +162,37 @@ class SuggestionController extends AbstractController
     /**
      * @Route("/suggestion/admin/view/{id}", name="suggestionAdminView")
      */
-    public function suggestionAdminView($id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    public function suggestionAdminView(Request $request,$id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
         $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$id]);
         if(is_null($res))
             return $this->redirectToRoute('404');
 
+        $ref = new Entity\SuggestionReferral();
+        $form = $this->createFormBuilder($ref)
+            ->add('user', Type\AutoentityType::class,['class'=>'App:SysPosition','choice_label'=>'publicLabel','label'=>'نام کاربر','attr'=>['pattern'=>'positions']])
+            ->add('des',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>5]])
+            ->add('submit', SubmitType::class,['label'=>'ارجاع'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ref->setDateSubmit(time());
+            $ref->setSuggestion($res);
+            $ref->setReferralSource($userMGR->currentPosition());
+            $entityMGR->insertEntity($ref);
+
+            //send notification to admins
+            $des = 'یک ارجاع جدید در نظام پیشنهادات و انتقادات دریافت کردید.';
+            $url = $this->generateUrl('suggestionInbox');
+            $userMGR->addNotificationForUser($ref->getUser(),$des,$url);
+            return $this->redirectToRoute('suggestionSubmitSuccess',['id'=>$ref->getId()]);
+        }
+
         return $this->render('suggestion/adminSuggestionView.html.twig', [
             'req' => $res,
-            'referrals'=>$res->getSuggestionReferrals()
+            'referrals'=>$res->getSuggestionReferrals(),
+            'form'=>$form->createView()
         ]);
     }
 }
