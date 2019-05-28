@@ -25,7 +25,10 @@
                     <td>{{ req.tel }}</td>
                     <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',req.dateSubmit) }}</td>
                     <td>
-                        <a class="btn btn-secondary" href="{{ path('ictreqView',{'rid':req.id}) }}">مشاهده</a>
+                        <a class="btn btn-success" href="{{ path('suggestionAdminView',{'id':req.SID}) }}">
+                            <i class="fa fa-eye"></i>
+                            مشاهده
+                        </a>
                     </td>
                 </tr>
             {% endfor %}

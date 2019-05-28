@@ -158,4 +158,19 @@ class SuggestionController extends AbstractController
             'alerts'=>$alerts
         ]);
     }
+
+    /**
+     * @Route("/suggestion/admin/view/{id}", name="suggestionAdminView")
+     */
+    public function suggestionAdminView($id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$id]);
+        if(is_null($res))
+            return $this->redirectToRoute('404');
+
+        return $this->render('suggestion/adminSuggestionView.html.twig', [
+            'req' => $res,
+            'referrals'=>$res->getSuggestionReferrals()
+        ]);
+    }
 }
