@@ -5,8 +5,69 @@
 {% block pageBody %}
     <div class="container">
         <div class="row">
-            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-xs-12 col-md-4 align-items-stretch">
+                <div class="card">
+                    <div class="card-header">
+                        نمودار تعداد پیشنهادات و انتقادات
+                    </div>
+                    <div class="card-body">
+                        <div class="ct-chart ct-perfect-fourth"></div>
 
+                        <script>
+                            var data = {
+                                series: [{{ type1Count }}, {{ type2Count }}]
+                            };
+
+                            var sum = function(a, b) { return a + b };
+
+                            new Chartist.Pie('.ct-chart', data, {
+                                labelInterpolationFnc: function(value) {
+                                    return Math.round(value / data.series.reduce(sum) * 100) + '%';
+                                }
+                            });
+                        </script>
+                    </div>
+                    <div class="card-footer">
+                        پیشنهادات:
+                        <span style="color:red">قرمز</span>
+                         |
+                        انتقادات
+                        <span style="color:orangered;">نارنجی</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 align-items-stretch">
+                <div class="card">
+                    <div class="card-header">
+                        آمار و اطلاعات
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12">
+                                <p>
+                                    تعداد کل انتقادات:
+                                    <span class="text-danger">{{ type2Count }}</span>
+                                    مورد
+                                </p>
+                                <p>
+                                    تعداد کل پیشنهادات و راهکارها:
+                                    <span class="text-success">{{ type1Count }}</span>
+                                    مورد
+                                </p>
+                                <p>
+                                    تعداد کل ارجاعات:
+                                    <span class="text-success">{{ refAll }}</span>
+                                    مورد
+                                </p>
+                                <p>
+                                    ارجاعات خوانده نشده:
+                                    <span class="text-success">{{ refUnread }}</span>
+                                    مورد
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
