@@ -29,6 +29,10 @@
                         </b>
                     </p>
                     <p class="">
+                        تاریخ ثبت:
+                        <span class="text-danger">{{ Jdate.jdate('Y/n/d در ساعت h:i',req.dateSubmit) }}</span>
+                    </p>
+                    <p class="">
                         نام و نام خانوادگی:
                         <span class="text-danger">{{ req.fullname }}</span>
                     </p>
@@ -44,8 +48,47 @@
                     <p><b>متن درخواست:</b></p>
                     <p>{{ req.comment }}</p>
                     <hr>
-                    {% if doing | length > 0 %}
+                    {% if referrals | length > 0 %}
                         <h3>اقدامات انجام شده:</h3>
+                        <div class="row">
+                            {% for referral in referrals %}
+                                <div class="col-sm-12 col-md-6 pt-1">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <span class="text-success">{{ loop.index }}>></span>
+                                            <b>
+                                                ارجاع دهنده:
+                                                {{ referral.referralSource.publicLabel }}
+                                            </b>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="text-secondary">
+                                                <i class="fa fa-user"></i>
+                                                ارجاع گیرنده:
+                                                {{ referral.user.publicLabel }}
+                                            </p>
+                                            <p>
+                                                پی نوشت:
+                                                {{ referral.des }}
+                                            </p>
+
+                                        </div>
+                                        <div class="card-footer">
+                                <span class="text-right">
+                                    تاریخ ارجاع:
+                                    {{ Jdate.jdate('Y/n/d در ساعت h:i',referral.dateSubmit) }}
+                                </span>
+                                            <span class="text-center text-danger"> | </span>
+                                            <span class="text-left">
+                                     تاریخ مشاهده:
+                                                {% if referral.dateView == null %}<span class="text-danger">مشاهده نشده</span> {% else %}<span class="text-success">{{ Jdate.jdate('Y/n/d در ساعت h:i',referral.dateView) }}</span> {% endif %}
+
+                                </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     {% else %}
                         <h3 class="text-danger">تاکنون اقدامی صورت نگرفته است</h3>
                     {% endif %}

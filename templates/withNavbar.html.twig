@@ -25,13 +25,48 @@
             </ul>
             <ul class="navbar-nav mr-auto pl-5">
                 {% if UserMGR.isLogedIn() %}
+                    {% set notifiCount = UserMGR.notificationCount() %}
                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                        <button type="button" class="btn btn-warning">
+                        {% if notifiCount == 0 %}
+                        <a class="btn btn-secondary" href="{{ path('userNotifications') }}">
                             <span class="fa fa-inbox"></span>
-                            0
-                        </button>
+                            {{ UserMGR.notificationCount() }}
+                        </a>
+                        {% else %}
+                            <div class="btn-group dropright" role="group">
+                                <button type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fa fa-inbox"></span>
+                                    {{ UserMGR.notificationCount() }}
+                                </button>
+                                <div class="dropdown-menu">
+                                    {%  set notifis = UserMGR.lastNotifications() %}
+                                    <h6 class="dropdown-header text-center text-danger">
+                                        اعلانات
+                                        <i class="fas fa-bullhorn"></i>
+                                    </h6>
+                                    <div class="dropdown-divider"></div>
+                                    {% for notifi in notifis %}
+                                        <a class="dropdown-item" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
+                                            <i class="fal fa-dot-circle"></i>
+                                            {{ notifi.des }}
+                                        </a>
+                                    {% endfor %}
+                                    <div class="dropdown-divider"></div>
+                                    <h6 class="dropdown-header">
+                                        <a class="btn btn-link" href="{{ path('userNotifications') }}">
+                                            <i class="fas fa-list"></i>
+                                            مشاهده همه اعلانات
+                                        </a>
+                                        <a class="btn btn-link" href="{{ path('userClearNotifications') }}">
+                                            <i class="fas fa-eye"></i>
+                                            علامتگزاری همه به عنوان خوانده شده
+                                        </a>
+                                    </h6>
+                                </div>
+                            </div>
+                        {% endif %}
                         <div class="btn-group" role="group">
-                            <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ UserMGR.currentPosition.publicLabel() }}
                             </button>
                             <div class="dropdown-menu">

@@ -63,10 +63,16 @@ class SysPosition
      */
     private $defaultArea;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SysNotification", mappedBy="userID", orphanRemoval=true)
+     */
+    private $sysNotifications;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
         $this->cMPassengers = new ArrayCollection();
+        $this->sysNotifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -236,6 +242,37 @@ class SysPosition
     public function setDefaultArea(?SysArea $defaultArea): self
     {
         $this->defaultArea = $defaultArea;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SysNotification[]
+     */
+    public function getSysNotifications(): Collection
+    {
+        return $this->sysNotifications;
+    }
+
+    public function addSysNotification(SysNotification $sysNotification): self
+    {
+        if (!$this->sysNotifications->contains($sysNotification)) {
+            $this->sysNotifications[] = $sysNotification;
+            $sysNotification->setUserID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSysNotification(SysNotification $sysNotification): self
+    {
+        if ($this->sysNotifications->contains($sysNotification)) {
+            $this->sysNotifications->removeElement($sysNotification);
+            // set the owning side to null (unless already changed)
+            if ($sysNotification->getUserID() === $this) {
+                $sysNotification->setUserID(null);
+            }
+        }
 
         return $this;
     }

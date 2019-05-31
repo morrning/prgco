@@ -1,0 +1,123 @@
+{% extends 'suggestion/base.html.twig' %}
+{% block title %} مشاهده درخواست صندوق انتقادات و پیشنهادات{% endblock %}
+{% block pageBody %}
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">مشخصات درخواست</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">ارجاعات</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="profile-ref" data-toggle="tab" href="#ref" role="tab" aria-controls="profile" aria-selected="false">ارجاع</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="row pt-1">
+                <div class="col-12">
+                    <p class="pt-2">
+                        <b>
+                            شماره پیگیری:
+                            <span class="text-success">{{ req.SID }}</span>
+                        </b>
+                    </p>
+                    <p class="">
+                        <b>
+                            نوع درخواست:
+                            <span class="text-success">
+                            {% if req.Stype == 1 %}
+                                انتقاد
+                            {% else %}
+                                پیشنهاد و راهکار
+                            {% endif %}
+                        </span>
+                        </b>
+                    </p>
+                    <p class="">
+                        تاریخ ثبت:
+                        <span class="text-danger">{{ Jdate.jdate('Y/n/d در ساعت h:i',req.dateSubmit) }}</span>
+                    </p>
+                    <p class="">
+                        نام و نام خانوادگی:
+                        <span class="text-danger">{{ req.fullname }}</span>
+                    </p>
+                    <p class="">
+                        تلفن تماس:
+                        <span class="text-danger">{{ req.tel }}</span>
+                    </p>
+                    <p class="">
+                        پست الکترونیکی:
+                        <span class="text-danger">{{ req.email }}</span>
+                    </p>
+                    <hr>
+                    <p><b>متن درخواست:</b></p>
+                    <p>{{ req.comment }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+            <div class="row">
+                {% for referral in referrals %}
+                    <div class="col-sm-12 col-md-6 pt-1">
+                        <div class="card">
+                            <div class="card-header">
+                                <span class="text-success">{{ loop.index }}>></span>
+                                <b>
+                                    ارجاع دهنده:
+                                    {{ referral.referralSource.publicLabel }}
+                                </b>
+                            </div>
+                            <div class="card-body">
+                                <p class="text-secondary">
+                                    <i class="fa fa-user"></i>
+                                    ارجاع گیرنده:
+                                    {{ referral.user.publicLabel }}
+                                </p>
+                                <p>
+                                    پی نوشت:
+                                    {{ referral.des }}
+                                </p>
+
+                            </div>
+                            <div class="card-footer">
+                            <span class="text-right">
+                                تاریخ ارجاع:
+                                {{ Jdate.jdate('Y/n/d در ساعت h:i',referral.dateSubmit) }}
+                            </span>
+                                <span class="text-center text-danger"> | </span>
+                                <span class="text-left">
+                                 تاریخ مشاهده:
+                                    {% if referral.dateView == null %}<span class="text-danger">مشاهده نشده</span> {% else %}<span class="text-success">{{ Jdate.jdate('Y/n/d در ساعت h:i',referral.dateView) }}</span> {% endif %}
+
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+        </div>
+        <div class="tab-pane fade" id="ref" role="tabpanel" aria-labelledby="home-tab">
+            <div class="row pt-3">
+                <div class="col-sm-12 col-md-6">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr>
+    <div class="row pt-1">
+        <div class="col-12">
+            <a class="btn btn-secondary" href="{{ path('suggestionReferralInbox') }}">
+                <i class="fa fa-undo"></i>
+                بازگشت
+            </a>
+        </div>
+    </div>
+{% endblock %}

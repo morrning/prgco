@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -60,6 +62,16 @@ class Suggestion
      * @ORM\Column(type="string", length=255)
      */
     private $Stype;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SuggestionReferral", mappedBy="suggestion")
+     */
+    private $suggestionReferrals;
+
+    public function __construct()
+    {
+        $this->suggestionReferrals = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -170,6 +182,37 @@ class Suggestion
     public function setStype(string $type): self
     {
         $this->Stype = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SuggestionReferral[]
+     */
+    public function getSuggestionReferrals(): Collection
+    {
+        return $this->suggestionReferrals;
+    }
+
+    public function addSuggestionReferral(SuggestionReferral $suggestionReferral): self
+    {
+        if (!$this->suggestionReferrals->contains($suggestionReferral)) {
+            $this->suggestionReferrals[] = $suggestionReferral;
+            $suggestionReferral->setSuggestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuggestionReferral(SuggestionReferral $suggestionReferral): self
+    {
+        if ($this->suggestionReferrals->contains($suggestionReferral)) {
+            $this->suggestionReferrals->removeElement($suggestionReferral);
+            // set the owning side to null (unless already changed)
+            if ($suggestionReferral->getSuggestion() === $this) {
+                $suggestionReferral->setSuggestion(null);
+            }
+        }
 
         return $this;
     }

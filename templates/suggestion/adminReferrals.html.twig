@@ -1,0 +1,40 @@
+{% extends 'suggestion/base.html.twig' %}
+
+{% block title %}آرشیو ارجاعات دریافتی{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>ارجاع دهنده</th>
+                <th>کد پیگیری</th>
+                <th>نوع درخواست</th>
+                <th>نام و نام خانوادگی</th>
+                <th>تاریخ ثبت</th>
+                <th>تاریخ ارجاع</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for req in refs %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ req.referralSource.publicLabel }}</td>
+                    <td>{{ req.suggestion.sid }}</td>
+                    <td>{% if req.suggestion.stype == 1 %}پیشنهاد{% else %}انتقاد{% endif %}</td>
+                    <td>{{ req.suggestion.fullname }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d  h:i',req.suggestion.dateSubmit) }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d  h:i',req.dateSubmit) }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('suggestionOtherAdminView',{'id':req.suggestion.SID}) }}">
+                            <i class="fa fa-eye"></i>
+                            مشاهده
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

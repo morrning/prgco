@@ -1,0 +1,38 @@
+{% extends 'suggestion/base.html.twig' %}
+
+{% block title %}آرشیو پیشنهادات و انتقادات دریافتی{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>کد پیگیری</th>
+                <th>نوع درخواست</th>
+                <th>نام و نام خانوادگی</th>
+                <th>تلفن تماس</th>
+                <th>تاریخ ثبت</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for req in reqs %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ req.sid }}</td>
+                    <td>{% if req.stype == 1 %}پیشنهاد{% else %}انتقاد{% endif %}</td>
+                    <td>{{ req.fullname }}</td>
+                    <td>{{ req.tel }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',req.dateSubmit) }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('suggestionAdminView',{'id':req.SID}) }}">
+                            <i class="fa fa-eye"></i>
+                            مشاهده
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'withNavbar.html.twig' %}
+
+{% block title %}اعلانات و رخدادها{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-8 mx-auto">
+                <div class="card">
+                    <div class="card-header">
+                        اعلانات و رخدادها
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered  table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th class="text-center" scope="col">ردیف</th>
+                                    <th class="text-center" scope="col">توضیحات</th>
+                                    <th class="text-center" scope="col">تاریخ</th>
+                                    <th class="text-center" scope="col">امکانات</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for notifi in notifis %}
+                                    <tr class="{% if notifi.viewed == null %} text-success {% else %} text-secondary{% endif %}" >
+                                        <th class="text-center" >{{ loop.index }}</th>
+                                        <th class="text-center" >{{ notifi.des }}</th>
+                                        <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',notifi.dateSubmit) }}</td>
+                                        <th class="text-center" >
+                                            <a class="btn btn-primary" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
+                                                <span class="fa fa-arrow-left"></span>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

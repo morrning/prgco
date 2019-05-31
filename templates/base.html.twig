@@ -18,7 +18,7 @@
 
     <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
 
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
 
@@ -44,6 +44,10 @@
 
     {% block stylesheets %}{% endblock %}
 
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
+
+
 </head>
 <body onload="jsCoreRun()">
 <div class="">
@@ -51,5 +55,16 @@
 </div>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
+<script>
+    $(document).ready(function(){
+        //create datatable
+        $('.table').DataTable({
+            "language": {
+                "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
+            }
+        });
+
+    });
+</script>
 </body>
 </html>

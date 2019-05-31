@@ -162,4 +162,50 @@ class UserMGR
         }
     }
 
+    //--------------- NOTIFICATION CONTROLL ---------------
+    public function notificationCount()
+    {
+        if(! $this->isLogedIn())
+            return 0;
+        return count($this->em->findBy('App:SysNotification',['userID'=>$this->currentPosition(),'viewed'=>null]));
+    }
+
+    public function lastNotifications($count=10)
+    {
+        $orm = $this->em->getORM();
+        return $orm->createQueryBuilder('q')
+            ->select('q')
+            ->from('App:SysNotification','q')
+            ->setMaxResults($count)
+            ->orderBy('q.id','DESC')
+            ->getQuery()
+            ->execute();
+    }
+
+    public function addNotificationForUser($user,$des,$url){
+        $notification = new Entity\SysNotification();
+        $notification->setDateSubmit(time());
+        $notification->setUserID($user);
+        $notification->setViewed(null);
+        $notification->setDes($des);
+        $notification->setLinkTarget($url);
+        return $this->em->insertEntity($notification);
+    }
+
+
+    public function addNotificationForGroup($GroupName,$boundle,$des,$url,$pid=1){
+        $group = $this->em->findOneBy('App:SysGroup',['groupName'=>$GroupName,'bundle'=>$boundle,'PID'=>$pid]);
+        $users = $this->positionsOfGroup($group->getId());
+        foreach ($users as $user)
+        {
+            $notification = new Entity\SysNotification();
+            $notification->setDateSubmit(time());
+            $notification->setUserID($user);
+            $notification->setViewed(null);
+            $notification->setDes($des);
+            $notification->setLinkTarget($url);
+        }
+
+        return $this->em->insertEntity($notification);
+    }
 }

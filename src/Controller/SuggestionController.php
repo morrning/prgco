@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
@@ -74,8 +75,11 @@ class SuggestionController extends AbstractController
             $suggestion->setDateSubmit(time());
             $suggestion->setParrentID('#');
             $suggestion->setSID($this->RandomString(8));
-
             $entityMGR->insertEntity($suggestion);
+            //send notification to admins
+            $des = 'یک درخواست جدید در صندوق پیشنهادات و انتقادات ثبت شد.';
+            $url = $this->generateUrl('suggestionInbox');
+            $userMGR->addNotificationForGroup('suggestionInbox','SUGGESTION',$des,$url);
             return $this->redirectToRoute('suggestionSubmitSuccess',['id'=>$suggestion->getSID()]);
         }
 
@@ -123,7 +127,155 @@ class SuggestionController extends AbstractController
 
         return $this->render('suggestion/suggestionView.html.twig', [
             'req' => $res,
-            'doing'=>$entityMGR->findBy('App:Suggestion',['parrentID'=>$res->getId()])
+            'referrals'=>$entityMGR->findBy('App:SuggestionReferral',['suggestion'=>$res,'guestView'=>1])
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/admin", name="suggestionAdmin")
+     */
+    public function suggestionAdmin(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('userLogin');
+
+        //get counts
+        $type1 = count($entityMGR->findBy('App:Suggestion',['Stype'=>1]));
+        $type2 = count($entityMGR->findBy('App:Suggestion',['Stype'=>2]));
+        $refAll = count($entityMGR->findBy('App:SuggestionReferral',['user'=>$userMGR->currentPosition()]));
+        $refUnread = count($entityMGR->findBy('App:SuggestionReferral',['user'=>$userMGR->currentPosition(),'dateView'=>null]));
+        return $this->render('suggestion/adminDashboard.html.twig', [
+            'type1Count' => $type1,
+            'type2Count' => $type2,
+            'refAll'=>$refAll,
+            'refUnread'=>$refUnread
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/admin/inbox/{msg}", name="suggestionInbox")
+     */
+    public function suggestionInbox($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        if(! $userMGR->hasPermission('suggestionInbox','SUGGESTION'))
+            return $this->redirectToRoute('403');
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'درخواست با موفقیت ارجاع شد.']];
+
+        return $this->render('suggestion/adminInbox.html.twig', [
+            'reqs' => $entityMGR->findAll('App:Suggestion'),
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/admin/view/{id}", name="suggestionAdminView")
+     */
+    public function suggestionAdminView(Request $request,$id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$id]);
+        if(is_null($res))
+            return $this->redirectToRoute('404');
+
+        //check referals view
+        $items = $entityMGR->findBy('App:SuggestionReferral',['user'=>$userMGR->currentPosition(),'suggestion'=>$res]);
+        foreach ($items as $item)
+        {
+            $item->setDateView(time());
+            $entityMGR->update($item);
+        }
+        $ref = new Entity\SuggestionReferral();
+        $form = $this->createFormBuilder($ref)
+            ->add('guestView', CheckboxType::class, ['label' => 'برای ارباب رجوع نمایش داده شود؟', 'required' => false])
+            ->add('user', Type\AutoentityType::class,['class'=>'App:SysPosition','choice_label'=>'publicLabel','label'=>'ارجاع گیرنده:','attr'=>['pattern'=>'positions']])
+            ->add('des',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>5]])
+            ->add('submit', SubmitType::class,['label'=>'ارجاع'])
+            ->getForm();
+        $alerts = null;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ref->setDateSubmit(time());
+            $ref->setSuggestion($res);
+            $ref->setReferralSource($userMGR->currentPosition());
+            $entityMGR->insertEntity($ref);
+
+            //send notification to admins
+            $des = 'یک ارجاع جدید در نظام پیشنهادات و انتقادات دریافت کردید.';
+            $url = $this->generateUrl('suggestionInbox');
+            $userMGR->addNotificationForUser($ref->getUser(),$des,$url);
+            $alerts = [['type'=>'success','message'=>'درخواست با موفقیت ارجاع شد.']];
+        }
+
+        return $this->render('suggestion/adminSuggestionView.html.twig', [
+            'req' => $res,
+            'referrals'=>$res->getSuggestionReferrals(),
+            'form'=>$form->createView(),
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/suggestion/admin/other/view/{id}", name="suggestionOtherAdminView")
+     */
+    public function suggestionOtherAdminView(Request $request,$id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        $res = $entityMGR->findOneBy('App:Suggestion',['SID'=>$id]);
+        if(is_null($res))
+            return $this->redirectToRoute('404');
+
+        //check referals view
+        $items = $entityMGR->findBy('App:SuggestionReferral',['user'=>$userMGR->currentPosition(),'suggestion'=>$res]);
+        foreach ($items as $item)
+        {
+            $item->setDateView(time());
+            $entityMGR->update($item);
+        }
+
+        $ref = new Entity\SuggestionReferral();
+        $form = $this->createFormBuilder($ref)
+            ->add('guestView', CheckboxType::class, ['label' => 'برای ارباب رجوع نمایش داده شود؟', 'required' => false])
+            ->add('user', Type\AutoentityType::class,['class'=>'App:SysPosition','choice_label'=>'publicLabel','label'=>'ارجاع گیرنده:','attr'=>['pattern'=>'positions']])
+            ->add('des',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>5]])
+            ->add('submit', SubmitType::class,['label'=>'ارجاع'])
+            ->getForm();
+        $alerts = null;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ref->setDateSubmit(time());
+            $ref->setSuggestion($res);
+            $ref->setReferralSource($userMGR->currentPosition());
+            $entityMGR->insertEntity($ref);
+
+            //send notification to admins
+            $des = 'یک ارجاع جدید در نظام پیشنهادات و انتقادات دریافت کردید.';
+            $url = $this->generateUrl('suggestionInbox');
+            $userMGR->addNotificationForUser($ref->getUser(),$des,$url);
+            $alerts = [['type'=>'success','message'=>'درخواست با موفقیت ارجاع شد.']];
+        }
+
+        return $this->render('suggestion/adminOtherSuggestionView.html.twig', [
+            'req' => $res,
+            'referrals'=>$res->getSuggestionReferrals(),
+            'form'=>$form->createView(),
+            'alerts'=>$alerts
+        ]);
+    }
+    /**
+     * @Route("/suggestion/referrals/inbox/{msg}", name="suggestionReferralInbox")
+     */
+    public function suggestionReferralInbox($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+
+        $alerts = null;
+        if($msg == 1)
+            $alerts = [['type'=>'success','message'=>'درخواست با موفقیت ارجاع شد.']];
+
+        return $this->render('suggestion/adminReferrals.html.twig', [
+            'refs' => $entityMGR->findBy('App:SuggestionReferral',['user'=>$userMGR->currentPosition()]),
+            'alerts'=>$alerts
         ]);
     }
 }
