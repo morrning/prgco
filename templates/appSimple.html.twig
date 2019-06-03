@@ -1,147 +1,145 @@
 {% extends 'withNavbar.html.twig' %}
 {% block pageBody %}
     <!-- Page Content -->
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-3">
-                <div class="row">
-                    <div class="col-12 pb-1">
-                        <div class="card mb-1">
-                            <div class="card-header bg-success text-light">
-                                <span class="fa fa-clock"></span>
-                                امروز
-                                {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
-                            </div>
-                        </div>
-                        <div class="list-group">
-                            <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active">
-                                <i class="fas fa-bars"></i>
-                                سامانه‌ها
-                            </a>
-                            <a href="http://oas.prgco.ir/menu/" class="list-group-item list-group-item-action" target="_blank">
-                                <i class="fas fa-envelope"></i>
-                                سامانه مکاتبات سازمانی
-                            </a>
-                            <a href="http://pay.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
-                                <i class="fas fa-money-check-alt"></i>
-                                سامانه فیش حقوقی
-                            </a>
-                            <a href="http://pms.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
-                                <i class="fab fa-product-hunt"></i>
-                                سامانه مدیریت قراردادها
-                            </a>
-                            <a href="http://pw.prgco.ir:1210/Account/Login" class="list-group-item list-group-item-action" target="_blank">
-                                <i class="fas fa-user-alt"></i>
-                                سامانه مدیریت کارکنان
-                            </a>
-                            <a href="{{ path('suggestion') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-box-alt"></i>
-                                صندوق پیشنهادات و انتقادات
-                            </a>
-                            <a href="https://mail.prgco.ir/" class="list-group-item list-group-item-action" target="_blank">
-                                <i class="fas fa-inbox"></i>
-                                پست الکترونیکی
-                            </a>
-                            <a href="{{ path('phonebook',{'msg':0,'search':0}) }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-book"></i>
-                                دفترچه تلفن
-                            </a>
-                            <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-box-alt"></i>
-                                فرم های پرکاربرد
-                            </a>
-                            {% if UserMGR.isLogedIn() %}
-                                <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-warning">
-                                    داشبورد کاربری
-                                </a>
-                                {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
-                                    <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-box-alt"></i>
-                                        مدیریت فرم های پرکاربرد
-                                    </a>
-                                {% endif %}
-                                {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
-                                    <a href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-newspaper"></i>
-                                        سامانه انتشار خبر
-                                    </a>
-                                {% endif %}
-                                {% if UserMGR.isLogedin() == true %}
-                                    <a href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-newspaper"></i>
-                                        نظام بررسی پیشنهادات و انتقادات
-                                    </a>
-                                {% endif %}
-                                {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
-                                    <a href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-newspaper"></i>
-                                        سامانه کنترل پروژه کل
-                                    </a>
-                                {% endif %}
-
-                                {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
-                                <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
-                                    ناحیه کاری:{{ area.areaName }}
-                                </a>
-                                {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
-                                    <a href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-desktop"></i>
-                                        درخواست خدمات فناوری اطلاعات
-                                    </a>
-                                {% endif %}
-                                {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
-                                    <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-server"></i>
-                                        مجری خدمات فناوری اطلاعات
-                                    </a>
-                                {% endif %}
-                                {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
-                                    <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
-                                {% endif %}
-                                {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
-                                    <a href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
-                                        <i class="fas fa-passport"></i>
-                                        سامانه درخواست تشریفات
-                                    </a>
-                                {% endif %}
-                            {% endif %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-3">
+            <div class="row">
+                <div class="col-12 pb-1">
+                    <div class="card mb-1">
+                        <div class="card-header bg-success text-light">
+                            <span class="fa fa-clock"></span>
+                            امروز
+                            {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
                         </div>
                     </div>
-                    <div class="col-12 pb-1">
-                        <div class="card">
-                            <div class="card-header text-center bg-primary text-light">
-                                تابلو اعلانات
-                            </div>
-                            <div class="card-body">
-                                <ul class="">
-                                    {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
-                                    {% for post in posts %}
-                                        <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            </div>
+                    <div class="list-group">
+                        <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active">
+                            <i class="fas fa-bars"></i>
+                            سامانه‌ها
+                        </a>
+                        <a href="http://oas.prgco.ir/menu/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-envelope"></i>
+                            سامانه مکاتبات سازمانی
+                        </a>
+                        <a href="http://pay.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-money-check-alt"></i>
+                            سامانه فیش حقوقی
+                        </a>
+                        <a href="http://pms.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fab fa-product-hunt"></i>
+                            سامانه مدیریت قراردادها
+                        </a>
+                        <a href="http://pw.prgco.ir:1210/Account/Login" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-user-alt"></i>
+                            سامانه مدیریت کارکنان
+                        </a>
+                        <a href="{{ path('suggestion') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box-alt"></i>
+                            صندوق پیشنهادات و انتقادات
+                        </a>
+                        <a href="https://mail.prgco.ir/" class="list-group-item list-group-item-action" target="_blank">
+                            <i class="fas fa-inbox"></i>
+                            پست الکترونیکی
+                        </a>
+                        <a href="{{ path('phonebook',{'msg':0,'search':0}) }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-book"></i>
+                            دفترچه تلفن
+                        </a>
+                        <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box-alt"></i>
+                            فرم های پرکاربرد
+                        </a>
+                        {% if UserMGR.isLogedIn() %}
+                            <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-warning">
+                                داشبورد کاربری
+                            </a>
+                            {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                                <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-box-alt"></i>
+                                    مدیریت فرم های پرکاربرد
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                                <a href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    سامانه انتشار خبر
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.isLogedin() == true %}
+                                <a href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    نظام بررسی پیشنهادات و انتقادات
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                                <a href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    سامانه کنترل پروژه کل
+                                </a>
+                            {% endif %}
+
+                            {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+                            <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
+                                ناحیه کاری:{{ area.areaName }}
+                            </a>
+                            {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                                <a href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-desktop"></i>
+                                    درخواست خدمات فناوری اطلاعات
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
+                                <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-server"></i>
+                                    مجری خدمات فناوری اطلاعات
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
+                                <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
+                                <a href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-passport"></i>
+                                    سامانه درخواست تشریفات
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-12 pb-1">
+                    <div class="card">
+                        <div class="card-header text-center bg-primary text-light">
+                            تابلو اعلانات
+                        </div>
+                        <div class="card-body">
+                            <ul class="">
+                                {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                                {% for post in posts %}
+                                    <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
+                                {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-12 col-md-8">
-                {% if breadcrumb is not defined %}
-                    <ol class="breadcrumb my-2">
-                        <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
-                                <i class="fas fa-home"></i>
-                                پورتال اصلی
-                            </a></li>
-                        <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
-                                <i class="fal fa-window-alt"></i>
-                                برنامه‌ها
-                            </a>
-                        </li>
-                        <li class="breadcrumb-item active">{{ block('title') }}</li>
-                    </ol>
-                {% endif %}
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-9">
+            {% if breadcrumb is not defined %}
+                <ol class="breadcrumb my-2">
+                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
+                            <i class="fas fa-home"></i>
+                            پورتال اصلی
+                        </a></li>
+                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
+                            <i class="fal fa-window-alt"></i>
+                            برنامه‌ها
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item active">{{ block('title') }}</li>
+                </ol>
+            {% endif %}
 
-                {% block appBody %}{% endblock %}
-            </div>
+            {% block appBody %}{% endblock %}
         </div>
     </div>
 {% endblock %}
