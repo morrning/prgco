@@ -38,12 +38,6 @@
                                 <i class="fas fa-box-alt"></i>
                                 صندوق پیشنهادات و انتقادات
                             </a>
-                            {% if UserMGR.isLogedin() == true %}
-                                <a href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-newspaper"></i>
-                                    نظام بررسی پیشنهادات و انتقادات
-                                </a>
-                            {% endif %}
                             <a href="https://mail.prgco.ir/" class="list-group-item list-group-item-action" target="_blank">
                                 <i class="fas fa-inbox"></i>
                                 پست الکترونیکی
@@ -52,30 +46,39 @@
                                 <i class="fas fa-book"></i>
                                 دفترچه تلفن
                             </a>
-                            {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
-                                <a href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-newspaper"></i>
-                                    سامانه انتشار خبر
-                                </a>
-                            {% endif %}
-
-                            {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
-                                <a href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-newspaper"></i>
-                                    سامانه کنترل پروژه کل
-                                </a>
-                            {% endif %}
-                            {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
-                                <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
-                                    <i class="fas fa-box-alt"></i>
-                                    مدیریت فرم های پرکاربرد
-                                </a>
-                            {% endif %}
                             <a href="{{ path('mostusedfilesView') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-box-alt"></i>
                                 فرم های پرکاربرد
                             </a>
                             {% if UserMGR.isLogedIn() %}
+                                <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-warning">
+                                    داشبورد کاربری
+                                </a>
+                                {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                                    <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-box-alt"></i>
+                                        مدیریت فرم های پرکاربرد
+                                    </a>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                                    <a href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-newspaper"></i>
+                                        سامانه انتشار خبر
+                                    </a>
+                                {% endif %}
+                                {% if UserMGR.isLogedin() == true %}
+                                    <a href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-newspaper"></i>
+                                        نظام بررسی پیشنهادات و انتقادات
+                                    </a>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                                    <a href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
+                                        <i class="fas fa-newspaper"></i>
+                                        سامانه کنترل پروژه کل
+                                    </a>
+                                {% endif %}
+
                                 {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
                                 <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-success">
                                     ناحیه کاری:{{ area.areaName }}
