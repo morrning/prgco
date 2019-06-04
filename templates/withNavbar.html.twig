@@ -115,30 +115,28 @@
             </ul>
         </div>
     </nav>
-    <main role="main" style="padding-top: 1rem; padding-bottom: 3rem">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    {% block alert %}
-                        {% if alert is defined %}
-                            {% if alert|length != 0 %}
-                                {% for alt in alert %}
-                                    <div class="alert alert-{{ alt.type }}" role="alert">
-                                        {{ alt.message }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
+    <div class="container pt-1">
+        <div class="row">
+            <div class="col-12">
+                {% block alert %}
+                    {% if alert is defined %}
+                        {% if alert|length != 0 %}
+                            {% for alt in alert %}
+                                <div class="alert alert-{{ alt.type }}" role="alert">
+                                    {{ alt.message }}
+                                </div>
+                            {% endfor %}
                         {% endif %}
-                    {% endblock %}
-                </div>
+                    {% endif %}
+                {% endblock %}
             </div>
         </div>
-        <div class="container-fluid">
-            {% block pageBody %}{% endblock %}
-        </div>
-    </main>
+    </div>
+    <div class="container-fluid pt-1">
+        {% block pageBody %}{% endblock %}
+    </div>
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom py-0">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom py-0 mt-3">
         <!-- Navbar text-->
         <span class="navbar-text text-light">
             {{ ConfigMGR.getConfig.footerText }}
