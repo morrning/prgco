@@ -16,4 +16,5 @@ return [
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
     FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
+    Gregwar\CaptchaBundle\GregwarCaptchaBundle::class => ['all' => true],
 ];

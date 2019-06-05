@@ -1,0 +1,50 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}سامانه IMS{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            سامانه IMS
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover rounded text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>شناسه ایزو</th>
+                        <th>دسته بندی</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for file in files %}
+                        <tr class="">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ file.title }}</td>
+                            <td>{{ file.ISOCode }}</td>
+                            <td>{{ file.cat.catName }}</td>
+
+                            <td>
+                                {% if file.fileExt == 'docx' %}
+                                    <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-word"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'xlsx' %}
+                                    <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-excel"></i>
+                                        دریافت</a>
+                                {% elseif file.fileExt == 'pdf' %}
+                                    <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                        <i class="fas fa-file-pdf"></i>
+                                        دریافت</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
