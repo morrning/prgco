@@ -49,6 +49,10 @@
                             <i class="fas fa-box-alt"></i>
                             فرم های پرکاربرد
                         </a>
+                        <a href="{{ path('ISOformsView') }}" class="list-group-item list-group-item-action">
+                            <i class="fas fa-box-alt"></i>
+                            سامانه IMS
+                        </a>
                         {% if UserMGR.isLogedIn() %}
                             <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active btn-warning">
                                 داشبورد کاربری
@@ -57,6 +61,12 @@
                                 <a href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
                                     <i class="fas fa-box-alt"></i>
                                     مدیریت فرم های پرکاربرد
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
+                                <a href="{{ path('isoformsDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-box-alt"></i>
+                                    مدیریت سامانه IMS
                                 </a>
                             {% endif %}
                             {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}

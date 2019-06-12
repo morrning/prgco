@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-
+use Gregwar\CaptchaBundle\Type\CaptchaType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
 
@@ -67,6 +67,7 @@ class SuggestionController extends AbstractController
             ->add('email', TextType::class,['label'=>' پست الکترونیکی','required'=>false,'attr'=>['placeholder'=>'youremail@example.com']])
             ->add('tel', TextType::class,['label'=>'تلفن تماس','required'=>false,'attr'=>['placeholder'=>'0912345678']])
             ->add('comment',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>12]])
+            ->add('captcha', CaptchaType::class)
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 

@@ -101,6 +101,12 @@
             "ref": "a9f2e49180f75cdc71ae279a929c4b2e0638de84"
         }
     },
+    "gregwar/captcha": {
+        "version": "v1.1.7"
+    },
+    "gregwar/captcha-bundle": {
+        "version": "v2.0.6"
+    },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
     },
@@ -136,9 +142,6 @@
     },
     "psr/log": {
         "version": "1.1.0"
-    },
-    "psr/simple-cache": {
-        "version": "1.0.1"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",
