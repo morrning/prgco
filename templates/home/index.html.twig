@@ -54,11 +54,68 @@
                             نمودار پیشرفت
                         </div>
                         <div class="card-body">
-                            <p>
-                                <span style="color: orangered">پیشرفت برنامه‌ای</span>
-                                |
-                                <span style="color: lightseagreen">پیشرفت فیزیکی</span>
-                            </p>
+                            <canvas id="myChart" class="w-100" height="400"></canvas>
+                            <script>
+                                var ctx = document.getElementById('myChart');
+                                var color = Chart.helpers.color;
+                                window.chartColors = {
+                                    red: 'rgb(255, 99, 132)',
+                                    orange: 'rgb(255, 159, 64)',
+                                    yellow: 'rgb(255, 205, 86)',
+                                    green: 'rgb(75, 192, 192)',
+                                    blue: 'rgb(54, 162, 235)',
+                                    purple: 'rgb(153, 102, 255)',
+                                    grey: 'rgb(201, 203, 207)'
+                                };
+                                var myChart = new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: {{ pn | json_encode | raw }},
+                                        datasets: [
+                                            {
+                                                label: 'پیشرفت برنامه‌ای',
+                                                backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                                                borderColor: window.chartColors.red,
+                                                borderWidth: 1,
+                                                data: {{ cp | json_encode | raw }},
+                                        },
+                                            {
+                                                label: 'پیشرفت فیزیکی',
+                                                backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                                                borderColor: window.chartColors.blue,
+                                                borderWidth: 1,
+                                                data: {{ pp | json_encode | raw}},
+                                            }
+
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            yAxes: [{
+                                                ticks: {
+                                                    beginAtZero: true
+                                                }
+                                            }],
+                                            xAxes: [{
+                                                barPercentage: 0.5,
+                                                barThickness: 25,
+                                                maxBarThickness: 25,
+                                                minBarLength: 2,
+                                                gridLines: {
+                                                    offsetGridLines: true
+                                                }
+                                            }]
+                                        },
+                                        legend: {
+                                            labels: {
+                                                // This more specific font property overrides the global property
+                                                fontColor: 'black',
+                                                defaultFontFamily: 'Shabnam FD'
+                                            }
+                                        }
+                                    }
+                                });
+                            </script>
                             <div class="ct-chart" id="chart2"></div>
 
                             <script>
@@ -91,37 +148,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-9">
-                    <div class="card">
-                        <div class="card-header">
-                            گزارش پیشرفت عملیات اجرایی
-                        </div>
-                        <div class="card-body">
-                            {% for project in projects %}
-                                <div class="pb-2">
-                                    <span>{{ project.areaName }}</span>
-                                    <div class="progress" aria-describedby="passwordHelpBlock">
-                                        <div class="progress-bar progress-bar-animated progress-bar-striped
-                                        {% if project.Pprogress <10 %}bg-danger
-                                        {% elseif project.Pprogress <25 %}bg-warning
-                                        {% elseif project.Pprogress <55 %}bg-secondary
-                                        {% elseif project.Pprogress <80 %}bg-info
-                                        {% elseif project.Pprogress <100 %}bg-success{% endif %}
-                                        " role="progressbar" aria-valuenow="40"
-                                             aria-valuemin="0" aria-valuemax="100" style="width:{{ project.Pprogress }}%">
-                                            {{ project.Pprogress }} درصد
-                                        </div>
-                                    </div>
-                                    <small id="passwordHelpBlock" class="form-text text-muted">
-                                        آخرین به روز رسانی:
-                                        <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',project.lastUpdate) }}</td>
-                                    </small>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-3">
+                               <div class="col-sm-12 col-md-3">
                     <a href="{{ path('suggestion') }}"><img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/suggestionbox.jpg') }}"></a>
                 </div>
             </div>

@@ -204,7 +204,7 @@ class SuggestionController extends AbstractController
 
             //send notification to admins
             $des = 'یک ارجاع جدید در نظام پیشنهادات و انتقادات دریافت کردید.';
-            $url = $this->generateUrl('suggestionInbox');
+            $url = $this->generateUrl('suggestionReferralInbox');
             $userMGR->addNotificationForUser($ref->getUser(),$des,$url);
             $alerts = [['type'=>'success','message'=>'درخواست با موفقیت ارجاع شد.']];
         }
