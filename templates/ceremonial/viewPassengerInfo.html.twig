@@ -2,9 +2,12 @@
 
 {% block title %}اطلاعات مسافر:{{ passenger.pname ~ ' ' ~ passenger.pfamily }}{% endblock %}
 {% block pageBody %}
-    <div class="container">
+    <div class="container pb-3">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-4">
+                <img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/avatar.jpg') }}">
+            </div>
+            <div class="col-sm-12 col-md-4">
                 <p>
                     نام:
                     <span class="text-danger">{{ passenger.pname }}</span>
@@ -27,7 +30,7 @@
                 </p>
 
             </div>
-            <div class="col-sm-12 col-md-6">
+            <div class="col-sm-12 col-md-4">
                 <p>
                     Name:
                     <span class="text-danger">{{ passenger.lname }}</span>

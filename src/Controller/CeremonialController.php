@@ -114,13 +114,18 @@ class CeremonialController extends AbstractController
 
         $form->handleRequest($request);
         $jdate = new Service\Jdate();
+        $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $passenger->setSubmitter($userMGR->currentPosition());
-            $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
-            $entityMGR->insertEntity($passenger);
-            return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>1]);
+            if (is_null($entityMGR->findOneBy('App:CMPassenger', ['pcodemeli' => $passenger->getPcodemeli()]))) {
+                $passenger->setSubmitter($userMGR->currentPosition());
+                $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
+                $entityMGR->insertEntity($passenger);
+                return $this->redirectToRoute('ceremonialREQpasengers', ['msg' => 1]);
+            }
+            $alert = [['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.']];
         }
         return $this->render('ceremonial/newPasenger.html.twig', [
+            'alerts'=>$alert,
             'form' => $form->createView()
         ]);
     }
@@ -139,8 +144,6 @@ class CeremonialController extends AbstractController
             ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
             ->add('pfather', TextType::class,['label'=>' نام پدر'])
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
-            ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
-            ->add('pcodemeli', TextType::class,['label'=>'کد ملی'])
             ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
@@ -154,7 +157,7 @@ class CeremonialController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $passenger->setSubmitter($userMGR->currentPosition());
             $passenger->setPbirthday($jdate->jallaliToUnixTime($passenger->getPbirthday()));
-            $entityMGR->insertEntity($passenger);
+            $entityMGR->update($passenger);
             return $this->redirectToRoute('ceremonialREQpasengers',['msg'=>2]);
         }
         return $this->render('ceremonial/editPassenger.html.twig', [
@@ -162,4 +165,11 @@ class CeremonialController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ceremonial/req/air/ticket/new", name="ceremonialREQAIRpaneNew")
+     */
+    public function ceremonialREQAIRpaneNew(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+
+    }
 }

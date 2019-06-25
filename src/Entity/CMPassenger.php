@@ -19,6 +19,11 @@ class CMPassenger
     /**
      * @ORM\Column(type="string", length=255)
      */
+    private $ptype;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
     private $pname;
 
     /**
