@@ -6,7 +6,58 @@
     <div class="container">
         <div class="row">
             <div class="col-3 col-xs-12 d-flex align-items-stretch">
-
+                <div class="card">
+                    <div class="card-header">مسافرها</div>
+                    <img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}">
+                    <div class="card-body">
+                        <p>
+                            تعداد مسافرهای ثبت شده:
+                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                             نفر
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <div class="card-header">بلیط و تشریفات</div>
+                    <img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}">
+                    <div class="card-body">
+                        <p>
+                            تعداد بلیط های خریداری شده:
+                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            عدد
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <div class="card-header">سفرها</div>
+                    <img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}">
+                    <div class="card-body">
+                        <p>
+                            تعداد سفرهای انجام شده:
+                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            بار
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+                <div class="card">
+                    <div class="card-header">
+                        تابلو اعلانات
+                    </div>
+                    <div class="card-body">
+                        <ul class="pr-1">
+                            {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                            {% for post in posts %}
+                                <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
