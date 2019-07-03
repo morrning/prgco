@@ -67,7 +67,6 @@ class SuggestionController extends AbstractController
             ->add('email', TextType::class,['label'=>' پست الکترونیکی','required'=>false,'attr'=>['placeholder'=>'youremail@example.com']])
             ->add('tel', TextType::class,['label'=>'تلفن تماس','required'=>false,'attr'=>['placeholder'=>'0912345678']])
             ->add('comment',TextareaType::class,['label'=>'متن:','attr'=>['rows'=>12]])
-            ->add('captcha', CaptchaType::class)
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 

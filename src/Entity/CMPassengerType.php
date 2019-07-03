@@ -20,6 +20,10 @@ class CMPassengerType
      * @ORM\Column(type="string", length=255)
      */
     private $typeName;
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hseGuide;
 
     public function getId(): ?int
     {
@@ -37,4 +41,21 @@ class CMPassengerType
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getHseGuide()
+    {
+        return $this->hseGuide;
+    }
+
+    /**
+     * @param mixed $hseGuide
+     */
+    public function setHseGuide($hseGuide): void
+    {
+        $this->hseGuide = $hseGuide;
+    }
+
 }
