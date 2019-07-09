@@ -68,7 +68,7 @@ class ISOFormController extends AbstractController
             return $this->redirectToRoute('403');
 
         $entityMGR->remove('App:MostUsedFile',$id);
-        return $this->redirectToRoute('mostusedfilesDashboard',['msg'=>1]);
+        return $this->redirectToRoute('isoformsDashboard',['msg'=>1]);
     }
 
     /**
