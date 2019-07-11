@@ -132,7 +132,26 @@
                     </div>
                 </div>
                 <div class="col-12 pb-1">
-                    <a href="{{ path('suggestion') }}"><img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/suggestionbox.jpg') }}"></a>
+                    {% set countdowns = EntityMGR.findAll('App:Countdown') %}
+                    <div class="card">
+                        <img class="card-img-top" src="{{ asset('assets/images/public/countdown.jpg') }}" alt="Card image cap">
+                        <div class="card-body">
+                            <ul class="list-group mb-3">
+                                {% for countdown in countdowns %}
+                                    <li class="list-group-item d-flex justify-content-between my-0">
+                                        <div>
+                                            <h6 class="my-0 text-success">{{ countdown.title }}</h6>
+                                            <small class="text-muted">{{ countdown.des }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-primary">
+                                            {{ Jdate.jdate('d',countdown.timearrive - Jdate.time()) }}
+                                            روز
+                                        </button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
