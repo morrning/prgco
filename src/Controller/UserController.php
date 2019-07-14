@@ -21,8 +21,8 @@ class UserController extends AbstractController
     {
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
-            ->add('username', TextType::class,['label'=>'نام کاربری'])
-            ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
+            ->add('username', TextType::class,['label'=>'نام کاربری','attr'=>['placeholder'=>'نام کاربری']])
+            ->add('password', PasswordType::class,['label'=>'کلمه عبور','attr'=>['placeholder'=>'کلمه عبور']])
             ->add('submit', SubmitType::class,['label'=>'ورود به پورتال'])
             ->getForm();
 
