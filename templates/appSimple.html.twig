@@ -21,7 +21,7 @@
                                     {% set dayArrive = (countdown.timearrive - Jdate.time())/86400 %}
                                     <li class="list-group-item d-flex justify-content-between my-0 {% if dayArrive < 10 %}bg-warning{% endif %}">
                                         <div>
-                                            <h6 class="my-0 text-success">{{ countdown.title }}</h6>
+                                            <h4 class="my-0 text-success">{{ countdown.title }}</h4>
                                             <small class="text-muted">{{ Jdate.jdate('(Y/n/d)',countdown.timearrive) }} {{ countdown.des }}</small>
                                         </div>
                                         <button type="button" class="btn btn-primary">
