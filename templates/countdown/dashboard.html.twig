@@ -1,0 +1,47 @@
+{% extends 'appSimple.html.twig' %}
+
+{% block title %}مدیریت روزشمار رویدادها{% endblock %}
+
+{% block appBody %}
+    <div class="card">
+        <div class="card-header">
+            <span class="float-right">
+                مدیریت روزشمار رویدادها
+            </span>
+            <span class="float-left">
+                <a class="btn btn-success" href="{{ path('countdownNew') }}"> <i class="fas fa-plus"></i>
+                    جدید
+                </a>
+            </span>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover rounded text-center">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>توضیحات</th>
+                        <th>تاریخ سررسید</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for countdown in countdowns %}
+                        <tr class="">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ countdown.title }}</td>
+                            <td>{{ countdown.des }}</td>
+                            <td>{{ Jdate.jdate('Y/n/d',countdown.timearrive) }}</td>
+                            <td>
+                                <a class="btn btn-danger" href="{{ path('countdownDelete',{'id':countdown.id}) }}">حذف</a>
+                                <a class="btn btn-warning" href="{{ path('countdownEdit',{'id':countdown.id}) }}">ویرایش</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

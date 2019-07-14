@@ -63,6 +63,12 @@
                                     مدیریت فرم های پرکاربرد
                                 </a>
                             {% endif %}
+                            {% if UserMGR.hasPermission('CountDown','COUNTDOWN') == true %}
+                                <a href="{{ path('countdownDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-stopwatch"></i>
+                                    مدیریت روزشمار رویدادها
+                                </a>
+                            {% endif %}
                             {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
                                 <a href="{{ path('isoformsDashboard') }}" class="list-group-item list-group-item-action">
                                     <i class="fas fa-box-alt"></i>
@@ -138,13 +144,15 @@
                         <div class="card-body">
                             <ul class="list-group mb-3">
                                 {% for countdown in countdowns %}
-                                    <li class="list-group-item d-flex justify-content-between my-0">
+                                    {% set dayArrive = (countdown.timearrive - Jdate.time())/86400 %}
+                                    <li class="list-group-item d-flex justify-content-between my-0 {% if dayArrive < 10 %}bg-warning{% endif %}">
                                         <div>
                                             <h6 class="my-0 text-success">{{ countdown.title }}</h6>
-                                            <small class="text-muted">{{ countdown.des }}</small>
+                                            <small class="text-muted">{{ Jdate.jdate('(Y/n/d)',countdown.timearrive) }} {{ countdown.des }}</small>
                                         </div>
                                         <button type="button" class="btn btn-primary">
-                                            {{ Jdate.jdate('d',countdown.timearrive - Jdate.time()) }}
+
+                                            {{ dayArrive | number_format(0, '.', ',') }}
                                             روز
                                         </button>
                                     </li>

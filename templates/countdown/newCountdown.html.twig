@@ -1,0 +1,43 @@
+{% extends 'appSimple.html.twig' %}
+
+{% block title %}روزشمار رویداد جدید{% endblock %}
+
+{% block appBody %}
+    <div class="card">
+        <div class="card-header">
+            <span class="float-right">
+                روزشمار رویداد جدید
+            </span>
+            <span class="float-left">
+                <a class="btn btn-success" href="{{ path('countdownNew') }}"> <i class="fas fa-plus"></i>
+                    جدید
+                </a>
+            </span>
+        </div>
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    {{ form_label(form.title) }}
+                    {{ form_widget(form.title) }}
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    {{ form_label(form.timeArrive) }}
+                    {{ form_widget(form.timeArrive) }}
+                </div>
+                <div class="col-sm-12 col-md-12 pt-1">
+                    {{ form_label(form.des) }}
+                    {{ form_widget(form.des) }}
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-warning" href="{{ path('countdownDashboard') }}">بازگشت</a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

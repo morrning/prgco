@@ -67,7 +67,7 @@ class ISOFormController extends AbstractController
         if(! $userMGR->hasPermission('ISOfORMS','ISOFORM'))
             return $this->redirectToRoute('403');
 
-        $entityMGR->remove('App:MostUsedFile',$id);
+        $entityMGR->remove('App:ISOForm',$id);
         return $this->redirectToRoute('isoformsDashboard',['msg'=>1]);
     }
 
@@ -81,7 +81,7 @@ class ISOFormController extends AbstractController
 
         $alerts = [];
 
-        $data = new Entity\MostUsedFile();
+        $data = new Entity\ISOForm();
         $form = $this->createFormBuilder($data)
             ->add('title', TextType::class,['label'=>'عنوان:'])
             ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\MostUsedFileCat::class,'choice_label'=>'catName','choice_value'=>'id'])
