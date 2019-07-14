@@ -141,8 +141,8 @@
                     {% set countdowns = EntityMGR.findAll('App:Countdown') %}
                     <div class="card">
                         <img class="card-img-top" src="{{ asset('assets/images/public/countdown.jpg') }}" alt="Card image cap">
-                        <div class="card-body">
-                            <ul class="list-group mb-3">
+                        <div class="card-body p-0 m-0">
+                            <ul class="list-group m-0 p-0">
                                 {% for countdown in countdowns %}
                                     {% set dayArrive = (countdown.timearrive - Jdate.time())/86400 %}
                                     <li class="list-group-item d-flex justify-content-between my-0 {% if dayArrive < 10 %}bg-warning{% endif %}">
