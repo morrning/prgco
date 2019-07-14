@@ -12,6 +12,28 @@
                             {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
                         </div>
                     </div>
+                    {% set countdowns = EntityMGR.findAll('App:Countdown') %}
+                    <div class="card">
+                        <img class="card-img-top" src="{{ asset('assets/images/public/countdown.jpg') }}" alt="Card image cap">
+                        <div class="card-body p-0 m-0">
+                            <ul class="list-group m-0 p-0">
+                                {% for countdown in countdowns %}
+                                    {% set dayArrive = (countdown.timearrive - Jdate.time())/86400 %}
+                                    <li class="list-group-item d-flex justify-content-between my-0 {% if dayArrive < 10 %}bg-warning{% endif %}">
+                                        <div>
+                                            <h6 class="my-0 text-success">{{ countdown.title }}</h6>
+                                            <small class="text-muted">{{ Jdate.jdate('(Y/n/d)',countdown.timearrive) }} {{ countdown.des }}</small>
+                                        </div>
+                                        <button type="button" class="btn btn-primary">
+
+                                            {{ dayArrive | number_format(0, '.', ',') }}
+                                            روز
+                                        </button>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
                     <div class="list-group">
                         <a href="{{ path('apps') }}" class="list-group-item list-group-item-action active">
                             <i class="fas fa-bars"></i>
@@ -132,30 +154,6 @@
                                 {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
                                 {% for post in posts %}
                                     <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 pb-1">
-                    {% set countdowns = EntityMGR.findAll('App:Countdown') %}
-                    <div class="card">
-                        <img class="card-img-top" src="{{ asset('assets/images/public/countdown.jpg') }}" alt="Card image cap">
-                        <div class="card-body p-0 m-0">
-                            <ul class="list-group m-0 p-0">
-                                {% for countdown in countdowns %}
-                                    {% set dayArrive = (countdown.timearrive - Jdate.time())/86400 %}
-                                    <li class="list-group-item d-flex justify-content-between my-0 {% if dayArrive < 10 %}bg-warning{% endif %}">
-                                        <div>
-                                            <h6 class="my-0 text-success">{{ countdown.title }}</h6>
-                                            <small class="text-muted">{{ Jdate.jdate('(Y/n/d)',countdown.timearrive) }} {{ countdown.des }}</small>
-                                        </div>
-                                        <button type="button" class="btn btn-primary">
-
-                                            {{ dayArrive | number_format(0, '.', ',') }}
-                                            روز
-                                        </button>
-                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
