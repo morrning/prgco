@@ -22,6 +22,80 @@
                         برنامه‌ها
                     </a>
                 </li>
+                {% if UserMGR.isLogedIn() %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            داشبورد کاربری
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                                <a class="dropdown-item" href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-box-alt"></i>
+                                    مدیریت فرم های پرکاربرد
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('CountDown','COUNTDOWN') == true %}
+                                <a class="dropdown-item" href="{{ path('countdownDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-stopwatch"></i>
+                                    مدیریت روزشمار رویدادها
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
+                                <a class="dropdown-item" href="{{ path('isoformsDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-box-alt"></i>
+                                    مدیریت سامانه IMS
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                                <a class="dropdown-item" href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    سامانه انتشار خبر
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.isLogedin() == true %}
+                                <a class="dropdown-item" href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    نظام بررسی پیشنهادات و انتقادات
+                                </a>
+                            {% endif %}
+                            {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                                <a class="dropdown-item" href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
+                                    <i class="fas fa-newspaper"></i>
+                                    سامانه کنترل پروژه کل
+                                </a>
+                            {% endif %}
+                        </div>
+                    </li>
+
+                <li class="nav-item dropdown">
+                    {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ناحیه کاری:{{ area.areaName }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-desktop"></i>
+                                درخواست خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-server"></i>
+                                مجری خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه درخواست تشریفات
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </ul>
             <ul class="navbar-nav mr-auto pl-5">
                 {% if UserMGR.isLogedIn() %}
@@ -46,7 +120,7 @@
                                     </h6>
                                     <div class="dropdown-divider"></div>
                                     {% for notifi in notifis %}
-                                        <a class="dropdown-item" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
+                                        <a class="dropdown-item {% if notifi.viewed is null %}bg-success{% endif %}" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
                                             <i class="fal fa-dot-circle"></i>
                                             {{ notifi.des }}
                                         </a>

@@ -21,10 +21,6 @@ class Suggestion
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $captcha;
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $SID;
 
     /**
@@ -220,22 +216,5 @@ class Suggestion
 
         return $this;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getCaptcha()
-    {
-        return $this->captcha;
-    }
-
-    /**
-     * @param mixed $captcha
-     */
-    public function setCaptcha($captcha): void
-    {
-        $this->captcha = $captcha;
-    }
-
 
 }
