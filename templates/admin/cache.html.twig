@@ -1,0 +1,28 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}حافظه نهان{% endblock %}
+
+{% block pageBody %}
+    <p class="alert alert-info">
+        <i class="fas fa-info"></i>
+        حافظه نهان مکانی جهت ذخیره داده های است که در تعداد بالا مورد استفاده قرار میگیرند.ما هر از چند گاهی به صورت اتوماتیک یک خانه تکانی کوچک انجام میدهیم.
+    </p>
+    <h6>فضای استفاده شده:{{ size }} </h6>
+    <br>
+    <i>جهت پاکسازی حافظه نهان دکمه زیر را فشار دهید.</i>
+    <hr>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+    {% if output|length > 0 %}
+        <hr>
+        <h4> پاسخ سرویس دهنده ... </h4>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-danger" style="font-family: Tahoma">پاکسازی حافظه موقت سیستم</b>
+            {{ output.cache }}
+        </pre>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-success" style="font-family: Tahoma">همه چی اوکی شد.</b>
+        </pre>
+    {% endif %}
+{% endblock %}

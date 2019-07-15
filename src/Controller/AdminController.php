@@ -28,6 +28,15 @@ use App\Form\Type as Type;
 
 class AdminController extends AbstractController
 {
+    public function folderSize ($dir)
+    {
+        $size = 0;
+        foreach (glob(rtrim($dir, '/').'/*', GLOB_NOSORT) as $each) {
+            $size += is_file($each) ? filesize($each) : $this->folderSize($each);
+        }
+        return $size;
+    }
+
     /**
      * @Route("/le", name="LE")
      */
@@ -455,6 +464,40 @@ class AdminController extends AbstractController
             'currentVer'=>$urlConfig['version'],
             'localVer'=>$localConfig['version'],
             'note'=>$note
+        ]);
+    }
+    /**
+     * @Route("/admin/system/cache", name="adminCache" , options = { "expose" = true })
+     */
+    public function adminCache(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if (!$userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('submit', SubmitType::class,['label'=>'خانه تکانی حافظه نهان...'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        $out = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $out['cache'] = shell_exec('php ../bin/console cache:clear');
+        }
+        $dir = __DIR__;
+        $dir = str_replace('src\Controller','var\cache',$dir);
+        $size = $this->folderSize($dir);
+        if($size<1024){$size=$size." Bytes";}
+        elseif(($size<1048576)&&($size>1023)){$size=round($size/1024, 1)." KB";}
+        elseif(($size<1073741824)&&($size>1048575)){$size=round($size/1048576, 1)." MB";}
+        else{$size=round($size/1073741824, 1)." GB";}
+
+        return $this->render('admin/cache.html.twig',[
+            'output'=>$out,
+            'form'=>$form->createView(),
+            'alert'=>$alerts,
+            'size'=>$size
         ]);
 
 
