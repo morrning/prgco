@@ -54,7 +54,7 @@ class ISOFormController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت اضافه شد.']);
 
         return $this->render('iso_form/adminArchiveFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:MostUsedFile'),
+            'files' => $entityMGR->findBy('App:ISOForm'),
             'alerts' => $alerts
         ]);
     }

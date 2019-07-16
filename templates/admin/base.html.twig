@@ -6,7 +6,21 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
     <a class="navbar-brand mr-1" href="{{ path('adminDashboard') }}">ناحیه مدیریت</a>
-
+    <ul class="navbar-nav mr-0">
+        <li class="nav-item active">
+            <a class="nav-link bg-primary" href="{{ path('home') }}">
+                <i class="fas fa-home"></i>
+                {{ ConfigMGR.getConfig.siteName }}
+            </a>
+        </li>
+        <li class="nav-item bg-success text-light">
+            <a class="nav-link" href="#">
+                <i class="fas fa-clock"></i>
+                امروز
+                {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
+            </a>
+        </li>
+    </ul>
     <!-- Navbar -->
     <ul class="navbar-nav mr-auto ml-md-3">
         <li class="nav-item dropright mx-1">
