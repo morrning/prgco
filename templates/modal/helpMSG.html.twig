@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal fade" id="SystemModalCenter" tabindex="-1" role="dialog" aria-labelledby="SystemModalCenter" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-light">
+                <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row h-100 justify-content-center align-items-center">
+                    <div class="col-sm-12 col-md-3">
+                        <img src="{{ asset('assets/images/public/help.png') }}" class="img-fluid">
+                    </div>
+                    <div class="col-sm-12 col-md-9">
+                        {{ body }}
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
+            </div>
+        </div>
+    </div>
+</div>

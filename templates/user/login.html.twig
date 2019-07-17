@@ -8,6 +8,7 @@
             <div class="card">
                 <img class="card-img-top" src="{{ asset('assets/images/public/loginbackgrount.webp') }}" alt="Card image cap">
                 <div class="card-header text-center bg-success text-light">
+                    <i class="fas fa-question-square" onclick="SysLoadMsg('1002');"></i>
                     ورود به پورتال
                 </div>
                 <div class="card-body">
@@ -17,6 +18,8 @@
                             {{ form_widget(form.username) }}
                             <br>
                             {{ form_widget(form.password) }}
+                            <br>
+                            <div class="alert alert-warning" onclick="SysLoadMsg('1003');">نام کاربری یا کلمه عبور خود را فراموش کرده اید؟</div>
                             <hr>
                             {{ form_widget(form.submit) }}
                             <a class="btn btn-warning" href="{{ path('home') }}">

@@ -21,9 +21,13 @@ class CoreController extends AbstractController
      */
     public function SystemLoadMessage($id,Service\UserMGR $userMgr, Service\EntityMGR $entityMgr)
     {
-        $msg = $entityMgr->selectOneRow('App:SysHelp',['helpID'=>$id]);
-        if(!is_null($entityMgr))
-            return new Response($msg->getHelpMsg());
+        $msg = $entityMgr->findOneBy('App:SysHelp',['hid'=>$id]);
+        if(!is_null($entityMgr)){
+            return $this->render('modal/helpMSG.html.twig',[
+                'title'=>'راهنما',
+                'body'=>$msg->getDes()
+            ]);
+        }
     }
 
     /**

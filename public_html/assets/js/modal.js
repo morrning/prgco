@@ -68,3 +68,30 @@ function showModalNotification(title,body,type, reload=false){
     $('.modal').modal('show');
 
 }
+
+function SysCreateModal(data)
+{
+    if(SysIsModalOn == false)
+    {
+        $('.SystemModal').empty();
+        $('.SystemModal').append(data);
+        $('#SystemModalCenter').on('show.bs.modal', function (e) {
+            SysIsModalOn = true;
+        })
+
+        $('#SystemModalCenter').on('hidden.bs.modal', function (e) {
+            SysIsModalOn = false;
+        })
+        $('#SystemModalCenter').modal();
+    }
+
+}
+
+function SysLoadMsg(helpID) {
+    $.ajax({
+        url: Routing.generate('SystemLoadMessage', { 'id': helpID }),
+        success: function(data) {
+            SysCreateModal(data)
+        }
+    });
+}

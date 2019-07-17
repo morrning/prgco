@@ -17,15 +17,10 @@
     <!-- chartist CSS -->
     <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
-
     <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
-
-
-
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
 
     <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
-
     <!-- Optional JavaScript -->
     <!-- Javascript JS Routing library -->
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
@@ -43,18 +38,11 @@
     <script src="{{ asset('assets/js/modal.js') }}"></script>
     <script src="{{ asset('assets/chartjs/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
-
-    {% block stylesheets %}{% endblock %}
-
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-
-
-
+    {% block stylesheets %}{% endblock %}
 </head>
 <body onload="jsCoreRun()">
-<div class="">
-    <div class="" id="modalPart"></div>
-</div>
+<div class="SystemModal" id="SystemModal"></div>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 <script>
@@ -63,7 +51,10 @@
         $('.table').DataTable({
             "language": {
                 "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
-            }
+            },
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
         });
 
     });
