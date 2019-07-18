@@ -1,96 +1,73 @@
 {% extends 'appSimple.html.twig' %}
 {% block title %}سامانه IMS{% endblock %}
 {% block appBody %}
-    <div class="accordion" id="accordionExample">
-        <div class="card">
-            <div class="card-header" id="headingOne">
-                <h2 class="mb-0">
-                    <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                        Collapsible Group Item #1
-                    </button>
-                </h2>
-            </div>
-
-            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExample">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingTwo">
-                <h2 class="mb-0">
-                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        Collapsible Group Item #2
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-            </div>
-        </div>
-        <div class="card">
-            <div class="card-header" id="headingThree">
-                <h2 class="mb-0">
-                    <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Collapsible Group Item #3
-                    </button>
-                </h2>
-            </div>
-            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
-                <div class="card-body">
-                    Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                </div>
-            </div>
-        </div>
-    </div>
-
-
     <div class="card">
         <div class="card-header bg-info text-light">
+            <i class="fas fa-question-square" onclick="SysLoadMsg('1004');"></i>
+
             سامانه IMS
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-sm table-bordered table-hover rounded text-center">
-                    <thead class="thead-dark">
-                    <tr>
-                        <th>ردیف</th>
-                        <th>عنوان</th>
-                        <th>شناسه ایزو</th>
-                        <th>دسته بندی</th>
-                        <th>امکانات</th>
-                    </tr>
-                    </thead>
-                    <tbody class="">
-                    {% for file in files %}
-                        <tr class="">
-                            <td>{{ loop.index }}</td>
-                            <td>{{ file.title }}</td>
-                            <td>{{ file.ISOCode }}</td>
-                            <td>{{ file.cat.catName }}</td>
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                به سامانه مدیریت متمرکز خوش آمدید. جهت دریافت فرم های ایزو مورد نظر ابتدا بر روی دسته بندی کلیک کنید.سپس از ابزارهای جست و جو برای یافتن فرم مورد نظر استفاده نمایید.
+            </div>
+            <br>
+            <div class="accordion" id="accordionExample">
+                {% for cat in cats %}
+                    <div class="card">
+                        <div class="card-header bg-success text-light" id="heading{{ cat.id }}">
+                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#cat{{ cat.id }}" aria-expanded="true" aria-controls="cat{{ cat.id }}">
+                                <i class="fas fa-arrow-left"></i>
+                                {{ cat.catName }}
+                            </button>
+                        </div>
+                        <div id="cat{{ cat.id }}" class="collapse" aria-labelledby="heading{{ cat.id }}" data-parent="#accordionExample">
+                            <div class="card-body">
+                                {% set files = EntityMGR.findBy('App:ISOForm',{'cat':cat}) %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                                        <thead class="thead-dark">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>عنوان</th>
+                                            <th>شناسه ایزو</th>
+                                            <th>آخرین بازبینی</th>
+                                            <th>امکانات</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for file in files %}
+                                            <tr class="">
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ file.title }}</td>
+                                                <td>{{ file.ISOCode }}</td>
+                                                <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
 
-                            <td>
-                                {% if file.fileExt == 'docx' %}
-                                    <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                        <i class="fas fa-file-word"></i>
-                                        دریافت</a>
-                                {% elseif file.fileExt == 'xlsx' %}
-                                    <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                        <i class="fas fa-file-excel"></i>
-                                        دریافت</a>
-                                {% elseif file.fileExt == 'pdf' %}
-                                    <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                        <i class="fas fa-file-pdf"></i>
-                                        دریافت</a>
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+                                                <td>
+                                                    {% if file.fileExt == 'docx' %}
+                                                        <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                            <i class="fas fa-file-word"></i>
+                                                            دریافت</a>
+                                                    {% elseif file.fileExt == 'xlsx' %}
+                                                        <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                            <i class="fas fa-file-excel"></i>
+                                                            دریافت</a>
+                                                    {% elseif file.fileExt == 'pdf' %}
+                                                        <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                            <i class="fas fa-file-pdf"></i>
+                                                            دریافت</a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

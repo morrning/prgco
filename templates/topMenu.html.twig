@@ -1,0 +1,194 @@
+<nav class="navbar navbar-expand-lg navbar-dark py-1 text-light baseNavbar" >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse js-navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('home') }}">
+                    <i class="fas fa-home"></i>
+                    صفحه اصلی
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ path('apps') }}">
+                    <i class="fal fa-window-alt"></i>
+                    برنامه‌ها
+                </a>
+            </li>
+            {% if UserMGR.isLogedIn() %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-anchor"></i>
+                        داشبورد کاربری
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                            <a class="dropdown-item" href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-box-alt"></i>
+                                مدیریت فرم های پرکاربرد
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('CountDown','COUNTDOWN') == true %}
+                            <a class="dropdown-item" href="{{ path('countdownDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-stopwatch"></i>
+                                مدیریت روزشمار رویدادها
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
+                            <a class="dropdown-item" href="{{ path('isoformsDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-box-alt"></i>
+                                مدیریت سامانه IMS
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                            <a class="dropdown-item" href="{{ path('newsDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-newspaper"></i>
+                                سامانه انتشار خبر
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.isLogedin() == true %}
+                            <a class="dropdown-item" href="{{ path('suggestionAdmin') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-newspaper"></i>
+                                نظام بررسی پیشنهادات و انتقادات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                            <a class="dropdown-item" href="{{ path('projectAdminDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-newspaper"></i>
+                                سامانه کنترل پروژه کل
+                            </a>
+                        {% endif %}
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-columns"></i>
+                        ناحیه کاری:{{ area.areaName }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-desktop"></i>
+                                درخواست خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-server"></i>
+                                مجری خدمات فناوری اطلاعات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('pmAccess','PM',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action">سامانه کنترل پروژه</a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه درخواست تشریفات
+                            </a>
+                        {% endif %}
+                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('help') }}">
+                        <i class="fas fa-info-circle"></i>
+                        راهنمای سامانه
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav mr-auto pl-5">
+            {% if UserMGR.isLogedIn() %}
+                {% set notifiCount = UserMGR.notificationCount() %}
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    {% if notifiCount == 0 %}
+                        <a class="btn btn-secondary" href="{{ path('userNotifications') }}">
+                            <span class="fa fa-inbox"></span>
+                            {{ UserMGR.notificationCount() }}
+                        </a>
+                    {% else %}
+                        <div class="btn-group dropright" role="group">
+                            <button type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="fa fa-inbox"></span>
+                                {{ UserMGR.notificationCount() }}
+                            </button>
+                            <div class="dropdown-menu">
+                                {%  set notifis = UserMGR.lastNotifications() %}
+                                <h6 class="dropdown-header text-center text-danger">
+                                    اعلانات
+                                    <i class="fas fa-bullhorn"></i>
+                                </h6>
+                                <div class="dropdown-divider"></div>
+                                {% for notifi in notifis %}
+                                    <a class="dropdown-item {% if notifi.viewed is null %}bg-success{% endif %}" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
+                                        <i class="fal fa-dot-circle"></i>
+                                        {{ notifi.des }}
+                                    </a>
+                                {% endfor %}
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">
+                                    <a class="btn btn-link" href="{{ path('userNotifications') }}">
+                                        <i class="fas fa-list"></i>
+                                        مشاهده همه اعلانات
+                                    </a>
+                                    <a class="btn btn-link" href="{{ path('userClearNotifications') }}">
+                                        <i class="fas fa-eye"></i>
+                                        علامتگزاری همه به عنوان خوانده شده
+                                    </a>
+                                </h6>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="btn-group" role="group">
+                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ UserMGR.currentPosition.publicLabel() }}
+                        </button>
+                        <div class="dropdown-menu">
+                            {% if UserMGR.hasPermission('superAdmin') == true %}
+                                <a class="dropdown-item text-danger" href="{{ path('adminDashboard') }}">
+                                    <i class="fal fa-toolbox"></i>
+                                    داشبورد مدیریت
+                                </a>
+                                <div class="dropdown-divider"></div>
+                            {% endif %}
+                            <a class="dropdown-item text-success" href="{{ path('apps') }}">
+                                <i class="fal fa-window-alt"></i>
+                                برنامه‌ها
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userPositions') }}">
+                                <i class="fal fa-users"></i>
+                                سمت‌ها و جایگاه‌ها
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userViewProfile') }}">
+                                <i class="fal fa-sliders-h"></i>
+                                تنظیمات شخصی
+                            </a>
+                            <a class="dropdown-item" href="{{ path('userChangePassword') }}">
+                                <i class="fal fa-lock"></i>
+                                تغییر کلمه‌عبور
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{{ path('userLogout') }}">
+                                <i class="fal fa-door-open"></i>
+                                خروج
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <li class="nav-item">
+                    <a class="btn btn-warning" href="{{ path('userLogin') }}">
+                        <i class="fas fa-user-tie"></i>
+                        ورود به پورتال
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

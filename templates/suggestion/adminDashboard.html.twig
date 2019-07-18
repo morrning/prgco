@@ -8,31 +8,90 @@
             <div class="col-xs-12 col-md-4 align-items-stretch">
                 <div class="card">
                     <div class="card-header">
-                        نمودار تعداد پیشنهادات و انتقادات
+                        نمودار ارجاعات
                     </div>
                     <div class="card-body">
-                        <div class="ct-chart ct-perfect-fourth"></div>
-
+                        <div class="chart-container">
+                            <canvas id="myChart1"></canvas>
+                        </div>
                         <script>
-                            var data = {
-                                series: [{{ type1Count }}, {{ type2Count }}]
+
+                            var ctx = document.getElementById('myChart1');
+                            var color = Chart.helpers.color;
+                            Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                            window.chartColors = {
+                                red: 'rgb(255, 99, 132)',
+                                orange: 'rgb(255, 159, 64)',
+                                yellow: 'rgb(255, 205, 86)',
+                                green: 'rgb(75, 192, 192)',
+                                blue: 'rgb(54, 162, 235)',
+                                purple: 'rgb(153, 102, 255)',
+                                grey: 'rgb(201, 203, 207)'
                             };
+                            var myChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: ['کل ارجاعات','خوانده نشده'],
+                                    datasets: [
+                                        {
+                                            borderWidth: 1,
+                                            data: [{{ refAll }},{{ refUnread }}],
+                                            backgroundColor: [
+                                                color(window.chartColors.gray).alpha(0.5).rgbString(),
+                                                color(window.chartColors.orange).alpha(0.5).rgbString(),
+                                            ]
 
-                            var sum = function(a, b) { return a + b };
+                                        }
 
-                            new Chartist.Pie('.ct-chart', data, {
-                                labelInterpolationFnc: function(value) {
-                                    return Math.round(value / data.series.reduce(sum) * 100) + '%';
+                                    ]
                                 }
                             });
                         </script>
                     </div>
-                    <div class="card-footer">
-                        پیشنهادات:
-                        <span style="color:red">قرمز</span>
-                         |
-                        انتقادات
-                        <span style="color:orangered;">نارنجی</span>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-4 align-items-stretch">
+                <div class="card">
+                    <div class="card-header">
+                        نمودار تعداد پیشنهادات و انتقادات
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <script>
+
+                            var ctx = document.getElementById('myChart');
+                            var color = Chart.helpers.color;
+                            Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                            window.chartColors = {
+                                red: 'rgb(255, 99, 132)',
+                                orange: 'rgb(255, 159, 64)',
+                                yellow: 'rgb(255, 205, 86)',
+                                green: 'rgb(75, 192, 192)',
+                                blue: 'rgb(54, 162, 235)',
+                                purple: 'rgb(153, 102, 255)',
+                                grey: 'rgb(201, 203, 207)'
+                            };
+                            var myChart = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: ['پیشنهاد و راهکار','انتقاد'],
+                                    datasets: [
+                                        {
+                                            borderWidth: 1,
+                                            data: [{{ type1Count }},{{ type2Count }}],
+                                            backgroundColor: [
+                                                color(window.chartColors.blue).alpha(0.5).rgbString(),
+                                                color(window.chartColors.red).alpha(0.5).rgbString(),
+                                                ]
+
+                                        }
+
+                                    ]
+                                }
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

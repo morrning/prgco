@@ -35,7 +35,8 @@ class ISOFormController extends AbstractController
     public function ISOformsView(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         return $this->render('iso_form/mostUsedFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:MostUsedFile')
+            'files' => $entityMGR->findBy('App:ISOForm'),
+            'cats'=> $entityMGR->findBy('App:ISOFormCat'),
         ]);
     }
 
@@ -84,7 +85,7 @@ class ISOFormController extends AbstractController
         $data = new Entity\ISOForm();
         $form = $this->createFormBuilder($data)
             ->add('title', TextType::class,['label'=>'عنوان:'])
-            ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\MostUsedFileCat::class,'choice_label'=>'catName','choice_value'=>'id'])
+            ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\ISOFormCat::class,'choice_label'=>'catName','choice_value'=>'id'])
             ->add('isoCode', TextType::class,['label'=>'شناسه ایزو:'])
             ->add('fileID',FileType::class,['label'=>'فایل :'])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
@@ -103,7 +104,7 @@ class ISOFormController extends AbstractController
                     $data->setDateSubmit(time());
                     $data->setFileExt($file->getClientOriginalExtension());
                     $entityMGR->insertEntity($data);
-                    return $this->redirectToRoute('mostusedfilesDashboard',['msg'=>2]);
+                    return $this->redirectToRoute('isoformsDashboard',['msg'=>2]);
                 }
                 else{
                     array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);

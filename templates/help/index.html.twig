@@ -1,0 +1,55 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}راهنمای سامانه{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <img class="card-img-top" src="{{ asset('assets/images/public/struggle.png') }}">
+        <div class="card-header bg-info text-light">
+            راهنمای سامانه
+        </div>
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-12 col-md-3">
+                        <div id="html1"></div>
+                        <script>
+                            $(document).ready(function(){
+                                // AJAX
+                                $('#html1').on('changed.jstree', function (e, data) {
+                                    window.location.replace(Routing.generate('help', { 'id':data.selected}));
+                                })
+                                    .jstree({
+                                        'core' : {
+                                            'data' : {
+                                                'url' : function (node) {
+                                                    return node.id === '#' ? Routing.generate('helpGetChildsTree', { 'PID':'1'}) : Routing.generate('helpGetChildsTree', { 'PID': node.id});
+                                                },
+                                                "dataType" : "json",
+                                                'data' : function (node) {
+                                                    return {
+
+                                                    };
+                                                }
+                                            }
+                                        }});
+                            })
+                        </script>
+                    </div>
+                    <div class="col-sm-12 col-md-9 border-right">
+                        <h3>{{ content.title }}</h3>
+                        <hr>
+                        <p class="text-justify">{{ content.des | raw }}</p>
+                        <hr>
+                        {% if childs | length != 0 %}
+                            <h5>زیر شاخه ها:</h5>
+                            <ul>
+                                {% for child in childs %}
+                                    <li><a class="" href="{{ path('help',{'id':child.id}) }}">{{ child.title }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

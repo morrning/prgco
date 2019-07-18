@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -25,6 +27,16 @@ class ISOFormCat
      * @ORM\Column(type="string", length=255)
      */
     private $parrent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ISOForm", mappedBy="cat")
+     */
+    private $iSOForms;
+
+    public function __construct()
+    {
+        $this->iSOForms = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,6 +63,37 @@ class ISOFormCat
     public function setParrent(string $parrent): self
     {
         $this->parrent = $parrent;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ISOForm[]
+     */
+    public function getISOForms(): Collection
+    {
+        return $this->iSOForms;
+    }
+
+    public function addISOForm(ISOForm $iSOForm): self
+    {
+        if (!$this->iSOForms->contains($iSOForm)) {
+            $this->iSOForms[] = $iSOForm;
+            $iSOForm->setCat($this);
+        }
+
+        return $this;
+    }
+
+    public function removeISOForm(ISOForm $iSOForm): self
+    {
+        if ($this->iSOForms->contains($iSOForm)) {
+            $this->iSOForms->removeElement($iSOForm);
+            // set the owning side to null (unless already changed)
+            if ($iSOForm->getCat() === $this) {
+                $iSOForm->setCat(null);
+            }
+        }
 
         return $this;
     }

@@ -46,6 +46,11 @@ class ISOForm
      */
     private $fileExt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ISOFormCat", inversedBy="iSOForms")
+     */
+    private $cat;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -145,6 +150,18 @@ class ISOForm
     public function setFileExt($fileExt): void
     {
         $this->fileExt = $fileExt;
+    }
+
+    public function getCat(): ?ISOFormCat
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?ISOFormCat $cat): self
+    {
+        $this->cat = $cat;
+
+        return $this;
     }
     
 

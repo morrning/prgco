@@ -22,7 +22,7 @@
                     <td>{{ file.cat.catName }}</td>
                     <td>
                         <a class="btn btn-success" href="{{ asset('files/' ~ file.fileID) }}">دریافت</a>
-                        <a class="btn btn-sm btn-danger" href="{{ path('mostusedfilesDeleteFile',{'id':file.id}) }}">حذف</a>
+                        <a class="btn btn-sm btn-danger" href="{{ path('isoformsDeleteFile',{'id':file.id}) }}">حذف</a>
                     </td>
                 </tr>
             {% endfor %}
