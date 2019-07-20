@@ -17,7 +17,7 @@ class UserController extends AbstractController
     /**
      * @Route("/user/login", name="userLogin")
      */
-    public function login(Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger)
+    public function login(Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
     {
         $defaultData = ['message' => 'Type your message here'];
         $form = $this->createFormBuilder($defaultData)
@@ -44,8 +44,9 @@ class UserController extends AbstractController
                         $position->setIsDefault(1);
                         $entityMGR->update($position);
                     }
-                    return $this->redirectToRoute('home');
                     $logger->info('user ' . $data['username'] .' loged in.');
+                    $logMGR->addEvent('3gv5','ورود به سامانه',sprintf('کاربر با نام کاربری %s وارد سامانه شد.',$data['username']),'USERS',$request->getClientIp());
+                    return $this->redirectToRoute('home');
                 }
 
             }
@@ -64,9 +65,10 @@ class UserController extends AbstractController
     /**
      * @Route("/user/logout", name="userLogout")
      */
-    public function logout(Request $request, Service\UserMGR $userMGR, LoggerInterface $logger)
+    public function logout(Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMGR, LoggerInterface $logger)
     {
         $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' logout.');
+        $logMGR->addEvent('3gv5','خروج از سامانه',sprintf('کاربر با نام کاربری %s از سامانه خارج شد.',$userMGR->currentUser()->getUsername()),'USERS',$request->getClientIp());
         $userMGR->logout();
         return $this->redirectToRoute('home');
     }
@@ -74,7 +76,7 @@ class UserController extends AbstractController
     /**
      * @Route("user/change/password" ,name="userChangePassword")
      */
-    public function userChangePassword(Request $request,Service\UserMGR $userMgr, Service\EntityMGR $entityMgr,LoggerInterface $logger)
+    public function userChangePassword(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\EntityMGR $entityMgr,LoggerInterface $logger)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
@@ -101,6 +103,7 @@ class UserController extends AbstractController
             {
                 $user->setPassword(md5($form->get('newPassword')->getData()));
                 $entityMgr->update($user);
+                $logMGR->addEvent('3gv5','تغییر کلمه عبور',sprintf('کاربر با نام کاربری %s کلمه عبور خود را تغییر داد.',$userMgr->currentUser()->getUsername()),'USERS',$request->getClientIp());
                 $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change own password.');
                 array_push($alert,['type'=>'success','message'=>'کلمه عبور با موفقیت تغییر کرد.']);
             }
@@ -112,10 +115,11 @@ class UserController extends AbstractController
     /**
      * @Route("user/positions" ,name="userPositions")
      */
-    public function userPositions( Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    public function userPositions( Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
+        $logMGR->addEvent('3gv5','مشاهده','سمت‌ها و جایگاه‌های کاربر','USERS',$request->getClientIp());
 
         return $this->render('user/positions.html.twig',
             [
@@ -125,9 +129,25 @@ class UserController extends AbstractController
     }
 
     /**
+     * @Route("user/events" ,name="userEvents")
+     */
+    public function userEvents(Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('userLogin');
+        $logMGR->addEvent('3gv5','مشاهده','رویدادها و وقایع کاربر','USERS',$request->getClientIp());
+
+        return $this->render('user/events.html.twig',
+            [
+                'events' => $entityMGR->findBy('App:SysLog',['username'=>$userMgr->currentUser()->getUsername()])
+            ]
+        );
+    }
+
+    /**
      * @Route("user/select/position/{id}" ,name="userChangePosition")
      */
-    public function userChangePosition($id = null, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function userChangePosition($id = null,Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
@@ -150,7 +170,7 @@ class UserController extends AbstractController
             $position = $entityMGR->find('App:SysPosition',$id);
             $position->setIsDefault(1);
             $entityMGR->update($position);
-
+            $logMGR->addEvent('3gv5','ویرایش',sprintf('کاربر با نام کاربری %s سمت پیشفرض خود را تغییر داد.',$userMgr->currentUser()->getUsername()),'USERS',$request->getClientIp());
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change active position');
         }
         return $this->redirectToRoute('home');
@@ -159,11 +179,11 @@ class UserController extends AbstractController
     /**
      * @Route("user/profile" ,name="userViewProfile")
      */
-    public function userViewProfile(Service\UserMGR $userMgr)
+    public function userViewProfile(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
-
+        $logMGR->addEvent('3gv5','مشاهده','پروفایل کاربری','USERS',$request->getClientIp());
         return $this->render('user/viewProfile.html.twig',
             [
                 'user'=>$userMgr->currentUser(),
@@ -175,10 +195,11 @@ class UserController extends AbstractController
     /**
      * @Route("user/notifications" ,name="userNotifications")
      */
-    public function userNotifications( Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    public function userNotifications(Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
+        $logMGR->addEvent('3gv5','مشاهده','اعلانات کاربر','USERS',$request->getClientIp());
 
         return $this->render('user/notifications.html.twig',
             [
@@ -190,7 +211,7 @@ class UserController extends AbstractController
     /**
      * @Route("user/clear/notifications" ,name="userClearNotifications")
      */
-    public function userClearNotifications(Request $request, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
+    public function userClearNotifications(Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMgr, Service\EntityMGR $entityMGR)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
@@ -202,8 +223,8 @@ class UserController extends AbstractController
             $not->setDateSubmit(time());
             $entityMGR->update($not);
         }
+        $logMGR->addEvent('3gv5','حذف','اعلانات کاربر','USERS',$request->getClientIp());
         return $this->redirect($request->server->get('HTTP_REFERER'));
-
     }
 
     /**

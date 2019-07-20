@@ -25,6 +25,7 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use App\Service;
 use App\Entity as Entity;
 use App\Form\Type as Type;
+use Twig\Extension\SandboxExtension;
 
 class AdminController extends AbstractController
 {
@@ -73,7 +74,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="adminDashboard")
      */
-    public function index(Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
+    public function index(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -87,7 +88,7 @@ class AdminController extends AbstractController
 
         if ($urlData < 0)
             return $this->redirectToRoute('LE');
-
+        $logMGR->addEvent('4ert','مشاهده','داشبورد مدیریت سامانه','ADMINISTRATOR',$request->getClientIp());
         return $this->render('admin/dashboard.html.twig', [
             'usersCount' => $entityMGR->rowsCount('App:SysUser'),
             'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
@@ -101,7 +102,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/settings", name="adminSettings")
      */
-    public function adminSettings(Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminSettings(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -118,6 +119,7 @@ class AdminController extends AbstractController
         $alerts = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $entityMGR->update($form->getData());
+            $logMGR->addEvent('4ert','ویرایش','تنظیمات کلی سامانه','ADMINISTRATOR',$request->getClientIp());
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change system settings.');
             $alerts = [['message'=>'تنظیمات با موفقیت ذخیره شد.','type'=>'success']];
         }
@@ -129,9 +131,23 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/events/logs", name="adminEvents")
+     */
+    public function adminEvents(Request $request , Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('4ert','مشاهده','تاریخچه رویدادهای کل سامانه','ADMINISTRATOR',$request->getClientIp());
+
+        return $this->render('admin/events.html.twig', [
+            'events'=>$entityMGR->findAll('App:SysLog')
+        ]);
+    }
+
+    /**
      * @Route("/admin/logs", name="adminLogs")
      */
-    public function adminLogs(Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminLogs(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -147,7 +163,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $fileSystem->remove(str_replace('src','var/log/prod.log',dirname(__DIR__)));
-
+            $logMGR->addEvent('4ert','حذف','تاریخچه رویدادهای سیستمی','ADMINISTRATOR',$request->getClientIp());
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' clear system log file.');
             $alerts = [['message'=>'تاریخچه با موفقیت پاک شد.','type'=>'success']];
         }
@@ -164,7 +180,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/aries", name="adminAries")
      */
-    public function adminAries(Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminAries(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -180,6 +196,7 @@ class AdminController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityMGR->insertEntity($form->getData());
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' clear system log file.');
+            $logMGR->addEvent('4ert','افزودن','نواحی کاری کل سامانه','ADMINISTRATOR',$request->getClientIp());
             $alerts = [['message'=>'ناحیه کاری با موفقیت افزوده شد.','type'=>'success']];
         }
 
@@ -211,7 +228,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/positionsofgroup/{id}/{msg}", name="adminPositionsofgroup")
      */
-    public function adminPositionsofgroup($id,$msg=0,Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminPositionsofgroup($id,$msg=0,Service\LogMGR $logMGR,Request $request,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -235,6 +252,7 @@ class AdminController extends AbstractController
                 $position = $entityMGR->find('App:SysPosition',$form->get('PositionID')->getData());
                 $alerts = [['message'=>'سمت شغلی با موفقیت افزوده شد.','type'=>'success']];
                 $userMgr->addToGroup($position->getId(),$id);
+                $logMGR->addEvent('4ert','افزودن','کاربران گروه‌های دسترسی','ADMINISTRATOR',$request->getClientIp());
                 $logger->info(sprintf('user %s add position ID %s to group ID %s',$userMgr->currentUser()->getUsername(),$position->getId(),$id));
             }
         }
@@ -250,12 +268,13 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/group/position/delete/{GID}/{UID}", name="adminDeletePositionOfGroup", options = { "expose" = true })
      */
-    public function adminDeletePositionOfGroup($GID,$UID ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    public function adminDeletePositionOfGroup($GID,$UID ,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
         if(! $userMGR->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
         $userMGR->removeFromGroup($UID,$GID);
+        $logMGR->addEvent('4ert','حذف','کاربران گروه‌های دسترسی','ADMINISTRATOR',$request->getClientIp());
         $logger->info(sprintf('position with username %s delete position with ID %s from Group ID %s',
             $userMGR->currentUser()->getUsername(),
             $UID,
@@ -267,7 +286,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/positions/{msg}", name="adminPositions")
      */
-    public function adminPositions($msg=0, Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminPositions($msg=0, Request $request, Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -283,6 +302,7 @@ class AdminController extends AbstractController
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
 
+        $logMGR->addEvent('4ert','مشاهده','سمت‌ها و جایگاه‌های کل سامانه','ADMINISTRATOR',$request->getClientIp());
 
         return $this->render('admin/positions.html.twig', [
             'form' => $form->createView(),
@@ -323,7 +343,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/users/{msg}", name="adminUsers")
      */
-    public function adminUsers($msg=0, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminUsers($msg=0, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -335,6 +355,7 @@ class AdminController extends AbstractController
             $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
 
         $users = $entityMGR->findAll('App:SysUser');
+        $logMGR->addEvent('4ert','مشاهده','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
 
         return $this->render('admin/users.html.twig', [
             'users'=>$users,
@@ -345,7 +366,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/adminEditPosition/{PID}", name="adminEditPosition" , options = { "expose" = true })
      */
-    public function adminEditPosition($PID, Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminEditPosition($PID, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -397,6 +418,7 @@ class AdminController extends AbstractController
                     }
                 }
                 $entityMGR->insertEntity($position);
+                $logMGR->addEvent('4ert','ویرایش','سمت‌ها و جایگاه‌های کل سامانه','ADMINISTRATOR',$request->getClientIp());
                 $logger->info(sprintf('user %s edit position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>2]);
             }
@@ -414,7 +436,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/system/update", name="adminSystemUpdate" , options = { "expose" = true })
      */
-    public function adminSystemUpdate(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminSystemUpdate(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if (!$userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -455,6 +477,8 @@ class AdminController extends AbstractController
             $out['git'] = shell_exec('git pull origin master');
             $out['cache'] = shell_exec('php ../bin/console cache:clear');
             $out['db'] = shell_exec('php ../bin/console doctrine:schema:update --force');
+            $logMGR->addEvent('4ert','به روز رسانی','به روز رسانی سامانه','ADMINISTRATOR',$request->getClientIp());
+
         }
 
         return $this->render('admin/systemUpdate.html.twig',[
@@ -469,7 +493,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/system/cache", name="adminCache" , options = { "expose" = true })
      */
-    public function adminCache(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminCache(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if (!$userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -484,6 +508,7 @@ class AdminController extends AbstractController
         $out = [];
         if ($form->isSubmitted() && $form->isValid()) {
             $out['cache'] = shell_exec('php ../bin/console cache:clear');
+            $logMGR->addEvent('4ert','حذف','حافظه نهان کل سامانه','ADMINISTRATOR',$request->getClientIp());
         }
         $dir = __DIR__;
         $dir = str_replace('src\Controller','var\cache',$dir);
@@ -506,7 +531,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/adminNewPosition/{PID}", name="adminNewPosition" , options = { "expose" = true })
      */
-    public function adminNewPosition($PID, Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminNewPosition($PID, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -534,6 +559,7 @@ class AdminController extends AbstractController
                 if(is_null($entityMGR->findBy('App:SysPosition',['isDefault'=>'1' , 'userID'=>$user])));
                     $position->setIsDefault(1);
                 $entityMGR->insertEntity($position);
+                $logMGR->addEvent('4ert','افزودن','سمت‌ها و جایگاه‌های کل سامانه','ADMINISTRATOR',$request->getClientIp());
                 $logger->info(sprintf('user %s add new position with id %s', $userMgr->currentUser()->getUsername() , $position->getId()));
                 return $this->redirectToRoute('adminPositions',['msg'=>1]);
             }
@@ -550,7 +576,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/user/add", name="adminNewUser")
      */
-    public function adminNewUser(Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminNewUser(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -570,6 +596,7 @@ class AdminController extends AbstractController
             $user = $form->getData();
             $user->setPassword(md5($user->getPassword()));
             $entityMGR->insertEntity($user);
+            $logMGR->addEvent('4ert','افزودن','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
             $logger->info(sprintf('user %s add new user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
             return $this->redirectToRoute('adminUsers',['msg'=>1]);
 
@@ -584,7 +611,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/usersedit/{id}", name="adminUserEditUser")
      */
-    public function adminUserEditUser($id,Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminUserEditUser($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -610,7 +637,7 @@ class AdminController extends AbstractController
                 $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
                 $entityMGR->update($position);
             }
-
+            $logMGR->addEvent('4ert','ویرایش','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
             $logger->info(sprintf('user %s edit user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
             return $this->redirectToRoute('adminUsers',['msg'=>2]);
 
@@ -626,7 +653,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/user/change/password/{id}", name="adminUserChangepassword")
      */
-    public function adminUserChangepassword($id,Request $request,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    public function adminUserChangepassword($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
@@ -646,6 +673,7 @@ class AdminController extends AbstractController
             $user = $form->getData();
             $user->setPassword(md5($user->getPassword()));
             $entityMGR->update($user);
+            $logMGR->addEvent('4ert','ویرایش','تغییر کلمه عبور کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
             $logger->info(sprintf('user %s change password of user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
             return $this->redirectToRoute('adminUsers',['msg'=>2]);
 

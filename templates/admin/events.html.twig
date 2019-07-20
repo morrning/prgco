@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}رویدادها{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>زیر سیستم</th>
+                            <th>تاریخ</th>
+                            <th>کاربر</th>
+                            <th>نام کاربر</th>
+                            <th>عملیات</th>
+                            <th>IP</th>
+                            <th>توضیحات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for event in events %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ event.bundleLabel }}</td>
+                                <td>{{ Jdate.jdate('Y/n/d H:i:s',event.dateSubmit) }}</td>
+                                <td>{{ event.username }}</td>
+                                <td>{{ event.fullname }}</td>
+                                <td>{{ event.operation }}</td>
+                                <td>{{ event.ipSource }}</td>
+                                <td>{{ event.des }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
