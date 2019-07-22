@@ -318,7 +318,7 @@ class CeremonialController extends AbstractController
      */
     public function ceremonialDOINGTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
         $ticket = $entityMGR->find('App:CMAirTicket',$id);
         if(is_null($ticket))
@@ -329,13 +329,30 @@ class CeremonialController extends AbstractController
         $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
         $alerts = [];
         if($msg == 1)
-            array_push($alerts,['type'=>'success','message'=>'درخواست بلیط با موفقیت ثبت شد.']);
+            array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت رد شد.']);
 
-        return $this->render('ceremonial/REQTicketView.html.twig', [
+        return $this->render('ceremonial/DOINGTicketView.html.twig', [
             'passenger' => $passenger,
             'ticket'=>$ticket,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
             'alerts'=>$alerts
         ]);
+    }
+
+    /**
+     * @Route("/ceremonial/doing/ticket/reject/{id}", name="ceremonialDOINGTicketReject")
+     */
+    public function ceremonialDOINGTicketReject($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $ticket = $entityMGR->find('App:CMAirTicket',$id);
+        $ticket->setRejecter($userMGR->currentPosition());
+        $ticket->setRejectDate(time());
+        $rejectstate = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>1]);
+        $ticket->setTicketState($rejectstate);
+        $entityMGR->update($ticket);
+        $logMGR->addEvent('CERTICKET'.$ticket->getId(),'رد درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+        return $this->redirectToRoute('ceremonialDOINGTicketView',['msg'=>1,'id'=>$ticket->getId()]);
     }
 }
