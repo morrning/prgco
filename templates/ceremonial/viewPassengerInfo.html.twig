@@ -2,69 +2,126 @@
 
 {% block title %}اطلاعات مسافر:{{ passenger.pname ~ ' ' ~ passenger.pfamily }}{% endblock %}
 {% block pageBody %}
-    <div class="container pb-3">
-        <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/avatar.jpg') }}">
-            </div>
-            <div class="col-sm-12 col-md-4">
-                <p>
-                    نام:
-                    <span class="text-danger">{{ passenger.pname }}</span>
-                </p>
-                <p>
-                    نام خانوادگی:
-                    <span class="text-danger">{{ passenger.pfamily }}</span>
-                </p>
-                <p>
-                    نام پدر:
-                    <span class="text-danger">{{ passenger.pfather }}</span>
-                </p>
-                <p>
-                    شماره شناسنامه:
-                    <span class="text-danger">{{ passenger.pshenasname }}</span>
-                </p>
-                <p>
-                    کد ملی:
-                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
-                </p>
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                <i class="fas fa-user"></i>
+                اطلاعات مسافر
+            </a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
+                <i class="fas fa-history"></i>
+                تاریخچه رویدادها
+            </a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/avatar.jpg') }}">
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <p>
+                            نسبت مسافر:
+                            <span class="alert alert-danger">{{ passenger.ptype.typeName }}</span>
+                        </p>
+                        <hr>
+                        <p>
+                            نام:
+                            <span class="text-danger">{{ passenger.pname }}</span>
+                        </p>
+                        <p>
+                            نام خانوادگی:
+                            <span class="text-danger">{{ passenger.pfamily }}</span>
+                        </p>
+                        <p>
+                            نام پدر:
+                            <span class="text-danger">{{ passenger.pfather }}</span>
+                        </p>
+                        <p>
+                            شماره شناسنامه:
+                            <span class="text-danger">{{ passenger.pshenasname }}</span>
+                        </p>
+                        <p>
+                            کد ملی:
+                            <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                        </p>
 
-            </div>
-            <div class="col-sm-12 col-md-4">
-                <p>
-                    Name:
-                    <span class="text-danger">{{ passenger.lname }}</span>
-                </p>
-                <p>
-                    FamilyName:
-                    <span class="text-danger">{{ passenger.lfamily }}</span>
-                </p>
-                <p>
-                    Father Name:
-                    <span class="text-danger">{{ passenger.lfather }}</span>
-                </p>
-                <p>
-                    National Code:
-                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
-                </p>
-                <p>
-                    Visa Number:
-                    <span class="text-danger">{{ passenger.VisaNo }}</span>
-                </p>
-                <p>
-                    Passport Number:
-                    <span class="text-danger">{{ passenger.PassNo }}</span>
-                </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <p>
+                            Name:
+                            <span class="text-danger">{{ passenger.lname }}</span>
+                        </p>
+                        <p>
+                            FamilyName:
+                            <span class="text-danger">{{ passenger.lfamily }}</span>
+                        </p>
+                        <p>
+                            Father Name:
+                            <span class="text-danger">{{ passenger.lfather }}</span>
+                        </p>
+                        <p>
+                            National Code:
+                            <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                        </p>
+                        <p>
+                            Visa Number:
+                            <span class="text-danger">{{ passenger.VisaNo }}</span>
+                        </p>
+                        <p>
+                            Passport Number:
+                            <span class="text-danger">{{ passenger.PassNo }}</span>
+                        </p>
 
+                    </div>
+                </div>
+            </div>
+            <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">
+                <i class="fa fa-edit"></i>
+                ویرایش
+            </a>
+            <a class="btn btn-primary" href="{{ path('ceremonialREQAIRpaneNew',{'id':passenger.id}) }}">
+                <i class="fas fa-plane"></i>
+                بلیط هواپیما
+            </a>
+            <a class="btn btn-info" href="{{ path('ceremonialREQpasengers') }}">
+                <i class="fa fa-undo"></i>
+                بازگشت
+            </a>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 mx-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>تاریخ</th>
+                                    <th>نام کاربر</th>
+                                    <th>توضیحات</th>
+                                    <th>عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for event in events %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ Jdate.jdate('Y/n/d H:i:s',event.dateSubmit) }}</td>
+                                        <td>{{ event.fullname }}</td>
+                                        <td>{{ event.des }}</td>
+                                        <td>{{ event.operation }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">
-        <i class="fa fa-edit"></i>
-        ویرایش
-    </a>
-    <a class="btn btn-info" href="{{ path('ceremonialREQpasengers') }}">
-        <i class="fa fa-undo"></i>
-        بازگشت
-    </a>
 {% endblock %}

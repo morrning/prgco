@@ -38,9 +38,15 @@ class SysArea
      */
     private $sysPositions;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMAirTicket", mappedBy="Area")
+     */
+    private $cMAirTickets;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
+        $this->cMAirTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -114,6 +120,37 @@ class SysArea
             // set the owning side to null (unless already changed)
             if ($sysPosition->getDefaultArea() === $this) {
                 $sysPosition->setDefaultArea(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMAirTicket[]
+     */
+    public function getCMAirTickets(): Collection
+    {
+        return $this->cMAirTickets;
+    }
+
+    public function addCMAirTicket(CMAirTicket $cMAirTicket): self
+    {
+        if (!$this->cMAirTickets->contains($cMAirTicket)) {
+            $this->cMAirTickets[] = $cMAirTicket;
+            $cMAirTicket->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMAirTicket(CMAirTicket $cMAirTicket): self
+    {
+        if ($this->cMAirTickets->contains($cMAirTicket)) {
+            $this->cMAirTickets->removeElement($cMAirTicket);
+            // set the owning side to null (unless already changed)
+            if ($cMAirTicket->getArea() === $this) {
+                $cMAirTicket->setArea(null);
             }
         }
 

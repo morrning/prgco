@@ -27,7 +27,8 @@
                 </ol>
                 <div class="card my-0">
                     <div class="card-header">
-                        {{ block('title') }}
+                        <span class="float-right">{{ block('title') }}</span>
+                        <span class="float-left">{% block appTop %}{% endblock %}</span>
                     </div>
                     <div class="card-body">
                         <div class="container-fluid">

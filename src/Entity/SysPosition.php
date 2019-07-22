@@ -68,11 +68,23 @@ class SysPosition
      */
     private $sysNotifications;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMAirTicket", mappedBy="accepter")
+     */
+    private $cMAirTickets;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMAirTicket", mappedBy="submitter", orphanRemoval=true)
+     */
+    private $no;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
         $this->cMPassengers = new ArrayCollection();
         $this->sysNotifications = new ArrayCollection();
+        $this->cMAirTickets = new ArrayCollection();
+        $this->no = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -271,6 +283,68 @@ class SysPosition
             // set the owning side to null (unless already changed)
             if ($sysNotification->getUserID() === $this) {
                 $sysNotification->setUserID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMAirTicket[]
+     */
+    public function getCMAirTickets(): Collection
+    {
+        return $this->cMAirTickets;
+    }
+
+    public function addCMAirTicket(CMAirTicket $cMAirTicket): self
+    {
+        if (!$this->cMAirTickets->contains($cMAirTicket)) {
+            $this->cMAirTickets[] = $cMAirTicket;
+            $cMAirTicket->setAccepter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMAirTicket(CMAirTicket $cMAirTicket): self
+    {
+        if ($this->cMAirTickets->contains($cMAirTicket)) {
+            $this->cMAirTickets->removeElement($cMAirTicket);
+            // set the owning side to null (unless already changed)
+            if ($cMAirTicket->getAccepter() === $this) {
+                $cMAirTicket->setAccepter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMAirTicket[]
+     */
+    public function getNo(): Collection
+    {
+        return $this->no;
+    }
+
+    public function addNo(CMAirTicket $no): self
+    {
+        if (!$this->no->contains($no)) {
+            $this->no[] = $no;
+            $no->setSubmitter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNo(CMAirTicket $no): self
+    {
+        if ($this->no->contains($no)) {
+            $this->no->removeElement($no);
+            // set the owning side to null (unless already changed)
+            if ($no->getSubmitter() === $this) {
+                $no->setSubmitter(null);
             }
         }
 

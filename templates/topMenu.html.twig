@@ -91,6 +91,12 @@
                                 سامانه درخواست تشریفات
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه مدیریت تشریفات
+                            </a>
+                        {% endif %}
                     </div>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('help') }}">

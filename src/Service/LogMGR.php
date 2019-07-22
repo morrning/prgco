@@ -29,4 +29,8 @@ class LogMGR
         $log->setDateSubmit(time());
         $this->em->insertEntity($log);
     }
+
+    public function getEvents($bundle,$sid){
+        return $this->em->findBy('App:SysLog',['bundleLabel'=>$bundle,'sid'=>$sid]);
+    }
 }
