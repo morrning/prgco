@@ -60,6 +60,18 @@
                                 سامانه کنترل پروژه کل
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL') == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه مدیریت تشریفات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailOPTDashboard','CEREMONIAL') == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه اپراتوری تشریفات
+                            </a>
+                        {% endif %}
                     </div>
                 </li>
 
@@ -89,12 +101,6 @@
                             <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-passport"></i>
                                 سامانه درخواست تشریفات
-                            </a>
-                        {% endif %}
-                        {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
-                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
-                                سامانه مدیریت تشریفات
                             </a>
                         {% endif %}
                     </div>

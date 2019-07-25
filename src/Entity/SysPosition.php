@@ -78,6 +78,11 @@ class SysPosition
      */
     private $no;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ACCdoc", mappedBy="icuser")
+     */
+    private $aCCdocs;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -85,6 +90,7 @@ class SysPosition
         $this->sysNotifications = new ArrayCollection();
         $this->cMAirTickets = new ArrayCollection();
         $this->no = new ArrayCollection();
+        $this->aCCdocs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -345,6 +351,37 @@ class SysPosition
             // set the owning side to null (unless already changed)
             if ($no->getSubmitter() === $this) {
                 $no->setSubmitter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ACCdoc[]
+     */
+    public function getACCdocs(): Collection
+    {
+        return $this->aCCdocs;
+    }
+
+    public function addACCdoc(ACCdoc $aCCdoc): self
+    {
+        if (!$this->aCCdocs->contains($aCCdoc)) {
+            $this->aCCdocs[] = $aCCdoc;
+            $aCCdoc->setIcuser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeACCdoc(ACCdoc $aCCdoc): self
+    {
+        if ($this->aCCdocs->contains($aCCdoc)) {
+            $this->aCCdocs->removeElement($aCCdoc);
+            // set the owning side to null (unless already changed)
+            if ($aCCdoc->getIcuser() === $this) {
+                $aCCdoc->setIcuser(null);
             }
         }
 

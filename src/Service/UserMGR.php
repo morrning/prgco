@@ -107,7 +107,11 @@ class UserMGR
                 if(! is_null($pid))
                     $grp->setPID($pid);
                 $grp->setGroupName($permissionName);
-                $grp->setLabel($permissionName);
+                $permission = $this->em->findOneBy('App:SysPermissionLabel',['pname'=>$permissionName]);
+                if(!is_null($permission))
+                    $grp->setLabel($permission->getPlabel());
+                else
+                    $grp->setLabel($permissionName);
                 $this->em->insertEntity($grp);
 
             }

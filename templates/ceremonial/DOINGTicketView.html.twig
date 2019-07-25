@@ -169,6 +169,10 @@
                                             تاریخ تایید:
                                             <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.acceptDate) }}</span>
                                         </p>
+                                        <p>
+                                            نحوه پرداخت:
+                                            <span class="text-success">{{ ticket.acceptIF.ifName }}</span>
+                                        </p>
                                     {% endif %}
                                     {% if ticket.ticketState.StateCode == 3 %}
                                         <p>
@@ -266,7 +270,7 @@
                                 برای ثبت اقدام یکی از گذینه‌های زیر را انتخاب نمایید.
                             </div>
                             <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-success">
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Acceptmodal">
                                     <i class="fas fa-check-circle"></i>
                                     تایید درخواست
                                 </button>
@@ -351,7 +355,7 @@
         </div>
     </div>
 
-    <!-- Modal -->
+    <!-- Modal REject ticket -->
     <div class="modal fade" id="rejectmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -373,6 +377,41 @@
                         <i class="fas fa-check"></i>
                         رد درخواست
                     </a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                        انصراف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Accept ticket -->
+    <div class="modal fade" id="Acceptmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-light">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        تایید درخواست
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-justify">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 pb-3">
+                            {{ form_start(form) }}
+                            {{ form_label(form.acceptIF) }}
+                            {{ form_widget(form.acceptIF) }}
+                            {{ form_label(form.acceptDes) }}
+                            {{ form_widget(form.acceptDes) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ form_widget(form.submit) }}
+                    {{ form_end(form) }}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         <i class="fas fa-times"></i>
                         انصراف

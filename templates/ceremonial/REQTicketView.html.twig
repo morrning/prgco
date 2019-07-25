@@ -165,6 +165,10 @@
                                             تاریخ تایید:
                                             <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.acceptDate) }}</span>
                                         </p>
+                                        <p>
+                                            نحوه پرداخت:
+                                            <span class="text-success">{{ ticket.acceptIF.ifName }}</span>
+                                        </p>
                                     {% endif %}
                                     {% if ticket.ticketState.StateCode == 3 %}
                                         <p>

@@ -122,6 +122,16 @@ class CMAirTicket
      */
     private $fileID;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $acceptDes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CMacceptIF")
+     */
+    private $acceptIF;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -375,6 +385,30 @@ class CMAirTicket
     public function setFileID(?string $fileID): self
     {
         $this->fileID = $fileID;
+
+        return $this;
+    }
+
+    public function getAcceptDes(): ?string
+    {
+        return $this->acceptDes;
+    }
+
+    public function setAcceptDes(?string $acceptDes): self
+    {
+        $this->acceptDes = $acceptDes;
+
+        return $this;
+    }
+
+    public function getAcceptIF(): ?CMacceptIF
+    {
+        return $this->acceptIF;
+    }
+
+    public function setAcceptIF(?CMacceptIF $acceptIF): self
+    {
+        $this->acceptIF = $acceptIF;
 
         return $this;
     }

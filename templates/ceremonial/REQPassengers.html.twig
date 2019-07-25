@@ -27,7 +27,11 @@
                     <td>{{ passenger.pfather }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',passenger.pbirthday) }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}">مشاهده</a>
+                        <a class="btn btn-primary" href="{{ path('ceremonialREQAIRpaneNew',{'id':passenger.id}) }}">
+                            <i class="fas fa-plane"></i>
+                            <span>بلیط هواپیما</span>
+                        </a>
+                        <a class="btn btn-info" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}">مشاهده</a>
                         <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">ویرایش</a>
                     </td>
                 </tr>
