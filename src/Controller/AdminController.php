@@ -490,6 +490,35 @@ class AdminController extends AbstractController
             'note'=>$note
         ]);
     }
+
+    /**
+     * @Route("/admin/system/database/import", name="adminDatabaseImport" , options = { "expose" = true })
+     */
+    public function adminDatabaseImport(Request $request,Service\LogMGR $logMGR,Service\ConfigMGR $configMGR,Service\UserMGR $userMgr, LoggerInterface $logger)
+    {
+        if (!$userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('submit', SubmitType::class,['label'=>'وارد کردن دادهای پیشفرض'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $configMGR->importBasicData();
+            $alerts = [['message'=>'اطلاعات پیشفرض با موفقیت ذخیره شد.','type'=>'success']];
+            $logMGR->addEvent('4ert','افزودن','وارد کردن داده های پیشفرض به بانک اطلاعاتی','ADMINISTRATOR',$request->getClientIp());
+        }
+
+        return $this->render('admin/databaseImport.html.twig',[
+            'form'=>$form->createView(),
+            'alerts'=>$alerts,
+        ]);
+
+
+    }
     /**
      * @Route("/admin/system/cache", name="adminCache" , options = { "expose" = true })
      */

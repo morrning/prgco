@@ -1,0 +1,13 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}وارد کردن داده ها{% endblock %}
+
+{% block pageBody %}
+    <p class="alert alert-info">
+        <i class="fas fa-info"></i>
+        برای وارد کردن داد های پیشفرض به سامانه دکمه زیر را کلیک کنید.
+    </p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}
