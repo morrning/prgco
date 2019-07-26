@@ -89,6 +89,11 @@ class UserMGR
     //--------------- PERMISSION CONTROLL ---------------
     public function hasPermission($permissionName,$bundle='CORE',$option=null,$pid = 1)
     {
+        if($permissionName != 'superAdmin'){
+            if($this->hasPermission('superAdmin')){
+                return true;
+            }
+        }
         if($this->isLogedIn()){
             $groups = explode(',',$this->currentPosition()->getGroups());
             $params = [
