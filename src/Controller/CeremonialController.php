@@ -324,8 +324,7 @@ class CeremonialController extends AbstractController
         $ticket = $entityMGR->find('App:CMAirTicket',$id);
         if(is_null($ticket))
             return $this->redirectToRoute('404');
-        elseif ($ticket->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
-            return $this->redirectToRoute('403');
+
         $passenger = $entityMGR->find('App:CMPassenger',$ticket->getPassengerID()->getId());
         $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
         $alerts = [];
