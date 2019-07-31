@@ -127,7 +127,7 @@ class ConfigMGR
         if(count($this->em->findAll('App:CMacceptIF')) == 0) {
             $entity = new Entity\CMacceptIF();
             $entity->setIfCode(1);
-            $entity->setIfName('پرداخت از حساب شرکت/موسسه');
+            $entity->setIfName('پرداخت از حساب شرکت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMacceptIF();
             $entity->setIfCode(2);

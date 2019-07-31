@@ -3,6 +3,7 @@
 use App\Kernel;
 use Symfony\Component\Debug\Debug;
 use Symfony\Component\HttpFoundation\Request;
+ini_set('max_execution_time', 300);
 
 require dirname(__DIR__).'/config/bootstrap.php';
 

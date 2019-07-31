@@ -217,7 +217,7 @@ class CeremonialController extends AbstractController
                 'label'=>'مقصد حرکت:'
             ])
             ->add('dateSuggest',Type\JdateType::class,['label'=>'تاریخ مسافرت:'])
-            ->add('des', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
             ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
             ->getForm();
 
