@@ -118,6 +118,12 @@
                                     تاریخ درخواست:
                                     <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}</span>
                                 </p>
+                                {% if ticket.suggestTime != null %}
+                                    <p>
+                                        زمان پیشنهادی:
+                                        <span class="text-danger">{{ ticket.suggestTime.label }}</span>
+                                    </p>
+                                {% endif %}
                                 <p>
                                     تاریخ سفر:
                                     <span class="text-danger">{{ ticket.dateSuggest }}</span>

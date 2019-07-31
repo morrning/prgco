@@ -204,6 +204,12 @@ class CeremonialController extends AbstractController
 
         $ticket = new Entity\CMAirTicket();
         $form = $this->createFormBuilder($ticket)
+            ->add('suggestTime', EntityType::class, [
+                'class'=>Entity\CMdaytime::class,
+                'choice_label'=>'label',
+                'choice_value' => 'id',
+                'label'=>'ساعت پیشنهادی:'
+            ])
             ->add('source', EntityType::class, [
                 'class'=>Entity\CMCities::class,
                 'choice_label'=>'cname',
@@ -358,6 +364,7 @@ class CeremonialController extends AbstractController
         }
 
         return $this->render('ceremonial/DOINGTicketView.html.twig', [
+            'travels'=>$entityMGR->findBy('App:CMAirTicket',['passengerID'=>$passenger]),
             'passenger' => $passenger,
             'ticket'=>$ticket,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
@@ -385,4 +392,20 @@ class CeremonialController extends AbstractController
         $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
         return $this->redirectToRoute('ceremonialDOINGTicketView',['msg'=>1,'id'=>$ticket->getId()]);
     }
+
+    //--------------------------------------------OPERATOR PART ----------------------------------------
+    /**
+     * @Route("/ceremonial/opt/dashboard", name="ceremonialOPTDashboard")
+     */
+    public function ceremonialOPTDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
+
+        return $this->render('ceremonial/OPTDashboard.html.twig', [
+            'controller_name' => 'CeremonialController',
+        ]);
+    }
+
 }

@@ -28,6 +28,11 @@
                 فایل و تصویر بلیط
                 <div class="badge badge-danger">{% if ticket.fileID is not null %}1{% else %}0{% endif %}</div>
             </a>
+            <a class="nav-item nav-link" id="nav-travel-tab" data-toggle="tab" href="#nav-travel" role="tab" aria-controls="nav-travel" aria-selected="false">
+                <i class="fas fa-suitcase-rolling"></i>
+                درخواست‌های قبلی
+                <div class="badge badge-danger">{{ travels | length }}</div>
+            </a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
                 <i class="fas fa-history"></i>
                 تاریخچه رویدادها
@@ -126,6 +131,12 @@
                                     تاریخ سفر:
                                     <span class="text-danger">{{ ticket.dateSuggest }}</span>
                                 </p>
+                                {% if ticket.suggestTime != null %}
+                                    <p>
+                                        زمان پیشنهادی:
+                                        <span class="text-danger">{{ ticket.suggestTime.label }}</span>
+                                    </p>
+                                {% endif %}
                                 <p>
                                     مبدا سفر:
                                     <span class="text-danger">{{ ticket.source.cname }}</span>
@@ -317,6 +328,38 @@
                                 </div>
                             </div>
                         {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-travel" role="tabpanel" aria-labelledby="nav-travel-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 mx-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>تاریخ درخواست</th>
+                                    <th>درخواست کننده</th>
+                                    <th>وضعیت</th>
+                                    <th>امکانات</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for travel in travels %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ Jdate.jdate('Y/n/d H:i:s',travel.dateSubmit) }}</td>
+                                        <td>{{ travel.submitter.publicLabel }}</td>
+                                        <td>{{ travel.ticketState.stateName }}</td>
+                                        <td><a class="btn btn-primary" href="{{ path('ceremonialDOINGTicketView',{'id':ticket.id}) }}">مشاهده</a></td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

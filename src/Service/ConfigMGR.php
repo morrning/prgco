@@ -96,6 +96,22 @@ class ConfigMGR
             $this->em->insertEntity($pl);
         }
 
+        //import default daytime
+        if(count($this->em->findAll('App:CMdaytime')) == 0){
+            $daytime = new Entity\CMdaytime();
+            $daytime->setLabel('اهمیتی ندارد');
+            $this->em->insertEntity($daytime);
+            $daytime = new Entity\CMdaytime();
+            $daytime->setLabel('صبح(6-12)');
+            $this->em->insertEntity($daytime);
+            $daytime = new Entity\CMdaytime();
+            $daytime->setLabel('عصر(18-13)');
+            $this->em->insertEntity($daytime);
+            $daytime = new Entity\CMdaytime();
+            $daytime->setLabel('شب(24-18)');
+            $this->em->insertEntity($daytime);
+        }
+
         //import default moneys
         if(count($this->em->findAll('App:ACCMoney')) == 0){
             $money = new Entity\ACCMoney();

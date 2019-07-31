@@ -132,6 +132,11 @@ class CMAirTicket
      */
     private $acceptIF;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CMdaytime", inversedBy="cMAirTickets")
+     */
+    private $suggestTime;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -409,6 +414,18 @@ class CMAirTicket
     public function setAcceptIF(?CMacceptIF $acceptIF): self
     {
         $this->acceptIF = $acceptIF;
+
+        return $this;
+    }
+
+    public function getSuggestTime(): ?CMdaytime
+    {
+        return $this->suggestTime;
+    }
+
+    public function setSuggestTime(?CMdaytime $suggestTime): self
+    {
+        $this->suggestTime = $suggestTime;
 
         return $this;
     }

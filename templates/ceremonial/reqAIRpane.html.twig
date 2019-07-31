@@ -42,15 +42,19 @@
                     <hr>
                     {{ form_start(form) }}
                     <div class="row">
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-3">
                             {{ form_label(form.dateSuggest) }}
                             {{ form_widget(form.dateSuggest) }}
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-3">
+                            {{ form_label(form.suggestTime) }}
+                            {{ form_widget(form.suggestTime) }}
+                        </div>
+                        <div class="col-sm-12 col-md-3">
                             {{ form_label(form.source) }}
                             {{ form_widget(form.source) }}
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-3">
                             {{ form_label(form.destination) }}
                             {{ form_widget(form.destination) }}
                         </div>
