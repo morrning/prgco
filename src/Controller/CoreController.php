@@ -42,7 +42,11 @@ class CoreController extends AbstractController
             if($jdateMgr->jcheckdate($dateArray[1],$dateArray[2],$dateArray[0] ))
                 if($dateArray[0]>1300 && $dateArray[0]<1450)
                     return new Response('ok');
-        return new Response('فرمت تاریخ وارد شده نامعتبر است. مثال 1396/02/27');
+
+        return $this->render('modal/helpMSG.html.twig',[
+            'title'=>'راهنما',
+            'body'=>'فرمت تاریخ وارد شده نامعتبر است. مثال 1396/02/27'
+        ]);
     }
     /**
      * @Route("/System/autocomplete/load/{name}/{filter}", name="SystemAutoCompleteLoad", options={"expose" = true}, requirements={"filter"=".+"})
