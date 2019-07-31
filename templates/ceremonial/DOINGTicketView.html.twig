@@ -170,6 +170,12 @@
                                             تاریخ رد درخواست:
                                             <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',ticket.rejectDate) }}</span>
                                         </p>
+                                        {% if ticket.rejectDes != null %}
+                                            <p>
+                                                توضیحات:
+                                                <span class="text-danger">{{ ticket.rejectDes }}</span>
+                                            </p>
+                                        {% endif %}
                                     {% endif %}
                                     {% if ticket.ticketState.StateCode == 3 or ticket.ticketState.StateCode == 2 %}
                                         <p>
@@ -184,6 +190,12 @@
                                             نحوه پرداخت:
                                             <span class="text-success">{{ ticket.acceptIF.ifName }}</span>
                                         </p>
+                                        {% if ticket.acceptDes != null %}
+                                            <p>
+                                                توضیحات:
+                                                <span class="text-success">{{ ticket.acceptDes }}</span>
+                                            </p>
+                                        {% endif %}
                                     {% endif %}
                                     {% if ticket.ticketState.StateCode == 3 %}
                                         <p>
@@ -411,15 +423,25 @@
                     </button>
                 </div>
                 <div class="modal-body text-justify">
-                    آیا برای رد درخواست بلیط برای {{ passenger.pname ~ ' ' ~ passenger.pfamily }} از {{ ticket.source.cname }} به {{ ticket.destination.cname }} مطمئن هستید؟
-                    <br>
-                    این عملیات غیرقابل بازگشت است!
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 pb-3">
+                            <div class="alert alert-info">
+                                <span class="fa fa-info-circle"></span>
+                                    آیا برای رد درخواست بلیط برای {{ passenger.pname ~ ' ' ~ passenger.pfamily }} از {{ ticket.source.cname }} به {{ ticket.destination.cname }} مطمئن هستید؟
+                                    <br>
+                                    این عملیات غیرقابل بازگشت است!
+                                </span>
+                            </div>
+                            <br>
+                            {{ form_start(form1) }}
+                            {{ form_label(form1.rejectDes) }}
+                            {{ form_widget(form1.rejectDes) }}
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <a  href="{{ path('ceremonialDOINGTicketReject',{'id':ticket.id}) }}" class="btn btn-primary">
-                        <i class="fas fa-check"></i>
-                        رد درخواست
-                    </a>
+                    {{ form_widget(form1.submit) }}
+                    {{ form_end(form1) }}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
                         <i class="fas fa-times"></i>
                         انصراف

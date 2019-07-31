@@ -37,7 +37,7 @@ class HelpController extends AbstractController
         if(is_null($content))
             return $this->redirectToRoute('404');
 
-        return $this->render('help/index.html.twig', [
+        return $this->render('help/page.html.twig', [
             'content' => $content,
             'childs'=>$entityMGR->findBy('App:SysHelpContent',['parrent'=>$content])
         ]);

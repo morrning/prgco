@@ -137,6 +137,11 @@ class CMAirTicket
      */
     private $suggestTime;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $rejectDes;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -426,6 +431,18 @@ class CMAirTicket
     public function setSuggestTime(?CMdaytime $suggestTime): self
     {
         $this->suggestTime = $suggestTime;
+
+        return $this;
+    }
+
+    public function getRejectDes(): ?string
+    {
+        return $this->rejectDes;
+    }
+
+    public function setRejectDes(?string $rejectDes): self
+    {
+        $this->rejectDes = $rejectDes;
 
         return $this;
     }

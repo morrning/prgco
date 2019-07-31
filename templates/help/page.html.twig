@@ -1,0 +1,24 @@
+{% extends 'help/helpBase.html.twig' %}
+
+{% block title %}راهنما{% endblock %}
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/struggle.png') }}">
+                <h3 class="pt-5">{{ content.title }}</h3>
+                <hr>
+                <p class="text-justify">{{ content.des | raw }}</p>
+                <hr>
+                {% if childs | length != 0 %}
+                    <h5>زیر شاخه ها:</h5>
+                    <ul>
+                        {% for child in childs %}
+                            <li><a class="" href="{{ path('help',{'id':child.id}) }}">{{ child.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

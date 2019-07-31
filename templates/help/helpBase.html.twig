@@ -1,0 +1,37 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}راهنمای سامانه{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('ceremonialDOINGDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>صفحه اصلی</span>
+            </a>
+        </li>
+        <div id="html1"></div>
+        <script>
+            $(document).ready(function(){
+                // AJAX
+                $('#html1').on('changed.jstree', function (e, data) {
+                    window.location.replace(Routing.generate('help', { 'id':data.selected}));
+                })
+                    .jstree({
+                        'core' : {
+                            'data' : {
+                                'url' : function (node) {
+                                    return node.id === '#' ? Routing.generate('helpGetChildsTree', { 'PID':'1'}) : Routing.generate('helpGetChildsTree', { 'PID': node.id});
+                                },
+                                "dataType" : "json",
+                                'data' : function (node) {
+                                    return {
+
+                                    };
+                                }
+                            }
+                        }});
+            })
+        </script>
+    </ul>
+{% endblock %}
+
+
