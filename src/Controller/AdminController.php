@@ -100,6 +100,20 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/menu/main", name="adminMainMenu")
+     */
+    public function adminMainMenu(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('4ert','مشاهده','گزینه های منو','ADMINISTRATOR',$request->getClientIp());
+
+        return $this->render('admin/menus.html.twig', [
+            'items'=>$entityMGR->findAll('App:SysMenuItem')
+        ]);
+    }
+
+    /**
      * @Route("/admin/settings", name="adminSettings")
      */
     public function adminSettings(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)

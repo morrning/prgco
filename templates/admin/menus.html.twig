@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}گزینه‌های منو{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>عنوان</th>
+                            <th>اولویت</th>
+                            <th>توضیحات</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for item in items %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ item.url }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
