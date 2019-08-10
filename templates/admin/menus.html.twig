@@ -27,8 +27,8 @@
                                 <td>{{ item.label }}</td>
                                 <td>{{ item.upper }}</td>
                                 <td>
-                                    <a class="btn btn-info" href="{{ path('adminMenuItemEdit',{'id':item.id}) }}">ویرایش</a>
-                                    <a class="btn btn-warning" href="{{ path('adminMenuItemDelete',{'id':item.id}) }}">حذف</a>
+                                    <a class="btn btn-warning" href="{{ path('adminMenuItemEdit',{'id':item.id}) }}">ویرایش</a>
+                                    <a class="btn btn-danger" href="{{ path('adminMenuItemDelete',{'id':item.id}) }}">حذف</a>
                                 </td>
                             </tr>
                         {% endfor %}

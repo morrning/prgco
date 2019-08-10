@@ -21,9 +21,17 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fas fa-anchor"></i>
-                        داشبورد کاربری
+                        سامانه‌ها
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        {% set menuItems = EntityMGR.findAll('App:SysMenuItem') %}
+                        {% for menuItem in menuItems %}
+                            <a class="dropdown-item" href="{{ menuItem.url | raw}}" class="list-group-item list-group-item-action">
+                                {{ menuItem.fontawsome | raw }}
+                                {{ menuItem.label | raw}}
+                            </a>
+                        {% endfor %}
+                        <div class="dropdown-divider"></div>
                         {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
                             <a class="dropdown-item" href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-box-alt"></i>
