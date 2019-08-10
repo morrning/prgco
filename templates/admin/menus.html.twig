@@ -3,6 +3,10 @@
 {% block title %}گزینه‌های منو{% endblock %}
 
 {% block pageBody %}
+    <a class="btn btn-success" href="{{ path('adminMenuItemAdd') }}">
+        <span class="fa fa-plus"></span>
+        پیوند جدید</a>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">
@@ -20,7 +24,12 @@
                         {% for item in items %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ item.url }}</td>
+                                <td>{{ item.label }}</td>
+                                <td>{{ item.upper }}</td>
+                                <td>
+                                    <a class="btn btn-info" href="{{ path('adminMenuItemEdit',{'id':item.id}) }}">ویرایش</a>
+                                    <a class="btn btn-warning" href="{{ path('adminMenuItemDelete',{'id':item.id}) }}">حذف</a>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>

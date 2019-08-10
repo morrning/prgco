@@ -100,19 +100,118 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/menu/main", name="adminMainMenu")
+     * @Route("/admin/menu/main/{msg}", name="adminMainMenu")
      */
-    public function adminMainMenu(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
+    public function adminMainMenu($msg = 0,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
         $logMGR->addEvent('4ert','مشاهده','گزینه های منو','ADMINISTRATOR',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'پیوند مورد نظر حذف شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'پیوند مورد نظر اضافه شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'پیوند مورد نظر ویرایش شد.']);
 
         return $this->render('admin/menus.html.twig', [
-            'items'=>$entityMGR->findAll('App:SysMenuItem')
+            'items'=>$entityMGR->findAll('App:SysMenuItem'),
+            'alerts'=>$alerts
         ]);
     }
 
+    /**
+     * @Route("/admin/menu/item/delete/{id}", name="adminMenuItemDelete")
+     */
+    public function adminMenuItemDelete($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('4ert','حذف','گزینه های منو','ADMINISTRATOR',$request->getClientIp());
+
+        $item = $entityMGR->find('App:SysMenuItem',$id);
+        if(is_null($item))
+            return $this->redirectToRoute('404');
+        $entityMGR->remove('App:SysMenuItem',$id);
+        return $this->redirectToRoute('adminMainMenu',['msg'=>1]);
+
+    }
+
+    /**
+     * @Route("/admin/menu/item/add", name="adminMenuItemAdd")
+     */
+    public function adminMenuItemAdd(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $item = new Entity\SysMenuItem();
+        $menu = $entityMGR->findOneBy('App:SysMenu',['menuName'=>'MAIN']);
+        $item->setMenu($menu);
+        $form = $this->createFormBuilder($item)
+            ->add('label', TextType::class,['label'=>'عنوان'])
+            ->add('url', TextType::class,['label'=>'پیوند','help'=>'پیوندها به http  یا https شروع می شوند.'])
+            ->add('fontawsome', TextType::class,['label'=>'فونت آیکون','help'=>'برای مشاهده لیست فونت آیکون ها به سایت fontawsome.com مراجعه کنید.'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $item->setUpper(10);
+            $item->setInternalUrl(false);
+            $entityMGR->insertEntity($form->getData());
+            $logMGR->addEvent('4ert','جدید','گزینه های منو','ADMINISTRATOR',$request->getClientIp());
+            $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' add new menuItem.');
+            return $this->redirectToRoute('adminMainMenu',['msg'=>2]);
+
+        }
+
+        return $this->render('admin/menuItemAdd.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts
+        ]);
+    }
+
+    /**
+     * @Route("/admin/menu/item/edit/{id}", name="adminMenuItemEdit")
+     */
+    public function adminMenuItemEdit($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $item = $entityMGR->find('App:SysMenuItem',$id);
+        if(is_null($item))
+            return $this->redirectToRoute('404');
+
+        $menu = $entityMGR->findOneBy('App:SysMenu',['menuName'=>'MAIN']);
+        $item->setMenu($menu);
+        $form = $this->createFormBuilder($item)
+            ->add('label', TextType::class,['label'=>'عنوان'])
+            ->add('url', TextType::class,['label'=>'پیوند','help'=>'پیوندها به http  یا https شروع می شوند.'])
+            ->add('fontawsome', TextType::class,['label'=>'فونت آیکون','help'=>'برای مشاهده لیست فونت آیکون ها به سایت fontawsome.com مراجعه کنید.'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $item->setUpper(10);
+            $item->setInternalUrl(false);
+            $entityMGR->insertEntity($form->getData());
+            $logMGR->addEvent('4ert','جدید','گزینه های منو','ADMINISTRATOR',$request->getClientIp());
+            $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' add new menuItem.');
+            return $this->redirectToRoute('adminMainMenu',['msg'=>2]);
+
+        }
+
+        return $this->render('admin/menuItemAdd.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts
+        ]);
+    }
     /**
      * @Route("/admin/settings", name="adminSettings")
      */

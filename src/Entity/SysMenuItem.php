@@ -41,6 +41,11 @@ class SysMenuItem
      */
     private $fontawsome;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $upper;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -102,6 +107,18 @@ class SysMenuItem
     public function setFontawsome(?string $fontawsome): self
     {
         $this->fontawsome = $fontawsome;
+
+        return $this;
+    }
+
+    public function getUpper(): ?string
+    {
+        return $this->upper;
+    }
+
+    public function setUpper(?string $upper): self
+    {
+        $this->upper = $upper;
 
         return $this;
     }

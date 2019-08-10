@@ -267,5 +267,53 @@ class ConfigMGR
             $entity->setTypeName('ARM');
             $this->em->insertEntity($entity);
         }
+
+        //import Menu default data
+        if(count($this->em->findAll('App:SysMenu')) == 0) {
+            $entity = new Entity\SysMenu();
+            $entity->setMenuName('MAIN');
+            $entity->setMenuLabel('منو اصلی سیستم');
+            $this->em->insertEntity($entity);
+            $entityItem = new Entity\SysMenuItem();
+            $entityItem->setLabel('سامانه مکاتبات سازمانی');
+            $entityItem->setFontawsome('<i class="fas fa-envelope"></i>');
+            $entityItem->setInternalUrl(false);
+            $entityItem->setUpper(1);
+            $entityItem->setMenu($entity);
+            $entityItem->setUrl('https://oas.prgco.ir/cas/login?service=http%3A%2F%2Foas.prgco.ir%2Fmenu%2FIndex.do');
+            $this->em->insertEntity($entityItem);
+            $entityItem = new Entity\SysMenuItem();
+            $entityItem->setLabel('سامانه فیش حقوقی');
+            $entityItem->setFontawsome('<i class="fas fa-money-check-alt"></i>');
+            $entityItem->setInternalUrl(false);
+            $entityItem->setUpper(2);
+            $entityItem->setMenu($entity);
+            $entityItem->setUrl('http://pay.prgco.ir');
+            $this->em->insertEntity($entityItem);
+            $entityItem = new Entity\SysMenuItem();
+            $entityItem->setLabel('سامانه PMS');
+            $entityItem->setFontawsome('<i class="fab fa-product-hunt"></i>');
+            $entityItem->setInternalUrl(false);
+            $entityItem->setUpper(3);
+            $entityItem->setMenu($entity);
+            $entityItem->setUrl('http://pms.prgco.ir');
+            $this->em->insertEntity($entityItem);
+            $entityItem = new Entity\SysMenuItem();
+            $entityItem->setLabel('سامانه مدیریت منابع انسانی');
+            $entityItem->setFontawsome('<i class="fas fa-user-alt"></i>');
+            $entityItem->setInternalUrl(false);
+            $entityItem->setUpper(4);
+            $entityItem->setMenu($entity);
+            $entityItem->setUrl('http://pw.prgco.ir:1210/Account/Login');
+            $this->em->insertEntity($entityItem);
+            $entityItem = new Entity\SysMenuItem();
+            $entityItem->setLabel('پست الکترونیکی');
+            $entityItem->setFontawsome('<i class="fas fa-inbox"></i>');
+            $entityItem->setInternalUrl(false);
+            $entityItem->setUpper(5);
+            $entityItem->setMenu($entity);
+            $entityItem->setUrl('https://mail.prgco.ir/');
+            $this->em->insertEntity($entityItem);
+        }
     }
 }

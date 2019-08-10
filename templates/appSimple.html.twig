@@ -39,33 +39,17 @@
                             <i class="fas fa-bars"></i>
                             سامانه‌ها
                         </a>
-                        <a href="http://oas.prgco.ir/menu/" class="list-group-item list-group-item-action" target="_blank">
-                            <i class="fas fa-envelope"></i>
-                            سامانه مکاتبات سازمانی
-                        </a>
-                        <a href="http://pay.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
-                            <i class="fas fa-money-check-alt"></i>
-                            سامانه فیش حقوقی
-                        </a>
-                        <a href="http://pms.prgco.ir" class="list-group-item list-group-item-action" target="_blank">
-                            <i class="fab fa-product-hunt"></i>
-                            سامانه PMS
-                        </a>
-                        <a href="http://pw.prgco.ir:1210/Account/Login" class="list-group-item list-group-item-action" target="_blank">
-                            <i class="fas fa-user-alt"></i>
-                            سامانه مدیریت کارکنان
-                        </a>
-                        <a href="{{ path('suggestion') }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-box-alt"></i>
-                            صندوق پیشنهادات و انتقادات
-                        </a>
+                        {% set menuItems = EntityMGR.findAll('App:SysMenuItem') %}
+                        {% for menuItem in menuItems %}
+                            <a href="{{ menuItem.url | raw}}" class="list-group-item list-group-item-action">
+                                {{ menuItem.fontawsome | raw }}
+                                {{ menuItem.label | raw}}
+                            </a>
+                        {% endfor %}
+
                         <a href="{{ path('ISOformsView') }}" class="list-group-item list-group-item-action">
                             <i class="far fa-books"></i>
                             سامانه IMS
-                        </a>
-                        <a href="https://mail.prgco.ir/" class="list-group-item list-group-item-action" target="_blank">
-                            <i class="fas fa-inbox"></i>
-                            پست الکترونیکی
                         </a>
                         <a href="{{ path('phonebook',{'msg':0,'search':0}) }}" class="list-group-item list-group-item-action">
                             <i class="fas fa-book"></i>
