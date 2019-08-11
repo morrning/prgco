@@ -407,4 +407,99 @@ class CeremonialController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ceremonial/opt/air/ticket/list/{type}", name="ceremonialOPTAIRpaneList")
+     */
+    public function ceremonialOPTAIRpaneList($type,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        if($type == 'acp'){
+            $state = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>'2']);
+            $tickets = $entityMGR->findBy('App:CMAirTicket',['ticketState'=>$state],['dateSubmit'=>'DESC']);
+        }
+        elseif($type == 'all'){
+            $state = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>'2']);
+            $tickets = $entityMGR->findBy('App:CMAirTicket',[],['dateSubmit'=>'DESC']);
+        }
+
+        return $this->render('ceremonial/OPTAirTicketList.html.twig',
+            [
+                'tickets'=>$tickets,
+                'type'=>$type
+            ]);
+    }
+
+    /**
+     * @Route("/ceremonial/opt/ticket/view/{id}/{msg}", name="ceremonialOPTTicketView")
+     */
+    public function ceremonialOPTTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        $ticket = $entityMGR->find('App:CMAirTicket',$id);
+        if(is_null($ticket))
+            return $this->redirectToRoute('404');
+
+        $passenger = $entityMGR->find('App:CMPassenger',$ticket->getPassengerID()->getId());
+        $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت رد شد.']);
+        if($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت تایید شد.']);
+
+        $form = $this->createFormBuilder($ticket)
+            ->add('acceptIF', EntityType::class, [
+                'class'=>Entity\CMacceptIF::class,
+                'choice_label'=>'ifName',
+                'choice_value' => 'id',
+                'label'=>'مرکز هزینه این بلیط:'
+            ])
+            ->add('acceptDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $form1 = $this->createFormBuilder($ticket)
+            ->add('rejectDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $form1->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setAccepter($userMGR->currentPosition());
+            $ticket->setAcceptDate(time());
+            $acceptState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>2]);
+            $ticket->setTicketState($acceptState);
+            $logMGR->addEvent('CERTICKET'.$ticket->getId(),'تایید درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست بلیط شما توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
+            $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+            return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
+        }
+
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $ticket->setRejecter($userMGR->currentPosition());
+            $ticket->setRejectDate(time());
+            $rejectstate = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>1]);
+            $ticket->setTicketState($rejectstate);
+            $entityMGR->update($ticket);
+            $logMGR->addEvent('CERTICKET'.$ticket->getId(),'رد درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست بلیط شما توسط %s رد شد.',$ticket->getRejecter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
+            $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+            return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>1]);
+        }
+
+        return $this->render('ceremonial/OPTTicketView.html.twig', [
+            'travels'=>$entityMGR->findBy('App:CMAirTicket',['passengerID'=>$passenger]),
+            'passenger' => $passenger,
+            'ticket'=>$ticket,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
+            'alerts'=>$alerts,
+            'form'=>$form->createView(),
+            'form1'=>$form1->createView()
+        ]);
+    }
+
 }
