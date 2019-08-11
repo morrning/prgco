@@ -435,7 +435,7 @@ class CeremonialController extends AbstractController
      */
     public function ceremonialOPTTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
             return $this->redirectToRoute('403');
         $ticket = $entityMGR->find('App:CMAirTicket',$id);
         if(is_null($ticket))
