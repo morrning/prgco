@@ -483,9 +483,17 @@ class CeremonialController extends AbstractController
             $ticket->setTicketState($acceptState);
 
             //accounting process
-            $ACC->addAccount($ticket->getSubmitter()->getUserID()->getFullname(),$ticket->getSubmitter()->getUserID());
+            if($ticket->getAcceptIF()->getIfCode()==1)
+                $account = $ACC->getAccount(1);
+            else{
+                if($ACC->hasAccount($ticket->getSubmitter()))
+                    $account = $ACC->getAccount($ticket->getSubmitter());
+                else
+                    $account = $ACC->addAccount($ticket->getSubmitter()->getUserID()->getFullname(),$ticket->getSubmitter()->getUserID());
+            }
+
             $ic = $ACC->getICCenter(1002);
-            $document = $ACC->addDocument('ایاب و ذهاب',$userMGR->currentPosition(),$ic,$ticket->getSubmitter());
+            $document = $ACC->addDocument('ایاب و ذهاب',$userMGR->currentPosition(),$ic,$account);
             $ACC->addDocumentItem($document,$ticket->getMoneyType(),$ticket->getMoneyValue());
 
             $logMGR->addEvent('CERTICKET'.$ticket->getId(),'خرید بلیط','درخواست بلیط','CEREMONIAL',$request->getClientIp());

@@ -16,32 +16,43 @@ class ACC
         $this->em = $entityMgr;
     }
 
-
-    public function addAccount($label,$user=null,$position=null){
-        if(!$this->hasAccount($user,$position)){
-            $acc = new Entity\ACCaccount();
-            $acc->setLabel($label);
-            $acc->setPosition($position);
-            $acc->setUser($user);
-            return $this->em->insertEntity($acc);
-        }
+    /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
     }
 
-    public function hasAccount($user=null,$position=null){
+    public function addAccount($label,$user=null){
+        $acc = new Entity\ACCaccount();
+        $acc->setLabel($label);
+        $acc->setUser($user);
+        $acc->setAccountNo($this->RandomString(32));
+        return $this->em->insertEntity($acc);
+    }
+
+    public function hasAccount($user=null,$acountNo=null){
         $exist=false;
         if(!is_null($this->em->findOneBy('App:ACCaccount',['user'=>$user])))
             $exist = true;
-        elseif (!is_null($this->em->findOneBy('App:ACCaccount',['position'=>$position])))
+        elseif (!is_null($this->em->findOneBy('App:ACCaccount',['accountNo'=>$acountNo])))
             $exist = true;
         return $exist;
     }
 
-    public function addDocument($title,$submitter,$iccenterCode,$icUser){
+    public function getAccount($acountNo){
+        return $this->em->findOneBy('App:ACCaccount',['accountNo'=>$acountNo]);
+    }
+
+    public function addDocument($title,$submitter,$iccenterCode,$account){
         $doc = new Entity\ACCdoc();
         $doc->setSubmitter($submitter);
         $doc->setDateSubmit(time());
         $doc->setDocTitle($title);
         $doc->setIccenter($iccenterCode);
+        $doc->setAccount($account);
         $this->em->insertEntity($doc);
         return $doc;
     }

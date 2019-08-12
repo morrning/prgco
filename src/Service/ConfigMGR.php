@@ -124,6 +124,13 @@ class ConfigMGR
             $money->setMoneyName('دینار عراق');
             $this->em->insertEntity($money);
         }
+        //import default acc account
+        if(count($this->em->findAll('App:ACCaccount')) == 0){
+            $entity = new Entity\ACCaccount();
+            $entity->setAccountNo('1');
+            $entity->setLabel('حساب اصلی شرکت');
+            $this->em->insertEntity($entity);
+        }
 
         //import default moneys
         if(count($this->em->findAll('App:ACCiccenter')) == 0){

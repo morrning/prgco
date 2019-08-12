@@ -29,14 +29,14 @@ class ACCaccount
     private $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Sysposition")
-     */
-    private $position;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\ACCdoc", mappedBy="account")
      */
     private $aCCdocs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $accountNo;
 
     public function __construct()
     {
@@ -72,18 +72,6 @@ class ACCaccount
         return $this;
     }
 
-    public function getPosition(): ?Sysposition
-    {
-        return $this->position;
-    }
-
-    public function setPosition(?Sysposition $position): self
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
     /**
      * @return Collection|ACCdoc[]
      */
@@ -111,6 +99,18 @@ class ACCaccount
                 $aCCdoc->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getAccountNo(): ?string
+    {
+        return $this->accountNo;
+    }
+
+    public function setAccountNo(?string $accountNo): self
+    {
+        $this->accountNo = $accountNo;
 
         return $this;
     }
