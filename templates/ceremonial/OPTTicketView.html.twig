@@ -1,4 +1,4 @@
-{% extends 'ceremonial/OPTTicketView.html.twig' %}
+{% extends 'ceremonial/OPTbase.html.twig' %}
 
 {% block title %}درخواست بلیط برای:{{ passenger.pname ~ ' ' ~ passenger.pfamily }} از {{ ticket.source.cname }} به {{ ticket.destination.cname }}{% endblock %}
 {% block appTop %}
@@ -27,11 +27,6 @@
                 <i class="far fa-file-archive"></i>
                 فایل و تصویر بلیط
                 <div class="badge badge-danger">{% if ticket.fileID is not null %}1{% else %}0{% endif %}</div>
-            </a>
-            <a class="nav-item nav-link" id="nav-travel-tab" data-toggle="tab" href="#nav-travel" role="tab" aria-controls="nav-travel" aria-selected="false">
-                <i class="fas fa-suitcase-rolling"></i>
-                درخواست‌های قبلی
-                <div class="badge badge-danger">{{ travels | length }}</div>
             </a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
                 <i class="fas fa-history"></i>
@@ -221,12 +216,16 @@
                                         <span class="text-success">{{ ticket.FlyAirway.airwayName }}</span>
                                     </p>
                                     <p>
-                                        تاریخ و ساعت پرواز:
-                                        <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}</span>
+                                        تاریخ  پرواز:
+                                        <span class="text-success">{{ ticket.flyDate }}</span>
+                                    </p>
+                                    <p>
+                                        ساعت  پرواز:
+                                        <span class="text-success">{{ ticket.flyTime }}</span>
                                     </p>
                                     <p>
                                         شماره پرواز:
-                                        <span class="text-success">{{ ticket.dateSuggest }}</span>
+                                        <span class="text-success">{{ ticket.flyNumber }}</span>
                                     </p>
                                     <p>
                                         مبلغ:
@@ -287,27 +286,59 @@
             <div class="container py-3">
                 <div class="row">
                     <div class="col-sm-12 col-md-12 mx-auto text-center">
-                        {% if ticket.ticketState.StateCode == 0 %}
-                            <div class="alert alert-info">
-                                <span class="fa fa-info-circle"></span>
-                                برای ثبت اقدام یکی از گذینه‌های زیر را انتخاب نمایید.
+                        <div class="modal-body text-justify">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 pb-3">
+                                    {% if ticket.ticketState.stateCode != 3 %}
+                                        {{ form_start(form) }}
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-3">
+                                                {{ form_label(form.flyAirway) }}
+                                                {{ form_widget(form.flyAirway) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-3">
+                                                {{ form_label(form.flyDate) }}
+                                                {{ form_widget(form.flyDate) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-3">
+                                                {{ form_label(form.flyTime) }}
+                                                {{ form_widget(form.flyTime) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-3">
+                                                {{ form_label(form.flyNumber) }}
+                                                {{ form_widget(form.flyNumber) }}
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-5">
+                                                {{ form_label(form.moneyType) }}
+                                                {{ form_widget(form.moneyType) }}
+                                            </div>
+                                            <div class="col-sm-12 col-md-5">
+                                                {{ form_label(form.moneyValue) }}
+                                                {{ form_widget(form.moneyValue) }}
+                                            </div>
+                                        </div>
+                                        <div class="row pt-2">
+                                            <div class="col-12">
+                                                {{ form_widget(form.submit) }}
+                                                {{ form_end(form) }}
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                    <i class="fas fa-times"></i>
+                                                    انصراف
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <span class="fa fa-info-circle"></span>
+                                            با توجه به ثبت نهایی شدن وضعیت بلیط و ثبت اطلاعات خرید امکان ویرایش میسر نمی باشد.
+                                        </div>
+                                    {% endif %}
+                                </div>
                             </div>
-                            <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Acceptmodal">
-                                    <i class="fas fa-check-circle"></i>
-                                    تایید درخواست
-                                </button>
-                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectmodal">
-                                    <i class="fas fa-times-circle"></i>
-                                    رد درخواست
-                                </button>
-                            </div>
-                        {% else %}
-                            <div class="alert alert-warning">
-                                <span class="fa fa-info-circle"></span>
-                                با توجه به ثبت نهایی شدن وضعیت بلیط امکان ویرایش میسر نمی باشد.
-                            </div>
-                        {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -340,38 +371,6 @@
                                 </div>
                             </div>
                         {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="nav-travel" role="tabpanel" aria-labelledby="nav-travel-tab">
-            <div class="container py-3">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12 mx-auto">
-                        <div class="table-responsive">
-                            <table class="table table-sm table-bordered table-hover rounded text-center">
-                                <thead class="thead-dark">
-                                <tr>
-                                    <th>ردیف</th>
-                                    <th>تاریخ درخواست</th>
-                                    <th>درخواست کننده</th>
-                                    <th>وضعیت</th>
-                                    <th>امکانات</th>
-                                </tr>
-                                </thead>
-                                <tbody class="">
-                                {% for travel in travels %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ Jdate.jdate('Y/n/d H:i:s',travel.dateSubmit) }}</td>
-                                        <td>{{ travel.submitter.publicLabel }}</td>
-                                        <td>{{ travel.ticketState.stateName }}</td>
-                                        <td><a class="btn btn-primary" href="{{ path('ceremonialDOINGTicketView',{'id':ticket.id}) }}">مشاهده</a></td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -410,79 +409,4 @@
         </div>
     </div>
 
-    <!-- Modal REject ticket -->
-    <div class="modal fade" id="rejectmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-light">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        رد درخواست
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-justify">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 pb-3">
-                            <div class="alert alert-info">
-                                <span class="fa fa-info-circle"></span>
-                                آیا برای رد درخواست بلیط برای {{ passenger.pname ~ ' ' ~ passenger.pfamily }} از {{ ticket.source.cname }} به {{ ticket.destination.cname }} مطمئن هستید؟
-                                <br>
-                                این عملیات غیرقابل بازگشت است!
-                                </span>
-                            </div>
-                            <br>
-                            {{ form_start(form1) }}
-                            {{ form_label(form1.rejectDes) }}
-                            {{ form_widget(form1.rejectDes) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    {{ form_widget(form1.submit) }}
-                    {{ form_end(form1) }}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        <i class="fas fa-times"></i>
-                        انصراف
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Accept ticket -->
-    <div class="modal fade" id="Acceptmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-success text-light">
-                    <h5 class="modal-title" id="exampleModalLabel">
-                        تایید درخواست
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body text-justify">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 pb-3">
-                            {{ form_start(form) }}
-                            {{ form_label(form.acceptIF) }}
-                            {{ form_widget(form.acceptIF) }}
-                            {{ form_label(form.acceptDes) }}
-                            {{ form_widget(form.acceptDes) }}
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    {{ form_widget(form.submit) }}
-                    {{ form_end(form) }}
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                        <i class="fas fa-times"></i>
-                        انصراف
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 {% endblock %}

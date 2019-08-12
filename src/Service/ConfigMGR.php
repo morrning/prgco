@@ -224,7 +224,7 @@ class ConfigMGR
             $entity->setHseGuide(0);
             $this->em->insertEntity($entity);
             $entity = new Entity\CMPassengerType();
-            $entity->setTypeName('خویشاوند پرسنل شرکت');
+            $entity->setTypeName('همراه');
             $entity->setHseGuide(0);
             $this->em->insertEntity($entity);
             $entity = new Entity\CMPassengerType();
@@ -268,6 +268,12 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
+        //import acc account default
+        if(count($this->em->findAll('App:ACCaccount')) == 0) {
+            $entity = new Entity\ACCaccount();
+            $entity->setLabel('حساب اصلی شرکت');
+            $this->em->insertEntity($entity);
+        }
         //import Menu default data
         if(count($this->em->findAll('App:SysMenu')) == 0) {
             $entity = new Entity\SysMenu();

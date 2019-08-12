@@ -212,12 +212,16 @@
                                         <span class="text-success">{{ ticket.FlyAirway.airwayName }}</span>
                                     </p>
                                     <p>
-                                        تاریخ و ساعت پرواز:
-                                        <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}</span>
+                                        تاریخ  پرواز:
+                                        <span class="text-success">{{ ticket.flyDate }}</span>
+                                    </p>
+                                    <p>
+                                        ساعت  پرواز:
+                                        <span class="text-success">{{ ticket.flyTime }}</span>
                                     </p>
                                     <p>
                                         شماره پرواز:
-                                        <span class="text-success">{{ ticket.dateSuggest }}</span>
+                                        <span class="text-success">{{ ticket.flyNumber }}</span>
                                     </p>
                                     <p>
                                         مبلغ:

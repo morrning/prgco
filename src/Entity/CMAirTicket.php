@@ -142,6 +142,12 @@ class CMAirTicket
      */
     private $rejectDes;
 
+    /**
+     * @ORM\Column(type="string", nullable=true, length=255)
+     */
+    private $flyTime;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -446,4 +452,22 @@ class CMAirTicket
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFlyTime()
+    {
+        return $this->flyTime;
+    }
+
+    /**
+     * @param mixed $flyTime
+     */
+    public function setFlyTime($flyTime): void
+    {
+        $this->flyTime = $flyTime;
+    }
+
+
 }

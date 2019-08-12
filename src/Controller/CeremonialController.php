@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TimeType;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
@@ -433,7 +434,7 @@ class CeremonialController extends AbstractController
     /**
      * @Route("/ceremonial/opt/ticket/view/{id}/{msg}", name="ceremonialOPTTicketView")
      */
-    public function ceremonialOPTTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialOPTTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
     {
         if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
             return $this->redirectToRoute('403');
@@ -450,45 +451,47 @@ class CeremonialController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت تایید شد.']);
 
         $form = $this->createFormBuilder($ticket)
-            ->add('acceptIF', EntityType::class, [
-                'class'=>Entity\CMacceptIF::class,
-                'choice_label'=>'ifName',
+            ->add('flyAirway', EntityType::class, [
+                'class'=>Entity\CMAirway::class,
+                'choice_label'=>'airwayName',
                 'choice_value' => 'id',
-                'label'=>'مرکز هزینه این بلیط:'
+                'label'=>'شرکت هواپیمایی'
             ])
-            ->add('acceptDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
-            ->getForm();
-        $form1 = $this->createFormBuilder($ticket)
-            ->add('rejectDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('moneyType', EntityType::class, [
+                'class'=>Entity\ACCMoney::class,
+                'choice_label'=>'moneyName',
+                'choice_value' => 'id',
+                'label'=>'واحد پولی'
+            ])
+            ->add('flyNumber', TextType::class,['label'=>'شماره پرواز'])
+            ->add('moneyValue', Type\NumbermaskType::class,['label'=>'مقدار هزینه'])
+            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز'])
+            ->add('flyTime', TimeType::class, [
+                'label'=>'ساعت پرواز',
+                'input'  => 'string',
+                'widget' => 'single_text',
+                'with_seconds'=>false
+            ])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
         $form->handleRequest($request);
-        $form1->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $ticket->setAccepter($userMGR->currentPosition());
-            $ticket->setAcceptDate(time());
-            $acceptState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>2]);
+            $ticket->setBuyer($userMGR->currentPosition());
+            $ticket->setBuyDate(time());
+            $acceptState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>3]);
             $ticket->setTicketState($acceptState);
-            $logMGR->addEvent('CERTICKET'.$ticket->getId(),'تایید درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
-            $des = sprintf('درخواست بلیط شما توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
-            $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
-            $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
-            return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
-        }
 
-        if ($form1->isSubmitted() && $form1->isValid()) {
-            $ticket->setRejecter($userMGR->currentPosition());
-            $ticket->setRejectDate(time());
-            $rejectstate = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>1]);
-            $ticket->setTicketState($rejectstate);
-            $entityMGR->update($ticket);
-            $logMGR->addEvent('CERTICKET'.$ticket->getId(),'رد درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
-            $des = sprintf('درخواست بلیط شما توسط %s رد شد.',$ticket->getRejecter()->getPublicLabel());
+            //accounting process
+            $ACC->addAccount($ticket->getSubmitter()->getUserID()->getFullname(),$ticket->getSubmitter()->getUserID());
+            $ic = $ACC->getICCenter(1002);
+            $document = $ACC->addDocument('ایاب و ذهاب',$userMGR->currentPosition(),$ic,$ticket->getSubmitter());
+            $ACC->addDocumentItem($document,$ticket->getMoneyType(),$ticket->getMoneyValue());
+
+            $logMGR->addEvent('CERTICKET'.$ticket->getId(),'خرید بلیط','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+            $des = sprintf(' بلیط شما توسط %s خریداری شد.',$ticket->getBuyer()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
-            return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>1]);
         }
 
         return $this->render('ceremonial/OPTTicketView.html.twig', [
@@ -498,7 +501,6 @@ class CeremonialController extends AbstractController
             'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
             'alerts'=>$alerts,
             'form'=>$form->createView(),
-            'form1'=>$form1->createView()
         ]);
     }
 

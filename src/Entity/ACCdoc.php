@@ -29,12 +29,6 @@ class ACCdoc
     private $dateSubmit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $submitter;
-
-    /**
      * @ORM\OneToMany(targetEntity="App\Entity\ACCdocItem", mappedBy="doc", orphanRemoval=true)
      */
     private $aCCdocItems;
@@ -45,9 +39,14 @@ class ACCdoc
     private $iccenter;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="aCCdocs")
+     * @ORM\ManyToOne(targetEntity="App\Entity\ACCaccount", inversedBy="aCCdocs")
      */
-    private $icuser;
+    private $account;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     */
+    private $submitter;
 
     public function __construct()
     {
@@ -79,18 +78,6 @@ class ACCdoc
     public function setDateSubmit(string $dateSubmit): self
     {
         $this->dateSubmit = $dateSubmit;
-
-        return $this;
-    }
-
-    public function getSubmitter(): ?SysPosition
-    {
-        return $this->submitter;
-    }
-
-    public function setSubmitter(?SysPosition $submitter): self
-    {
-        $this->submitter = $submitter;
 
         return $this;
     }
@@ -138,14 +125,26 @@ class ACCdoc
         return $this;
     }
 
-    public function getIcuser(): ?SysPosition
+    public function getAccount(): ?ACCaccount
     {
-        return $this->icuser;
+        return $this->account;
     }
 
-    public function setIcuser(?SysPosition $icuser): self
+    public function setAccount(?ACCaccount $account): self
     {
-        $this->icuser = $icuser;
+        $this->account = $account;
+
+        return $this;
+    }
+
+    public function getSubmitter(): ?SysPosition
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(?SysPosition $submitter): self
+    {
+        $this->submitter = $submitter;
 
         return $this;
     }
