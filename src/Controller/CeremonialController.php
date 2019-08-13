@@ -484,7 +484,7 @@ class CeremonialController extends AbstractController
 
             //accounting process
             if($ticket->getAcceptIF()->getIfCode()==1)
-                $account = $ACC->getAccount(1);
+                $account = $ACC->getAccountByAccountNo(1);
             else{
                 if($ACC->hasAccount($ticket->getSubmitter()))
                     $account = $ACC->getAccountByUser($ticket->getSubmitter()->getUserID());
