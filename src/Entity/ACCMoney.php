@@ -21,6 +21,11 @@ class ACCMoney
      */
     private $moneyName;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $moneyCode;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +39,18 @@ class ACCMoney
     public function setMoneyName(string $moneyName): self
     {
         $this->moneyName = $moneyName;
+
+        return $this;
+    }
+
+    public function getMoneyCode(): ?string
+    {
+        return $this->moneyCode;
+    }
+
+    public function setMoneyCode(?string $moneyCode): self
+    {
+        $this->moneyCode = $moneyCode;
 
         return $this;
     }

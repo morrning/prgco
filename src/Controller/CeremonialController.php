@@ -487,7 +487,7 @@ class CeremonialController extends AbstractController
                 $account = $ACC->getAccount(1);
             else{
                 if($ACC->hasAccount($ticket->getSubmitter()))
-                    $account = $ACC->getAccount($ticket->getSubmitter());
+                    $account = $ACC->getAccountByUser($ticket->getSubmitter()->getUserID());
                 else
                     $account = $ACC->addAccount($ticket->getSubmitter()->getUserID()->getFullname(),$ticket->getSubmitter()->getUserID());
             }

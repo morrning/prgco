@@ -116,12 +116,15 @@ class ConfigMGR
         if(count($this->em->findAll('App:ACCMoney')) == 0){
             $money = new Entity\ACCMoney();
             $money->setMoneyName('ریال ایران');
+            $money->setMoneyCode('IRR');
             $this->em->insertEntity($money);
             $money = new Entity\ACCMoney();
             $money->setMoneyName('دلار آمریکا');
+            $money->setMoneyCode('DLR');
             $this->em->insertEntity($money);
             $money = new Entity\ACCMoney();
             $money->setMoneyName('دینار عراق');
+            $money->setMoneyCode('IQD');
             $this->em->insertEntity($money);
         }
         //import default acc account

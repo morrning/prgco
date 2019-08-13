@@ -30,7 +30,8 @@ class ACC
         $acc->setLabel($label);
         $acc->setUser($user);
         $acc->setAccountNo($this->RandomString(32));
-        return $this->em->insertEntity($acc);
+        $this->em->insertEntity($acc);
+        return $acc;
     }
 
     public function hasAccount($user=null,$acountNo=null){
@@ -42,8 +43,12 @@ class ACC
         return $exist;
     }
 
-    public function getAccount($acountNo){
+    public function getAccountByAccountNo($acountNo){
         return $this->em->findOneBy('App:ACCaccount',['accountNo'=>$acountNo]);
+    }
+
+    public function getAccountByUser($user){
+        return $this->em->findOneBy('App:ACCaccount',['accountNo'=>$user]);
     }
 
     public function addDocument($title,$submitter,$iccenterCode,$account){
@@ -68,5 +73,9 @@ class ACC
 
     public function getICCenter($code){
         return $this->em->findOneBy('App:ACCiccenter',['iccode'=>$code]);
+    }
+
+    public function totalMoney($moneyCode){
+
     }
 }
