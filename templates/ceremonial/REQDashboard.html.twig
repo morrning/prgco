@@ -8,7 +8,7 @@
             <div class="col-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">مسافرها</div>
-                    <img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}">
+                    <a href="{{ path('ceremonialREQpasengers') }}"><img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}"></a>
                     <div class="card-body">
                         <p>
                             تعداد مسافرهای ثبت شده:
@@ -21,7 +21,7 @@
             <div class="col-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">بلیط و تشریفات</div>
-                    <a href="{{ path('ceremonialREQpasengers') }}"><img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}"></a>
+                    <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}"></a>
                     <div class="card-body">
                         <p>
                             تعداد بلیط های خریداری شده:
@@ -34,7 +34,7 @@
             <div class="col-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">سفرها</div>
-                    <img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}">
+                    <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}"></a>
                     <div class="card-body">
                         <p>
                             تعداد سفرهای انجام شده:
@@ -61,4 +61,40 @@
             </div>
         </div>
     </div>
+    {% if EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length == 0 %}
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header bg-warning text-light">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">ثبت اطلاعات مسافر</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="text-success">
+                            به سامانه درخواست تشریفات خوش آمدید.
+                        </p>
+                        <br>
+                        اطلاعات شخصی شما تکمیل نشده است لطفا جهت ثبت اطلاعات کاربری
+                        <a href="{{ path('ceremonialREQpasengerNew') }}">اینجا</a>
+                         کلیک کنید.
+                    </div>
+                    <div class="modal-footer">
+                        <a href="{{ path('ceremonialREQpasengerNew') }}" class="btn btn-primary">صفحه تکمیل اطلاعات</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(document).ready(function(){
+                $('#exampleModalCenter').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                });
+            });
+        </script>
+    {% endif %}
 {% endblock %}

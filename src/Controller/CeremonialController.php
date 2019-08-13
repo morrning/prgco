@@ -109,7 +109,14 @@ class CeremonialController extends AbstractController
             ->add('pfather', TextType::class,['label'=>' نام پدر'])
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
             ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
-            ->add('pcodemeli', TextType::class,['label'=>'کد ملی'])
+            ->add('pcodemeli', TextType::class,[
+                'label'=>'کد ملی',
+                'attr'     => array(
+                    'min'  => 0,
+                    'max'  => 9999.99,
+                    'step' => 0.01,
+                ),
+            ])
             ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
@@ -464,8 +471,8 @@ class CeremonialController extends AbstractController
                 'label'=>'واحد پولی'
             ])
             ->add('flyNumber', TextType::class,['label'=>'شماره پرواز'])
-            ->add('moneyValue', Type\NumbermaskType::class,['label'=>'مقدار هزینه'])
-            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز'])
+            ->add('moneyValue', Type\NumbermaskType::class,['label'=>'مقدار هزینه','attr'=>['class'=>'MoneyInput']])
+            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>'1398/02/02'])
             ->add('flyTime', TimeType::class, [
                 'label'=>'ساعت پرواز',
                 'input'  => 'string',
