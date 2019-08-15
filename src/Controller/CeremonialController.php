@@ -475,8 +475,8 @@ class CeremonialController extends AbstractController
             ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>'1398/02/02'])
             ->add('flyTime', TimeType::class, [
                 'label'=>'ساعت پرواز',
-                'input'  => 'string',
-                'widget' => 'single_text',
+                'input'  => 'datetime',
+                'widget' => 'choice',
                 'with_seconds'=>false
             ])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
