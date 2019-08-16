@@ -7,6 +7,13 @@
         لیست مسافرها
     </a>{% endblock %}
 {% block pageBody %}
+    <div class="alert alert-info">
+        <i class="fa fa-info-circle"></i>
+        برای ثبت درخواست بلیط جدید ابتدا به بخش
+        <a class="btn btn-link" href="{{ path('ceremonialREQpasengers') }}"> فهرست مسافرها </a>
+        مراجعه نمایید
+        سپس از بخش مشاهده اطلاعات مسافر نسبت به ثبت درخواست اقدام نمایید.
+    </div>
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="thead-dark">

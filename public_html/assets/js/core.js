@@ -13,6 +13,10 @@ var SysIsModalOn = false;
 $(document).ready(function(){
     $('.JdateInput').mask('0000/00/00');
     $('.MoneyInput').mask('000,000,000,000,000',{reverse: true})
+    $('.date').mask('00/00/0000');
+    $('.time').mask('00:00');
+    $('.tel').mask('00000000000');
+    $('.codeMeli').mask('0000000000');
 });
 
 function SysChangeValueMoney(value,id)

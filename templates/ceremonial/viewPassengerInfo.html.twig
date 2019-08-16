@@ -8,6 +8,10 @@
                 <i class="fas fa-user"></i>
                 اطلاعات مسافر
             </a>
+            <a class="nav-item nav-link" id="nav-scan-tab" data-toggle="tab" href="#nav-scan" role="tab" aria-controls="nav-scan" aria-selected="false">
+                <i class="fas fa-file-archive"></i>
+                اسکن مدارک هویتی
+            </a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
                 <i class="fas fa-history"></i>
                 تاریخچه رویدادها
@@ -77,6 +81,20 @@
 
                     </div>
                 </div>
+                <hr>
+                <h5 class="text-success">اطلاعات تماس</h5>
+                <div class="col-12 pt-1">
+                    تلفن تماس1:
+                    {{ passenger.tel1 }}
+                </div>
+                <div class="col-12 pt-1">
+                    تلفن تماس2:
+                    {{ passenger.tel2 }}
+                </div>
+                <div class="col-12 pt-1">
+                    نشانی:
+                    {{ passenger.adr }}
+                </div>
             </div>
             <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">
                 <i class="fa fa-edit"></i>
@@ -90,6 +108,34 @@
                 <i class="fa fa-undo"></i>
                 بازگشت
             </a>
+        </div>
+        <div class="tab-pane fade show" id="nav-scan" role="tabpanel" aria-labelledby="nav-scan-tab">
+            {{ form_start(form) }}
+            <h5 class="text-success pt-3">اسکن مدارک شناسایی:
+                <i class="fas fa-question-square" onclick="SysLoadMsg('1006');"></i>
+            </h5>
+            <hr>
+            <div class="row">
+                <div class="col-sm-12 col-md-6">
+                    {{ form_widget(form.docType) }}
+                </div>
+                <div class="col-sm-12 col-md-6">
+                    {{ form_widget(form.docName) }}
+                </div>
+            </div>
+            <br>
+            {{ form_widget(form.submit) }}
+            {{ form_end(form) }}
+            {% if docs | length != 0 %}
+                <hr>
+                <h5 class="text-success">اسکن مدارک:</h5>
+                {% for doc in docs %}
+                    <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
+                {% endfor %}
+            {% else %}
+                <hr>
+                <h5 class="text-warning">تاکنون هیچ یک از اسناد را ارسال نکرده اید.</h5>
+            {% endif %}
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             <div class="container py-3">
