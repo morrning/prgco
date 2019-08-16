@@ -369,14 +369,18 @@ class CeremonialController extends AbstractController
     }
 
     /**
-     * @Route("/ceremonial/doing/air/ticket/list", name="ceremonialDOINGAIRpaneList")
+     * @Route("/ceremonial/doing/air/ticket/list/{type}", name="ceremonialDOINGAIRpaneList")
      */
-    public function ceremonialDOINGAIRpaneList(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialDOINGAIRpaneList($type='acp',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
             return $this->redirectToRoute('403');
-        $tickets = $entityMGR->findBy('App:CMAirTicket',[],['ticketState'=>'ASC']);
 
+        $tickets = $entityMGR->findBy('App:CMAirTicket',[],['ticketState'=>'ASC']);
+        if($type == 'acp'){
+            $ticketState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>0]);
+            $tickets=$entityMGR->findBy('App:CMAirTicket',['ticketState'=>$ticketState],['ticketState'=>'ASC']);
+        }
         return $this->render('ceremonial/DOINGAirTicketList.html.twig',
             [
                 'tickets'=>$tickets
@@ -428,6 +432,9 @@ class CeremonialController extends AbstractController
             $des = sprintf('درخواست بلیط شما توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+            $des = sprintf('درخواست بلیط توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialOPTTicketView',['id'=>$ticket->getId()]);
+            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
         }
 
@@ -527,10 +534,10 @@ class CeremonialController extends AbstractController
             ])
             ->add('flyNumber', TextType::class,['label'=>'شماره پرواز'])
             ->add('moneyValue', Type\NumbermaskType::class,['label'=>'مقدار هزینه','attr'=>['class'=>'MoneyInput']])
-            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>'1398/02/02'])
+            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>$ticket->getDateSuggest()])
             ->add('flyTime', TimeType::class, [
                 'label'=>'ساعت پرواز',
-                'input'  => 'datetime',
+                'input'  => 'string',
                 'widget' => 'choice',
                 'with_seconds'=>false
             ])
@@ -539,6 +546,7 @@ class CeremonialController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setMoneyValue(str_replace(',','',$ticket->getMoneyValue()));
             $ticket->setBuyer($userMGR->currentPosition());
             $ticket->setBuyDate(time());
             $acceptState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>3]);
@@ -562,8 +570,35 @@ class CeremonialController extends AbstractController
             $des = sprintf(' بلیط شما توسط %s خریداری شد.',$ticket->getBuyer()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات بلیط با موفقیت ثبت شد.']);
         }
 
+        $form1 = $this->createFormBuilder($ticket)
+            ->add('fileID', Type\FileboxType::class,['label'=>'فایل اسکن','data_class'=>null])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره'])
+            ->getForm();
+
+        $form1->handleRequest($request);
+        $file = $form1->get('fileID')->getData();
+        $guid = $this->RandomString(32);
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
+                if($file->getSize() < 4097152){
+                    $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
+                    $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
+                    $ticket->setFileID($tempFileName);
+                    $entityMGR->update($ticket);
+                    $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','بارگزاری بلیط هواپیما','CEREMONIAL',$request->getClientIp());
+                    array_push($alerts,['type'=>'success','message'=>'فایل مورد نظر با موفقیت ذخیره شد.']);
+                }
+                else{
+                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);
+                }
+            }
+            else{
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,png,pdf,jpeg  ارسال فرمایید.']);
+            }
+        }
         return $this->render('ceremonial/OPTTicketView.html.twig', [
             'travels'=>$entityMGR->findBy('App:CMAirTicket',['passengerID'=>$passenger]),
             'passenger' => $passenger,
@@ -571,6 +606,7 @@ class CeremonialController extends AbstractController
             'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
             'alerts'=>$alerts,
             'form'=>$form->createView(),
+            'form1'=>$form1->createView()
         ]);
     }
 

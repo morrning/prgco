@@ -8,6 +8,7 @@
     </a>
 {% endblock %}
 {% block pageBody %}
+    {% set docs = passenger.getCMPassengerPersonalDocs() %}
     <nav>
         <div class="nav nav-tabs" id="nav-tab" role="tablist">
             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
@@ -27,6 +28,11 @@
                 <i class="far fa-file-archive"></i>
                 فایل و تصویر بلیط
                 <div class="badge badge-danger">{% if ticket.fileID is not null %}1{% else %}0{% endif %}</div>
+            </a>
+            <a class="nav-item nav-link" id="nav-scan-tab" data-toggle="tab" href="#nav-scan" role="tab" aria-controls="nav-scan" aria-selected="false">
+                <i class="far fa-file-archive"></i>
+                اسکن مدارک
+                <div class="badge badge-danger">{{ docs | length }}</div>
             </a>
             <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
                 <i class="fas fa-history"></i>
@@ -348,10 +354,13 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 mx-auto">
                         {% if ticket.fileID is null %}
-                            <div class="alert alert-secondary">
+                            <div class="alert alert-info">
                                 <span class="fa fa-info-circle"></span>
-                                تاکنون هیچ فایل یا تصویری ارسال نشده است.
+                                برای تاکنون هیچ فایل یا تصویری ارسال نشده است.برای ارسال فایل بلیط از جعبه زیر ساتفاده نمایید.
                             </div>
+                            {{ form_start(form1) }}
+                            {{ form_widget(form1) }}
+                            {{ form_end(form1) }}
                         {% else %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-3 mx-auto">
@@ -374,6 +383,18 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="tab-pane fade" id="nav-scan" role="tabpanel" aria-labelledby="nav-scan-tab">
+            {% if docs | length != 0 %}
+                <hr>
+                <h5 class="text-success">اسکن مدارک:</h5>
+                {% for doc in docs %}
+                    <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
+                {% endfor %}
+            {% else %}
+                <hr>
+                <h5 class="text-warning">تاکنون هیچ یک از اسناد را ارسال نکرده اید.</h5>
+            {% endif %}
         </div>
         <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
             <div class="container py-3">
