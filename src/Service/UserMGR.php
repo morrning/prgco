@@ -185,6 +185,8 @@ class UserMGR
         return $orm->createQueryBuilder('q')
             ->select('q')
             ->from('App:SysNotification','q')
+            ->where('q.userID=?1')
+            ->setParameter('1',$this->currentPosition())
             ->setMaxResults($count)
             ->orderBy('q.id','DESC')
             ->getQuery()
