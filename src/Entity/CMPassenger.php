@@ -88,9 +88,30 @@ class CMPassenger
      */
     private $cMAirTickets;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $adr;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tel1;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tel2;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMPassengerPersonalDoc", mappedBy="passenger", orphanRemoval=true)
+     */
+    private $cMPassengerPersonalDocs;
+
     public function __construct()
     {
         $this->cMAirTickets = new ArrayCollection();
+        $this->cMPassengerPersonalDocs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -279,6 +300,73 @@ class CMPassenger
             // set the owning side to null (unless already changed)
             if ($cMAirTicket->getPassengerID() === $this) {
                 $cMAirTicket->setPassengerID(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getAdr(): ?string
+    {
+        return $this->adr;
+    }
+
+    public function setAdr(?string $adr): self
+    {
+        $this->adr = $adr;
+
+        return $this;
+    }
+
+    public function getTel1(): ?string
+    {
+        return $this->tel1;
+    }
+
+    public function setTel1(?string $tel1): self
+    {
+        $this->tel1 = $tel1;
+
+        return $this;
+    }
+
+    public function getTel2(): ?string
+    {
+        return $this->tel2;
+    }
+
+    public function setTel2(?string $tel2): self
+    {
+        $this->tel2 = $tel2;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMPassengerPersonalDoc[]
+     */
+    public function getCMPassengerPersonalDocs(): Collection
+    {
+        return $this->cMPassengerPersonalDocs;
+    }
+
+    public function addCMPassengerPersonalDoc(CMPassengerPersonalDoc $cMPassengerPersonalDoc): self
+    {
+        if (!$this->cMPassengerPersonalDocs->contains($cMPassengerPersonalDoc)) {
+            $this->cMPassengerPersonalDocs[] = $cMPassengerPersonalDoc;
+            $cMPassengerPersonalDoc->setPassenger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMPassengerPersonalDoc(CMPassengerPersonalDoc $cMPassengerPersonalDoc): self
+    {
+        if ($this->cMPassengerPersonalDocs->contains($cMPassengerPersonalDoc)) {
+            $this->cMPassengerPersonalDocs->removeElement($cMPassengerPersonalDoc);
+            // set the owning side to null (unless already changed)
+            if ($cMPassengerPersonalDoc->getPassenger() === $this) {
+                $cMPassengerPersonalDoc->setPassenger(null);
             }
         }
 

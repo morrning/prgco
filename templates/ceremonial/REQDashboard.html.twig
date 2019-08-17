@@ -1,11 +1,32 @@
 {% extends 'ceremonial/REQbase.html.twig' %}
 
 {% block title %}داشبورد درخواست تشریفات{% endblock %}
-
+{% block appTop %}
+    <i class="fas fa-question-square" onclick="SysLoadMsg('1005');"></i>
+{% endblock %}
 {% block pageBody %}
     <div class="container">
         <div class="row">
-            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-12">
+                <div class="alert alert-success" role="alert">
+                    <h4 class="alert-heading">سامانه درخواست تشریفات</h4>
+                    <p>به کارپوشه خود خوش آمدید.در این سامانه امکان درخواست خدمات تشریفات از جمله بلیط هواپیما،درخواست ویزا و اسکان برای شما فراهم شده است.</p>
+                    <hr>
+                    <p class="mb-0">در صورت هرگونه سوال درباره سامانه میتوانید به بخش راهنمای سامانه مراجعه نمایید یا با مدیر فناوری اطلاعات و ارتباطات تماس بگیرید.
+                        <br>
+                        همچنین در هر بخش با کلیک با روی آیکون علامت سوال
+                        <i class="fas fa-question-square" onclick="SysLoadMsg('1005');"></i>
+                        می توانید به اطلاعات مختصری درباره آن بخش دسترسی داشته باشید.</p>
+                    <hr>
+                    <p class="mb-0">
+                        برای درخواست بلیط هواپیما ، ویزا و اسکان ابتدا به بخش
+                        مسافران مراجعه نمایید سپس از امکان درخواست استفاده نمایید.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">مسافرها</div>
                     <a href="{{ path('ceremonialREQpasengers') }}"><img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}"></a>
@@ -18,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">بلیط و تشریفات</div>
                     <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}"></a>
@@ -31,7 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">سفرها</div>
                     <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}"></a>
@@ -44,7 +65,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">
                         تابلو اعلانات

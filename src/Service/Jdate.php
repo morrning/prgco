@@ -11,7 +11,7 @@ class Jdate
 {
     public function GetTodayDate()
     {
-        return $this->jdate('Y/n/d',time());
+        return $this->jdate('Y/m/d',time());
     }
     public function time(){
         return time();

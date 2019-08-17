@@ -180,6 +180,18 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
+        //import CM default passenger documents type
+        if(count($this->em->findAll('App:CMPassengerDocType')) == 0) {
+            $entity = new Entity\CMPassengerDocType();
+            $entity->setTname('شناسنامه');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMPassengerDocType();
+            $entity->setTname('کارت ملی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMPassengerDocType();
+            $entity->setTname('گذرنامه');
+            $this->em->insertEntity($entity);
+        }
         //import CM default Ticket state
         if(count($this->em->findAll('App:CMAirTicketState')) == 0) {
             $entity = new Entity\CMAirTicketState();
