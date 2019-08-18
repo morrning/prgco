@@ -215,7 +215,8 @@ class UserMGR
             $notification->setViewed(null);
             $notification->setDes($des);
             $notification->setLinkTarget($url);
-            return $this->em->insertEntity($notification);
+            $this->em->insertEntity($notification);
         }
+        return true;
     }
 }
