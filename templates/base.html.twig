@@ -41,6 +41,7 @@
     <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/lightbox/js/lightbox.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+
     {% block stylesheets %}{% endblock %}
 </head>
 <body onload="jsCoreRun()">
@@ -55,7 +56,7 @@
                 "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
             },
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+                'excel'
             ]
         });
 
