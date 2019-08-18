@@ -27,12 +27,6 @@ class ACCdocItem
      */
     private $moneyValue;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\ACCMoney")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $moneyType;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -58,18 +52,6 @@ class ACCdocItem
     public function setMoneyValue(int $moneyValue): self
     {
         $this->moneyValue = $moneyValue;
-
-        return $this;
-    }
-
-    public function getMoneyType(): ?ACCMoney
-    {
-        return $this->moneyType;
-    }
-
-    public function setMoneyType(?ACCMoney $moneyType): self
-    {
-        $this->moneyType = $moneyType;
 
         return $this;
     }

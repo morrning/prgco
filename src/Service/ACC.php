@@ -48,34 +48,33 @@ class ACC
     }
 
     public function getAccountByUser($user){
-        return $this->em->findOneBy('App:ACCaccount',['accountNo'=>$user]);
+        return $this->em->findOneBy('App:ACCaccount',['user'=>$user]);
     }
 
-    public function addDocument($title,$submitter,$iccenterCode,$account){
+    public function addDocument($title,$moneyType,$submitter,$iccenterCode,$account){
         $doc = new Entity\ACCdoc();
         $doc->setSubmitter($submitter);
         $doc->setDateSubmit(time());
         $doc->setDocTitle($title);
+        $doc->setMoney($moneyType);
         $doc->setIccenter($iccenterCode);
         $doc->setAccount($account);
         $this->em->insertEntity($doc);
         return $doc;
     }
 
-    public function addDocumentItem($document,$moneyType,$moneyValue)
+    public function addDocumentItem($document,$moneyValue)
     {
         $item = new Entity\ACCdocItem();
         $item->setDoc($document);
         $item->setMoneyValue($moneyValue);
-        $item->setMoneyType($moneyType);
-        return $this->em->insertEntity($item);
+        $this->em->insertEntity($item);
+
+        $document->setTotalValue($document->getTotalValue() + $moneyValue);
+        return $this->em->update($document);
     }
 
     public function getICCenter($code){
         return $this->em->findOneBy('App:ACCiccenter',['iccode'=>$code]);
-    }
-
-    public function totalMoney($moneyCode){
-
     }
 }

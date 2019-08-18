@@ -51,23 +51,38 @@ class CeremonialController extends AbstractController
     /**
      * @Route("/ceremonial/req/acc/balance/{msg}", name="ceremonialACCBalance")
      */
-    public function ceremonialACCBalance($msg=0,Request $request,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialACCBalance($msg=0,Request $request,Service\ACC $ACC,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
-        $alerts = [];
-        if($msg == 1)
-            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر اضافه شد.']);
-        elseif($msg == 2)
-            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر ویرایش شد.']);
-        elseif($msg == 3)
-            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر حذف شد.']);
 
-        $logMGR->addEvent('FRE56','مشاهده','لیست مسافران','CEREMONIAL',$request->getClientIp());
+        $moneyLabels=[];
+        $moneyTypes = $entityMGR->findAll('App:ACCMoney');
+        $moneyTotal = [];
 
-        return $this->render('ceremonial/REQPassengers.html.twig', [
-            'passengers' => $userMGR->currentPosition()->getcMPassengers(),
-            'alerts' => $alerts,
+        if($ACC->hasAccount($userMGR->currentUser()))
+            $account = $ACC->getAccountByUser($userMGR->currentUser());
+        else
+            $account = $ACC->addAccount($userMGR->currentUser()->getFullname(),$userMGR->currentUser());
+        foreach ($moneyTypes as $moneyType)
+        {
+            array_push($moneyLabels, $moneyType->getMoneyName());
+            $docs = $entityMGR->findBy('App:ACCdoc',['account'=>$account,'Money'=>$moneyType]);
+            $total = 0;
+            foreach ($docs as $doc){
+                $total = $total + $doc->getTotalValue();
+            }
+            array_push($moneyTotal,$total);
+        }
+        $account = $entityMGR->findOneBy('App:ACCaccount',['user'=>$userMGR->currentUser()]);
+        $docs = $account->getACCdocs();
+
+
+        return $this->render('ceremonial/REQACCdashboard.html.twig', [
+            'moneys' => $moneyTypes,
+            'moneyLabels'=>$moneyLabels,
+            'moneyTotals'=>$moneyTotal,
+            'docs'=>$docs
         ]);
     }
 
@@ -542,7 +557,8 @@ class CeremonialController extends AbstractController
         if($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت تایید شد.']);
 
-        $form = $this->createFormBuilder($ticket)
+        $default =['message'=>'test'];
+        $form = $this->createFormBuilder($default)
             ->add('flyAirway', EntityType::class, [
                 'class'=>Entity\CMAirway::class,
                 'choice_label'=>'airwayName',
@@ -569,6 +585,12 @@ class CeremonialController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setFlyAirway($form->get('flyAirway')->getData());
+            $ticket->setMoneyType($form->get('moneyType')->getData());
+            $ticket->setFlyNumber($form->get('flyNumber')->getData());
+            $ticket->setMoneyValue($form->get('moneyValue')->getData());
+            $ticket->setFlyDate($form->get('flyDate')->getData());
+            $ticket->setFlyTime($form->get('flyTime')->getData());
             $ticket->setMoneyValue(str_replace(',','',$ticket->getMoneyValue()));
             $ticket->setBuyer($userMGR->currentPosition());
             $ticket->setBuyDate(time());
@@ -579,15 +601,15 @@ class CeremonialController extends AbstractController
             if($ticket->getAcceptIF()->getIfCode()==1)
                 $account = $ACC->getAccountByAccountNo(1);
             else{
-                if($ACC->hasAccount($ticket->getSubmitter()))
+                if($ACC->hasAccount($ticket->getSubmitter()->getUserID()))
                     $account = $ACC->getAccountByUser($ticket->getSubmitter()->getUserID());
                 else
                     $account = $ACC->addAccount($ticket->getSubmitter()->getUserID()->getFullname(),$ticket->getSubmitter()->getUserID());
             }
 
-            $ic = $ACC->getICCenter(1002);
-            $document = $ACC->addDocument('ایاب و ذهاب',$userMGR->currentPosition(),$ic,$account);
-            $ACC->addDocumentItem($document,$ticket->getMoneyType(),$ticket->getMoneyValue());
+            $ic = $ACC->getICCenter(10002);
+            $document = $ACC->addDocument('ایاب و ذهاب',$ticket->getMoneyType(),$userMGR->currentPosition(),$ic,$account);
+            $ACC->addDocumentItem($document,$ticket->getMoneyValue());
 
             $logMGR->addEvent('CERTICKET'.$ticket->getId(),'خرید بلیط','درخواست بلیط','CEREMONIAL',$request->getClientIp());
             $des = sprintf(' بلیط شما توسط %s خریداری شد.',$ticket->getBuyer()->getPublicLabel());
@@ -595,8 +617,8 @@ class CeremonialController extends AbstractController
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
             array_push($alerts,['type'=>'success','message'=>'اطلاعات بلیط با موفقیت ثبت شد.']);
         }
-
-        $form1 = $this->createFormBuilder($ticket)
+        $ticket1 = $entityMGR->find('App:CMAirTicket',$id);
+        $form1 = $this->createFormBuilder($ticket1)
             ->add('fileID', Type\FileboxType::class,['label'=>'فایل اسکن','data_class'=>null])
             ->add('submit', SubmitType::class,['label'=>'ذخیره'])
             ->getForm();
@@ -609,8 +631,8 @@ class CeremonialController extends AbstractController
                 if($file->getSize() < 4097152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
-                    $ticket->setFileID($tempFileName);
-                    $entityMGR->update($ticket);
+                    $ticket1->setFileID($tempFileName);
+                    $entityMGR->update($ticket1);
                     $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','بارگزاری بلیط هواپیما','CEREMONIAL',$request->getClientIp());
                     array_push($alerts,['type'=>'success','message'=>'فایل مورد نظر با موفقیت ذخیره شد.']);
                 }

@@ -48,6 +48,16 @@ class ACCdoc
      */
     private $submitter;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ACCmoney", inversedBy="aCCdocs")
+     */
+    private $Money;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $totalValue;
+
     public function __construct()
     {
         $this->aCCdocItems = new ArrayCollection();
@@ -145,6 +155,30 @@ class ACCdoc
     public function setSubmitter(?SysPosition $submitter): self
     {
         $this->submitter = $submitter;
+
+        return $this;
+    }
+
+    public function getMoney(): ?ACCmoney
+    {
+        return $this->Money;
+    }
+
+    public function setMoney(?ACCmoney $Money): self
+    {
+        $this->Money = $Money;
+
+        return $this;
+    }
+
+    public function getTotalValue(): ?string
+    {
+        return $this->totalValue;
+    }
+
+    public function setTotalValue(?string $totalValue): self
+    {
+        $this->totalValue = $totalValue;
 
         return $this;
     }
