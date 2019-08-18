@@ -49,6 +49,29 @@ class CeremonialController extends AbstractController
     }
 
     /**
+     * @Route("/ceremonial/req/acc/balance/{msg}", name="ceremonialACCBalance")
+     */
+    public function ceremonialACCBalance($msg=0,Request $request,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر اضافه شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر ویرایش شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'اطلاعات مسافر حذف شد.']);
+
+        $logMGR->addEvent('FRE56','مشاهده','لیست مسافران','CEREMONIAL',$request->getClientIp());
+
+        return $this->render('ceremonial/REQPassengers.html.twig', [
+            'passengers' => $userMGR->currentPosition()->getcMPassengers(),
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
      * @Route("/ceremonial/req/pasengers/{msg}", name="ceremonialREQpasengers")
      */
     public function ceremonialREQpasengers($msg=0,Request $request,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)

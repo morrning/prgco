@@ -295,7 +295,7 @@
                         <div class="modal-body text-justify">
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 pb-3">
-                                    {% if ticket.ticketState.stateCode != 3 %}
+                                    {% if ticket.ticketState.stateCode == 2 %}
                                         {{ form_start(form) }}
                                         <div class="row">
                                             <div class="col-sm-12 col-md-3">
@@ -336,10 +336,15 @@
                                                 </button>
                                             </div>
                                         </div>
-                                    {% else %}
+                                    {% elseif ticket.ticketState.stateCode == 3 %}
                                         <div class="alert alert-warning">
                                             <span class="fa fa-info-circle"></span>
                                             با توجه به ثبت نهایی شدن وضعیت بلیط و ثبت اطلاعات خرید امکان ویرایش میسر نمی باشد.
+                                        </div>
+                                    {% else %}
+                                        <div class="alert alert-warning">
+                                            <span class="fa fa-info-circle"></span>
+                                            این درخواست تاکنون تایید نشده است.
                                         </div>
                                     {% endif %}
                                 </div>
@@ -358,9 +363,20 @@
                                 <span class="fa fa-info-circle"></span>
                                 برای تاکنون هیچ فایل یا تصویری ارسال نشده است.برای ارسال فایل بلیط از جعبه زیر ساتفاده نمایید.
                             </div>
-                            {{ form_start(form1) }}
-                            {{ form_widget(form1) }}
-                            {{ form_end(form1) }}
+                            <div class="row">
+                                <div class="col-sm-12 col-md-3">
+                                    {{ form_start(form1) }}
+                                    {{ form_label(form1.fileID) }}
+                                    {{ form_widget(form1.fileID) }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row pt-2">
+                                <div class="col-12">
+                                    {{ form_widget(form1.submit) }}
+                                    {{ form_end(form1) }}
+                                </div>
+                            </div>
                         {% else %}
                             <div class="row">
                                 <div class="col-sm-12 col-md-3 mx-auto">
