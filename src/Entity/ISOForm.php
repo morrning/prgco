@@ -51,6 +51,11 @@ class ISOForm
      */
     private $cat;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ISOFormType", inversedBy="iSOForms")
+     */
+    private $formType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -160,6 +165,18 @@ class ISOForm
     public function setCat(?ISOFormCat $cat): self
     {
         $this->cat = $cat;
+
+        return $this;
+    }
+
+    public function getFormType(): ?ISOFormType
+    {
+        return $this->formType;
+    }
+
+    public function setFormType(?ISOFormType $formType): self
+    {
+        $this->formType = $formType;
 
         return $this;
     }

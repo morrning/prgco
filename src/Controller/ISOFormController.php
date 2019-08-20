@@ -88,6 +88,12 @@ class ISOFormController extends AbstractController
             ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\ISOFormCat::class,'choice_label'=>'catName','choice_value'=>'id'])
             ->add('isoCode', TextType::class,['label'=>'شناسه ایزو:'])
             ->add('fileID',FileType::class,['label'=>'فایل :'])
+            ->add('formType', EntityType::class, [
+                'class'=>Entity\ISOFormType::class,
+                'choice_label'=>'typeName',
+                'choice_value' => 'id',
+                'label'=>'نوع مدرک'
+            ])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
 
@@ -95,7 +101,7 @@ class ISOFormController extends AbstractController
         $file = $form->get('fileID')->getData();
         $guid = $this->RandomString(32);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xlsx'){
+            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xls' || $file->getClientOriginalExtension() == 'doc' || $file->getClientOriginalExtension() == 'xlsx'){
                 if($file->getSize() < 2097152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );

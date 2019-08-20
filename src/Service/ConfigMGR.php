@@ -95,7 +95,17 @@ class ConfigMGR
             $pl->setPlabel('مدیریت کنترل پروژه ناحیه');
             $this->em->insertEntity($pl);
         }
-
+            //import iso forms type
+        if(count($this->em->findAll('App:ISOFormType')) == 0) {
+            $entity = new Entity\ISOFormType();
+            $entity->setTypeName('فرم اجرایی');
+            $entity->setTypeCode(1);
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ISOFormType();
+            $entity->setTypeName('دستورالعمل');
+            $entity->setTypeCode(2);
+            $this->em->insertEntity($entity);
+        }
         //import default daytime
         if(count($this->em->findAll('App:CMdaytime')) == 0){
             $daytime = new Entity\CMdaytime();
