@@ -35,8 +35,8 @@ class ISOFormController extends AbstractController
     public function ISOformsView(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         return $this->render('iso_form/mostUsedFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:ISOForm'),
-            'cats'=> $entityMGR->findBy('App:ISOFormCat'),
+            'files' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>1])],['dateSubmit'=>'DESC']),
+            'insts' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>2])],['dateSubmit'=>'DESC']),
         ]);
     }
 
@@ -54,9 +54,28 @@ class ISOFormController extends AbstractController
         elseif($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت اضافه شد.']);
 
-        return $this->render('iso_form/adminArchiveFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:ISOForm'),
+        return $this->render('iso_form/dashboard.html.twig', [
+            'forms' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>1])],['dateSubmit'=>'DESC']),
+            'insts' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>2])],['dateSubmit'=>'DESC']),
             'alerts' => $alerts
+        ]);
+    }
+
+    /**
+     * @Route("/isoforms/admin/forms/{type}", name="isoformsForms")
+     */
+    public function isoformsForms($type = 1,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        //type  forms====>1 insts====>2
+        if(! $userMGR->hasPermission('ISOfORMS','ISOFORM'))
+            return $this->redirectToRoute('403');
+        $entitys = $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>$type])]);
+        $formType = 'فرم‌ها';
+        if($type == 2)
+            $formType = 'دستورالعمل‌ها';
+        return $this->render('iso_form/adminArchiveFiles.html.twig', [
+            'files' => $entitys,
+            'formType'=>$formType
         ]);
     }
 

@@ -1,6 +1,6 @@
 {% extends 'iso_form/base.html.twig' %}
 
-{% block title %}آرشیو فرم ها{% endblock %}
+{% block title %}آرشیو {{ formType }}ا{% endblock %}
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
@@ -8,6 +8,7 @@
             <tr>
                 <th>ردیف</th>
                 <th>عنوان</th>
+                <th>نوع مدرک</th>
                 <th>شناسه ایزو</th>
                 <th>دسته بندی</th>
                 <th>امکانات</th>
@@ -18,6 +19,7 @@
                 <tr class="">
                     <td>{{ loop.index }}</td>
                     <td>{{ file.title }}</td>
+                    <td>{{ file.formType.typeName }}</td>
                     <td>{{ file.ISOCode }}</td>
                     <td>{{ file.cat.catName }}</td>
                     <td>

@@ -1,0 +1,60 @@
+{% extends 'iso_form/base.html.twig' %}
+
+{% block title %}داشبورد مدیریت سامانه IMS{% endblock %}
+{% block appTop %}
+    <a class="btn btn-success" href="{{ path('isoformsNewFile') }}">
+        <i class="fas fa-plus"></i>
+        <span>جدید</span>
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            <div class="card">
+                <div class="card-header bg-success text-light">
+                    اطلاعات آماری
+                </div>
+                <div class="card-body">
+                    <ul>
+                        <li>
+                            تعداد کل فرم‌ها:
+                            {{ forms | length }}
+                        </li>
+                        <li>
+                            تعداد کل دستورالعمل‌ها:
+                            {{ insts | length }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    آخرین فرم‌ها
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for form in forms |slice(0,10)%}
+                            <li>{{ form.title }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    آخرین دستورالعمل‌ها
+                </div>
+                <div class="card-body">
+                    <ul>
+                        {% for inst in insts |slice(0,10)%}
+                            <li>{{ inst.title }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

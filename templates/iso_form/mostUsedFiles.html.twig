@@ -10,64 +10,111 @@
         <div class="card-body">
             <div class="alert alert-info">
                 <i class="fas fa-info-circle"></i>
-                به سامانه مدیریت متمرکز خوش آمدید. جهت دریافت فرم های ایزو مورد نظر ابتدا بر روی دسته بندی کلیک کنید.سپس از ابزارهای جست و جو برای یافتن فرم مورد نظر استفاده نمایید.
+                به سامانه مدیریت متمرکز خوش آمدید. جهت دریافت فرمها و دستورالعمل‌های اجرایی ایزو مورد نظر ابتدا بر روی ستون مورد نظر کلیک کنید.سپس از ابزارهای جست و جو برای یافتن فایل مورد نظر استفاده نمایید.
             </div>
             <br>
-            <div class="accordion" id="accordionExample">
-                {% for cat in cats %}
-                    <div class="card">
-                        <div class="card-header bg-success text-light" id="heading{{ cat.id }}">
-                            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#cat{{ cat.id }}" aria-expanded="true" aria-controls="cat{{ cat.id }}">
-                                <i class="fas fa-arrow-left"></i>
-                                {{ cat.catName }}
-                            </button>
-                        </div>
-                        <div id="cat{{ cat.id }}" class="collapse" aria-labelledby="heading{{ cat.id }}" data-parent="#accordionExample">
-                            <div class="card-body">
-                                {% set files = EntityMGR.findBy('App:ISOForm',{'cat':cat}) %}
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-bordered table-hover rounded text-center">
-                                        <thead class="thead-dark">
-                                        <tr>
-                                            <th>ردیف</th>
-                                            <th>عنوان</th>
-                                            <th>شناسه ایزو</th>
-                                            <th>آخرین بازبینی</th>
-                                            <th>امکانات</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody class="">
-                                        {% for file in files %}
-                                            <tr class="">
-                                                <td>{{ loop.index }}</td>
-                                                <td>{{ file.title }}</td>
-                                                <td>{{ file.ISOCode }}</td>
-                                                <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
-
-                                                <td>
-                                                    {% if file.fileExt == 'docx' %}
-                                                        <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                                            <i class="fas fa-file-word"></i>
-                                                            دریافت</a>
-                                                    {% elseif file.fileExt == 'xlsx' %}
-                                                        <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                                            <i class="fas fa-file-excel"></i>
-                                                            دریافت</a>
-                                                    {% elseif file.fileExt == 'pdf' %}
-                                                        <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
-                                                            <i class="fas fa-file-pdf"></i>
-                                                            دریافت</a>
-                                                    {% endif %}
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+            <div class="p-2">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                            <i class="fa fa-file"></i>
+                            فرم‌ها
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                            <i class="fa fa-map"></i>
+                            دستورالعمل‌ها
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active p-2" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>عنوان</th>
+                                    <th>دسته بندی</th>
+                                    <th>شناسه ایزو</th>
+                                    <th>آخرین بازبینی</th>
+                                    <th>امکانات</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for file in files %}
+                                    <tr class="">
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ file.title }}</td>
+                                        <td>{{ file.cat.catName }}</td>
+                                        <td>{{ file.ISOCode }}</td>
+                                        <td>{{ Jdate.jdate('Y/n/d',file.dateSubmit) }}</td>
+                                        <td>
+                                            {% if file.fileExt == 'docx' or file.fileExt == 'doc' %}
+                                                <a class="btn btn-block btn-success" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                    <i class="fas fa-file"></i>
+                                                    دریافت</a>
+                                            {% elseif file.fileExt == 'xlsx' or file.fileExt == 'xls' %}
+                                                <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                    <i class="fas fa-file-excel"></i>
+                                                    دریافت</a>
+                                            {% elseif file.fileExt == 'pdf' %}
+                                                <a class="btn btn-block btn-info" href="{{ asset('files/' ~ file.fileID) }}" target="_blank">
+                                                    <i class="fas fa-file-pdf"></i>
+                                                    دریافت</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                {% endfor %}
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div class="tab-pane fade show active p-2" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="table-responsive">
+                                <table class="table table-sm table-bordered table-hover rounded text-center">
+                                    <thead class="thead-dark">
+                                    <tr>
+                                        <th>ردیف</th>
+                                        <th>عنوان</th>
+                                        <th>دسته بندی</th>
+                                        <th>شناسه ایزو</th>
+                                        <th>آخرین بازبینی</th>
+                                        <th>امکانات</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody class="">
+                                    {% for inst in insts %}
+                                        <tr class="">
+                                            <td>{{ loop.index }}</td>
+                                            <td>{{ inst.title }}</td>
+                                            <td>{{ inst.cat.catName }}</td>
+                                            <td>{{ inst.ISOCode }}</td>
+                                            <td>{{ Jdate.jdate('Y/n/d',inst.dateSubmit) }}</td>
+                                            <td>
+                                                {% if inst.fileExt == 'docx' or inst.fileExt == 'doc' %}
+                                                    <a class="btn btn-block btn-success" href="{{ asset('files/' ~ inst.fileID) }}" target="_blank">
+                                                        <i class="fas fa-file"></i>
+                                                        دریافت</a>
+                                                {% elseif inst.fileExt == 'xlsx' or inst.fileExt == 'xls' %}
+                                                    <a class="btn btn-block btn-primary" href="{{ asset('files/' ~ inst.fileID) }}" target="_blank">
+                                                        <i class="fas fa-file-excel"></i>
+                                                        دریافت</a>
+                                                {% elseif inst.fileExt == 'pdf' %}
+                                                    <a class="btn btn-block btn-info" href="{{ asset('files/' ~ inst.fileID) }}" target="_blank">
+                                                        <i class="fas fa-file-pdf"></i>
+                                                        دریافت</a>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
