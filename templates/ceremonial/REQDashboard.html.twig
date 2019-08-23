@@ -32,7 +32,7 @@
                     <a href="{{ path('ceremonialREQpasengers') }}"><img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}"></a>
                     <div class="card-body">
                         <p>
-                            تعداد مسافرهای ثبت شده:
+                            مسافرهای ثبت شده:
                             {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
                              نفر
                         </p>
@@ -45,7 +45,7 @@
                     <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}"></a>
                     <div class="card-body">
                         <p>
-                            تعداد بلیط های خریداری شده:
+                            بلیط های خریداری شده:
                             {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
                             عدد
                         </p>
@@ -54,12 +54,12 @@
             </div>
             <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
                 <div class="card">
-                    <div class="card-header">سفرها</div>
+                    <div class="card-header">ویزاها</div>
                     <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}"></a>
                     <div class="card-body">
                         <p>
-                            تعداد سفرهای انجام شده:
-                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            درخواست‌های ویزا:
+                            {{ EntityMGR.findBy('App:CMVisaReq',{'submitter':UserMGR.CurrentPosition()}) | length}}
                             بار
                         </p>
                     </div>

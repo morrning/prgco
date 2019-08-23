@@ -1,0 +1,176 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}درخواست ویزا برای:{{ passenger.pname ~ ' ' ~ passenger.pfamily }} به مقصد {{ visa.countryDes.countryName }} به{% endblock %}
+{% block appTop %}
+    <a class="btn btn-info" href="{{ path('ceremonialREQVisaList') }}">
+        <i class="fa fa-undo"></i>
+        بازگشت
+    </a>
+{% endblock %}
+{% block pageBody %}
+    {% set docs = passenger.getCMPassengerPersonalDocs() %}
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                <i class="fas fa-receipt"></i>
+                اطلاعات درخواست
+            </a>
+            <a class="nav-item nav-link" id="nav-scan-tab" data-toggle="tab" href="#nav-scan" role="tab" aria-controls="nav-scan" aria-selected="false">
+                <i class="far fa-file-archive"></i>
+                اسکن مدارک
+                <div class="badge badge-danger">{{ docs | length }}</div>
+            </a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
+                <i class="fas fa-history"></i>
+                تاریخچه رویدادها
+                <div class="badge badge-danger">{{ events | length }}</div>
+            </a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container py-3">
+                <div class="row rounded border py-3 mb-1">
+                    <div class="col-12">
+                        <h5>
+                            <i class="fas fa-user"></i>
+                            اطلاعات مسافر:
+                        </h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <img class="img-fluid img-thumbnail" src="{{ asset('assets/images/public/avatar.jpg') }}">
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <p>
+                                    نسبت مسافر:
+                                    <span class="alert alert-danger">{{ passenger.ptype.typeName }}</span>
+                                </p>
+                                <hr>
+                                <p>
+                                    نام:
+                                    <span class="text-danger">{{ passenger.pname }}</span>
+                                </p>
+                                <p>
+                                    نام خانوادگی:
+                                    <span class="text-danger">{{ passenger.pfamily }}</span>
+                                </p>
+                                <p>
+                                    نام پدر:
+                                    <span class="text-danger">{{ passenger.pfather }}</span>
+                                </p>
+                                <p>
+                                    شماره شناسنامه:
+                                    <span class="text-danger">{{ passenger.pshenasname }}</span>
+                                </p>
+                                <p>
+                                    کد ملی:
+                                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <p>
+                                    Name:
+                                    <span class="text-danger">{{ passenger.lname }}</span>
+                                </p>
+                                <p>
+                                    FamilyName:
+                                    <span class="text-danger">{{ passenger.lfamily }}</span>
+                                </p>
+                                <p>
+                                    Father Name:
+                                    <span class="text-danger">{{ passenger.lfather }}</span>
+                                </p>
+                                <p>
+                                    National Code:
+                                    <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                                </p>
+                                <p>
+                                    Passport Number:
+                                    <span class="text-danger">{{ passenger.PassNo }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row rounded border py-3 mb-1">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <h6>
+                                    <i class="fas fa-info-square"></i>
+                                    اطلاعات درخواست:
+                                </h6>
+                                <hr>
+                                <p>
+                                    درخواست کننده:
+                                    <span class="text-danger">{{ visa.submitter.publicLabel }}</span>
+                                </p>
+                                <p>
+                                    تاریخ درخواست:
+                                    <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',visa.dateSubmit) }}</span>
+                                </p>
+                                <p>
+                                    مقصد سفر:
+                                    <span class="text-danger">{{ visa.countryDes.countryName }}</span>
+                                </p>
+                                <p>
+                                    وضعیت درخواست:
+                                    <span class="text-danger">{{ visa.visaState.stateName }}</span>
+                                </p>
+                                <p>
+                                    علت سفر:
+                                    <span class="text-danger">{{ visa.des }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-scan" role="tabpanel" aria-labelledby="nav-scan-tab">
+            {% if docs | length != 0 %}
+                <hr>
+                <h5 class="text-success">اسکن مدارک:</h5>
+                {% for doc in docs %}
+                    <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
+                {% endfor %}
+            {% else %}
+                <hr>
+                <h5 class="text-warning">تاکنون هیچ یک از اسناد را ارسال نکرده اید.</h5>
+            {% endif %}
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 mx-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="thead-dark">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>تاریخ</th>
+                                    <th>نام کاربر</th>
+                                    <th>توضیحات</th>
+                                    <th>عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for event in events %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ Jdate.jdate('Y/n/d H:i:s',event.dateSubmit) }}</td>
+                                        <td>{{ event.fullname }}</td>
+                                        <td>{{ event.des }}</td>
+                                        <td>{{ event.operation }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

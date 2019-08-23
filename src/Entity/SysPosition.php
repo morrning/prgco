@@ -83,6 +83,11 @@ class SysPosition
      */
     private $aCCdocs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="submitter")
+     */
+    private $cMVisaReqs;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -91,6 +96,7 @@ class SysPosition
         $this->cMAirTickets = new ArrayCollection();
         $this->no = new ArrayCollection();
         $this->aCCdocs = new ArrayCollection();
+        $this->cMVisaReqs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -382,6 +388,37 @@ class SysPosition
             // set the owning side to null (unless already changed)
             if ($aCCdoc->getIcuser() === $this) {
                 $aCCdoc->setIcuser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaReq[]
+     */
+    public function getCMVisaReqs(): Collection
+    {
+        return $this->cMVisaReqs;
+    }
+
+    public function addCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if (!$this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs[] = $cMVisaReq;
+            $cMVisaReq->setSubmitter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if ($this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs->removeElement($cMVisaReq);
+            // set the owning side to null (unless already changed)
+            if ($cMVisaReq->getSubmitter() === $this) {
+                $cMVisaReq->setSubmitter(null);
             }
         }
 

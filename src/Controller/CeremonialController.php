@@ -682,7 +682,7 @@ class CeremonialController extends AbstractController
                 'class'=>Entity\CMVisaSendWay::class,
                 'choice_label'=>'WayName',
                 'choice_value' => 'id',
-                'label'=>'مقصد مسافرت:'
+                'label'=>'روش ارسال ویزا:'
             ])
             ->add('dateSendToCo',Type\JdateType::class,['label'=>'تاریخ مسافرت:','data'=>$jdate->GetTodayDate()])
             ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
@@ -694,7 +694,7 @@ class CeremonialController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $visa->setPassenger($passenger);
             $visa->setDateSubmit(time());
-            $visa->setSubmitter($userMGR->currentUser());
+            $visa->setSubmitter($userMGR->currentPosition());
             $visa->setArea($userMGR->currentPosition()->getDefaultArea());
             $visa->setVisaState($entityMGR->findOneBy('App:CMVisaState',['StateCode'=>1]));
 
@@ -703,7 +703,7 @@ class CeremonialController extends AbstractController
             $logMGR->addEvent('CERVISA'.$visa->getId(),'ایجاد','درخواست ویزا','CEREMONIAL',$request->getClientIp());
             $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
             $des = sprintf('درخواست ویزا توسط %s ثبت شد.',$visa->getSubmitter()->getPublicLabel());
-            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa>getId()]);
+            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
             return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
         }
@@ -714,13 +714,45 @@ class CeremonialController extends AbstractController
         ]);
     }
     /**
-     * @Route("/ceremonial/req/passport/view/{id}/{msg}", name="ceremonialREQVisaView")
+     * @Route("/ceremonial/req/Visa/view/{id}/{msg}", name="ceremonialREQVisaView")
      */
     public function ceremonialREQVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
     {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        elseif ($visa->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+        $passenger = $entityMGR->find('App:CMPassenger',$visa->getPassenger()->getId());
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست بلیط با موفقیت ثبت شد.']);
 
+        return $this->render('ceremonial/REQVisaView.html.twig', [
+            'passenger' => $passenger,
+            'visa'=>$visa,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
+            'alerts'=>$alerts
+        ]);
     }
 
+    /**
+     * @Route("/ceremonial/req/visa/list", name="ceremonialREQVisaList")
+     */
+    public function ceremonialREQVisaList(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $visas = $entityMGR->findBy('App:CMVisaReq',['submitter'=>$userMGR->currentPosition()]);
+
+        return $this->render('ceremonial/REQVisaList.html.twig',
+            [
+                'visas'=>$visas
+            ]);
+    }
 
     //----------------------------------------- operator part ----------------------------------------
     /**

@@ -53,12 +53,6 @@ class CMVisaReq
     private $dateSubmit;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysUser", inversedBy="cMVisaReqs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $submitter;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $des;
@@ -106,6 +100,11 @@ class CMVisaReq
      * @ORM\JoinColumn(nullable=false)
      */
     private $countryDes;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="cMVisaReqs")
+     */
+    private $submitter;
 
     public function getId(): ?int
     {
@@ -192,18 +191,6 @@ class CMVisaReq
     public function setDateSubmit(string $dateSubmit): self
     {
         $this->dateSubmit = $dateSubmit;
-
-        return $this;
-    }
-
-    public function getSubmitter(): ?SysUser
-    {
-        return $this->submitter;
-    }
-
-    public function setSubmitter(?SysUser $submitter): self
-    {
-        $this->submitter = $submitter;
 
         return $this;
     }
@@ -312,6 +299,18 @@ class CMVisaReq
     public function setCountryDes(?CMVisaCountry $countryDes): self
     {
         $this->countryDes = $countryDes;
+
+        return $this;
+    }
+
+    public function getSubmitter(): ?SysPosition
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(?SysPosition $submitter): self
+    {
+        $this->submitter = $submitter;
 
         return $this;
     }
