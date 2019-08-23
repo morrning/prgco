@@ -670,55 +670,64 @@ class CeremonialController extends AbstractController
         elseif ($passenger->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
             return $this->redirectToRoute('403');
 
-        $ticket = new Entity\CMAirTicket();
-        $form = $this->createFormBuilder($ticket)
-            ->add('suggestTime', EntityType::class, [
-                'class'=>Entity\CMdaytime::class,
-                'choice_label'=>'label',
+        $visa = new Entity\CMVisaReq();
+        $form = $this->createFormBuilder($visa)
+            ->add('countryDes', EntityType::class, [
+                'class'=>Entity\CMVisaCountry::class,
+                'choice_label'=>'countryName',
                 'choice_value' => 'id',
-                'label'=>'ساعت پیشنهادی:'
+                'label'=>'مقصد مسافرت:'
             ])
-            ->add('source', EntityType::class, [
-                'class'=>Entity\CMCities::class,
-                'choice_label'=>'cname',
+            ->add('WaySendToCo', EntityType::class, [
+                'class'=>Entity\CMVisaSendWay::class,
+                'choice_label'=>'WayName',
                 'choice_value' => 'id',
-                'label'=>'مبدا حرکت:'
+                'label'=>'مقصد مسافرت:'
             ])
-            ->add('destination', EntityType::class, [
-                'class'=>Entity\CMCities::class,
-                'choice_label'=>'cname',
-                'choice_value' => 'id',
-                'label'=>'مقصد حرکت:'
-            ])
-            ->add('dateSuggest',Type\JdateType::class,['label'=>'تاریخ مسافرت:','data'=>$jdate->GetTodayDate()])
+            ->add('dateSendToCo',Type\JdateType::class,['label'=>'تاریخ مسافرت:','data'=>$jdate->GetTodayDate()])
             ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
+
             ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
             ->getForm();
         $alerts = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            if($ticket->getSource() == $ticket->getDestination()){
-                array_push($alerts,['type'=>'warning','message'=>'مبدا و مقصد سفر نمیتواند یکسان باشد.']);
-            }
-            else{
-                $ticket->setPassengerID($passenger);
-                $ticket->setDateSubmit(time());
-                $ticket->setArea($userMGR->currentPosition()->getDefaultArea());
-                $ticket->setSubmitter($userMGR->currentPosition());
-                $ticket->setTicketState($entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>0]));
-                $entityMGR->insertEntity($ticket);
-                $logMGR->addEvent('CERTICKET'.$ticket->getId(),'ایجاد','درخواست بلیط','CEREMONIAL',$request->getClientIp());
-                $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست بلیط هواپیما','CEREMONIAL',$request->getClientIp());
-                $des = sprintf('درخواست بلیط هواپیما توسط %s ثبت شد.',$ticket->getSubmitter()->getPublicLabel());
-                $url = $this->generateUrl('ceremonialDOINGTicketView',['id'=>$ticket->getId()]);
-                $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url);
-                return $this->redirectToRoute('ceremonialREQTicketView',['id'=>$ticket->getId(),'msg'=>1]);
-            }
+            $visa->setPassenger($passenger);
+            $visa->setDateSubmit(time());
+            $visa->setSubmitter($userMGR->currentUser());
+            $visa->setArea($userMGR->currentPosition()->getDefaultArea());
+            $visa->setVisaState($entityMGR->findOneBy('App:CMVisaState',['StateCode'=>1]));
+
+            $entityMGR->insertEntity($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'ایجاد','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزا توسط %s ثبت شد.',$visa->getSubmitter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa>getId()]);
+            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
+            return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
         }
-        return $this->render('ceremonial/reqAIRpane.html.twig',[
+        return $this->render('ceremonial/REQVisaNew.html.twig',[
             'passenger'=>$passenger,
             'form'=>$form->createView(),
             'alerts'=>$alerts
         ]);
+    }
+    /**
+     * @Route("/ceremonial/req/passport/view/{id}/{msg}", name="ceremonialREQVisaView")
+     */
+    public function ceremonialREQVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
+    {
+
+    }
+
+
+    //----------------------------------------- operator part ----------------------------------------
+    /**
+     * @Route("/ceremonial/opt/visa/view/{id}/{msg}", name="ceremonialOPTVisaView")
+     */
+    public function ceremonialOPTVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
+    {
+
     }
 }

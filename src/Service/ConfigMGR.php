@@ -159,6 +159,73 @@ class ConfigMGR
             $this->em->insertEntity($sentity);
         }
 
+        //import default Visa countries
+        if(count($this->em->findAll('App:CMVisaCountry')) == 0){
+            $entity = new Entity\CMVisaCountry();
+            $entity->setCountryCode(964);
+            $entity->setCountryName('عراق');
+            $this->em->insertEntity($entity);
+        }
+
+        //import default Visa send ways
+        if(count($this->em->findAll('App:CMVisaSendWay')) == 0){
+            $entity = new Entity\CMVisaSendWay();
+            $entity->setWayCode(1);
+            $entity->setWayName('تحویل به دفتر شرکت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaSendWay();
+            $entity->setWayCode(2);
+            $entity->setWayName('ارسال توسط شرکت پست');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaSendWay();
+            $entity->setWayCode(3);
+            $entity->setWayName('ارسال توسط تیپاکس');
+            $this->em->insertEntity($entity);
+        }
+
+        //import default Visa states
+        if(count($this->em->findAll('App:CMVisaState')) == 0){
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(1);
+            $entity->setStateName('ارسال به دفتر شرکت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(2);
+            $entity->setStateName('دریافت شده توسط واحد تشریفات');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(3);
+            $entity->setStateName('در انتظار تایید اقدامات تامینی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(4);
+            $entity->setStateName('تایید شده توسط مدیریت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(5);
+            $entity->setStateName('ارسال شده به سفارت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(6);
+            $entity->setStateName('بازگشت از سفارت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(7);
+            $entity->setStateName('ارسال به مرز');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(8);
+            $entity->setStateName('اعلام وصول مرز');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(9);
+            $entity->setStateName('ارسال به دفتر شرکت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(10);
+            $entity->setStateName('تحویل به نفر');
+            $this->em->insertEntity($entity);
+        }
         //import CM default accept if conjections
         if(count($this->em->findAll('App:CMacceptIF')) == 0) {
             $entity = new Entity\CMacceptIF();

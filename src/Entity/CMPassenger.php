@@ -108,10 +108,16 @@ class CMPassenger
      */
     private $cMPassengerPersonalDocs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="passenger", orphanRemoval=true)
+     */
+    private $cMVisaReqs;
+
     public function __construct()
     {
         $this->cMAirTickets = new ArrayCollection();
         $this->cMPassengerPersonalDocs = new ArrayCollection();
+        $this->cMVisaReqs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -367,6 +373,37 @@ class CMPassenger
             // set the owning side to null (unless already changed)
             if ($cMPassengerPersonalDoc->getPassenger() === $this) {
                 $cMPassengerPersonalDoc->setPassenger(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaReq[]
+     */
+    public function getCMVisaReqs(): Collection
+    {
+        return $this->cMVisaReqs;
+    }
+
+    public function addCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if (!$this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs[] = $cMVisaReq;
+            $cMVisaReq->setPassenger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if ($this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs->removeElement($cMVisaReq);
+            // set the owning side to null (unless already changed)
+            if ($cMVisaReq->getPassenger() === $this) {
+                $cMVisaReq->setPassenger(null);
             }
         }
 

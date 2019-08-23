@@ -43,10 +43,16 @@ class SysArea
      */
     private $cMAirTickets;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="area", orphanRemoval=true)
+     */
+    private $cMVisaReqs;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
         $this->cMAirTickets = new ArrayCollection();
+        $this->cMVisaReqs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -151,6 +157,37 @@ class SysArea
             // set the owning side to null (unless already changed)
             if ($cMAirTicket->getArea() === $this) {
                 $cMAirTicket->setArea(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaReq[]
+     */
+    public function getCMVisaReqs(): Collection
+    {
+        return $this->cMVisaReqs;
+    }
+
+    public function addCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if (!$this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs[] = $cMVisaReq;
+            $cMVisaReq->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMVisaReq(CMVisaReq $cMVisaReq): self
+    {
+        if ($this->cMVisaReqs->contains($cMVisaReq)) {
+            $this->cMVisaReqs->removeElement($cMVisaReq);
+            // set the owning side to null (unless already changed)
+            if ($cMVisaReq->getArea() === $this) {
+                $cMVisaReq->setArea(null);
             }
         }
 
