@@ -27,6 +27,10 @@
                     <td>{{ passenger.pfather }}</td>
                     <td>{{ passenger.pbirthday }}</td>
                     <td>
+                        <a class="btn btn-success" href="{{ path('ceremonialPassportNew',{'id':passenger.id}) }}">
+                            <i class="fas fa-passport"></i>
+                            <span>درخواست ویزا</span>
+                        </a>
                         <a class="btn btn-primary" href="{{ path('ceremonialREQAIRpaneNew',{'id':passenger.id}) }}">
                             <i class="fas fa-plane"></i>
                             <span>بلیط هواپیما</span>
