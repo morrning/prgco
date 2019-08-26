@@ -1,20 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'hsse/HSSEbase.html.twig' %}
 
-{% block title %}Hello HSSEController!{% endblock %}
+{% block title %}داشبورد سامانه جامع ایمنی و اقدامات تامینی{% endblock %}
+{% block appTop %}
+    <i class="fas fa-question-square" onclick="SysLoadMsg('1005');"></i>
+{% endblock %}
+{% block pageBody %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/src/Controller/HSSEController.php'|file_link(0) }}">src/Controller/HSSEController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/templates/hsse/index.html.twig'|file_link(0) }}">templates/hsse/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

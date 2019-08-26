@@ -23,7 +23,7 @@
                     <td>{{ visa.visaState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialOPTVisaView',{'id':visa.id}) }}">مشاهده</a>
+                        <a class="btn btn-primary" href="{{ path('HSSECeremonialView',{'id':visa.id}) }}">مشاهده</a>
                     </td>
                 </tr>
             {% endfor %}

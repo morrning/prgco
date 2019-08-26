@@ -210,7 +210,7 @@ class ConfigMGR
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
             $entity->setStateCode(3);
-            $entity->setStateName('در انتظار تایید اقدامات تامینی');
+            $entity->setStateName('تایید شده توسط اقدامات تامینی');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
             $entity->setStateCode(4);
@@ -238,7 +238,7 @@ class ConfigMGR
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
             $entity->setStateCode(10);
-            $entity->setStateName('تحویل به نفر');
+            $entity->setStateName('تحویل داده شده');
             $this->em->insertEntity($entity);
         }
         //import CM default accept if conjections
