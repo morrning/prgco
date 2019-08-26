@@ -729,7 +729,7 @@ class CeremonialController extends AbstractController
         $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
         $alerts = [];
         if($msg == 1)
-            array_push($alerts,['type'=>'success','message'=>'درخواست بلیط با موفقیت ثبت شد.']);
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت ثبت شد.']);
 
         return $this->render('ceremonial/REQVisaView.html.twig', [
             'passenger' => $passenger,
@@ -756,10 +756,74 @@ class CeremonialController extends AbstractController
 
     //----------------------------------------- operator part ----------------------------------------
     /**
+     * @Route("/ceremonial/opt/visa/list/{type}", name="ceremonialOPTVisaList")
+     */
+    public function ceremonialOPTVisaList($type = 'all',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        $visas = $entityMGR->findAll('App:CMVisaReq');
+
+        return $this->render('ceremonial/OPTVisaList.html.twig',
+            [
+                'visas'=>$visas
+            ]);
+    }
+
+
+    /**
      * @Route("/ceremonial/opt/visa/view/{id}/{msg}", name="ceremonialOPTVisaView")
      */
-    public function ceremonialOPTVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
+    public function ceremonialOPTVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
 
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        $passenger = $entityMGR->find('App:CMPassenger',$visa->getPassenger()->getId());
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت ثبت شد.']);
+
+        return $this->render('ceremonial/OPTVisaView.html.twig', [
+            'passenger' => $passenger,
+            'visa'=>$visa,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
+            'alerts'=>$alerts
+        ]);
+
+    }
+
+    /**
+     * @Route("/ceremonial/opt/visa/deliver/{id}", name="ceremonialOPTVisaDeliver")
+     */
+    public function ceremonialOPTVisaDeliver($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        $passenger = $visa->getPassenger();
+        $visaState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>2]);
+        $visa->setVisaState($visaState);
+        $visa->setDateReciveToCo(time());
+        $visa->setReciver($userMGR->currentPosition());
+        $entityMGR->update($visa);
+
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'اعلام وصول','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $des = sprintf('درخواست ویزا توسط %s اعلام وصول شد.',$userMGR->currentPosition()->getPublicLabel());
+        $url = $this->generateUrl('HSSECeremonialView',['id'=>$visa->getId()]);
+        $userMGR->addNotificationForGroup('HSSETOTAL','HSSE',$des,$url);
+        $des = sprintf('درخواست ویزا %s اعلام وصول شد.',$visa->getSubmitter()->getPublicLabel());
+        $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+        $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+
+        return $this->redirectToRoute('ceremonialOPTVisaView',['id'=>$visa->getId()]);
     }
 }

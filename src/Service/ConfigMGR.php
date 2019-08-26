@@ -95,6 +95,21 @@ class ConfigMGR
             $pl->setPlabel('مدیریت کنترل پروژه ناحیه');
             $this->em->insertEntity($pl);
         }
+        $entity = $this->em->findOneBy('App:SysPermissionLabel',['pname'=>'HSSETOTAL']);
+        if(is_null($entity)){
+            $entity = new Entity\SysPermissionLabel();
+            $entity->setPname('HSSETOTAL');
+            $entity->setPlabel('سامانه جامع ایمنی و اقدامات تامینی');
+            $this->em->insertEntity($entity);
+        }
+        $entity = $this->em->findOneBy('App:SysPermissionLabel',['pname'=>'HSSEAREA']);
+        if(is_null($entity)){
+            $entity = new Entity\SysPermissionLabel();
+            $entity->setPname('HSSEAREA');
+            $entity->setPlabel('سامانه ناحیه‌ای ایمنی و اقدامات تامینی');
+            $this->em->insertEntity($entity);
+        }
+
             //import iso forms type
         if(count($this->em->findAll('App:ISOFormType')) == 0) {
             $entity = new Entity\ISOFormType();

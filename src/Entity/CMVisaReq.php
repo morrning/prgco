@@ -106,6 +106,16 @@ class CMVisaReq
      */
     private $submitter;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="allvisaReq")
+     */
+    private $reciver;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     */
+    private $hsseAccepter;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -311,6 +321,30 @@ class CMVisaReq
     public function setSubmitter(?SysPosition $submitter): self
     {
         $this->submitter = $submitter;
+
+        return $this;
+    }
+
+    public function getReciver(): ?SysPosition
+    {
+        return $this->reciver;
+    }
+
+    public function setReciver(?SysPosition $reciver): self
+    {
+        $this->reciver = $reciver;
+
+        return $this;
+    }
+
+    public function getHsseAccepter(): ?SysPosition
+    {
+        return $this->hsseAccepter;
+    }
+
+    public function setHsseAccepter(?SysPosition $hsseAccepter): self
+    {
+        $this->hsseAccepter = $hsseAccepter;
 
         return $this;
     }

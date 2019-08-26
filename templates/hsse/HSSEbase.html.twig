@@ -1,0 +1,24 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}سامانه جامع ایمنی و اقدامات تامینی{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('HSSEDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-plane"></i>
+                <span>درخواست‌های ویزا</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <a class="dropdown-item" href="{{ path('ceremonialDOINGAIRpaneList',{'type':'acp'}) }}">درخواست‌های در انتظار</a>
+                <a class="dropdown-item" href="{{ path('ceremonialDOINGAIRpaneList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
+            </div>
+        </li>
+    </ul>
+{% endblock %}
+
+

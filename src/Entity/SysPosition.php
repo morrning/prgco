@@ -88,6 +88,11 @@ class SysPosition
      */
     private $cMVisaReqs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="reciver")
+     */
+    private $allvisaReq;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -97,6 +102,7 @@ class SysPosition
         $this->no = new ArrayCollection();
         $this->aCCdocs = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
+        $this->allvisaReq = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -419,6 +425,37 @@ class SysPosition
             // set the owning side to null (unless already changed)
             if ($cMVisaReq->getSubmitter() === $this) {
                 $cMVisaReq->setSubmitter(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaReq[]
+     */
+    public function getAllvisaReq(): Collection
+    {
+        return $this->allvisaReq;
+    }
+
+    public function addAllvisaReq(CMVisaReq $allvisaReq): self
+    {
+        if (!$this->allvisaReq->contains($allvisaReq)) {
+            $this->allvisaReq[] = $allvisaReq;
+            $allvisaReq->setReciver($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAllvisaReq(CMVisaReq $allvisaReq): self
+    {
+        if ($this->allvisaReq->contains($allvisaReq)) {
+            $this->allvisaReq->removeElement($allvisaReq);
+            // set the owning side to null (unless already changed)
+            if ($allvisaReq->getReciver() === $this) {
+                $allvisaReq->setReciver(null);
             }
         }
 

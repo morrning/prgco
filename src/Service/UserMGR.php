@@ -206,6 +206,8 @@ class UserMGR
 
     public function addNotificationForGroup($GroupName,$boundle,$des,$url,$pid=1){
         $group = $this->em->findOneBy('App:SysGroup',['groupName'=>$GroupName,'bundle'=>$boundle,'PID'=>$pid]);
+        if(is_null($group))
+            return false;
         $users = $this->positionsOfGroup($group->getId());
         foreach ($users as $user)
         {

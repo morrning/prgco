@@ -11,7 +11,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-plane"></i>
-                <span>بلیط هواپیما</span>
+                <span>درخواست‌های بلیط هواپیما</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="pagesDropdown">
                 <a class="dropdown-item" href="{{ path('ceremonialOPTAIRpaneList',{'type':'acp'}) }}">درخواست‌های تایید شده</a>
@@ -21,11 +21,12 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-passport"></i>
-                <span>ویزا</span>
+                <span>درخواست‌های ویزا</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                <a class="dropdown-item" href="{{ path('ceremonialOPTAIRpaneList',{'type':'acp'}) }}">درخواست‌های تایید شده</a>
-                <a class="dropdown-item" href="{{ path('ceremonialOPTAIRpaneList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'wfd'}) }}">درخواست‌های در انتظار</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'accepted'}) }}">درخواست های تایید شده</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
             </div>
         </li>
     </ul>

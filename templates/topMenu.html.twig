@@ -80,6 +80,12 @@
                                 سامانه اپراتوری تشریفات
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('HSSETOTAL','HSSE') == true %}
+                            <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-lamp"></i>
+                                سامانه جامع ایمنی و اقدامات تامینی
+                            </a>
+                        {% endif %}
                     </div>
                 </li>
 
@@ -109,6 +115,12 @@
                             <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-passport"></i>
                                 سامانه درخواست تشریفات
+                            </a>
+                        {% endif %}
+                        {% if UserMGR.hasPermission('HSSEAREA','HSSE',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-lamp"></i>
+                                سامانه ناحیه‌ای ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
                     </div>
