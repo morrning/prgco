@@ -112,9 +112,29 @@ class CMVisaReq
     private $reciver;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $hsseAccepter;
+    private $hseState;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hseedu;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $hseSubmitdate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="visaReqHse")
+     */
+    private $hseAR;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $hseDes;
 
     public function getId(): ?int
     {
@@ -337,14 +357,62 @@ class CMVisaReq
         return $this;
     }
 
-    public function getHsseAccepter(): ?SysPosition
+    public function getHseState(): ?string
     {
-        return $this->hsseAccepter;
+        return $this->hseState;
     }
 
-    public function setHsseAccepter(?SysPosition $hsseAccepter): self
+    public function setHseState(?string $hseState): self
     {
-        $this->hsseAccepter = $hsseAccepter;
+        $this->hseState = $hseState;
+
+        return $this;
+    }
+
+    public function getHseedu(): ?string
+    {
+        return $this->hseedu;
+    }
+
+    public function setHseedu(?string $hseedu): self
+    {
+        $this->hseedu = $hseedu;
+
+        return $this;
+    }
+
+    public function getHseSubmitdate(): ?string
+    {
+        return $this->hseSubmitdate;
+    }
+
+    public function setHseSubmitdate(?string $hseSubmitdate): self
+    {
+        $this->hseSubmitdate = $hseSubmitdate;
+
+        return $this;
+    }
+
+    public function getHseAR(): ?SysPosition
+    {
+        return $this->hseAR;
+    }
+
+    public function setHseAR(?SysPosition $hseAR): self
+    {
+        $this->hseAR = $hseAR;
+
+        return $this;
+    }
+
+    public function getHseDes(): ?string
+    {
+        return $this->hseDes;
+    }
+
+    public function setHseDes(?string $hseDes): self
+    {
+        $this->hseDes = $hseDes;
 
         return $this;
     }

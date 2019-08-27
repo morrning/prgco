@@ -201,6 +201,14 @@ class ConfigMGR
         //import default Visa states
         if(count($this->em->findAll('App:CMVisaState')) == 0){
             $entity = new Entity\CMVisaState();
+            $entity->setStateCode(-2);
+            $entity->setStateName('رد از طرف مدیریت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
+            $entity->setStateCode(-1);
+            $entity->setStateName('رد از طرف ایمنی و اقدامات تامینی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
             $entity->setStateCode(1);
             $entity->setStateName('ارسال به دفتر شرکت');
             $this->em->insertEntity($entity);

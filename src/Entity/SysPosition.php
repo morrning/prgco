@@ -93,6 +93,11 @@ class SysPosition
      */
     private $allvisaReq;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="hseAR")
+     */
+    private $visaReqHse;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -103,6 +108,7 @@ class SysPosition
         $this->aCCdocs = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
         $this->allvisaReq = new ArrayCollection();
+        $this->visaReqHse = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -456,6 +462,37 @@ class SysPosition
             // set the owning side to null (unless already changed)
             if ($allvisaReq->getReciver() === $this) {
                 $allvisaReq->setReciver(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaReq[]
+     */
+    public function getVisaReqHse(): Collection
+    {
+        return $this->visaReqHse;
+    }
+
+    public function addVisaReqHse(CMVisaReq $visaReqHse): self
+    {
+        if (!$this->visaReqHse->contains($visaReqHse)) {
+            $this->visaReqHse[] = $visaReqHse;
+            $visaReqHse->setHseAR($this);
+        }
+
+        return $this;
+    }
+
+    public function removeVisaReqHse(CMVisaReq $visaReqHse): self
+    {
+        if ($this->visaReqHse->contains($visaReqHse)) {
+            $this->visaReqHse->removeElement($visaReqHse);
+            // set the owning side to null (unless already changed)
+            if ($visaReqHse->getHseAR() === $this) {
+                $visaReqHse->setHseAR(null);
             }
         }
 

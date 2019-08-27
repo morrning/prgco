@@ -135,7 +135,7 @@
                                 </h6>
                                 <hr>
                                 {% if visa.visaState.stateCode == 1 %}
-                                    <a class="btn btn-success" href="{{ path('ceremonialOPTVisaDeliver', {'id': 1} ) }}">
+                                    <a class="btn btn-success" href="{{ path('ceremonialOPTVisaDeliver', {'id': visa.id} ) }}">
                                         <i class="fa fa-inbox-in"></i>
                                         اعلام وصول به شرکت
                                     </a>
