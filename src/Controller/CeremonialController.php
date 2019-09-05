@@ -411,7 +411,69 @@ class CeremonialController extends AbstractController
      */
     public function ceremonialDOINGVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
 
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        $passenger = $entityMGR->find('App:CMPassenger',$visa->getPassenger()->getId());
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+
+        $form = $this->createFormBuilder($visa)
+            ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $form1 = $this->createFormBuilder($visa)
+            ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $form1->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $visa->setHseSubmitDate(time());
+            $visa->setHseAR($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>3]);
+            $visa->setVisaState($acceptState);
+            $visa->setHseState('مورد تایید');
+            $entityMGR->update($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'تایید','ایمنی و اقدامات تامینی','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزای شما از نظر ایمنی و اقدامات تامینی توسط %s تایید شد.',$visa->getHseAR()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+
+            $des = sprintf('درخواست ویزا از نظر ایمنی و اقدامات تامینی توسط %s تایید شد.',$visa->getHseAR()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialDOINGVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url);
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);        }
+
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $visa->setHseSubmitDate(time());
+            $visa->setHseAR($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>-1]);
+            $visa->setVisaState($acceptState);
+            $visa->setHseState('عدم تایید');
+            $entityMGR->update($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'عدم تایید','ایمنی و اقدامات تامینی','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزای شما از نظر ایمنی و اقدامات تامینی توسط %s رد شد.',$visa->getHseAR()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت رد شد.']);
+
+        }
+        return $this->render('ceremonial/DoingVisaView.html.twig', [
+            'passenger' => $passenger,
+            'visa'=>$visa,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
+            'alerts'=>$alerts,
+            'form'=>$form->createView(),
+            'form1'=>$form1->createView()
+        ]);
     }
 
     /**
