@@ -1,0 +1,33 @@
+{% extends 'ceremonial/DOINGbase.html.twig' %}
+
+{% block title %}{{ typeName }}{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام و نام‌خانوادگی</th>
+                <th>شماره ملی</th>
+                <th>وضعیت درخواست</th>
+                <th>تاریخ درخواست</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for visa in visas %}
+                <tr class="{% if visa.visaState.stateCode == 10 %}bg-success text-light{% endif %}">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ visa.passenger.pname }} {{ visa.passenger.pfamily }}</td>
+                    <td>{{ visa.passenger.pcodemeli }}</td>
+                    <td>{{ visa.visaState.stateName }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('ceremonialDOINGVisaView',{'id':visa.id}) }}">مشاهده</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

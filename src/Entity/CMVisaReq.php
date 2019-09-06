@@ -136,6 +136,11 @@ class CMVisaReq
      */
     private $hseDes;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ARSubmitDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -413,6 +418,18 @@ class CMVisaReq
     public function setHseDes(?string $hseDes): self
     {
         $this->hseDes = $hseDes;
+
+        return $this;
+    }
+
+    public function getARSubmitDate(): ?string
+    {
+        return $this->ARSubmitDate;
+    }
+
+    public function setARSubmitDate(?string $ARSubmitDate): self
+    {
+        $this->ARSubmitDate = $ARSubmitDate;
 
         return $this;
     }

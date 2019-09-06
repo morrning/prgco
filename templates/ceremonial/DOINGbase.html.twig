@@ -18,6 +18,17 @@
                 <a class="dropdown-item" href="{{ path('ceremonialDOINGAIRpaneList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
             </div>
         </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-passport"></i>
+                <span>درخواست‌های ویزا</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <a class="dropdown-item" href="{{ path('ceremonialDOINGVisaList',{'type':'wfd'}) }}">درخواست‌های در انتظار</a>
+                <a class="dropdown-item" href="{{ path('ceremonialDOINGVisaList',{'type':'accepted'}) }}">درخواست های تایید شده</a>
+                <a class="dropdown-item" href="{{ path('ceremonialDOINGVisaList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
+            </div>
+        </li>
     </ul>
 {% endblock %}
 

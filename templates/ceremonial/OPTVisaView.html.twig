@@ -139,6 +139,16 @@
                                         <i class="fa fa-inbox-in"></i>
                                         اعلام وصول به شرکت
                                     </a>
+                                {% elseif visa.visaState.stateCode == 4 %}
+                                    <a class="btn btn-success" href="{{ path('ceremonialOPTVisaDeliver', {'id': visa.id} ) }}">
+                                        <i class="fa fa-forward"></i>
+                                        اعلام ارسال به کنسولگری
+                                    </a>
+                                {% elseif visa.visaState.stateCode == 5 %}
+                                    <a class="btn btn-success" href="{{ path('ceremonialOPTVisaDeliver', {'id': visa.id} ) }}">
+                                        <i class="fa fa-undo-alt"></i>
+                                        اعلام بازگشت از کنسولگری
+                                    </a>
                                 {% elseif visa.visaState.stateCode == 2 %}
                                     <i class="fa fa-times-circle"></i>
                                     در انتظار تایید واحد ایمنی و اقدامات تامینی

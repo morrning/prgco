@@ -95,7 +95,7 @@ class HSSEController extends AbstractController
             ->getForm();
         $form1 = $this->createFormBuilder($visa)
             ->add('hseedu', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->add('submit1', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
         $form->handleRequest($request);

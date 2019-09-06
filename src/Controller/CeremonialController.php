@@ -407,6 +407,37 @@ class CeremonialController extends AbstractController
     }
 
     /**
+     * @Route("/ceremonial/mng/visa/list/{type}", name="ceremonialDOINGVisaList")
+     */
+    public function ceremonialDOINGVisaList($type = 'all',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        if($type == 'all'){
+            $visas = $entityMGR->findAll('App:CMVisaReq');
+            $typeName = 'آرشیو تمام درخواست‌ها';
+        }
+        elseif ($type == 'wfd'){
+            $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>3]);
+            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state]);
+            $typeName = 'پاسپورت‌های در انتظار تایید';
+        }
+        elseif ($type == 'accepted'){
+            $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>4]);
+            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state]);
+            $typeName = 'پاسپورت‌های تایید شده';
+        }
+        else
+            return $this->redirectToRoute('404');
+
+        return $this->render('ceremonial/DOINGVisaList.html.twig',
+            [
+                'visas'=>$visas,
+                'typeName'=>$typeName
+            ]);
+    }
+
+    /**
      * @Route("/ceremonial/doing/visa/view/{id}/{msg}", name="ceremonialDOINGVisaView")
      */
     public function ceremonialDOINGVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
@@ -415,6 +446,7 @@ class CeremonialController extends AbstractController
             return $this->redirectToRoute('403');
 
         $visa = $entityMGR->find('App:CMVisaReq',$id);
+        $visa1 = $entityMGR->find('App:CMVisaReq',$id);
         if(is_null($visa))
             return $this->redirectToRoute('404');
         $passenger = $entityMGR->find('App:CMPassenger',$visa->getPassenger()->getId());
@@ -425,41 +457,39 @@ class CeremonialController extends AbstractController
             ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
-        $form1 = $this->createFormBuilder($visa)
+        $form1 = $this->createFormBuilder($visa1)
             ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->add('submit1', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
         $form->handleRequest($request);
         $form1->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $visa->setHseSubmitDate(time());
-            $visa->setHseAR($userMGR->currentPosition());
-            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>3]);
+            $visa->setARSubmitDate(time());
+            $visa->setAccepter($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>4]);
             $visa->setVisaState($acceptState);
-            $visa->setHseState('مورد تایید');
             $entityMGR->update($visa);
 
             $logMGR->addEvent('CERVISA'.$visa->getId(),'تایید','ایمنی و اقدامات تامینی','CEREMONIAL',$request->getClientIp());
-            $des = sprintf('درخواست ویزای شما از نظر ایمنی و اقدامات تامینی توسط %s تایید شد.',$visa->getHseAR()->getPublicLabel());
+            $des = sprintf('درخواست ویزای شما توسط %s تایید شد.',$visa->getHseAR()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
 
-            $des = sprintf('درخواست ویزا از نظر ایمنی و اقدامات تامینی توسط %s تایید شد.',$visa->getHseAR()->getPublicLabel());
-            $url = $this->generateUrl('ceremonialDOINGVisaView',['id'=>$visa->getId()]);
-            $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url);
-            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);        }
-
+            $des = 'درخواست ویزا توسط مدیریت تایید شد.';
+            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);
+        }
         if ($form1->isSubmitted() && $form1->isValid()) {
-            $visa->setHseSubmitDate(time());
-            $visa->setHseAR($userMGR->currentPosition());
-            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>-1]);
-            $visa->setVisaState($acceptState);
-            $visa->setHseState('عدم تایید');
-            $entityMGR->update($visa);
+            $visa1->setARSubmitDate(time());
+            $visa1->setRejecter($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>-2]);
+            $visa1->setVisaState($acceptState);
+            $entityMGR->update($visa1);
 
-            $logMGR->addEvent('CERVISA'.$visa->getId(),'عدم تایید','ایمنی و اقدامات تامینی','CEREMONIAL',$request->getClientIp());
-            $des = sprintf('درخواست ویزای شما از نظر ایمنی و اقدامات تامینی توسط %s رد شد.',$visa->getHseAR()->getPublicLabel());
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'تایید','ایمنی و اقدامات تامینی','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزای شما توسط %s رد شد.',$visa->getHseAR()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
 
@@ -475,6 +505,7 @@ class CeremonialController extends AbstractController
             'form1'=>$form1->createView()
         ]);
     }
+
 
     /**
      * @Route("/ceremonial/doing/air/ticket/list/{type}", name="ceremonialDOINGAIRpaneList")
