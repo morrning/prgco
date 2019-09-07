@@ -407,6 +407,38 @@ class CeremonialController extends AbstractController
     }
 
     /**
+     * @Route("/ceremonial/doing/acc/balance/{msg}", name="ceremonialDOINGACCBalance")
+     */
+    public function ceremonialDOINGACCBalance($msg=0,Request $request,Service\ACC $ACC,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+
+        $moneyLabels=[];
+        $moneyTypes = $entityMGR->findAll('App:ACCMoney');
+        $moneyTotal = [];
+        $ic = $entityMGR->findOneBy('App:ACCiccenter',['iccode'=>1002]);
+        $totalDocs = $entityMGR->findBy('App:ACCdoc',['iccenter'=>$ic]);
+        foreach ($moneyTypes as $moneyType)
+        {
+            array_push($moneyLabels, $moneyType->getMoneyName());
+            $docs = $entityMGR->findBy('App:ACCdoc',['iccenter'=>$ic,'Money'=>$moneyType]);
+            $total = 0;
+            foreach ($docs as $doc){
+                $total = $total + $doc->getTotalValue();
+            }
+            array_push($moneyTotal,$total);
+        }
+
+        return $this->render('ceremonial/DOINGACCTicket.html.twig', [
+            'moneys' => $moneyTypes,
+            'moneyLabels'=>$moneyLabels,
+            'moneyTotals'=>$moneyTotal,
+            'docs'=>$totalDocs
+        ]);
+    }
+
+    /**
      * @Route("/ceremonial/mng/visa/list/{type}", name="ceremonialDOINGVisaList")
      */
     public function ceremonialDOINGVisaList($type = 'all',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
@@ -902,7 +934,11 @@ class CeremonialController extends AbstractController
         $passenger = $entityMGR->find('App:CMPassenger',$visa->getPassenger()->getId());
         $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
         $alerts = [];
-        if($msg == 1)
+        if($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'اعلام ارسال پاسپورت به کنسولگری با موفقیت ثبت شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'اعلام دریافت پاسپورت از کنسول گری با موفقیت ثبت شد.']);
+        elseif($msg == 1)
             array_push($alerts,['type'=>'success','message'=>'اعلام وصول پاسپورت با موفقیت ثبت شد.']);
 
         return $this->render('ceremonial/OPTVisaView.html.twig', [
@@ -942,5 +978,47 @@ class CeremonialController extends AbstractController
         $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
 
         return $this->redirectToRoute('ceremonialOPTVisaView',['id'=>$visa->getId(),'msg'=>1]);
+    }
+
+    /**
+     * @Route("/ceremonial/opt/visa/consulate/{id}/{type}", name="ceremonialOPTVisaConsulate")
+     */
+    public function ceremonialOPTVisaConsulate($id,$type='in',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        $passenger = $visa->getPassenger();
+        if($type == 'in'){
+            $visaState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>5]);
+            $visa->setVisaState($visaState);
+            $visa->setDateInputConsulate(time());
+            $visa->setConsulateImporter($userMGR->currentPosition());
+            $entityMGR->update($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'تحویل گذرنامه به کنسولگری','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('گذرنامه توسط %s به کنسولگری تحویل داده شد.',$visa->getSubmitter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            return $this->redirectToRoute('ceremonialOPTVisaView',['id'=>$visa->getId(),'msg'=>2]);
+        }
+        if($type == 'out'){
+            $visaState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>6]);
+            $visa->setVisaState($visaState);
+            $visa->setDateOutputConsulate(time());
+            $visa->setConsulateExporter($userMGR->currentPosition());
+            $entityMGR->update($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'تحویل از کنسولگری','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('گذرنامه توسط %s از کنسولگری تحویل گرفته شد.',$visa->getSubmitter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            return $this->redirectToRoute('ceremonialOPTVisaView',['id'=>$visa->getId(),'msg'=>3]);
+        }
     }
 }

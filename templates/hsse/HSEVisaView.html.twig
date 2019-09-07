@@ -181,6 +181,60 @@
                                 <p> پاسپورت در {{ Jdate.jdate('Y/n/d H:i:s',visa.dateReciveToCo) }}  توسط {{ visa.reciver.publicLabel }} دریافت شد.</p>
                             </div>
                         {% endif %}
+                        {% if visa.visaState.StateCode  >= 3  %}
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-check-square"></i>
+                                    تایید مدیریت ایمنی و اقدامات تامینی
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.hseSubmitDate) }}  توسط {{ visa.hseAR.publicLabel }} تایید شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if visa.visaState.StateCode  <= -1 and  visa.visaState.StateCode  <= 0 %}
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-times-circle"></i>
+                                    رد درخواست توسط مدیریت ایمنی و اقدامات تامینی
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.hseSubmitDate) }}  توسط {{ visa.hseAR.publicLabel }} رد شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if visa.visaState.StateCode  <= -2 and  visa.visaState.StateCode  <= 0 %}
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-times-circle"></i>
+                                    رد درخواست توسط مدیریت مدیریت
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ARSubmitDate) }}  توسط {{ visa.rejecter.publicLabel }} رد شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if visa.visaState.StateCode  >= 4  %}
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-check-double"></i>
+                                    تایید مدیریت
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ARSubmitDate) }}  توسط {{ visa.accepter.publicLabel }} تایید شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if visa.visaState.StateCode  >= 5  %}
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-box-alt"></i>
+                                    ارسال به کنسولگری
+                                </h4>
+                                <p> گذرنامه در {{ Jdate.jdate('Y/n/d H:i:s',visa.dateInputConsulate) }}  توسط {{ visa.consulateImporter.publicLabel }} تحویل کنسولگری شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if visa.visaState.StateCode  >= 6  %}
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-undo"></i>
+                                    بازگشت از کنسولگری
+                                </h4>
+                                <p> گذرنامه در {{ Jdate.jdate('Y/n/d H:i:s',visa.dateOutputConsulate) }}  توسط {{ visa.consulateExporter.publicLabel }} از کنسولگری  تحویل گرفته شد.</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>

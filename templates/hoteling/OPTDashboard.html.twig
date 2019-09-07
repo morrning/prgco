@@ -1,0 +1,35 @@
+{% extends 'hoteling/OPTbase.html.twig' %}
+
+{% block title %}داشبورد اپراتوری اسکان و اقامت{% endblock %}
+
+{% block pageBody %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-md-4 align-items-stretch">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    <i class="fas fa-chart-line"></i>
+                    آمار و اطلاعات
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-4 align-items-stretch">
+            <div class="card">
+                <div class="card-header bg-primary text-light">
+                    <i class="fas fa-newspaper"></i>
+                    تابلو اعلانات
+                </div>
+                <div class="card-body">
+                    <ul class="pr-1">
+                        {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                        {% for post in posts %}
+                        <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

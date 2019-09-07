@@ -123,6 +123,12 @@
                                 سامانه ناحیه‌ای ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('hotelingOPTDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-hotel"></i>
+                                سامانه اپراتوری اسکان و اقامت
+                            </a>
+                        {% endif %}
                     </div>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('help') }}">

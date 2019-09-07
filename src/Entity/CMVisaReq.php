@@ -141,6 +141,26 @@ class CMVisaReq
      */
     private $ARSubmitDate;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dateInputConsulate;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $dateOutputConsulate;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     */
+    private $consulateImporter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     */
+    private $consulateExporter;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -430,6 +450,54 @@ class CMVisaReq
     public function setARSubmitDate(?string $ARSubmitDate): self
     {
         $this->ARSubmitDate = $ARSubmitDate;
+
+        return $this;
+    }
+
+    public function getDateInputConsulate(): ?string
+    {
+        return $this->dateInputConsulate;
+    }
+
+    public function setDateInputConsulate(?string $dateInputConsulate): self
+    {
+        $this->dateInputConsulate = $dateInputConsulate;
+
+        return $this;
+    }
+
+    public function getDateOutputConsulate(): ?string
+    {
+        return $this->dateOutputConsulate;
+    }
+
+    public function setDateOutputConsulate(?string $dateOutputConsulate): self
+    {
+        $this->dateOutputConsulate = $dateOutputConsulate;
+
+        return $this;
+    }
+
+    public function getConsulateImporter(): ?SysPosition
+    {
+        return $this->consulateImporter;
+    }
+
+    public function setConsulateImporter(?SysPosition $consulateImporter): self
+    {
+        $this->consulateImporter = $consulateImporter;
+
+        return $this;
+    }
+
+    public function getConsulateExporter(): ?SysPosition
+    {
+        return $this->consulateExporter;
+    }
+
+    public function setConsulateExporter(?SysPosition $consulateExporter): self
+    {
+        $this->consulateExporter = $consulateExporter;
 
         return $this;
     }
