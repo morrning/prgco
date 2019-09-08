@@ -129,6 +129,12 @@
                                 سامانه اپراتوری اسکان و اقامت
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('CMOPTARBAEIN','CMARBAEIN',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('cmarbainDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-circle"></i>
+                                سامانه اپراتوری اربعین
+                            </a>
+                        {% endif %}
                     </div>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('help') }}">

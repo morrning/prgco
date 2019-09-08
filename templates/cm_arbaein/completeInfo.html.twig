@@ -1,0 +1,71 @@
+{% extends 'cm_arbaein/base.html.twig' %}
+
+{% block title %}تکمیل اطلاعات زائر{% endblock %}
+
+{% block pageBody %}
+    <div class="row alert alert-success">
+        <div class="col-sm-12 col-md-3">
+            <p>
+                شماره جانمایی:
+                <span class="text-danger">
+                    {{ zaer.id }}
+                </span>
+            </p>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <p>
+                کد ملی:
+                <span class="text-danger">
+                    {{ zaer.codemeli }}
+                </span>
+            </p>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <p>
+                شماره فرم:
+                <span class="text-danger">
+                    {{ zaer.FGUID }}
+                </span>
+            </p>
+        </div>
+        <div class="col-sm-12 col-md-3">
+            <p>
+                شماره کارت:
+                <span class="text-danger">
+                    {{ zaer.FGUID }}
+                </span>
+            </p>
+        </div>
+    </div>
+    <hr>
+    {{ form_start(form) }}
+    <h3 class="text-success">اطلاعات فردی:</h3>
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            {{ form_label(form.fullname) }}
+            {{ form_widget(form.fullname) }}
+        </div>
+        <div class="col-sm-12 col-md-4">
+            {{ form_label(form.birthday) }}
+            {{ form_widget(form.birthday) }}
+        </div>
+        <div class="col-sm-12 col-md-4">
+            {{ form_label(form.tel) }}
+            {{ form_widget(form.tel) }}
+        </div>
+        <div class="col-sm-12 col-md-4 pt-2">
+            {{ form_label(form.isMan) }}
+            {{ form_widget(form.isMan) }}
+        </div>
+        <div class="col-12 pt-2">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-warning" href="{{ path('cmarbainSearchInfoCard') }}">جست و جوی مجدد</a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+    <script>
+        $(document).ready(function(){
+            $('input.activeInput').select();
+        });
+    </script>
+{% endblock %}

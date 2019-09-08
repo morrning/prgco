@@ -1,0 +1,26 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}سامانه ساماندهی اربعین{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('cmarbainDashboard') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+            <a class="nav-link" href="{{ path('cmarbainNewCard') }}">
+                <i class="fas fa-plus"></i>
+                <span>صدور کارت</span>
+            </a>
+            <a class="nav-link" href="{{ path('cmarbainSearchInfoCard') }}">
+                <i class="fas fa-list"></i>
+                <span>تکمیل اطلاعات</span>
+            </a>
+            <a class="nav-link" href="{{ path('ceremonialREQpasengers') }}">
+                <i class="fas fa-undo"></i>
+                <span>خروج زائر</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+

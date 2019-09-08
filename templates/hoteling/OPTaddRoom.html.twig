@@ -1,0 +1,28 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+
+{% block title %}اتاق جدید{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        <div class="col-sm-12 col-md-4 pb-3">
+            {{ form_start(form) }}
+            {{ form_label(form.num) }}
+            {{ form_widget(form.num) }}
+        </div>
+        <div class="col-sm-12 col-md-4 pb-3">
+            {{ form_start(form) }}
+            {{ form_label(form.dep) }}
+            {{ form_widget(form.dep) }}
+        </div>
+    </div>
+    <hr>
+    <div class="row mt-2">
+        <div class="col-12">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-info" href="{{ path('hotelingHotelList') }}">
+                <i class="fa fa-undo"></i>
+                بازگشت
+            </a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

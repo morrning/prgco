@@ -1,0 +1,22 @@
+{% extends 'cm_arbaein/base.html.twig' %}
+
+{% block title %} خروج زائر{% endblock %}
+
+{% block pageBody %}
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-sm-12 col-md-4">
+            {{ form_label(form.codemeli) }}
+            {{ form_widget(form.codemeli) }}
+        </div>
+        <div class="col-12 pt-2">
+            {{ form_widget(form.submit) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+    <script>
+        $(document).ready(function(){
+            $('input.activeInput').select();
+        });
+    </script>
+{% endblock %}

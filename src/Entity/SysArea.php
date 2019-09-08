@@ -48,11 +48,17 @@ class SysArea
      */
     private $cMVisaReqs;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\HotelingHotel", mappedBy="area", orphanRemoval=true)
+     */
+    private $hotelingHotels;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
         $this->cMAirTickets = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
+        $this->hotelingHotels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -188,6 +194,37 @@ class SysArea
             // set the owning side to null (unless already changed)
             if ($cMVisaReq->getArea() === $this) {
                 $cMVisaReq->setArea(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HotelingHotel[]
+     */
+    public function getHotelingHotels(): Collection
+    {
+        return $this->hotelingHotels;
+    }
+
+    public function addHotelingHotel(HotelingHotel $hotelingHotel): self
+    {
+        if (!$this->hotelingHotels->contains($hotelingHotel)) {
+            $this->hotelingHotels[] = $hotelingHotel;
+            $hotelingHotel->setArea($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHotelingHotel(HotelingHotel $hotelingHotel): self
+    {
+        if ($this->hotelingHotels->contains($hotelingHotel)) {
+            $this->hotelingHotels->removeElement($hotelingHotel);
+            // set the owning side to null (unless already changed)
+            if ($hotelingHotel->getArea() === $this) {
+                $hotelingHotel->setArea(null);
             }
         }
 

@@ -1,0 +1,33 @@
+{% extends 'hoteling/OPTbase.html.twig' %}
+
+{% block title %}مراکز اسکان{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام مرکز</th>
+                <th>آدرس</th>
+                <th>تعداد اتاق / سوئیت</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for hotel in hotels %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ hotel.hotelName }}</td>
+                    <td>{{ hotel.adr }}</td>
+                    <td>{{ hotel.hotelingRooms | length }}</td>
+                    <td>
+                        <a class="btn btn-success" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">افزودن اتاق</a>
+                        <a class="btn btn-primary" href="{{ path('hotelingHotelList',{'id':hotel.id}) }}">لیست اتاق‌ها</a>
+                        <a class="btn btn-warning" href="{{ path('hotelingHotelList',{'id':hotel.id}) }}">ویرایش</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
