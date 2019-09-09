@@ -1,22 +1,83 @@
 {% extends 'cm_arbaein/base.html.twig' %}
 
-{% block title %} خروج زائر{% endblock %}
+{% block title %}ثبت خروج زائر{% endblock %}
 
 {% block pageBody %}
-    {{ form_start(form) }}
-    <div class="row">
-        <div class="col-sm-12 col-md-4">
-            {{ form_label(form.codemeli) }}
-            {{ form_widget(form.codemeli) }}
+    <div class="jumbotron">
+        <h4 class="text-success">اطلاعات فردی</h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    شماره جانمایی:
+                    <span class="text-danger">
+                    {{ zaer.id }}
+                </span>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    کد ملی:
+                    <span class="text-danger">
+                    {{ zaer.codemeli }}
+                </span>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    شماره فرم:
+                    <span class="text-danger">
+                    {{ zaer.FGUID }}
+                </span>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    شماره کارت:
+                    <span class="text-danger">
+                    {{ zaer.FGUID }}
+                </span>
+                </p>
+            </div>
         </div>
-        <div class="col-12 pt-2">
-            {{ form_widget(form.submit) }}
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    نام و نام خانوادگی:
+                    <span class="text-danger">
+                    {{ zaer.fullname }}
+                </span>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    سال تولد:
+                    <span class="text-danger">
+                    {{ zaer.birthday }}
+                </span>
+                </p>
+            </div>
+            <div class="col-sm-12 col-md-3">
+                <p>
+                    تاریخ ورود:
+                    <span class="text-danger">
+                    {{ Jdate.jdate('Y/n/d H:i',zaer.inputDate) }}
+                </span>
+                </p>
+            </div>
+        </div>
+        <hr>
+        <div class="row pt-2">
+            <div class="col-12">
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        {{ form_widget(form.submit) }}
+                        <a class="btn btn-warning" href="{{ path('cmarbainExitZaer') }}">انصراف</a>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
         </div>
     </div>
-    {{ form_end(form) }}
-    <script>
-        $(document).ready(function(){
-            $('input.activeInput').select();
-        });
-    </script>
+
 {% endblock %}
