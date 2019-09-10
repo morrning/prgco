@@ -44,6 +44,20 @@ class CMArbaeinController extends AbstractController
     }
 
     /**
+     * @Route("/c/m/arbaein/list", name="cmarbainListZaer")
+     */
+    public function cmarbainListZaer(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CMOPTARBAEIN','CMARBAEIN',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        return $this->render('cm_arbaein/list.html.twig', [
+            'zaers' =>$entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea()])
+
+        ]);
+    }
+
+    /**
      * @Route("/c/m/arbaein/new/card", name="cmarbainNewCard")
      */
     public function cmarbainNewCard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\Jdate $jdate)
@@ -65,6 +79,11 @@ class CMArbaeinController extends AbstractController
                 array_push($alerts,['type'=>'danger','message'=>'این فرم قبلا ثبت شده است.']);
             elseif(!is_null($entityMGR->findOneBy('App:CMArbaein',['CGUID'=>$form->get('CGUID')->getData()])))
                 array_push($alerts,['type'=>'danger','message'=>'این کارت قبلا ثبت شده است.']);
+            elseif(!is_null($entityMGR->findOneBy('App:CMArbaein',[
+                'codemeli'=>$form->get('codemeli')->getData(),
+                'outputDate'=>null
+                ])))
+                array_push($alerts,['type'=>'danger','message'=>'زائر با این کد ملی قبلا ثبت شده است.']);
             else{
                 $zaer->setArea($userMGR->currentPosition()->getDefaultArea());
                 $zaer->setInputDate(time());

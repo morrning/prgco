@@ -1,0 +1,36 @@
+{% extends 'cm_arbaein/base.html.twig' %}
+
+{% block title %}لیست زائرین{% endblock %}
+
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>شماره ردیف</th>
+                <th>نام و نام‌خانوادگی</th>
+                <th>شماره ملی</th>
+                <th>شماره کارت</th>
+                <th>شماره فرم</th>
+                <th>تاریخ ورود</th>
+                <th>تاریخ خروج</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for zaer in zaers %}
+                <tr class="{% if zaer.outputDate == null %}bg-success text-light{% endif %}">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ zaer.id }}</td>
+                    <td>{{ zaer.fullname }}</td>
+                    <td>{{ zaer.codemeli }}</td>
+                    <td>{{ zaer.CGUID }}</td>
+                    <td>{{ zaer.FGUID }}</td>
+                    <td>{% if zaer.inputDate != null %}{{ Jdate.jdate('Y/n/d H:i',zaer.inputDate) }}{% endif %}</td>
+                    <td>{% if zaer.outputDate != null %}{{ Jdate.jdate('Y/n/d H:i',zaer.outputDate) }}{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
