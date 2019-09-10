@@ -37,6 +37,13 @@ class ConfigMGR
 
     public function importBasicData(){
         //IMPORT permission names
+        //IMPORT permission names
+        if(is_null($this->em->findOneBy('App:SysPermissionLabel',['pname'=>'CMOPTARBAEIN']))) {
+            $pl = new Entity\SysPermissionLabel();
+            $pl->setPname('CMOPTARBAEIN');
+            $pl->setPlabel('اپراتوری سامانه اربعین');
+            $this->em->insertEntity($pl);
+        }
         if(count($this->em->findAll('App:SysPermissionLabel')) == 0){
             $pl = new Entity\SysPermissionLabel();
             $pl->setPname('superAdmin');
