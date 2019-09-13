@@ -396,6 +396,71 @@ class ConfigMGR
             $entity->setTypeName('ARM');
             $this->em->insertEntity($entity);
         }
+        //import ICT default RAM type
+        if(count($this->em->findAll('App:ICTRamType')) == 0) {
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('1 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('2 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('3 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('4 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('6 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('8 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('16 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('24 GB');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRamType();
+            $entity->setTypeName('32 GB');
+            $this->em->insertEntity($entity);
+        }
+        //import ICT DOING STATE
+        if(count($this->em->findAll('App:ICTRequestEMSState')) == 0) {
+            $entity = new Entity\ICTRequestEMSState();
+            $entity->setStateName('عادی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRequestEMSState();
+            $entity->setStateName('فوری');
+            $this->em->insertEntity($entity);
+        }
+
+        //import ICT REQUEST TYPE
+        if(count($this->em->findAll('App:ICTRequestType')) == 0) {
+            $entity = new Entity\ICTRequestType();
+            $entity->setTypeName('نصب');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRequestType();
+            $entity->setTypeName('تعمیر و رفع عیب');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRequestType();
+            $entity->setTypeName('به روز رسانی');
+            $this->em->insertEntity($entity);
+        }
+
+        //import ICT REQUEST TYPE
+        if(count($this->em->findAll('App:ICTMachineType')) == 0) {
+            $entity = new Entity\ICTMachineType();
+            $entity->setTypeName('پرینتر');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTMachineType();
+            $entity->setTypeName('اسکنر');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTMachineType();
+            $entity->setTypeName('بیسیم');
+            $this->em->insertEntity($entity);
+        }
 
         //import acc account default
         if(count($this->em->findAll('App:ACCaccount')) == 0) {
