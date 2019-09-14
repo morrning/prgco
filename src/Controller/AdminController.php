@@ -466,6 +466,8 @@ class AdminController extends AbstractController
             $alerts = [['message'=>'کاربر با موفقیت اضافه شد.','type'=>'success']];
         if($msg==2)
             $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
+        if($msg==5)
+            $alerts = [['message'=>'این نام کاربری قبلا ثبت شده است.','type'=>'warning']];
 
         $users = $entityMGR->findAll('App:SysUser');
         $logMGR->addEvent('4ert','مشاهده','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
@@ -736,12 +738,15 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            $user->setPassword(md5($user->getPassword()));
-            $entityMGR->insertEntity($user);
-            $logMGR->addEvent('4ert','افزودن','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
-            $logger->info(sprintf('user %s add new user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
-            return $this->redirectToRoute('adminUsers',['msg'=>1]);
-
+            if(is_null($entityMGR->findOneBy('App:SysUser',['username'=>$user->getUsername()])))
+            {
+                $user->setPassword(md5($user->getPassword()));
+                $entityMGR->insertEntity($user);
+                $logMGR->addEvent('4ert','افزودن','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
+                $logger->info(sprintf('user %s add new user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
+                return $this->redirectToRoute('adminUsers',['msg'=>1]);
+            }
+            return $this->redirectToRoute('adminUsers',['msg'=>5]);
         }
 
         return $this->render('admin/userNew.html.twig', [

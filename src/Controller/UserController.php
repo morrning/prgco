@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Cookie;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -44,6 +45,9 @@ class UserController extends AbstractController
                         $position->setIsDefault(1);
                         $entityMGR->update($position);
                     }
+                    $cookie = new Cookie('UIDFL',20);
+                    $request->cookies->set('UIDFL',20);
+                    
                     $logger->info('user ' . $data['username'] .' loged in.');
                     $logMGR->addEvent('3gv5','ورود به سامانه',sprintf('کاربر با نام کاربری %s وارد سامانه شد.',$data['username']),'USERS',$request->getClientIp());
                     return $this->redirectToRoute('home');
