@@ -28,18 +28,19 @@ class CMArbaeinController extends AbstractController
     /**
      * @Route("/c/m/arbaein/dashboard", name="cmarbainDashboard")
      */
-    public function cmarbainDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function cmarbainDashboard(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\Jdate $jdate)
     {
         if(! $userMGR->hasPermission('CMOPTARBAEIN','CMARBAEIN',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
-
+        $today = $jdate->jdate('Y/n/d',time());
         return $this->render('cm_arbaein/dashboard.html.twig', [
             'area'=>$userMGR->currentPosition()->getDefaultArea(),
             'total'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea()])),
             'online'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea(),'outputDate'=>null])),
             'menCount'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea(),'outputDate'=>null,'isMan'=>true])),
             'womenCount'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea(),'outputDate'=>null,'isMan'=>false])),
-
+            'inputToday'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea(),'inputDate'=>$today])),
+            'outputToday'=>count($entityMGR->findBy('App:CMArbaein',['area'=>$userMGR->currentPosition()->getDefaultArea(),'outputDate'=>$today])),
         ]);
     }
 
