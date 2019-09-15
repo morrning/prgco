@@ -2,7 +2,7 @@
 
 {% block title %}اسکریپت‌ها{% endblock %}
 {% block pageBody %}
-    <a class="btn btn-success" href="{{ path('home') }}">
+    <a class="btn btn-success" href="{{ path('adminNewScript') }}">
         <span class="fa fa-plus"></span>
         افزودن اسکریپت جدید
     </a>
@@ -22,7 +22,7 @@
                     <td>{{ loop.index }}</td>
                     <td>{{ script.title }}</td>
                     <td>
-                        <a class="btn btn-info" href="{{ path('adminUserEditUser',{'id':script.id}) }}">اجرا</a>
+                        <a class="btn btn-info" href="{{ path('adminScriptDoing',{'id':script.id}) }}">اجرا</a>
                     </td>
                 </tr>
             {% endfor %}

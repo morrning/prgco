@@ -489,8 +489,10 @@ class AdminController extends AbstractController
         $alerts = [];
         if($msg==1)
             $alerts = [['message'=>'عملیات با موفقیت انجام شد.','type'=>'success']];
-        if($msg==2)
+        elseif($msg==2)
             $alerts = [['message'=>'اجرای عملیات با شکست مواجه شد.','type'=>'success']];
+        elseif($msg==3)
+            $alerts = [['message'=>'اسکریپت با موفقیت افزوده شد.','type'=>'success']];
 
         $scripts = $entityMGR->findAll('App:SysScript');
         $logMGR->addEvent('4ert','مشاهده','اسکریپت‌های سیستم','ADMINISTRATOR',$request->getClientIp());
@@ -500,6 +502,51 @@ class AdminController extends AbstractController
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * @Route("/admin/doing/script/{id}", name="adminScriptDoing")
+     */
+    public function adminScriptDoing($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $script = $entityMGR->find('App:SysScript',$id);
+        if(is_null($script))
+            return $this->redirectToRoute('404');
+        eval($script->getScript());
+        return $this->redirectToRoute('adminScripts',['msg'=>1]);
+    }
+
+    /**
+     * @Route("/admin/new/script", name="adminNewScript")
+     */
+    public function adminNewScript(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $script = new Entity\SysScript();
+        $form = $this->createFormBuilder($script)
+            ->add('title', TextType::class,['label'=>'عنوان'])
+            ->add('script', TextareaType::class,['label'=>'script','attr'=>['rows'=>10,'style'=>'direction:ltr;text-align:left;']])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($script);
+            $logMGR->addEvent('4ert','افزودن','اسکریپت های مدیریتی','ADMINISTRATOR',$request->getClientIp());
+            $logger->info(sprintf('user %s add script with id %s', $userMgr->currentUser()->getUsername() , $script->getId()));
+            return $this->redirectToRoute('adminScripts',['msg'=>3]);
+        }
+
+        return $this->render('admin/scriptNew.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
+
     /**
      * @Route("/admin/adminEditPosition/{PID}", name="adminEditPosition" , options = { "expose" = true })
      */

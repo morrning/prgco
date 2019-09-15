@@ -1,0 +1,25 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}اسکریپت جدید{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                {{ form_start(form) }}
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title) }}
+                {{ form_label(form.script) }}
+                {{ form_widget(form.script) }}
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        {{ form_widget(form.submit) }}
+                        <a class="btn btn-secondary" href="{{ path('adminScripts') }}">انصراف</a>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
