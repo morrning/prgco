@@ -479,6 +479,28 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/scripts/{msg}", name="adminScripts")
+     */
+    public function adminScripts($msg=0, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $alerts = [];
+        if($msg==1)
+            $alerts = [['message'=>'عملیات با موفقیت انجام شد.','type'=>'success']];
+        if($msg==2)
+            $alerts = [['message'=>'اجرای عملیات با شکست مواجه شد.','type'=>'success']];
+
+        $scripts = $entityMGR->findAll('App:SysScript');
+        $logMGR->addEvent('4ert','مشاهده','اسکریپت‌های سیستم','ADMINISTRATOR',$request->getClientIp());
+
+        return $this->render('admin/scripts.html.twig', [
+            'scripts'=>$scripts,
+            'alerts' => $alerts,
+        ]);
+    }
+    /**
      * @Route("/admin/adminEditPosition/{PID}", name="adminEditPosition" , options = { "expose" = true })
      */
     public function adminEditPosition($PID, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)

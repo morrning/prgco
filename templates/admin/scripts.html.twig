@@ -1,0 +1,33 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}اسکریپت‌ها{% endblock %}
+{% block pageBody %}
+    <a class="btn btn-success" href="{{ path('home') }}">
+        <span class="fa fa-plus"></span>
+        افزودن اسکریپت جدید
+    </a>
+    <hr>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام اسکریپت</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for script in scripts %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ script.title }}</td>
+                    <td>
+                        <a class="btn btn-info" href="{{ path('adminUserEditUser',{'id':script.id}) }}">اجرا</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
