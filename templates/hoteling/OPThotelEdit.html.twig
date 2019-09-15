@@ -1,0 +1,26 @@
+{% extends 'ceremonial/REQbase.html.twig' %}
+{% block title %}
+    ویرایش هتل:
+    {{ hotel.hotelName }}
+{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        {{ form_start(form) }}
+        <div class="col-sm-12 col-md-12 pb-2">
+            {{ form_label(form.hotelName) }}
+            {{ form_widget(form.hotelName) }}
+            {{ form_label(form.adr) }}
+            {{ form_widget(form.adr) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            {{ form_widget(form.submit) }}
+            <a class="btn btn-warning" href="{{ path('hotelingHotelList') }}">
+                <i class="fa fa-undo"></i>
+                بازگشت
+            </a>
+        </div>
+    </div>
+    {{ form_end(form) }}
+{% endblock %}

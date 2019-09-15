@@ -48,6 +48,10 @@ class HotelingController extends AbstractController
         $alerts = [];
         if($msg == 1)
             array_push($alerts,['type'=>'success','message'=>'اتاق با موفقیت افزوده شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'هتل با موفقیت افزوده شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'هتل با موفقیت ویرایش شد.']);
 
         return $this->render('hoteling/OPThotels.html.twig',
             [
@@ -96,5 +100,127 @@ class HotelingController extends AbstractController
             'alerts'=>$alert,
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/hoteling/opt/hotel/edit/room/{id}", name="hotelingHotelEditRoom")
+     */
+    public function hotelingHotelEditRoom($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $room = $entityMGR->find('App:HotelingRoom',$id);
+        if(is_null($room))
+            return $this->redirectToRoute('404');
+        if($userMGR->currentPosition()->getDefaultArea() != $room->getHotel()->getArea())
+            return $this->redirectToRoute('403');
+
+        $form = $this->createFormBuilder($room)
+            ->add('num', TextType::class,['label'=>'شماره اتاق'])
+            ->add('dep', TextType::class,[
+                'label'=>'ظرفیت اقامتگاه',
+                'attr'     => array(
+                    'class'  => 'codeMeli',
+                ),
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->update($room);
+            $logMGR->addEvent('HOTLING' . $room->getHotel()->getId() . 'ROOM'.$room->getId(),',ویرایش','اطلاعات اتاق','HOTELING',$request->getClientIp());
+            return $this->redirectToRoute('hotelingRoomsList', ['id'=>$room->getHotel()->getId(),'msg' => 2]);
+        }
+        return $this->render('hoteling/OPTeditRoom.html.twig', [
+            'alerts'=>$alert,
+            'form' => $form->createView(),
+            'room'=>$room
+        ]);
+    }
+
+    /**
+     * @Route("/hoteling/opt/hotel/add/hotel", name="hotelingHotelAddHotel")
+     */
+    public function hotelingHotelAddHotel(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $hotel = new Entity\HotelingHotel();
+        $hotel->setArea($userMGR->currentPosition()->getDefaultArea());
+        $form = $this->createFormBuilder($hotel)
+            ->add('hotelName', TextType::class,['label'=>'نام هتل:'])
+            ->add('adr', TextType::class,['label'=>'آدرس هتل:'])
+            ->add('submit', SubmitType::class,['label'=>'افزودن هتل'])
+            ->getForm();
+        $form->handleRequest($request);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($hotel);
+            $logMGR->addEvent('HOTLING' . $hotel->getId() . 'ROOM'.$hotel->getId(),'افزودن','اطلاعات هتل','HOTELING',$request->getClientIp());
+            return $this->redirectToRoute('hotelingHotelList', ['msg' => 2]);
+        }
+        return $this->render('hoteling/OPThotelNew.html.twig', [
+            'alerts'=>$alert,
+            'form' => $form->createView()
+        ]);
+    }
+
+
+    /**
+     * @Route("/hoteling/opt/hotel/edit/hotel/{id}", name="hotelingHotelEditHotel")
+     */
+    public function hotelingHotelEditHotel($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $hotel = $entityMGR->find('App:hotelingHotel',$id);
+        if(is_null($hotel))
+            return $this->redirectToRoute('404');
+
+        $form = $this->createFormBuilder($hotel)
+            ->add('hotelName', TextType::class,['label'=>'نام هتل:'])
+            ->add('adr', TextType::class,['label'=>'آدرس هتل:'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $form->handleRequest($request);
+        $alert = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->update($hotel);
+            $logMGR->addEvent('HOTLING' . $hotel->getId() . 'ROOM'.$hotel->getId(),'ویرایش','اطلاعات هتل','HOTELING',$request->getClientIp());
+            return $this->redirectToRoute('hotelingHotelList', ['msg' => 3]);
+        }
+        return $this->render('hoteling/OPThotelEdit.html.twig', [
+            'alerts'=>$alert,
+            'form' => $form->createView(),
+            'hotel'=>$hotel
+        ]);
+    }
+
+    /**
+     * @Route("/hoteling/opt/rooms/list/{id}/{msg}", name="hotelingRoomsList")
+     */
+    public function hotelingRoomsList($id,$msg = 0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $hotel = $entityMGR->find('App:hotelingHotel',$id);
+        if(is_null($hotel))
+            return $this->redirectToRoute('404');
+
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'اتاق با موفقیت افزوده شد.']);
+        elseif($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'اتاق با موفقیت ویرایش شد.']);
+
+        return $this->render('hoteling/OPTrooms.html.twig',
+            [
+                'rooms'=>$entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]),
+                'alerts'=>$alerts,
+                'hotel'=>$hotel
+            ]);
     }
 }

@@ -1,0 +1,37 @@
+{% extends 'hoteling/OPTbase.html.twig' %}
+
+{% block title %}لیست اتاق‌های هتل:
+{{ hotel.hotelName }}
+{% endblock %}
+{% block appTop %}
+    <a class="btn btn-success" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
+        <i class="fa fa-plus"></i>
+        افزودن اتاق جدید
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>شماره اتاق</th>
+                <th>ظرفیت(نفر)</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for room in rooms %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ room.num }}</td>
+                    <td>{{ room.dep }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{ path('hotelingHotelEditRoom',{'id':room.id}) }}"> ویرایش اتاق</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
