@@ -33,8 +33,14 @@ class HotelingController extends AbstractController
         if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
+        $hotels = $entityMGR->findBy('App:HotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        $roomCount = 0;
+        foreach ($hotels as $hotel){
+            $roomCount = $roomCount + count($entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]));
+        }
         return $this->render('hoteling/OPTDashboard.html.twig', [
-
+            'hotels'=>$hotels,
+            'roomsCount'=>$roomCount
         ]);
     }
 

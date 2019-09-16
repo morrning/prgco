@@ -132,15 +132,19 @@
                             var myChart = new Chart(ctx, {
                                 type: 'line',
                                 data: {
-                                    labels: {{ pn | json_encode | raw }},
+                                    labels: {{ tenDaysName | json_encode | raw }},
                                     datasets: [
+                                        {% set counter = 0 %}
+                                        {% for pname in pn %}
                                         {
-                                            label: 'بازدید',
-                                            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                                            label: '{{ pname }}',
+                                            backgroundColor: color(window.chartColors.{{ random(['red', 'orange', 'yellow','green','blue','purple','grey']) }}).alpha(0.5).rgbString(),
                                             borderColor: window.chartColors.red,
                                             borderWidth: 1,
-                                            data: {{ pi | json_encode | raw }},
-                                        }
+                                            data: {{ tenDaysInput[counter] | json_encode | raw }}
+                                            {% set counter = counter+1 %}
+                                        },
+                                        {% endfor %}
                                     ]
                                 },
                                 options: {

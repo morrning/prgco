@@ -264,7 +264,7 @@ class CMArbaeinController extends AbstractController
         if(! $userMGR->hasPermission('CMOPTARBAEIN','CMARBAEIN',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
         $daily = [];
-        $tenDays=[];
+        $tenDaysInput=[];
         $today = $jdate->jdate('Y/n/d',time());
         $areaes = $entityMGR->findAll('App:SysArea');
         foreach ($areaes as $area){
@@ -272,16 +272,24 @@ class CMArbaeinController extends AbstractController
             $areaRep['name'] = $area->getAreaName();
             $areaRep['countTodayInput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'inputDate'=>$today]));
             $areaRep['countTodayOutput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'outputDate'=>$today]));
-            array_push($daily,$areaRep);
+
+            if($areaRep['countTodayInput'] != 0 || $areaRep['countTodayOutput'] != 0)
+                array_push($daily,$areaRep);
 
             //10 day before
-            $tenDay = [];
+            $tenDayInput = [];
+            $tenDayName = [];
             for($i=10;$i>=0;$i--)
             {
                 $thatTime = explode('/',$today);
                 $thatTime[2] = $thatTime[2] - $i;
+                $targetDate = implode('/',$thatTime);
+                array_push($tenDayName,$targetDate);
+
+                array_push($tenDayInput,count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'inputDate'=>$targetDate])));
 
             }
+            array_push($tenDaysInput,$tenDayInput);
 
         }
         return $this->render('cm_arbaein/report.html.twig', [
@@ -289,6 +297,8 @@ class CMArbaeinController extends AbstractController
             'pn'=> array_column($daily, 'name'),
             'pi'=> array_column($daily, 'countTodayInput'),
             'po'=> array_column($daily, 'countTodayOutput'),
+            'tenDaysInput'=>$tenDaysInput,
+            'tenDaysName'=>$tenDayName
         ]);
     }
 }
