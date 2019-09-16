@@ -1,0 +1,177 @@
+{% extends 'cm_arbaein/base.html.twig' %}
+
+{% block title %}گزارش کلی{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-12">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-primary text-light">
+                                گزارش روزانه امروز
+                                {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-2 alert alert-success">
+                                        <h4 class="text-secondary">اطلاعات آماری امروز</h4>
+                                        <hr>
+                                        {% for dayly in daylys %}
+                                            <b>
+                                                {{ dayly.name }}
+                                                :
+                                            </b>
+                                            <p>
+                                                ورودی:
+                                                <span class="text-danger">{{ dayly.countTodayInput }}</span>
+                                                نفر
+                                                |
+                                                خروجی:
+                                                <span class="text-danger">{{ dayly.countTodayOutput }}</span>
+                                                نفر
+                                            </p>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-sm-12 col-md-10">
+                                        <div class="chart-container">
+                                            <canvas id="myChart"></canvas>
+                                        </div>
+                                        <script>
+                                            var ctx = document.getElementById('myChart');
+                                            var color = Chart.helpers.color;
+                                            Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                                            window.chartColors = {
+                                                red: 'rgb(255, 99, 132)',
+                                                orange: 'rgb(255, 159, 64)',
+                                                yellow: 'rgb(255, 205, 86)',
+                                                green: 'rgb(75, 192, 192)',
+                                                blue: 'rgb(54, 162, 235)',
+                                                purple: 'rgb(153, 102, 255)',
+                                                grey: 'rgb(201, 203, 207)'
+                                            };
+                                            var myChart = new Chart(ctx, {
+                                                type: 'bar',
+                                                data: {
+                                                    labels: {{ pn | json_encode | raw }},
+                                                    datasets: [
+                                                        {
+                                                            label: 'ورودی',
+                                                            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                                                            borderColor: window.chartColors.red,
+                                                            borderWidth: 1,
+                                                            data: {{ pi | json_encode | raw }},
+                                                        },
+                                                        {
+                                                            label: 'خروجی',
+                                                            backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+                                                            borderColor: window.chartColors.blue,
+                                                            borderWidth: 1,
+                                                            data: {{ po | json_encode | raw}},
+                                                        }
+
+                                                    ]
+                                                },
+                                                options: {
+                                                    scales: {
+                                                        yAxes: [{
+                                                            ticks: {
+                                                                beginAtZero: true
+                                                            }
+                                                        }],
+                                                        xAxes: [{
+                                                            barPercentage: 0.5,
+                                                            barThickness: 25,
+                                                            maxBarThickness: 25,
+                                                            minBarLength: 2,
+                                                            gridLines: {
+                                                                offsetGridLines: true
+                                                            }
+                                                        }]
+                                                    },
+                                                    legend: {
+                                                        labels: {
+                                                            // This more specific font property overrides the global property
+                                                            fontColor: 'black'
+                                                        }
+                                                    }
+                                                }
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 pt-2">
+                <div class="card">
+                    <div class="card-header bg-primary text-light">
+                        گزارش یک ماه اخیر
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="myChart1"></canvas>
+                        </div>
+                        <script>
+                            var ctx = document.getElementById('myChart1');
+                            var color = Chart.helpers.color;
+                            Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                            window.chartColors = {
+                                red: 'rgb(255, 99, 132)',
+                                orange: 'rgb(255, 159, 64)',
+                                yellow: 'rgb(255, 205, 86)',
+                                green: 'rgb(75, 192, 192)',
+                                blue: 'rgb(54, 162, 235)',
+                                purple: 'rgb(153, 102, 255)',
+                                grey: 'rgb(201, 203, 207)'
+                            };
+                            var myChart = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: {{ pn | json_encode | raw }},
+                                    datasets: [
+                                        {
+                                            label: 'بازدید',
+                                            backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+                                            borderColor: window.chartColors.red,
+                                            borderWidth: 1,
+                                            data: {{ pi | json_encode | raw }},
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }],
+                                        xAxes: [{
+                                            barPercentage: 0.5,
+                                            barThickness: 25,
+                                            maxBarThickness: 25,
+                                            minBarLength: 2,
+                                            gridLines: {
+                                                offsetGridLines: true
+                                            }
+                                        }]
+                                    },
+                                    legend: {
+                                        labels: {
+                                            // This more specific font property overrides the global property
+                                            fontColor: 'black'
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

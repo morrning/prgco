@@ -87,7 +87,7 @@ class CMArbaeinController extends AbstractController
                 array_push($alerts,['type'=>'danger','message'=>'زائر با این کد ملی قبلا ثبت شده است.']);
             else{
                 $zaer->setArea($userMGR->currentPosition()->getDefaultArea());
-                $zaer->setInputDate(time());
+                $zaer->setInputDate($jdate->jdate('Y/n/d',time()));
                 $zaer->setInputer($userMGR->currentPosition());
                 $zaer->setYear($jdate->jdate('Y',time()));
                 $entityMGR->insertEntity($zaer);
@@ -244,7 +244,7 @@ class CMArbaeinController extends AbstractController
         $alerts = [];
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $zaer->setOutputDate(time());
+            $zaer->setOutputDate($jdate->jdate('Y/n/d',time()));
             $zaer->setOutputer($userMGR->currentPosition());
             $entityMGR->update($zaer);
             return $this->redirectToRoute('cmarbainExitZaer',['msg'=>1]);
@@ -254,7 +254,30 @@ class CMArbaeinController extends AbstractController
             'alerts'=>$alerts,
             'zaer'=>$zaer
         ]);
-
     }
 
+    /**
+     * @Route("/c/m/arbaein/report", name="cmarbainReport")
+     */
+    public function cmarbainReport(Request $request,Service\Jdate $jdate,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CMOPTARBAEIN','CMARBAEIN',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $daily = [];
+        $today = $jdate->jdate('Y/n/d',time());
+        $areaes = $entityMGR->findAll('App:SysArea');
+        foreach ($areaes as $area){
+            $areaRep = [];
+            $areaRep['name'] = $area->getAreaName();
+            $areaRep['countTodayInput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'inputDate'=>$today]));
+            $areaRep['countTodayOutput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'outputDate'=>$today]));
+            array_push($daily,$areaRep);
+        }
+        return $this->render('cm_arbaein/report.html.twig', [
+            'daylys' =>$daily,
+            'pn'=> array_column($daily, 'name'),
+            'pi'=> array_column($daily, 'countTodayInput'),
+            'po'=> array_column($daily, 'countTodayOutput'),
+        ]);
+    }
 }

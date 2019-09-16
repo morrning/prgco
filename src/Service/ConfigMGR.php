@@ -208,12 +208,8 @@ class ConfigMGR
         //import default Visa states
         if(count($this->em->findAll('App:CMVisaState')) == 0){
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(-2);
-            $entity->setStateName('رد از طرف مدیریت');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
             $entity->setStateCode(-1);
-            $entity->setStateName('رد از طرف ایمنی و اقدامات تامینی');
+            $entity->setStateName('رد از طرف مدیریت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
             $entity->setStateCode(1);
@@ -225,34 +221,22 @@ class ConfigMGR
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
             $entity->setStateCode(3);
-            $entity->setStateName('تایید شده توسط اقدامات تامینی');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(4);
             $entity->setStateName('تایید شده توسط مدیریت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(5);
+            $entity->setStateCode(4);
             $entity->setStateName('ارسال شده به سفارت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(6);
+            $entity->setStateCode(5);
             $entity->setStateName('بازگشت از سفارت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(7);
+            $entity->setStateCode(6);
             $entity->setStateName('ارسال به مرز');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(8);
-            $entity->setStateName('اعلام وصول مرز');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(9);
-            $entity->setStateName('ارسال به دفتر شرکت');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(10);
+            $entity->setStateCode(7);
             $entity->setStateName('تحویل داده شده');
             $this->em->insertEntity($entity);
         }

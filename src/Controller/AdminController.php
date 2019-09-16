@@ -493,6 +493,8 @@ class AdminController extends AbstractController
             $alerts = [['message'=>'اجرای عملیات با شکست مواجه شد.','type'=>'success']];
         elseif($msg==3)
             $alerts = [['message'=>'اسکریپت با موفقیت افزوده شد.','type'=>'success']];
+        elseif($msg==4)
+            $alerts = [['message'=>'اسکریپت با موفقیت حذف شد.','type'=>'danger']];
 
         $scripts = $entityMGR->findAll('App:SysScript');
         $logMGR->addEvent('4ert','مشاهده','اسکریپت‌های سیستم','ADMINISTRATOR',$request->getClientIp());
@@ -517,6 +519,16 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('adminScripts',['msg'=>1]);
     }
 
+    /**
+     * @Route("/admin/delete/script/{id}", name="adminScriptDelete")
+     */
+    public function adminScriptDelete($id,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $entityMGR->remove('App:SysScript',$id);
+        return $this->redirectToRoute('adminScripts',['msg'=>2]);
+    }
     /**
      * @Route("/admin/new/script", name="adminNewScript")
      */

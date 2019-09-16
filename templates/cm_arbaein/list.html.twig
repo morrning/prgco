@@ -26,8 +26,8 @@
                     <td>{{ zaer.codemeli }}</td>
                     <td>{{ zaer.CGUID }}</td>
                     <td>{{ zaer.FGUID }}</td>
-                    <td>{% if zaer.inputDate != null %}{{ Jdate.jdate('Y/n/d H:i',zaer.inputDate) }}{% endif %}</td>
-                    <td>{% if zaer.outputDate != null %}{{ Jdate.jdate('Y/n/d H:i',zaer.outputDate) }}{% endif %}</td>
+                    <td>{% if zaer.inputDate != null %}{{ zaer.inputDate }}{% endif %}</td>
+                    <td>{% if zaer.outputDate != null %}{{ zaer.outputDate }}{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
