@@ -264,6 +264,7 @@ class CMArbaeinController extends AbstractController
         if(! $userMGR->hasPermission('CMOPTARBAEIN','CMARBAEIN',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
         $daily = [];
+        $tenDays=[];
         $today = $jdate->jdate('Y/n/d',time());
         $areaes = $entityMGR->findAll('App:SysArea');
         foreach ($areaes as $area){
@@ -272,6 +273,16 @@ class CMArbaeinController extends AbstractController
             $areaRep['countTodayInput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'inputDate'=>$today]));
             $areaRep['countTodayOutput'] = count($entityMGR->findBy('App:CMArbaein',['area'=>$area,'outputDate'=>$today]));
             array_push($daily,$areaRep);
+
+            //10 day before
+            $tenDay = [];
+            for($i=10;$i>=0;$i--)
+            {
+                $thatTime = explode('/',$today);
+                $thatTime[2] = $thatTime[2] - $i;
+
+            }
+
         }
         return $this->render('cm_arbaein/report.html.twig', [
             'daylys' =>$daily,
