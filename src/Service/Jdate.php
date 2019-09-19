@@ -9,6 +9,25 @@ namespace App\Service;
 
 class Jdate
 {
+    public function shamsiDate($nyear,$nmoon,$nday)
+    {
+        $reg_day   = jdate("d","now");
+        $reg_moon  = jdate("m","now");
+        $reg_year  = jdate("y","now");
+
+        $end_year =  jdate("y",jmaketime(0,0,0,$reg_moon+$nmoon,$reg_day+$nday,$reg_year+1300+$nyear));
+        $end_moon =  jdate("m",jmaketime(0,0,0,$reg_moon+$nmoon,$reg_day+$nday,$reg_year+1300+$nyear));
+        $end_day  =  jdate("d",jmaketime(0,0,0,$reg_moon+$nmoon,$reg_day+$nday,$reg_year+1300+$nyear));
+
+        //	if ($end_year < 10) $end_year = '0'.$end_year;
+        //	if ($end_moon < 10) $end_moon = '0'.$end_moon;
+        //	if ($end_day < 10)  $end_day  = '0'.$end_day;
+
+        $new_date = $end_year."/". $end_moon ."/".$end_day;
+
+        return $new_date;
+    }
+
     public function GetTodayDate()
     {
         return $this->jdate('Y/m/d',time());
