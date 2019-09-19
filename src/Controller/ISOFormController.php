@@ -98,9 +98,7 @@ class ISOFormController extends AbstractController
     {
         if(! $userMGR->hasPermission('ISOfORMS','ISOFORM'))
             return $this->redirectToRoute('403');
-
         $alerts = [];
-
         $data = new Entity\ISOForm();
         $form = $this->createFormBuilder($data)
             ->add('title', TextType::class,['label'=>'عنوان:'])
@@ -121,7 +119,7 @@ class ISOFormController extends AbstractController
         $guid = $this->RandomString(32);
         if ($form->isSubmitted() && $form->isValid()) {
             if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xls' || $file->getClientOriginalExtension() == 'doc' || $file->getClientOriginalExtension() == 'xlsx'){
-                if($file->getSize() < 2097152){
+                if($file->getSize() < 920907152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
                     $data->setSubmitter($userMGR->currentPosition()->getId());
@@ -132,15 +130,12 @@ class ISOFormController extends AbstractController
                     return $this->redirectToRoute('isoformsDashboard',['msg'=>2]);
                 }
                 else{
-                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);
+                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 8 مگابایت می باشد.']);
                 }
             }
-            else{
+            else
                 array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,xls,pdf,docx  ارسال فرمایید.']);
-            }
-
         }
-
         return $this->render('iso_form/adminNewFile.html.twig', [
             'form' => $form->createView(),
             'alerts' => $alerts,
