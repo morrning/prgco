@@ -119,7 +119,7 @@ class ISOFormController extends AbstractController
         $guid = $this->RandomString(32);
         if ($form->isSubmitted() && $form->isValid()) {
             if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xls' || $file->getClientOriginalExtension() == 'doc' || $file->getClientOriginalExtension() == 'xlsx'){
-                if($file->getSize() < 920907152){
+                if($file->getSize() < 1010920907152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
                     $data->setSubmitter($userMGR->currentPosition()->getId());

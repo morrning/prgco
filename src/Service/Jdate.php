@@ -19,9 +19,9 @@ class Jdate
         $end_moon =  jdate("m",jmaketime(0,0,0,$reg_moon+$nmoon,$reg_day+$nday,$reg_year+1300+$nyear));
         $end_day  =  jdate("d",jmaketime(0,0,0,$reg_moon+$nmoon,$reg_day+$nday,$reg_year+1300+$nyear));
 
-        //	if ($end_year < 10) $end_year = '0'.$end_year;
-        //	if ($end_moon < 10) $end_moon = '0'.$end_moon;
-        //	if ($end_day < 10)  $end_day  = '0'.$end_day;
+        if ($end_year < 10) $end_year = '0'.$end_year;
+        if ($end_moon < 10) $end_moon = '0'.$end_moon;
+        if ($end_day < 10)  $end_day  = '0'.$end_day;
 
         $new_date = $end_year."/". $end_moon ."/".$end_day;
 
