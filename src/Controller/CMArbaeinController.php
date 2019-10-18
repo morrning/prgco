@@ -310,7 +310,7 @@ class CMArbaeinController extends AbstractController
 
         }
 
-        var_dump($tenDayName);
+        var_dump($tenDaysInput);
         return $this->render('cm_arbaein/report.html.twig', [
             'daylys' =>$daily,
             'pn'=> array_column($daily, 'name'),
