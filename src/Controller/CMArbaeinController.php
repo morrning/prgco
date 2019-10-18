@@ -71,9 +71,9 @@ class CMArbaeinController extends AbstractController
             ->add('codemeli', TextType::class,['label'=>'کد ملی:','required'=>true,'attr'=>['class'=>'autoClear activeInput']])
             ->add('FGUID', TextType::class,['label'=>'کد فرم:','required'=>true,'attr'=>['class'=>'autoClear']])
             ->add('CGUID', TextType::class,['label'=>'کد کارت:','required'=>true,'attr'=>['class'=>'autoClear']])
-            ->add('fullname', TextType::class,['label'=>'نام و نام خانوادگی:','required'=>true,'attr'=>['class'=>'activeInput']])
-            ->add('birthday', TextType::class,['label'=>'سال تولد:','required'=>true])
-            ->add('tel', TextType::class,['label'=>'شماره تماس:','required'=>true,'attr'=>['class'=>'tel']])
+            ->add('fullname', TextType::class,['label'=>'نام و نام خانوادگی:','required'=>false,'attr'=>['class'=>'autoClear']])
+            ->add('birthday', TextType::class,['label'=>'سال تولد:','required'=>false, 'attr'=>['class'=>'autoClear']])
+            ->add('tel', TextType::class,['label'=>'شماره تماس:','required'=>false,'attr'=>['class'=>'tel autoClear']])
             ->add('isMan', ChoiceType::class,[
                     'label'=>'جنسیت:',
                     'choices'=>['مرد'=>true,'زن'=>false],
