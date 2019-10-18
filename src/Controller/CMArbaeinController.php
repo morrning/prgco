@@ -303,14 +303,12 @@ class CMArbaeinController extends AbstractController
                 $targetDate = implode('/',$thatTime);
                 array_push($tenDayName,$targetDate);
 
-                array_push($tenDayInput,count($entityMGR->findBy('App:CMArbaein',['inputDate'=>$targetDate])));
+                array_push($tenDayInput,count($entityMGR->findBy('App:CMArbaein',['area'=>$area->getId(),'inputDate'=>$targetDate])));
 
             }
             array_push($tenDaysInput,$tenDayInput);
 
         }
-
-        var_dump($tenDaysInput);
         return $this->render('cm_arbaein/report.html.twig', [
             'daylys' =>$daily,
             'pn'=> array_column($daily, 'name'),
