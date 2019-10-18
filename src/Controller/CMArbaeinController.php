@@ -96,6 +96,7 @@ class CMArbaeinController extends AbstractController
                 $zaer->setArea($userMGR->currentPosition()->getDefaultArea());
                 $zaer->setInputDate($jdate->jdate('Y/n/d',time()));
                 $zaer->setInputer($userMGR->currentPosition());
+                $zaer->setCompleter($userMGR->currentPosition());
                 $zaer->setYear($jdate->jdate('Y',time()));
                 $entityMGR->insertEntity($zaer);
                 array_push($alerts,['type'=>'success','message'=>'کارت با موفقیت صادر شد.شماره جانمایی گذرنامه ' . $zaer->getId() . ' می باشد.']);
@@ -290,6 +291,15 @@ class CMArbaeinController extends AbstractController
             {
                 $thatTime = explode('/',$today);
                 $thatTime[2] = $thatTime[2] - $i;
+                if($thatTime[2]<=0)
+                {
+                    if($thatTime[1]>6)
+                        $thatTime[2] = 30;
+                    else
+                        $thatTime[2] = 31;
+
+                    $thatTime[1] --;
+                }
                 $targetDate = implode('/',$thatTime);
                 array_push($tenDayName,$targetDate);
 
@@ -299,6 +309,8 @@ class CMArbaeinController extends AbstractController
             array_push($tenDaysInput,$tenDayInput);
 
         }
+
+        var_dump($tenDayName);
         return $this->render('cm_arbaein/report.html.twig', [
             'daylys' =>$daily,
             'pn'=> array_column($daily, 'name'),
