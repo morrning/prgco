@@ -273,6 +273,7 @@ class CMArbaeinController extends AbstractController
             return $this->redirectToRoute('403');
         $daily = [];
         $tenDaysInput=[];
+        $tenDaysOutput = [];
         $today = $jdate->jdate('Y/n/d',time());
         $areaes = $entityMGR->findAll('App:SysArea');
         foreach ($areaes as $area){
@@ -286,6 +287,7 @@ class CMArbaeinController extends AbstractController
 
             //10 day before
             $tenDayInput = [];
+            $tenDayOutput = [];
             $tenDayName = [];
             for($i=10;$i>=0;$i--)
             {
@@ -304,9 +306,11 @@ class CMArbaeinController extends AbstractController
                 array_push($tenDayName,$targetDate);
 
                 array_push($tenDayInput,count($entityMGR->findBy('App:CMArbaein',['inputDate'=>$targetDate])));
+                array_push($tenDayOutput,count($entityMGR->findBy('App:CMArbaein',['outputDate'=>$targetDate])));
 
             }
             array_push($tenDaysInput,$tenDayInput);
+            array_push($tenDaysOutput,$tenDayOutput);
 
         }
         return $this->render('cm_arbaein/report.html.twig', [
@@ -315,6 +319,7 @@ class CMArbaeinController extends AbstractController
             'pi'=> array_column($daily, 'countTodayInput'),
             'po'=> array_column($daily, 'countTodayOutput'),
             'tenDaysInput'=>$tenDaysInput,
+            'tenDaysOutput'=>$tenDaysOutput,
             'tenDaysName'=>$tenDayName
         ]);
     }
