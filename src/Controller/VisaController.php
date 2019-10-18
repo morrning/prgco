@@ -249,7 +249,7 @@ class VisaController extends AbstractController
         if(is_null($visa))
             return $this->redirectToRoute('404');
         $passenger = $visa->getPassenger();
-        $visaState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>2]);
+        $visaState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>3]);
         $visa->setVisaState($visaState);
         $visa->setDateReciveToCo(time());
         $visa->setReciver($userMGR->currentPosition());

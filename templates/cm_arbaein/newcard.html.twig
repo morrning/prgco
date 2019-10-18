@@ -17,6 +17,26 @@
             {{ form_label(form.CGUID) }}
             {{ form_widget(form.CGUID) }}
         </div>
+    </div>
+    <div class="row pt-2">
+        <div class="col-sm-12 col-md-3">
+            {{ form_label(form.fullname) }}
+            {{ form_widget(form.fullname) }}
+        </div>
+        <div class="col-sm-12 col-md-3">
+            {{ form_label(form.birthday) }}
+            {{ form_widget(form.birthday) }}
+        </div>
+        <div class="col-sm-12 col-md-3">
+            {{ form_label(form.tel) }}
+            {{ form_widget(form.tel) }}
+        </div>
+        <div class="col-sm-12 col-md-3">
+            {{ form_label(form.isMan) }}
+            {{ form_widget(form.isMan) }}
+        </div>
+    </div>
+    <div class="row">
         <div class="col-12 pt-2">
             {{ form_widget(form.submit) }}
         </div>
