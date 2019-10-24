@@ -31,6 +31,26 @@ class SysConfig
      */
     private $activeationCode;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_SG_SERVERNAME;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_SG_DATABASE;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_SG_USERNAME;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_SG_PASSWORD;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -68,6 +88,54 @@ class SysConfig
     public function setActiveationCode(?string $activeationCode): self
     {
         $this->activeationCode = $activeationCode;
+
+        return $this;
+    }
+
+    public function getHRMSGSERVERNAME(): ?string
+    {
+        return $this->HRM_SG_SERVERNAME;
+    }
+
+    public function setHRMSGSERVERNAME(?string $HRM_SG_SERVERNAME): self
+    {
+        $this->HRM_SG_SERVERNAME = $HRM_SG_SERVERNAME;
+
+        return $this;
+    }
+
+    public function getHRMSGDATABASE(): ?string
+    {
+        return $this->HRM_SG_DATABASE;
+    }
+
+    public function setHRMSGDATABASE(?string $HRM_SG_DATABASE): self
+    {
+        $this->HRM_SG_DATABASE = $HRM_SG_DATABASE;
+
+        return $this;
+    }
+
+    public function getHRMSGUSERNAME(): ?string
+    {
+        return $this->HRM_SG_USERNAME;
+    }
+
+    public function setHRMSGUSERNAME(?string $HRM_SG_USERNAME): self
+    {
+        $this->HRM_SG_USERNAME = $HRM_SG_USERNAME;
+
+        return $this;
+    }
+
+    public function getHRMSGPASSWORD(): ?string
+    {
+        return $this->HRM_SG_PASSWORD;
+    }
+
+    public function setHRMSGPASSWORD(?string $HRM_SG_PASSWORD): self
+    {
+        $this->HRM_SG_PASSWORD = $HRM_SG_PASSWORD;
 
         return $this;
     }

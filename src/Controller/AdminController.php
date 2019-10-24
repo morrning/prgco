@@ -244,6 +244,38 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/database/settings", name="adminDatabaseSettings")
+     */
+    public function adminDatabaseSettings(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $config = $configMGR->getConfig();
+        $form = $this->createFormBuilder($config)
+            ->add('HRM_SG_SERVERNAME', TextType::class,['label'=>'نام سرور','attr'=>['style'=>'direction:ltr;']])
+            ->add('HRM_SG_DATABASE', TextType::class,['label'=>'بانک اطلاعاتی','attr'=>['style'=>'direction:ltr;']])
+            ->add('HRM_SG_USERNAME', TextType::class,['label'=>'نام کاربری','attr'=>['style'=>'direction:ltr;']])
+            ->add('HRM_SG_PASSWORD', PasswordType::class,['label'=>'کلمه عبور','attr'=>['style'=>'direction:ltr;']])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->update($form->getData());
+            $logMGR->addEvent('4ert','ویرایش','تنظیمات کلی سامانه','ADMINISTRATOR',$request->getClientIp());
+            $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change system settings.');
+            $alerts = [['message'=>'تنظیمات با موفقیت ذخیره شد.','type'=>'success']];
+        }
+
+        return $this->render('admin/databaseSettings.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts
+        ]);
+    }
+
+    /**
      * @Route("/admin/events/logs", name="adminEvents")
      */
     public function adminEvents(Request $request , Service\LogMGR $logMGR,Service\UserMGR $userMgr, Service\ConfigMGR $configMGR,Service\EntityMGR $entityMGR, LoggerInterface $logger)
