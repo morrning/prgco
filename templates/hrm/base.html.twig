@@ -1,0 +1,20 @@
+{% extends 'appBase.html.twig' %}
+{% block appName %}سامانه مدیریت منابع انسانی{% endblock %}
+{% block appMenu %}
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('HRMadmin') }}">
+                <i class="fas fa-chalkboard"></i>
+                <span>داشبورد</span>
+            </a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a class="nav-link" href="{{ path('newsNewPost') }}">
+                <i class="fas fa-plus"></i>
+                <span>لیست پرسنل</span>
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+

@@ -51,6 +51,11 @@ class HRMemploye
      */
     private $tel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysArea")
+     */
+    private $area;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +141,18 @@ class HRMemploye
     public function setTel(?string $tel): self
     {
         $this->tel = $tel;
+
+        return $this;
+    }
+
+    public function getArea(): ?SysArea
+    {
+        return $this->area;
+    }
+
+    public function setArea(?SysArea $area): self
+    {
+        $this->area = $area;
 
         return $this;
     }
