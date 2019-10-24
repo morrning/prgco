@@ -1,0 +1,25 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}جستوجوی کد ملی{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        {{ form_start(form) }}
+        <div class="row pt-2">
+            <div class="col-sm-12 col-md-3">
+                {{ form_label(form.nationalCode) }}
+                {{ form_widget(form.nationalCode) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 pt-2">
+                {{ form_widget(form.submit) }}
+                <a class="btn btn-secondary" href="{{ path('HRMEmployelist') }}">
+                    <i class="fa fa-undo"></i>
+                    بازگشت
+                </a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

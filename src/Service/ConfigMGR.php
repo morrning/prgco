@@ -36,12 +36,70 @@ class ConfigMGR
     }
 
     public function importBasicData(){
+        //import iso forms type
+        if(count($this->em->findAll('App:StaticMonth')) == 0) {
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(1);
+            $entity->setLabel('فروردین');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(2);
+            $entity->setLabel('اردیبهشت');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(3);
+            $entity->setLabel('خرداد');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(4);
+            $entity->setLabel('تیر');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(5);
+            $entity->setLabel('مرداد');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(6);
+            $entity->setLabel('شهریور');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(7);
+            $entity->setLabel('مهر');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(8);
+            $entity->setLabel('آبان');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(9);
+            $entity->setLabel('آذر');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(10);
+            $entity->setLabel('دی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(11);
+            $entity->setLabel('بهمن');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\StaticMonth();
+            $entity->setCode(12);
+            $entity->setLabel('اسفند');
+            $this->em->insertEntity($entity);
+        }
+
         //IMPORT permission names
         //IMPORT permission names
         if(is_null($this->em->findOneBy('App:SysPermissionLabel',['pname'=>'CMOPTARBAEIN']))) {
             $pl = new Entity\SysPermissionLabel();
             $pl->setPname('CMOPTARBAEIN');
             $pl->setPlabel('اپراتوری سامانه اربعین');
+            $this->em->insertEntity($pl);
+        }
+        if(is_null($this->em->findOneBy('App:SysPermissionLabel',['pname'=>'HRMACCESS']))) {
+            $pl = new Entity\SysPermissionLabel();
+            $pl->setPname('HRMACCESS');
+            $pl->setPlabel('مدیریت منابع انسانی');
             $this->em->insertEntity($pl);
         }
         if(count($this->em->findAll('App:SysPermissionLabel')) == 0){
@@ -117,7 +175,7 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
-            //import iso forms type
+        //import iso forms type
         if(count($this->em->findAll('App:ISOFormType')) == 0) {
             $entity = new Entity\ISOFormType();
             $entity->setTypeName('فرم اجرایی');

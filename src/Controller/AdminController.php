@@ -256,7 +256,7 @@ class AdminController extends AbstractController
             ->add('HRM_SG_SERVERNAME', TextType::class,['label'=>'نام سرور','attr'=>['style'=>'direction:ltr;']])
             ->add('HRM_SG_DATABASE', TextType::class,['label'=>'بانک اطلاعاتی','attr'=>['style'=>'direction:ltr;']])
             ->add('HRM_SG_USERNAME', TextType::class,['label'=>'نام کاربری','attr'=>['style'=>'direction:ltr;']])
-            ->add('HRM_SG_PASSWORD', PasswordType::class,['label'=>'کلمه عبور','attr'=>['style'=>'direction:ltr;']])
+            ->add('HRM_SG_PASSWORD', PasswordType::class,['label'=>'کلمه عبور','required'=>false,'attr'=>['style'=>'direction:ltr;']])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 
