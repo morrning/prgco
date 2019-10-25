@@ -40,7 +40,11 @@ class HRMController extends AbstractController
 
         $str = 'Select FYear from GNR.GenYears ORDER BY FYear DESC';
         $stmt = $conn->query($str);
-        echo count($stmt->fetchAll());
+        $yesrs = $stmt->fetchAll();
+        $yearsArray = [];
+        foreach ($yesrs as $yesr){
+            $yearsArray['13' . $yesr['FYear'] ]= '13' . $yesr['FYear'];
+        }
         $combs = ['message'=>'test'];
         $form = $this->createFormBuilder($combs)
             ->add('monthNames', EntityType::class, [
@@ -49,7 +53,11 @@ class HRMController extends AbstractController
                 'choice_value' => 'code',
                 'label'=>'ماه'
             ])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->add('years', ChoiceType::class, [
+                'choices'=>$yearsArray,
+                'label'=>'ماه'
+            ])
+            ->add('submit', SubmitType::class,['label'=>'جستوجوی فیش حقوقی'])
             ->getForm();
         $alerts = [];
         $form->handleRequest($request);
@@ -57,7 +65,9 @@ class HRMController extends AbstractController
 
         }
         return $this->render('hrm/reportEarn.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'hrmUser' =>$entityMGR->findOneBy('App:HRMemploye',['user'=>$userMGR->currentUser()]),
+            'alert' =>$alerts
         ]);
     }
 
