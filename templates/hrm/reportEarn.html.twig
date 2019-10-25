@@ -11,7 +11,11 @@
             {% if hrmUser is null %}
                 <div class="alert alert-danger">
                     <i class="fa fa-info-circle"></i>
-                    اطلاعات فردی شما در سامانه ثبت نشده است.لطفا به مدیریت منابع انسانی و آموزش تماس بگیرید.
+                    <b>
+                        {{ UserMGR.currentUser.fullname }}
+                        ,
+                    </b>
+                    اطلاعات فردی شما در سامانه تکمیل نشده است.لطفا با مدیریت منابع انسانی و آموزش تماس بگیرید.
                 </div>
             {% else %}
                 <div class="alert alert-info">
