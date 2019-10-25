@@ -8,43 +8,50 @@
             سامانه فیش حقوقی
         </div>
         <div class="card-body">
-            <div class="alert alert-info">
-                <i class="fa fa-info-circle"></i>
-                به سامانه فیش حقوقی خوش آمدید. برای مشاهده فیش حقوقی مورد نظر خود ابتدا سال و ماه را انتخاب کرده و سپس دکمه جستوجو را فشار کنید.
-            </div>
-            {{ form_start(form) }}
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    {{ form_label(form.monthNames) }}
-                    {{ form_widget(form.monthNames) }}
+            {% if hrmUser is null %}
+                <div class="alert alert-danger">
+                    <i class="fa fa-info-circle"></i>
+                    اطلاعات فردی شما در سامانه ثبت نشده است.لطفا به مدیریت منابع انسانی و آموزش تماس بگیرید.
                 </div>
-                <div class="col-sm-12 col-md-4">
-                    {{ form_label(form.years) }}
-                    {{ form_widget(form.years) }}
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle"></i>
+                    به سامانه فیش حقوقی خوش آمدید. برای مشاهده فیش حقوقی مورد نظر خود ابتدا سال و ماه را انتخاب کرده و سپس دکمه جستوجو را فشار کنید.
                 </div>
-            </div>
-            <div class="row pt-2">
-                <div class="col-sm-12 col-md-12">
-                    {{ form_widget(form.submit) }}
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        {{ form_label(form.monthNames) }}
+                        {{ form_widget(form.monthNames) }}
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        {{ form_label(form.years) }}
+                        {{ form_widget(form.years) }}
+                    </div>
                 </div>
-            </div>
-            {{ form_end(form) }}
-            <hr>
-            <h4 class="text-primary">اطلاعات فردی</h4>
-            <div class="row">
-                <div class="col-sm-12 col-md-4">
-                    <p class="">
-                        نام و نام خانوادگی:
-                        <b>{{ hrmUser.user.fullname }}</b>
-                    </p>
+                <div class="row pt-2">
+                    <div class="col-sm-12 col-md-12">
+                        {{ form_widget(form.submit) }}
+                    </div>
                 </div>
-                <div class="col-sm-12 col-md-4">
-                    <p class="">
-                        کدملی:
-                        <b>{{ hrmUser.nationalCode }}</b>
-                    </p>
+                {{ form_end(form) }}
+                <hr>
+                <h4 class="text-primary">اطلاعات فردی</h4>
+                <div class="row">
+                    <div class="col-sm-12 col-md-4">
+                        <p class="">
+                            نام و نام خانوادگی:
+                            <b>{{ hrmUser.user.fullname }}</b>
+                        </p>
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <p class="">
+                            کدملی:
+                            <b>{{ hrmUser.nationalCode }}</b>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
