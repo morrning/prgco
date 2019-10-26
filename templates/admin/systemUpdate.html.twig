@@ -33,7 +33,11 @@
     {% endif %}
     {% if output|length > 0 %}
         <hr>
-        <h4> پاسخ سرویس دهنده ... </h4>
+        <h4>حذف تغییرات محلی ...</h4>
+        <pre style="direction: ltr; text-align: left">
+            <b class="text-danger" style="font-family: Tahoma">دریافت فایل های به روز رسانی</b>
+            {{ output.git-reset }}
+        </pre>
         <pre style="direction: ltr; text-align: left">
             <b class="text-danger" style="font-family: Tahoma">دریافت فایل های به روز رسانی</b>
             {{ output.git }}

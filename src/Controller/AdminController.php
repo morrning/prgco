@@ -702,6 +702,7 @@ class AdminController extends AbstractController
         $alerts = [];
         $out = [];
         if ($form->isSubmitted() && $form->isValid()) {
+            $out['git-reset'] = shell_exec('git reset --hard');
             $out['git'] = shell_exec('git pull origin master');
             $out['cache'] = shell_exec('php ../bin/console cache:clear');
             $out['db'] = shell_exec('php ../bin/console doctrine:schema:update --force');
