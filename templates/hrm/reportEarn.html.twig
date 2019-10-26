@@ -41,7 +41,7 @@
                 {{ form_end(form) }}
                 <hr>
                 <h4 class="text-primary">اطلاعات فردی</h4>
-                <div class="row">
+                <div class="row border-bottom">
                     <div class="col-sm-12 col-md-4">
                         <p class="">
                             نام و نام خانوادگی:
@@ -54,7 +54,144 @@
                             <b>{{ hrmUser.nationalCode }}</b>
                         </p>
                     </div>
+                    <div class="col-sm-12 col-md-4">
+                        <p class="">
+                            کد پرسنلی:
+                            <b>{{ hrmUser.nationalCode }}</b>
+                        </p>
+                    </div>
                 </div>
+                {% if fish is not null %}
+                    {% if fish == 0 %}
+                        <div class="row">
+                            <div class="col-12 pt-3 justify-content-center text-center">
+                                    <a class="alert alert-danger">
+                                        <i class="fa fa-info-circle"></i>
+                                        در این ماه برای شما کارکردی ثبت نشده است.در صورتی که فکر می کنید اشتباهی رخ داده است می توانید با مدیریت منابع انسانی و آموزش تماس بگیرید.
+                                    </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <h5 class="text-primary border-bottom">اطلاعات کارکرد و درآمد</h5>
+                                {% if fish.0 is defined %}
+                                    <p>
+                                        {{ fish['0']['title'] }}:
+                                        <b class="text-danger">{{ fish['0']['val'] | number_format() }}</b>
+                                        روز
+                                    </p>
+                                {% endif %}
+                                {% if fish.1 is defined %}
+                                    <p>
+                                        {{ fish['1']['title'] }}:
+                                        <b class="text-danger">{{ fish['1']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.10 is defined %}
+                                    <p>
+                                        {{ fish['10']['title'] }}:
+                                        <b class="text-danger">{{ fish['10']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.17 is defined %}
+                                    <p>
+                                        {{ fish['17']['title'] }}:
+                                        <b class="text-danger">{{ fish['17']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.8 is defined %}
+                                    <p>
+                                        {{ fish['8']['title'] }}:
+                                        <b class="text-danger">{{ fish['8']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.9 is defined %}
+                                    <p>
+                                        {{ fish['9']['title'] }}:
+                                        <b class="text-danger">{{ fish['9']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <h5 class="text-primary border-bottom">بیمه و کسورات</h5>
+                                {% if fish.14 is defined %}
+                                    <p>
+                                        {{ fish['14']['title'] }}:
+                                        <b class="text-danger">{{ fish['14']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.15 is defined %}
+                                    <p>
+                                        {{ fish['15']['title'] }}:
+                                        <b class="text-danger">{{ fish['15']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.16 is defined %}
+                                    <p>
+                                        {{ fish['16']['title'] }}:
+                                        <b class="text-danger">{{ fish['16']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.11 is defined %}
+                                    <p>
+                                        {{ fish['11']['title'] }}:
+                                        <b class="text-danger">{{ fish['11']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.13 is defined %}
+                                    <p>
+                                        {{ fish['13']['title'] }}:
+                                        <b class="text-danger">{{ fish['13']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <h5 class="text-primary border-bottom">جمع کسورات و درآمدها</h5>
+                                {% if fish.7 is defined %}
+                                    <p>
+                                        {{ fish['7']['title'] }}:
+                                        <b class="text-danger">{{ fish['7']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.6 is defined %}
+                                    <p>
+                                        {{ fish['6']['title'] }}:
+                                        <b class="text-danger">{{ fish['6']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.4 is defined %}
+                                    <p>
+                                        {{ fish['4']['title'] }}:
+                                        <b class="text-danger">{{ fish['4']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                                {% if fish.5 is defined %}
+                                    <p>
+                                        {{ fish['5']['title'] }}:
+                                        <b class="text-danger">{{ fish['5']['val'] | number_format(0, '.', ',') }}</b>
+                                        ریال
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                {% endif %}
+
             {% endif %}
         </div>
     </div>

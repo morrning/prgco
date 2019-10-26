@@ -60,14 +60,32 @@ class HRMController extends AbstractController
             ->add('submit', SubmitType::class,['label'=>'جستوجوی فیش حقوقی'])
             ->getForm();
         $alerts = [];
+        $hrmUser = $entityMGR->findOneBy('App:HRMemploye',['user'=>$userMGR->currentUser()]);
         $form->handleRequest($request);
+        $fish = null;
         if ($form->isSubmitted() && $form->isValid()) {
-
+            $selectQuery1 = "SELECT * FROM tbuser WHERE (nationalCode = ?)";
+            $stmt = $conn->prepare($selectQuery1);
+            $stmt->bindValue(1, $hrmUser->getNationalCode());
+            $stmt->execute();
+            $userInExternalDb = $stmt->fetch();
+            $selectQuery1 = "SELECT HRM.element.title,HRM.element.type, elmntref,val,issueyear,issuemonth,EffectYear,EffectMonth 
+                            FROM HRM.element,HRM.payMVPers 
+                            WHERE HRM.element.serial=HRM.payMVPers.elmntref AND val<>0 AND persref=? AND  issueyear=? and issuemonth=? ";
+            $stmt = $conn->prepare($selectQuery1);
+            $stmt->bindValue(1, $userInExternalDb['Serial']);
+            $stmt->bindValue(2, $form->get('years')->getData());
+            $stmt->bindValue(3, $form->get('monthNames')->getData()->getCode());
+            $stmt->execute();
+            $fish = $stmt->fetchAll();
+            if(count($fish) == 0)
+                $fish = 0;
         }
         return $this->render('hrm/reportEarn.html.twig', [
             'form' => $form->createView(),
-            'hrmUser' =>$entityMGR->findOneBy('App:HRMemploye',['user'=>$userMGR->currentUser()]),
-            'alert' =>$alerts
+            'hrmUser' =>$hrmUser,
+            'alert' =>$alerts,
+            'fish'=>$fish
         ]);
     }
 
