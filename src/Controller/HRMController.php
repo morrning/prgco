@@ -69,7 +69,7 @@ class HRMController extends AbstractController
             $stmt->bindValue(1, $hrmUser->getNationalCode());
             $stmt->execute();
             $userInExternalDb = $stmt->fetch();
-            $selectQuery1 = "SELECT HRM.element.title,HRM.element.type, elmntref,val,issueyear,issuemonth,EffectYear,EffectMonth 
+            $selectQuery1 =  "SELECT HRM.element.title,HRM.element.type, elmntref,val,issueyear,issuemonth,EffectYear,EffectMonth 
                             FROM HRM.element,HRM.payMVPers 
                             WHERE HRM.element.serial=HRM.payMVPers.elmntref AND val<>0 AND persref=? AND  issueyear=? and issuemonth=? ";
             $stmt = $conn->prepare($selectQuery1);
