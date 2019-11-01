@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}پشتیبان گیری از بانک اطلاعاتی{% endblock %}
+
+{% block pageBody %}
+    <p class="alert alert-info">
+        <i class="fas fa-info"></i>
+        پشتیبان گیری از بانک اطلاعاتی به صورت یک فایل انجام خواهد شد و با توجه به حجم دیتابیس ممکن است بین چند ثانیه تا چند دقیقه به طول بینجامد.این اطلاعات شامل فایل‌های تصاویر و اسناد ثانویه ذخیره شده نمی‌باشد.برای شروع عملیات پشتیبان‌گیری دکمه زیر را فشار دهید.
+    </p>
+    <p class="alert alert-warning">
+        <i class="fas fa-info"></i>
+        در سرویس‌دهنده‌های ویندوزی جهت اجرای درست این عملیات باید ‌MYSQL/MARIADB به عنوان System path تعریف شده باشد.
+    </p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+{% endblock %}

@@ -5,8 +5,10 @@ namespace App\Controller;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -15,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Yaml\Yaml;
-
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 //json encoder classes
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
@@ -29,6 +31,15 @@ use Twig\Extension\SandboxExtension;
 
 class AdminController extends AbstractController
 {
+    /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+
     public function folderSize ($dir)
     {
         $size = 0;
@@ -744,6 +755,56 @@ class AdminController extends AbstractController
         return $this->render('admin/databaseImport.html.twig',[
             'form'=>$form->createView(),
             'alerts'=>$alerts,
+        ]);
+
+
+    }
+    /**
+     * @Route("/admin/system/database/backup", name="adminDatabaseExport" , options = { "expose" = true })
+     */
+    public function adminDatabaseExport(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if (!$userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('submit', SubmitType::class,['label'=>'شروع عملیات پشتیبان‌گیری...'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alerts = [];
+        $output ='';
+        if ($form->isSubmitted() && $form->isValid()) {
+            $conn = $this->container->get('doctrine')->getConnection();
+            $path = str_replace('src/Controller','DBbackups',__DIR__).'/'. date('d-m-Y') . '@'.date('h.i.s').'.sql';
+            exec("mysqldump --user={$conn->getUsername()} --password={$conn->getPassword()} --host={$conn->getHost()} {$conn->getDatabase()} --result-file={$path} 2>&1", $output);
+            header("Content-Type: application/force-download");
+            $response =  new BinaryFileResponse($path);
+            // To generate a file download, you need the mimetype of the file
+            $mimeTypeGuesser = new FileinfoMimeTypeGuesser();
+
+            // Set the mimetype with the guesser or manually
+            if($mimeTypeGuesser->isSupported()){
+                // Guess the mimetype of the file according to the extension of the file
+                $response->headers->set('Content-Type', $mimeTypeGuesser->guess($path));
+            }else{
+                // Set the mimetype of the file manually, in this case for a text file is text/plain
+                $response->headers->set('Content-Type', 'text/plain');
+            }
+
+            // Set content disposition inline of the file
+            $response->setContentDisposition(
+                ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+                'backup.sql'
+            );
+            return $response;
+            $logMGR->addEvent('db543gv','افزودن','پشتیبان‌گیری از بانک اطلاعاتی سامانه','ADMINISTRATOR',$request->getClientIp());
+        }
+
+        return $this->render('admin/databaseExport.html.twig',[
+            'form'=>$form->createView(),
+            'alert'=>$alerts,
         ]);
 
 
