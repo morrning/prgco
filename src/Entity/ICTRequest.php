@@ -19,11 +19,6 @@ class ICTRequest
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $areaID;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $dateSubmit;
 
     /**
@@ -45,11 +40,6 @@ class ICTRequest
      * @ORM\Column(type="text", nullable=true)
      */
     private $des;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $machineID;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -76,21 +66,14 @@ class ICTRequest
      */
     private $acceptDoingTime;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysArea")
+     */
+    private $areaID;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAreaID(): ?string
-    {
-        return $this->areaID;
-    }
-
-    public function setAreaID(string $areaID): self
-    {
-        $this->areaID = $areaID;
-
-        return $this;
     }
 
     public function getDateSubmit(): ?string
@@ -153,18 +136,6 @@ class ICTRequest
         return $this;
     }
 
-    public function getMachineID(): ?string
-    {
-        return $this->machineID;
-    }
-
-    public function setMachineID(?string $machineID): self
-    {
-        $this->machineID = $machineID;
-
-        return $this;
-    }
-
     public function getEMS(): ?string
     {
         return $this->EMS;
@@ -221,6 +192,18 @@ class ICTRequest
     public function setAcceptDoingTime(?string $acceptDoingTime): self
     {
         $this->acceptDoingTime = $acceptDoingTime;
+
+        return $this;
+    }
+
+    public function getAreaID(): ?SysArea
+    {
+        return $this->areaID;
+    }
+
+    public function setAreaID(?SysArea $areaID): self
+    {
+        $this->areaID = $areaID;
 
         return $this;
     }

@@ -29,20 +29,9 @@ class IctController extends AbstractController
         if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
-        $devices = $entityMGR->getORM()->createQueryBuilder('m')
-            ->select('m.id')
-            ->from('App:ICTMachine','m')
-            ->innerJoin('App:SysPosition','p','WITH','p.id=m.ownerID')
-            ->where('p.defaultArea= :area')
-            ->setParameter('area' , $userMGR->currentPosition()->getDefaultArea())
-            ->getQuery()
-            ->getResult();
-
-
         return $this->render('ict/dashboardDoing.html.twig', [
             'reqCount'=> count($entityMGR->findBy('App:ICTRequest',['AcceptDoing'=>null,'areaID'=>$userMGR->currentPosition()->getDefaultArea()])),
-            'reqArchiveCount' => count($entityMGR->findBy('App:ICTRequest',['AcceptDoing'=>'1','areaID'=>$userMGR->currentPosition()->getDefaultArea()])),
-            'DeviceCount'=> count($devices)
+            'reqArchiveCount' => count($entityMGR->findBy('App:ICTRequest',['AcceptDoing'=>'1','areaID'=>$userMGR->currentPosition()->getDefaultArea()]))
         ]);
     }
 
@@ -150,7 +139,6 @@ class IctController extends AbstractController
         ]);
         foreach ($replays as $replay)
             $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
-        $req->setMachineID($entityMGR->find('App:ICTMachine',$req->getMachineID())->getMachineName());
 
         return $this->render('ict/requestViewDoing.html.twig', [
             'request' => $req,
@@ -199,14 +187,6 @@ class IctController extends AbstractController
                     'choice_label'=>'stateName'
                 ]
             )
-            ->add('machine', EntityType::class,
-                [
-                    'label'=>'دستگاه (رایانه, پرینتر و....)',
-                    'class'=>Entity\ICTMachine::class,
-                    'choice_value'=>'id',
-                    'choice_label'=>'machineName'
-                ]
-            )
             ->add('des', TextareaType::class,['label'=>'شرح درخواست'])
             ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
             ->getForm();
@@ -218,7 +198,6 @@ class IctController extends AbstractController
             $req->setDes($form->get('des')->getData());
             $req->setDateSubmit(time());
             $req->setRequestType($form->get('requestType')->getData()->getTypeName());
-            $req->setMachineID($form->get('machine')->getData()->getId());
             $req->setEMS($form->get('EMSstate')->getData()->getStateName());
             $req->setSubmitter($userMGR->currentPosition()->getId());
             $req->setAreaID($userMGR->currentPosition()->getDefaultArea());
@@ -290,10 +269,6 @@ class IctController extends AbstractController
             $entityMGR->update($request);
             $alert=[['type'=>'success','message'=>'تایید اقدامات با موفقیت انجام شد.']];
         }
-
-        $request->setMachineID($entityMGR->find('App:ICTMachine',$request->getMachineID())->getMachineName());
-
-
         return $this->render('ict/requestView.html.twig', [
             'request' => $request,
             'replays' => $replays,
@@ -302,182 +277,6 @@ class IctController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/ictreq/new/device", name="ictDoingNewDevice")
-     */
-    public function ictDoingNewDevice(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
-    {
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-
-        $default = ['message'=>'simple form'];
-        $form = $this->createFormBuilder($default)
-            ->add('ownerID', Type\AutocompleteType::class,['label'=>'تحویل گیرنده','attr'=>['pattern'=>'positions']])
-            ->add('PCBrand', TextType::class,['label'=>'برند'])
-            ->add('ProdectCode', TextType::class,['label'=>'کد اموال'])
-            ->add('PCName', TextType::class,['label'=>'نام نرم افزاری رایانه'])
-            ->add('PCCpu', EntityType::class,
-                [
-                    'label'=>'پردازنده',
-                    'class'=>Entity\ICTCpuType::class,
-                    'choice_value'=>'typeName',
-                    'choice_label'=>'typeName'
-                ]
-            )
-            ->add('PCRam', EntityType::class,
-                [
-                    'label'=>'رم',
-                    'class'=>Entity\ICTRamType::class,
-                    'choice_value'=>'typeName',
-                    'choice_label'=>'typeName'
-                ]
-            )
-            ->add('PCMainboard', TextType::class,['label'=>'برد اصلی'])
-            ->add('PCHard', TextType::class,['label'=>'هارد دیسک'])
-            ->add('des', TextareaType::class,['required'=>false,'label'=>'توضیحات بیشتر'])
-            ->add('submit', SubmitType::class,['label'=>'ثبت دستگاه'])
-            ->getForm();
-
-        $form->handleRequest($request);
-        $alerts = null;
-        if ($form->isSubmitted() && $form->isValid()) {
-            if(is_null($form->get('ownerID')->getData()))
-            {
-                $alerts = [['message'=>'سمت شغلی یافت نشد.','type'=>'danger']];
-            }
-            else{
-                $position = $entityMGR->find('App:SysPosition',$form->get('ownerID')->getData());
-                $machine = new Entity\ICTMachine();
-                $machine->setOwnerID($position->getId());
-                $machine->setDeviceType('رایانه ثابت / همراه');
-                $machine->setDes($form->get('des')->getData());
-                $machine->setPCBrand($form->get('PCBrand')->getData());
-                $machine->setPCCpu($form->get('PCCpu')->getData()->getTypeName());
-                $machine->setPCRam($form->get('PCRam')->getData()->getTypeName());
-                $machine->setPCHard($form->get('PCHard')->getData());
-                $machine->setPCMainboard($form->get('PCMainboard')->getData());
-                $machine->setPCName($form->get('PCName')->getData());
-                $machine->setProdectCode($form->get('ProdectCode')->getData());
-                $machine->setMachineName('رایانه ثابت / همراه' . 'PC Name:' . $machine->getPCName() . ' کد اموال: ' . $machine->getProdectCode());
-                $entityMGR->insertEntity($machine);
-                $logger->info(sprintf('user %s add new device with id: %s',$userMGR->currentUser()->getUsername(),$machine->getId()));
-                return $this->redirectToRoute('ictDoingDashboard',['msg'=>'1']);
-
-            }
-        }
-
-        return $this->render('ict/newDevice.html.twig', [
-            'form' => $form->createView(),
-            'alerts'=>$alerts
-        ]);
-    }
-
-    /**
-     * @Route("/ictreq/newotherdevice", name="ictDoingNewOtherDevice")
-     */
-    public function ictDoingNewOtherDevice(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
-    {
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-
-        $default = ['message'=>'simple form'];
-        $form = $this->createFormBuilder($default)
-            ->add('ownerID', Type\AutocompleteType::class,['label'=>'تحویل گیرنده','attr'=>['pattern'=>'positions']])
-            ->add('PCBrand', TextType::class,['label'=>'برند و مدل'])
-            ->add('ProdectCode', TextType::class,['label'=>'کد اموال'])
-            ->add('deviceType', EntityType::class,
-                [
-                    'label'=>'نوع دستگاه',
-                    'class'=>Entity\ICTMachineType::class,
-                    'choice_value'=>'typeName',
-                    'choice_label'=>'typeName'
-                ]
-            )
-            ->add('des', TextareaType::class,['required'=>false,'label'=>'توضیحات بیشتر'])
-            ->add('submit', SubmitType::class,['label'=>'ثبت دستگاه'])
-            ->getForm();
-
-        $form->handleRequest($request);
-        $alert = null;
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            if(is_null($form->get('ownerID')->getData()))
-            {
-                $alert = [['message'=>'سمت شغلی یافت نشد.','type'=>'danger']];
-            }
-            else{
-                $machine = new Entity\ICTMachine();
-                $machine->setOwnerID($form->get('ownerID')->getData());
-                $machine->setDeviceType($form->get('deviceType')->getData()->getTypeName());
-                $machine->setDes($form->get('des')->getData());
-                $machine->setProdectCode($form->get('ProdectCode')->getData());
-                $machine->setMachineName( $form->get('deviceType')->getData()->getTypeName() . ' کد اموال: ' . $machine->getProdectCode());
-                $entityMGR->insertEntity($machine);
-                $logger->info(sprintf('user %s add new device with id: %s',$userMGR->currentUser()->getUsername(),$machine->getId()));
-                return $this->redirectToRoute('ictDoingDashboard',['msg'=>'1']);
-
-            }
-        }
-
-        return $this->render('ict/newOtherDevice.html.twig', [
-            'form' => $form->createView(),
-            'alerts'=>$alert
-        ]);
-    }
-
-
-    /**
-     * @Route("/ictDoing/list/devices/{msg}", name="ictDoingListDevices")
-     */
-    public function ictDoingListDevices($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
-    {
-
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-
-        $alerts = null;
-        if($msg == 1)
-            $alerts = [['type'=>'success','message'=>'دستگاه با موفقیت اضافه شد.']];
-
-        $machines = $entityMGR->getORM()->createQueryBuilder('m')
-            ->select('m.id','p.publicLabel','m.DeviceType','m.ProdectCode','m.PCBrand')
-            ->from('App:ICTMachine','m')
-            ->innerJoin('App:SysPosition','p','WITH','p.id=m.ownerID')
-            ->where('p.defaultArea= :area')
-            ->setParameter('area' , $userMGR->currentPosition()->getDefaultArea())
-            ->orderBy('p.publicLabel','DESC')
-            ->getQuery()
-            ->getResult();
-
-
-        return $this->render('ict/listDevices.html.twig', [
-            'machines' => $machines,
-            'alerts'=>$alerts
-        ]);
-    }
-
-    /**
-     * @Route("/ictDoing/view/device/{id}", name="ictDoingViewDevice")
-     */
-    public function ictDoingViewDevice($id = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
-    {
-
-        if(! $userMGR->hasPermission('ictDoing','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-
-        $machine = $entityMGR->find('App:ICTMachine',$id);
-
-        if(is_null($machine))
-            return $this->redirectToRoute('404');
-        if($machine->getAreaID() != $userMGR->currentPosition()->getDefaultArea())
-            return $this->redirectToRoute('404');
-
-        $machine->setOwnerID($entityMGR->find('App:SysPosition',$machine->getOwnerID())->getPublicLabel());
-
-        return $this->render('ict/viewDevice.html.twig', [
-            'machine' => $machine
-        ]);
-    }
 
 
 }

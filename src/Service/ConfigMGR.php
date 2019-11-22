@@ -504,6 +504,18 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
+        if(count($this->em->findAll('App:ICTRequestState')) == 0) {
+            $entity = new Entity\ICTRequestState();
+            $entity->setStateName('در حال بررسی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRequestState();
+            $entity->setStateName('پاسخ داده شده');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\ICTRequestState();
+            $entity->setStateName('خاتمه یافته');
+            $this->em->insertEntity($entity);
+        }
+
         //import acc account default
         if(count($this->em->findAll('App:ACCaccount')) == 0) {
             $entity = new Entity\ACCaccount();

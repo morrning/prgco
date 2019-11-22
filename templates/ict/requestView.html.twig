@@ -20,7 +20,6 @@
                             <div class="col-xs-12 col-sm-12 col-md-6">
                                 <p>وضعیت درخواست: {{ request.state }}</p>
                                 <p>نوع درخواست:{{ request.requestType }}</p>
-                                <p>دستگاه:<span class="text-danger">{{ request.MachineID }}</span> </p>
                                 <p>ناحیه کاری:{{ EntityMGR.find('App:SysArea',UserMGR.CurrentPosition.defaultArea).areaName }}</p>
 
                             </div>
@@ -45,7 +44,7 @@
                                     {% else %}
                                         <span class="text-success">
                                              اقدامات در
-                                                {{ Jdate.jdate('Y/n/d در ساعت h:i',request.seenTime) }}
+                                                {{ Jdate.jdate('Y/n/d در ساعت h:i',request.acceptDoingTime) }}
                                             توسط شما تایید شده است.
 
                                         </span>
