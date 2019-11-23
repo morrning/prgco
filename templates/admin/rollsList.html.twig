@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}نقش‌های دسترسی{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-success border" href="{{ path('adminRollNew') }}">
+        <i class="far fa-users-cog"></i>
+        نقش کاربری جدید
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>ردیف</th>
+                <th>نام</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for roll in rolls %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ roll.label }}</td>
+                    <td>
+                        <a class="btn btn-warning" href="{{ path('adminRollNew',{'id':roll.id}) }}">
+                         <i class="fa fa-edit"></i>
+                            ویرایش
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

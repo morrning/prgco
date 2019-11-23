@@ -3,6 +3,8 @@ namespace App\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\BrowserKit\CookieJar;
 use App\Entity;
 
 
@@ -24,11 +26,14 @@ class UserMGR
         if(!is_null($this->user))
             return $this->user;
         $sessionID = $this->session->getId();
+        if(isset($_COOKIE['SYSUSER']))
+            $sessionID = $_COOKIE['SYSUSER'];
+
         $this->user = $this->em->findOneBy('App:SysUser',['uniqueID'=>$sessionID]);
         return $this->user;
     }
 
-    public function login($username, $password){
+    public function login($username, $password,$remember=false){
 
         $params = ["username"=>$username,"password"=>md5($password)];
         $user = $this->em->findOneBy('App:SysUser',$params);
@@ -36,6 +41,10 @@ class UserMGR
         {
             $user->setUniqueID($this->session->getId());
             $this->em->update($user);
+            if($remember){
+                $config = $this->em->find('App:SysConfig',1);
+                setcookie('SYSUSER', $user->getUniqueID(), time() + (86400 * $config->getUSERSMAXCOOKIETIME()), "/"); // 86400 = 1 day
+            }
             return true;
         }
         return false;
@@ -45,6 +54,7 @@ class UserMGR
         if($this->isLogedIn()){
             $user = $this->currentUser();
             $user->setUniqueID('');
+            setcookie('SYSUSER', '', time() - 86400 , "/"); // 86400 = 1 day
             return $this->em->update($user);
         }
     }
@@ -95,7 +105,7 @@ class UserMGR
             }
         }
         if($this->isLogedIn()){
-            $groups = explode(',',$this->currentPosition()->getGroups());
+            $groups = explode(',',$this->currentPosition()->getPermissionGroups());
             $params = [
                 'groupName'=>$permissionName,
                 'options'=>$option,
@@ -124,6 +134,17 @@ class UserMGR
                 return true;
             }
 
+            //check for position roll
+            if(!is_null($this->currentPosition()->getRoll()))
+            {
+                $property = 'get' . ucfirst($permissionName);
+                $metaData = $this->em->getORM()->getClassMetadata(Entity\SysRoll::class);
+                if ($metaData->hasField($permissionName)) {
+                    //property exists
+                    if($this->currentPosition()->getRoll()->$property() == 1)
+                        return true;
+                }
+            }
         }
         return false;
     }
@@ -132,10 +153,10 @@ class UserMGR
     {
         $obj = $this->em->getORM();
         return  $obj->getRepository('App:SysPosition')->createQueryBuilder('r')
-            ->Where('r.groups = :group')
-            ->orWhere('r.groups LIKE :group1')
-            ->orWhere('r.groups LIKE :group2')
-            ->orWhere('r.groups LIKE :group3')
+            ->Where('r.permissiongroups = :group')
+            ->orWhere('r.permissiongroups LIKE :group1')
+            ->orWhere('r.permissiongroups LIKE :group2')
+            ->orWhere('r.permissiongroups LIKE :group3')
             ->setParameter('group',  $groupID)
             ->setParameter('group1', '%,' . $groupID . ',%')
             ->setParameter('group2', '%' . $groupID . ',%')
@@ -147,12 +168,12 @@ class UserMGR
     public function removeFromGroup($positionID,$groupID)
     {
         $position = $this->em->find('App:SysPosition',$positionID);
-        $arrayRolls = explode(',',$position->getGroups());
+        $arrayRolls = explode(',',$position->getPermissiongroups());
         if(in_array($groupID,$arrayRolls)){
             $itemKey = array_search($groupID,$arrayRolls);
             unset($arrayRolls[$itemKey]);
             $newGroupList = implode(',',$arrayRolls);
-            $position->setGroups($newGroupList);
+            $position->setPermissionGroups($newGroupList);
             $this->em->update($position);
         }
     }
@@ -161,11 +182,11 @@ class UserMGR
     {
         $obj = $this->em->getORM();
         $position = $obj->getRepository('App:SysPosition')->find($posionID);
-        $groups = explode(',',$position->getGroups());
+        $groups = explode(',',$position->getPermissiongroups());
         if(! array_search($groupID,$groups)){
             array_push($groups,$groupID);
             $newGroupList = implode(',',$groups);
-            $position->setGroups($newGroupList);
+            $position->setPermissionGroups($newGroupList);
             $obj->persist($position);
             $obj->flush();
         }

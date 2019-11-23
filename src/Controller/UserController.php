@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 use App\Service;
@@ -31,9 +32,8 @@ class UserController extends AbstractController
         $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            if($userMGR->login($data['username'],$data['password']))
+            if($userMGR->login($data['username'],$data['password'],true))
             {
-
                 $position = $entityMGR->findOneBy('App:SysPosition',['userID'=>$userMGR->currentUser()]);
                 if(is_null($position))
                 {

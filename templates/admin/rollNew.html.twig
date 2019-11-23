@@ -1,0 +1,110 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}نقش کاربری جدید{% endblock %}
+
+{% block pageBody %}
+    <style>
+        .form-check{
+            float: right;
+        }
+    </style>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-8">
+                {{ form_start(form) }}
+                {{ form_label(form.label)}}
+                {{ form_widget(form.label) }}
+            </div>
+        </div>
+        <hr>
+        <h4 class="text-primary">
+            <i class="fa fa-arrow-down"></i>
+            زیرسیستم فناوری اطلاعات و ارتباطات
+        </h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.ictDoing) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.ictDoing) }}
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.ictRequest) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.ictRequest) }}
+            </div>
+        </div>
+        <h4 class="text-primary">
+            <i class="fa fa-arrow-down"></i>
+            زیرسیستم اعلانات و انتشار خبر
+        </h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.newsPublish) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.newsPublish) }}
+            </div>
+        </div>
+        <h4 class="text-primary">
+            <i class="fa fa-arrow-down"></i>
+            زیرسیستم برنامه‌ریزی و کنترل‌پروژه
+        </h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.projectAdmin) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.projectAdmin) }}
+            </div>
+        </div>
+        <h4 class="text-primary">
+            <i class="fa fa-arrow-down"></i>
+            زیرسیستم‌های عمومی
+        </h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.CountDown) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.CountDown) }}
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.ISOfORMS) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.ISOfORMS) }}
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.suggestionInbox) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.suggestionInbox) }}
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.phonebookAdmin) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.phonebookAdmin) }}
+            </div><div class="col-sm-12 col-md-8">
+                {{ form_label(form.MostUsedFiles) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.MostUsedFiles) }}
+            </div>
+
+        </div>
+        <hr>
+        <div class="row pt-2">
+            <div class="col-12">
+                {{ form_widget(form.submit) }}
+                <a class="btn btn-secondary" href="{{ path('adminRollsList') }}">
+                    <i class="fa fa-undo"></i>
+                    بازگشت
+                </a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

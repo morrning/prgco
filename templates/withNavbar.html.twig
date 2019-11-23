@@ -25,9 +25,13 @@
         {% block pageBody %}{% endblock %}
     </div>
 
-    <nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom py-0 mt-3">
+    <nav class="navbar navbar-expand-sm bg-secondary fixed-bottom py-0 mt-5">
         <!-- Navbar text-->
-        <span class="navbar-text text-light">
+        <a class="navbar-brand text-light" href="http://sarkesh.org">
+            <img src="{{asset('/assets/images/public/rahkar.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
+            سامانه مدیریت یکپارچه راهکار
+        </a>
+        <span class="navbar-text text-light mr-auto">
             {{ ConfigMGR.getConfig.footerText }}
         </span>
 

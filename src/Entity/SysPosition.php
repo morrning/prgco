@@ -41,7 +41,7 @@ class SysPosition
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $groups;
+    private $permissiongroups;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\NewsPost", mappedBy="submitter")
@@ -97,6 +97,11 @@ class SysPosition
      * @ORM\OneToMany(targetEntity="App\Entity\CMVisaReq", mappedBy="hseAR")
      */
     private $visaReqHse;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysRoll")
+     */
+    private $roll;
 
     public function __construct()
     {
@@ -183,18 +188,20 @@ class SysPosition
     /**
      * @return mixed
      */
-    public function getGroups()
+    public function getPermissiongroups()
     {
-        return $this->groups;
+        return $this->permissiongroups;
     }
 
     /**
-     * @param mixed $groups
+     * @param mixed $permissiongroups
      */
-    public function setGroups($groups): void
+    public function setPermissiongroups($permissiongroups): void
     {
-        $this->groups = $groups;
+        $this->permissiongroups = $permissiongroups;
     }
+
+
 
     /**
      * @return Collection|NewsPost[]
@@ -495,6 +502,18 @@ class SysPosition
                 $visaReqHse->setHseAR(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getRoll(): ?SysRoll
+    {
+        return $this->roll;
+    }
+
+    public function setRoll(?SysRoll $roll): self
+    {
+        $this->roll = $roll;
 
         return $this;
     }

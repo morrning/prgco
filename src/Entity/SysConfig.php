@@ -51,6 +51,11 @@ class SysConfig
      */
     private $HRM_SG_PASSWORD;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $USERS_MAX_COOKIE_TIME;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +141,18 @@ class SysConfig
     public function setHRMSGPASSWORD(?string $HRM_SG_PASSWORD): self
     {
         $this->HRM_SG_PASSWORD = $HRM_SG_PASSWORD;
+
+        return $this;
+    }
+
+    public function getUSERSMAXCOOKIETIME(): ?string
+    {
+        return $this->USERS_MAX_COOKIE_TIME;
+    }
+
+    public function setUSERSMAXCOOKIETIME(?string $USERS_MAX_COOKIE_TIME): self
+    {
+        $this->USERS_MAX_COOKIE_TIME = $USERS_MAX_COOKIE_TIME;
 
         return $this;
     }

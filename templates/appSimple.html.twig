@@ -53,7 +53,10 @@
                                 {{ menuItem.label | raw}}
                             </a>
                         {% endfor %}
-
+                        <a href="{{ path('suggestion') }}" class="list-group-item list-group-item-action">
+                            <i class="far fa-lightbulb"></i>
+                            نظام پیشنهادات و انتقادات
+                        </a>
                         <a href="{{ path('ISOformsView') }}" class="list-group-item list-group-item-action">
                             <i class="far fa-books"></i>
                             سامانه IMS

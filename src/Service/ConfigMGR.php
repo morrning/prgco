@@ -24,7 +24,8 @@ class ConfigMGR
         if(is_null($this->config))
         {
             $config = new Entity\SysConfig();
-            $config->setSiteName('YOUR SITE NAME');
+            $config->setSiteName('نام شرکت شما...');
+            $config->setUSERSMAXCOOKIETIME(1);
             $this->em->insertEntity($config);
             $this->config = $config;
         }
@@ -408,66 +409,6 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
-        //import ICT default CPU type
-        if(count($this->em->findAll('App:ICTCpuType')) == 0) {
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL CELERON');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL PENTIUM');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL DOUL CORE');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTER ATOM');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL CORE I3');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL CORE I5');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('INTEL CORE I7');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('AMD');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTCpuType();
-            $entity->setTypeName('ARM');
-            $this->em->insertEntity($entity);
-        }
-        //import ICT default RAM type
-        if(count($this->em->findAll('App:ICTRamType')) == 0) {
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('1 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('2 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('3 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('4 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('6 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('8 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('16 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('24 GB');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTRamType();
-            $entity->setTypeName('32 GB');
-            $this->em->insertEntity($entity);
-        }
         //import ICT DOING STATE
         if(count($this->em->findAll('App:ICTRequestEMSState')) == 0) {
             $entity = new Entity\ICTRequestEMSState();
@@ -491,19 +432,6 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
-        //import ICT REQUEST TYPE
-        if(count($this->em->findAll('App:ICTMachineType')) == 0) {
-            $entity = new Entity\ICTMachineType();
-            $entity->setTypeName('پرینتر');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTMachineType();
-            $entity->setTypeName('اسکنر');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\ICTMachineType();
-            $entity->setTypeName('بیسیم');
-            $this->em->insertEntity($entity);
-        }
-
         if(count($this->em->findAll('App:ICTRequestState')) == 0) {
             $entity = new Entity\ICTRequestState();
             $entity->setStateName('در حال بررسی');
@@ -515,7 +443,11 @@ class ConfigMGR
             $entity->setStateName('خاتمه یافته');
             $this->em->insertEntity($entity);
         }
-
+        //config max cookie time
+        if(is_null($this->config->getUSERSMAXCOOKIETIME())){
+            $this->config->setUSERSMAXCOOKIETIME(1);
+            $this->em->update($this->config);
+        }
         //import acc account default
         if(count($this->em->findAll('App:ACCaccount')) == 0) {
             $entity = new Entity\ACCaccount();

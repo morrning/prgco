@@ -14,8 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
-
-
 use App\Service;
 use App\Entity;
 
@@ -164,7 +162,7 @@ class IctController extends AbstractController
     /**
      * @Route("/ictreq/new/req", name="ictreqNew")
      */
-    public function ictreqNew(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    public function ictreqNew(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger,Service\LogMGR $logMGR)
     {
         if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
@@ -204,6 +202,10 @@ class IctController extends AbstractController
             $req->setState('در حال بررسی');
             $entityMGR->insertEntity($req);
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new ICT request.' );
+            $logMGR->addEvent('ICTREQ'.$userMGR->currentUser()->getId(),'افزودن','درخواست خدمات فناوری اطلاعات و ارتباطات','ICT',$request->getClientIp());
+            $des = sprintf('درخواست خدمات توسط %s ثبت شد.',$userMGR->currentPosition()->getPublicLabel());
+            $url = $this->generateUrl('ictdoingView',['rid'=>$req->getId()]);
+            $userMGR->addNotificationForGroup('ictDoing','ICT',$des,$url,$userMGR->currentPosition()->getDefaultArea()->getId());
             return $this->redirectToRoute('ictreqArchive',['msg'=>'1']);
         }
 

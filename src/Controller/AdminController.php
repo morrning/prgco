@@ -235,7 +235,20 @@ class AdminController extends AbstractController
         $form = $this->createFormBuilder($config)
             ->add('siteName', TextType::class,['label'=>'نام شرکت'])
             ->add('activeationCode', TextType::class,['label'=>'کد فعالسازی'])
-            ->add('footerText', TextType::class,['label'=>'پانویس پورتال'])
+            ->add('footerText', TextareaType::class,['label'=>'پانویس پورتال'])
+            ->add('USERS_MAX_COOKIE_TIME', ChoiceType::class, [
+                'label'=>'حداکثر اعتبار کوکی‌های کاربران',
+                'choices'  => [
+                    'یک روز' => 1,
+                    'سه روز' => 3,
+                    'یک هفته' => 7,
+                    'دو هفته' => 14,
+                    'یک ماه' => 30,
+                    'دو ماه' => 60,
+                    'شش ماه' => 180,
+                    'یک سال' => 365,
+                ],
+            ])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 
@@ -863,6 +876,10 @@ class AdminController extends AbstractController
                 'class'=>Entity\SysArea::class,'choice_label'=>'areaName',
                 'label'=>'ناحیه کاری'
             ])
+            ->add('roll', EntityType::class, [
+                'class'=>Entity\SysRoll::class,'choice_label'=>'label',
+                'label'=>'نقش کاربری'
+            ])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
@@ -1006,5 +1023,144 @@ class AdminController extends AbstractController
             'alerts' => $alerts,
         ]);
     }
+
+    /**
+     * @Route("/admin/rolls/{msg}", name="adminRollsList")
+     */
+    public function adminRollsList($msg=0,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'نقش کاربری مورد نظر با موفقیت ایجاد شد.']);
+        if($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'نقش کاربری مورد نظر با موفقیت ویرایش شد.']);
+        return $this->render('admin/rollsList.html.twig', [
+            'rolls' => $entityMGR->findAll('App:SysRoll'),
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/admin/roll/new/{id}", name="adminRollNew")
+     */
+    public function adminRollNew($id=0,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $id == 0 ? $roll = new Entity\SysRoll() : $roll = $entityMGR->find('App:SysRoll',$id);
+        if(is_null($roll))
+            return $this->redirectToRoute('404');
+
+        $form = $this->createFormBuilder($roll)
+            ->add('label', TextType::class,['label'=>'نام نقش کاربری'])
+            ->add('ictRequest', ChoiceType::class, [
+                'label'=>'درخواست خدمات فناوری اطلاعات و ارتباطات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false,
+            ])
+            ->add('ictDoing', ChoiceType::class, [
+                'label'=>'مجری خدمات فناوری اطلاعات و ارتباطات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('newsPublish', ChoiceType::class, [
+                'label'=>'مدیریت بخش اعلانات و انتشار خبر',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('MostUsedFiles', ChoiceType::class, [
+                'label'=>'مدیریت فایل‌های پراستفاده',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('phonebookAdmin', ChoiceType::class, [
+                'label'=>'مدیریت دفترتلفن',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('suggestionInbox', ChoiceType::class, [
+                'label'=>'مدیریت نظام پیشنهادات و انتقادات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('ISOfORMS', ChoiceType::class, [
+                'label'=>'مدیریت سامانه IMS',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('CountDown', ChoiceType::class, [
+                'label'=>'مدیریت سامانه روزشمار و تقویم',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('projectAdmin', ChoiceType::class, [
+                'label'=>'مدیریت سامانه کنترل پروژه کل',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'data'=>false,
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($roll);
+            $logMGR->addEvent('adminRoll','افزودن','نقش کاربری','ADMINISTRATOR',$request->getClientIp());
+            $logger->info(sprintf('user %s add new roll with id %s', $userMgr->currentUser()->getUsername() , $roll->getId()));
+            $id == 0 ? $msg=1: $msg=2;
+            return $this->redirectToRoute('adminRollsList',['msg'=>$msg]);
+
+        }
+        return $this->render('admin/rollNew.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
 
 }

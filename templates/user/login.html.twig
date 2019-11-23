@@ -15,17 +15,30 @@
                     <div class="row">
                         <div class="col-sm-12 col-md-12 justify-content-center">
                             {{ form_start(form) }}
-                            {{ form_widget(form.username) }}
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-user"></i>
+                                    </div>
+                                </div>
+                                {{ form_widget(form.username) }}
+                            </div>
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-key"></i>
+                                    </div>
+                                </div>
+                                {{ form_widget(form.password) }}
+                            </div>
                             <br>
-                            {{ form_widget(form.password) }}
-                            <br>
-                            <div class="alert alert-warning" onclick="SysLoadMsg('1003');">نام کاربری یا کلمه عبور خود را فراموش کرده اید؟</div>
-                            <hr>
                             {{ form_widget(form.submit) }}
                             <a class="btn btn-warning" href="{{ path('home') }}">
                                 بازگشت
                             </a>
                             {{ form_end(form) }}
+                            <hr>
+                            <div class="alert alert-warning" onclick="SysLoadMsg('1003');">نام کاربری یا کلمه عبور خود را فراموش کرده اید؟</div>
                         </div>
                     </div>
                 </div>
