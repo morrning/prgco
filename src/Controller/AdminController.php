@@ -1168,5 +1168,114 @@ class AdminController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/admin/roll/edit/{id}", name="adminRollEdit")
+     */
+    public function adminRollEdit($id=0,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+        $id == 0 ? $roll = new Entity\SysRoll() : $roll = $entityMGR->find('App:SysRoll',$id);
+        if(is_null($roll))
+            return $this->redirectToRoute('404');
 
+        $form = $this->createFormBuilder($roll)
+            ->add('label', TextType::class,['label'=>'نام نقش کاربری'])
+            ->add('ictRequest', ChoiceType::class, [
+                'label'=>'درخواست خدمات فناوری اطلاعات و ارتباطات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false,
+            ])
+            ->add('ictDoing', ChoiceType::class, [
+                'label'=>'مجری خدمات فناوری اطلاعات و ارتباطات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('newsPublish', ChoiceType::class, [
+                'label'=>'مدیریت بخش اعلانات و انتشار خبر',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('MostUsedFiles', ChoiceType::class, [
+                'label'=>'مدیریت فایل‌های پراستفاده',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('phonebookAdmin', ChoiceType::class, [
+                'label'=>'مدیریت دفترتلفن',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('suggestionInbox', ChoiceType::class, [
+                'label'=>'مدیریت نظام پیشنهادات و انتقادات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('ISOfORMS', ChoiceType::class, [
+                'label'=>'مدیریت سامانه IMS',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('CountDown', ChoiceType::class, [
+                'label'=>'مدیریت سامانه روزشمار و تقویم',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('projectAdmin', ChoiceType::class, [
+                'label'=>'مدیریت سامانه کنترل پروژه کل',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($roll);
+            $logMGR->addEvent('adminRoll','افزودن','نقش کاربری','ADMINISTRATOR',$request->getClientIp());
+            $logger->info(sprintf('user %s add new roll with id %s', $userMgr->currentUser()->getUsername() , $roll->getId()));
+            $id == 0 ? $msg=1: $msg=2;
+            return $this->redirectToRoute('adminRollsList',['msg'=>$msg]);
+
+        }
+        return $this->render('admin/rollEdit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }
