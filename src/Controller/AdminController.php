@@ -620,6 +620,7 @@ class AdminController extends AbstractController
      */
     public function adminEditPosition($PID, Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
+
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
 
@@ -635,6 +636,11 @@ class AdminController extends AbstractController
                 'choice_value' => 'id',
                 'label'=>'ناحیه کاری',
                 'data'=>$entityMGR->find('App:SysArea',$position->getDefaultArea()->getId()),
+            ])
+            ->add('roll', EntityType::class, [
+                'class'=>Entity\SysRoll::class,
+                'choice_label'=>'label',
+                'label'=>'نقش کاربری'
             ])
             ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
             ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
