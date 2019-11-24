@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -22,29 +24,9 @@ class ICTRequest
     private $dateSubmit;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $submitter;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $requestType;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $state;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $des;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $EMS;
 
     /**
      * @ORM\Column(type="string", length=20, nullable=true)
@@ -57,129 +39,226 @@ class ICTRequest
     private $seenTime;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysArea")
+     */
+    private $areaID;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $submitter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ICTRequestType", inversedBy="iCTRequests")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $requestType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ICTRequestState", inversedBy="iCTRequests")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $state;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ICTRequestEMSState")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $ems;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
      */
     private $seenID;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ICTDoing", mappedBy="reqID", orphanRemoval=true)
+     */
+    private $iCTDoings;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $acceptDoingTime;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysArea")
-     */
-    private $areaID;
+    public function __construct()
+    {
+        $this->iCTDoings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDateSubmit(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDateSubmit()
     {
         return $this->dateSubmit;
     }
 
-    public function setDateSubmit(string $dateSubmit): self
+    /**
+     * @param mixed $dateSubmit
+     */
+    public function setDateSubmit($dateSubmit): void
     {
         $this->dateSubmit = $dateSubmit;
-
-        return $this;
     }
 
-    public function getSubmitter(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDes()
+    {
+        return $this->des;
+    }
+
+    /**
+     * @param mixed $des
+     */
+    public function setDes($des): void
+    {
+        $this->des = $des;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAcceptDoing()
+    {
+        return $this->AcceptDoing;
+    }
+
+    /**
+     * @param mixed $AcceptDoing
+     */
+    public function setAcceptDoing($AcceptDoing): void
+    {
+        $this->AcceptDoing = $AcceptDoing;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSeenTime()
+    {
+        return $this->seenTime;
+    }
+
+    /**
+     * @param mixed $seenTime
+     */
+    public function setSeenTime($seenTime): void
+    {
+        $this->seenTime = $seenTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAreaID()
+    {
+        return $this->areaID;
+    }
+
+    /**
+     * @param mixed $areaID
+     */
+    public function setAreaID($areaID): void
+    {
+        $this->areaID = $areaID;
+    }
+
+    public function getSubmitter(): ?SysPosition
     {
         return $this->submitter;
     }
 
-    public function setSubmitter(string $submitter): self
+    public function setSubmitter(?SysPosition $submitter): self
     {
         $this->submitter = $submitter;
 
         return $this;
     }
 
-    public function getRequestType(): ?string
+    public function getRequestType(): ?ICTRequestType
     {
         return $this->requestType;
     }
 
-    public function setRequestType(string $requestType): self
+    public function setRequestType(?ICTRequestType $requestType): self
     {
         $this->requestType = $requestType;
 
         return $this;
     }
 
-    public function getState(): ?string
+    public function getState(): ?ICTRequestState
     {
         return $this->state;
     }
 
-    public function setState(?string $state): self
+    public function setState(?ICTRequestState $state): self
     {
         $this->state = $state;
 
         return $this;
     }
 
-    public function getDes(): ?string
+    public function getEms(): ?ICTRequestEMSState
     {
-        return $this->des;
+        return $this->ems;
     }
 
-    public function setDes(?string $des): self
+    public function setEms(?ICTRequestEMSState $ems): self
     {
-        $this->des = $des;
+        $this->ems = $ems;
 
         return $this;
     }
 
-    public function getEMS(): ?string
-    {
-        return $this->EMS;
-    }
-
-    public function setEMS(?string $EMS): self
-    {
-        $this->EMS = $EMS;
-
-        return $this;
-    }
-
-    public function getAcceptDoing(): ?string
-    {
-        return $this->AcceptDoing;
-    }
-
-    public function setAcceptDoing(?string $AccesptDoing): self
-    {
-        $this->AcceptDoing = $AccesptDoing;
-
-        return $this;
-    }
-
-    public function getSeenTime(): ?string
-    {
-        return $this->seenTime;
-    }
-
-    public function setSeenTime(?string $seenTime): self
-    {
-        $this->seenTime = $seenTime;
-
-        return $this;
-    }
-
-    public function getSeenID(): ?string
+    public function getSeenID(): ?SysPosition
     {
         return $this->seenID;
     }
 
-    public function setSeenID(?string $seenID): self
+    public function setSeenID(?SysPosition $seenID): self
     {
         $this->seenID = $seenID;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ICTDoing[]
+     */
+    public function getICTDoings(): Collection
+    {
+        return $this->iCTDoings;
+    }
+
+    public function addICTDoing(ICTDoing $iCTDoing): self
+    {
+        if (!$this->iCTDoings->contains($iCTDoing)) {
+            $this->iCTDoings[] = $iCTDoing;
+            $iCTDoing->setReqID($this);
+        }
+
+        return $this;
+    }
+
+    public function removeICTDoing(ICTDoing $iCTDoing): self
+    {
+        if ($this->iCTDoings->contains($iCTDoing)) {
+            $this->iCTDoings->removeElement($iCTDoing);
+            // set the owning side to null (unless already changed)
+            if ($iCTDoing->getReqID() === $this) {
+                $iCTDoing->setReqID(null);
+            }
+        }
 
         return $this;
     }
@@ -196,15 +275,5 @@ class ICTRequest
         return $this;
     }
 
-    public function getAreaID(): ?SysArea
-    {
-        return $this->areaID;
-    }
 
-    public function setAreaID(?SysArea $areaID): self
-    {
-        $this->areaID = $areaID;
-
-        return $this;
-    }
 }

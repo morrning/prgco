@@ -24,11 +24,6 @@ class HRMemploye
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nationalCode;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
     private $shenasnameh;
 
     /**
@@ -69,18 +64,6 @@ class HRMemploye
     public function setUser(?SysUser $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getNationalCode(): ?string
-    {
-        return $this->nationalCode;
-    }
-
-    public function setNationalCode(string $nationalCode): self
-    {
-        $this->nationalCode = $nationalCode;
 
         return $this;
     }

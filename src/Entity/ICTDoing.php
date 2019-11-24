@@ -22,17 +22,19 @@ class ICTDoing
     private $dateSubmit;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $submitter;
-
-    /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $des;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $submitter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\ICTRequest", inversedBy="iCTDoings")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $reqID;
 
@@ -53,18 +55,6 @@ class ICTDoing
         return $this;
     }
 
-    public function getSubmitter(): ?string
-    {
-        return $this->submitter;
-    }
-
-    public function setSubmitter(string $submitter): self
-    {
-        $this->submitter = $submitter;
-
-        return $this;
-    }
-
     public function getDes(): ?string
     {
         return $this->des;
@@ -77,15 +67,28 @@ class ICTDoing
         return $this;
     }
 
-    public function getReqID(): ?string
+    public function getSubmitter(): ?SysPosition
+    {
+        return $this->submitter;
+    }
+
+    public function setSubmitter(?SysPosition $submitter): self
+    {
+        $this->submitter = $submitter;
+
+        return $this;
+    }
+
+    public function getReqID(): ?ICTRequest
     {
         return $this->reqID;
     }
 
-    public function setReqID(string $reqID): self
+    public function setReqID(?ICTRequest $reqID): self
     {
         $this->reqID = $reqID;
 
         return $this;
     }
+    
 }

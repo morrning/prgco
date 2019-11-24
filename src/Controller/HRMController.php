@@ -60,13 +60,12 @@ class HRMController extends AbstractController
             ->add('submit', SubmitType::class,['label'=>'جستوجوی فیش حقوقی'])
             ->getForm();
         $alerts = [];
-        $hrmUser = $entityMGR->findOneBy('App:HRMemploye',['user'=>$userMGR->currentUser()]);
         $form->handleRequest($request);
         $fish = null;
         if ($form->isSubmitted() && $form->isValid()) {
             $selectQuery1 = "SELECT * FROM tbuser WHERE (nationalCode = ?)";
             $stmt = $conn->prepare($selectQuery1);
-            $stmt->bindValue(1, $hrmUser->getNationalCode());
+            $stmt->bindValue(1, $userMGR->currentUser()->getNationalCode());
             $stmt->execute();
             $userInExternalDb = $stmt->fetch();
             $selectQuery1 =  "SELECT HRM.element.title,HRM.element.type, elmntref,val,issueyear,issuemonth,EffectYear,EffectMonth 
@@ -83,7 +82,7 @@ class HRMController extends AbstractController
         }
         return $this->render('hrm/reportEarn.html.twig', [
             'form' => $form->createView(),
-            'hrmUser' =>$hrmUser,
+            'hrmUser' =>$userMGR->currentUser(),
             'alert' =>$alerts,
             'fish'=>$fish
         ]);
@@ -125,7 +124,7 @@ class HRMController extends AbstractController
         if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
-        $employe = new Entity\HRMemploye();
+        $employe = new Entity\SysUser();
         $form = $this->createFormBuilder($employe)
             ->add('nationalCode', TextType::class,['label'=>'کد ملی:','required'=>true,'attr'=>['class'=>'autoClear activeInput']])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])

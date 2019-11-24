@@ -9,14 +9,15 @@
                 {{ form_start(form) }}
                 {{ form_label(form.fullName) }}
                 {{ form_widget(form.fullName) }}
+                {{ form_label(form.nationalCode) }}
+                {{ form_widget(form.nationalCode) }}
                 {{ form_label(form.username) }}
                 {{ form_widget(form.username) }}
                 {{ form_label(form.password) }}
                 {{ form_widget(form.password) }}
                 {{ form_label(form.mobileNum) }}
                 {{ form_widget(form.mobileNum) }}
-                <hr>
-                <div class="row">
+                <div class="row pt-2">
                     <div class="col-12">
                         {{ form_widget(form.submit) }}
                         <a class="btn btn-secondary" href="{{ path('adminUsers') }}">بازگشت</a>

@@ -53,6 +53,11 @@ class SysUser
      */
     private $cMVisaReqs;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nationalCode;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -182,6 +187,18 @@ class SysUser
                 $cMVisaReq->setSubmitter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNationalCode(): ?string
+    {
+        return $this->nationalCode;
+    }
+
+    public function setNationalCode(string $nationalCode): self
+    {
+        $this->nationalCode = $nationalCode;
 
         return $this;
     }

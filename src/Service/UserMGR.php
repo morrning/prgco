@@ -152,7 +152,7 @@ class UserMGR
     public function positionsOfGroup($groupID)
     {
         $obj = $this->em->getORM();
-        return  $obj->getRepository('App:SysPosition')->createQueryBuilder('r')
+        $singlePermissionResult =  $obj->getRepository('App:SysPosition')->createQueryBuilder('r')
             ->Where('r.permissiongroups = :group')
             ->orWhere('r.permissiongroups LIKE :group1')
             ->orWhere('r.permissiongroups LIKE :group2')
@@ -163,6 +163,18 @@ class UserMGR
             ->setParameter('group3', '%,' . $groupID . '%')
             ->getQuery()
             ->getResult();
+        $group = $this->em->find('App:SysGroup',$groupID);
+
+        $rolls = $this->em->findBy('App:SysRoll',[$group->getGroupName()=>true]);
+        $rollRes=[];
+        foreach ($rolls as $roll){
+            $temp = $this->em->findBy('App:SysPosition',['roll'=>$roll]);
+            if(! is_null($temp))
+                foreach ($temp as $tmp)
+                    array_push($rollRes,$tmp);
+        }
+        echo count($rollRes);
+        return array_merge($singlePermissionResult,$rollRes);
     }
 
     public function removeFromGroup($positionID,$groupID)
@@ -227,9 +239,12 @@ class UserMGR
 
     public function addNotificationForGroup($GroupName,$boundle,$des,$url,$pid=1){
         $group = $this->em->findOneBy('App:SysGroup',['groupName'=>$GroupName,'bundle'=>$boundle,'PID'=>$pid]);
+
         if(is_null($group))
             return false;
+
         $users = $this->positionsOfGroup($group->getId());
+
         foreach ($users as $user)
         {
             $notification = new Entity\SysNotification();

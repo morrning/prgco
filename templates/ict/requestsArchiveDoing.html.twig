@@ -17,13 +17,13 @@
             </thead>
             <tbody class="">
             {% for request in requests %}
-                <tr class="{% if request.state == 'در حال بررسی' %}bg-warning{% endif %}{% if request.state == 'در دست اقدام' %}bg-info{% endif %}{% if request.state == 'خاتمه یافته' %}bg-success{% endif %}">
+                <tr class="{% if request.state.stateName == 'در حال بررسی' %}bg-warning{% endif %}{% if request.state.stateName == 'در دست اقدام' %}bg-info{% endif %}{% if request.state.stateName == 'خاتمه یافته' %}bg-success{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ request.id }}</td>
-                    <td>{{ request.submitter }}</td>
-                    <td>{{ request.requestType }}</td>
+                    <td>{{ request.submitter.publicLabel }}</td>
+                    <td>{{ request.requestType.typeName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d در ساعت h:i',request.dateSubmit) }}</td>
-                    <td>{{ request.state }}</td>
+                    <td>{{ request.state.stateName }}</td>
                     <td>
                         <a class="btn btn-secondary" href="{{ path('ictdoingView',{'rid':request.id}) }}">مشاهده</a>
                     </td>

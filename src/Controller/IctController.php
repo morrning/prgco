@@ -51,8 +51,7 @@ class IctController extends AbstractController
         ],[
             'id'=>'DESC'
         ]);
-        foreach ($requests as $request)
-            $request->setSubmitter($entityMGR->find('App:SysPosition',$request->getSubmitter())->getPublicLabel());
+
         return $this->render('ict/requestsArchiveDoing.html.twig', [
             'requests' => $requests,
             'alerts'=>$alerts
@@ -77,8 +76,7 @@ class IctController extends AbstractController
         ],[
             'id'=>'DESC'
         ]);
-        foreach ($requests as $request)
-            $request->setSubmitter($entityMGR->find('App:SysPosition',$request->getSubmitter())->getPublicLabel());
+
         return $this->render('ict/requestsArchiveDoing.html.twig', [
             'requests' => $requests,
             'alerts'=>$alerts
@@ -113,30 +111,31 @@ class IctController extends AbstractController
         if(is_null($req->getSeenTime()))
         {
             $req->setSeenTime(time());
-            $req->setSeenID($userMGR->currentPosition()->getId());
+            $req->setSeenID($userMGR->currentPosition());
             $entityMGR->update($req);
         }
         if ($form->isSubmitted() && $form->isValid()) {
             $doing = new Entity\ICTDoing();
             $doing->setDateSubmit(time());
-            $doing->setSubmitter($userMGR->currentPosition()->getId());
-            $doing->setReqID($rid);
+            $doing->setSubmitter($userMGR->currentPosition());
+            $doing->setReqID($req);
             $doing->setDes($form->get('des')->getData());
             $entityMGR->insertEntity($doing);
-            $req->setState($form->get('requestType')->getData()->getStateName());
-
+            $req->setState($form->get('requestType')->getData());
             $entityMGR->update($req);
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new ICT Doing.' );
             $alert = [['type'=>'success','message'=>'اقدام با موفقیت ثبت شد.']];
+            $des = sprintf('پاسخ درخواست خدمات توسط %s ارسال شد.',$userMGR->currentPosition()->getPublicLabel());
+            $url = $this->generateUrl('ictreqView',['rid'=>$req->getId()]);
+            $userMGR->addNotificationForUser($entityMGR->find('App:SysPosition',$req->getSubmitter()), $des,$url);
+
         }
 
         $replays = $entityMGR->findBy('App:ICTDoing',[
-            'reqID'=>$rid,
+            'reqID'=>$req,
         ],[
             'id'=>'DESC'
         ]);
-        foreach ($replays as $replay)
-            $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
 
         return $this->render('ict/requestViewDoing.html.twig', [
             'request' => $req,
@@ -167,8 +166,8 @@ class IctController extends AbstractController
         if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
-        $default = ['message'=>'simple form'];
-        $form = $this->createFormBuilder($default)
+        $req = new Entity\ICTRequest();
+        $form = $this->createFormBuilder($req)
             ->add('requestType', EntityType::class,
                 [
                     'label'=>'نوع درخواست',
@@ -177,7 +176,7 @@ class IctController extends AbstractController
                     'choice_label'=>'typeName'
                     ]
             )
-            ->add('EMSstate', EntityType::class,
+            ->add('ems', EntityType::class,
                 [
                     'label'=>'اولویت درخواست',
                     'class'=>Entity\ICTRequestEMSState::class,
@@ -192,14 +191,10 @@ class IctController extends AbstractController
         $form->handleRequest($request);
         $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $req = new Entity\ICTRequest();
-            $req->setDes($form->get('des')->getData());
             $req->setDateSubmit(time());
-            $req->setRequestType($form->get('requestType')->getData()->getTypeName());
-            $req->setEMS($form->get('EMSstate')->getData()->getStateName());
-            $req->setSubmitter($userMGR->currentPosition()->getId());
+            $req->setSubmitter($userMGR->currentPosition());
             $req->setAreaID($userMGR->currentPosition()->getDefaultArea());
-            $req->setState('در حال بررسی');
+            $req->setState($entityMGR->findOneBy('App:ICTRequestState',['stateName'=>'در حال بررسی']));
             $entityMGR->insertEntity($req);
             $logger->info('position with username ' . $userMGR->currentUser()->getUsername() . ' submit new ICT request.' );
             $logMGR->addEvent('ICTREQ'.$userMGR->currentUser()->getId(),'افزودن','درخواست خدمات فناوری اطلاعات و ارتباطات','ICT',$request->getClientIp());
@@ -230,7 +225,7 @@ class IctController extends AbstractController
         return $this->render('ict/requestsArchive.html.twig', [
             'requests' => $entityMGR->findBy('App:ICTRequest',[
                 'areaID'=>$userMGR->currentPosition()->getDefaultArea(),
-                'submitter'=>$userMGR->currentPosition()->getId()
+                'submitter'=>$userMGR->currentPosition()
             ],[
                 'id'=>'DESC'
             ]),
@@ -245,20 +240,18 @@ class IctController extends AbstractController
     {
         if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
-        if(is_null($entityMGR->find('App:ICTRequest',$rid)))
+        $rid = $entityMGR->find('App:ICTRequest',$rid);
+        if(is_null($rid))
             return $this->redirectToRoute('404');
         $request = $entityMGR->find('App:ICTRequest',$rid);
-        if($request->getSubmitter() != $userMGR->currentPosition()->getId())
+        if($request->getSubmitter() != $userMGR->currentPosition())
             return $this->redirectToRoute('403');
         $replays = $entityMGR->findBy('App:ICTDoing',[
             'reqID'=>$rid,
         ],[
             'id'=>'DESC'
         ]);
-        foreach ($replays as $replay)
-        {
-            $replay->setSubmitter($entityMGR->find('App:SysPosition',$replay->getSubmitter())->getPublicLabel());
-        }
+
         $default = ['message'=>'simple form'];
         $form = $this->createFormBuilder($default)
             ->add('submit', SubmitType::class,['attr'=>['class'=>'btn-success'],'label'=>'در صورت تایید دریافت خدمت مورد اشاره اینجا کلیک کنید'])
@@ -268,6 +261,7 @@ class IctController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $request->setAcceptDoing(1);
             $request->setAcceptDoingTime(time());
+            $request->setState($entityMGR->findOneBy('App:ICTRequestState',['stateCode'=>2]));
             $entityMGR->update($request);
             $alert=[['type'=>'success','message'=>'تایید اقدامات با موفقیت انجام شد.']];
         }

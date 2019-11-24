@@ -435,12 +435,15 @@ class ConfigMGR
         if(count($this->em->findAll('App:ICTRequestState')) == 0) {
             $entity = new Entity\ICTRequestState();
             $entity->setStateName('در حال بررسی');
+            $entity->setStateCode(0);
             $this->em->insertEntity($entity);
             $entity = new Entity\ICTRequestState();
             $entity->setStateName('پاسخ داده شده');
+            $entity->setStateCode(1);
             $this->em->insertEntity($entity);
             $entity = new Entity\ICTRequestState();
             $entity->setStateName('خاتمه یافته');
+            $entity->setStateCode(2);
             $this->em->insertEntity($entity);
         }
         //config max cookie time

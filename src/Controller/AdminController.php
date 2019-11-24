@@ -523,7 +523,7 @@ class AdminController extends AbstractController
         if($msg==2)
             $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
         if($msg==5)
-            $alerts = [['message'=>'این نام کاربری قبلا ثبت شده است.','type'=>'warning']];
+            $alerts = [['message'=>'این نام کاربری یا کد ملی قبلا ثبت شده است.','type'=>'warning']];
 
         $users = $entityMGR->findAll('App:SysUser');
         $logMGR->addEvent('4ert','مشاهده','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
@@ -930,13 +930,14 @@ class AdminController extends AbstractController
             ->add('username', TextType::class,['label'=>'نام کاربری'])
             ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
+            ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            if(is_null($entityMGR->findOneBy('App:SysUser',['username'=>$user->getUsername()])))
+            if(is_null($entityMGR->findOneBy('App:SysUser',['username'=>$user->getUsername()])) && is_null($entityMGR->findOneBy('App:SysUser',['nationalCode'=>$user->getNationalCode()])))
             {
                 $user->setPassword(md5($user->getPassword()));
                 $entityMGR->insertEntity($user);
@@ -967,6 +968,7 @@ class AdminController extends AbstractController
             ->add('fullName', TextType::class,['label'=>'نام و نام‌خانوادگی'])
             ->add('username', TextType::class,['label'=>'نام کاربری'])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
+            ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 

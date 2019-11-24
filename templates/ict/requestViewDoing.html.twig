@@ -15,12 +15,12 @@
                                 <p>شماره درخواست: {{ request.id }}</p>
                                 <p>درخواست کننده:{{ UserMGR.CurrentPosition.publicLabel }}</p>
                                 <p> تاریخ درخواست:{{ Jdate.jdate('Y/n/d در ساعت h:i',request.dateSubmit) }}</p>
-                                <p>اولویت:{{ request.EMS }}</p>
+                                <p>اولویت:{{ request.EMS.stateName }}</p>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-6">
-                                <p>وضعیت درخواست: {{ request.state }}</p>
-                                <p>نوع درخواست:{{ request.requestType }}</p>
-                                <p>ناحیه کاری:{{ EntityMGR.find('App:SysArea',UserMGR.CurrentPosition.defaultArea).areaName }}</p>
+                                <p>وضعیت درخواست: {{ request.state.stateName }}</p>
+                                <p>نوع درخواست:{{ request.requestType.typeName }}</p>
+                                <p>ناحیه کاری:{{ request.areaID.areaName }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -33,13 +33,13 @@
                                              اولین بار در تاریخ
                                                 {{ Jdate.jdate('Y/n/d در ساعت h:i',request.seenTime) }}
                                             توسط
-                                                {{ EntityMGR.find('App:SysPosition',request.seenID).publicLabel }}
+                                                {{ request.seenID.publicLabel }}
                                         </span>
                                     {% endif %}
                                 </p>
                                 <p>وضعیت تایید اقدامات:
                                     {% if request.acceptDoing == null %}
-                                        <span class="text-danger">اقدامات انجام شده از سوی شما تایید نشده است.</span>
+                                        <span class="text-danger">اقدامات انجام شده تایید نشده است.</span>
                                     {% else %}
                                         <span class="text-success">
                                              اقدامات در
@@ -93,7 +93,7 @@
                     <div class="card">
                         <div class="card-header bg-secondary text-light">
                             اقدام کننده:
-                            {{ replay.submitter }}
+                            {{ replay.submitter.publicLabel }}
                         </div>
                         <div class="card-body">
                             {{ replay.des }}
