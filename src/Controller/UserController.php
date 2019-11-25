@@ -45,12 +45,17 @@ class UserController extends AbstractController
                         $position->setIsDefault(1);
                         $entityMGR->update($position);
                     }
-                    $cookie = new Cookie('UIDFL',20);
-                    $request->cookies->set('UIDFL',20);
-                    
-                    $logger->info('user ' . $data['username'] .' loged in.');
-                    $logMGR->addEvent('3gv5','ورود به سامانه',sprintf('کاربر با نام کاربری %s وارد سامانه شد.',$data['username']),'USERS',$request->getClientIp());
-                    return $this->redirectToRoute('home');
+                    if($userMGR->currentUser()->getSuspend())
+                    {
+                        $userMGR->logout();
+                        $alert = [['message'=>'حساب کاربری شما توسط مدیرسامانه مسدود شده است.در صورتی که فکر می‌کنید اشتباهی رخ داده لطفا با مدیر سامانه تماس بگیرید.','type'=>'danger']];
+                    }
+                    else{
+                        $logger->info('user ' . $data['username'] .' loged in.');
+                        $logMGR->addEvent('3gv5','ورود به سامانه',sprintf('کاربر با نام کاربری %s وارد سامانه شد.',$data['username']),'USERS',$request->getClientIp());
+                        return $this->redirectToRoute('home');
+                    }
+
                 }
 
             }

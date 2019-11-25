@@ -15,16 +15,18 @@
                 <th>ردیف</th>
                 <th>نام کاربری</th>
                 <th>نام و نام‌خانوادگی</th>
+                <th>کد ملی</th>
                 <th>تلفن تماس</th>
                 <th>امکانات</th>
             </tr>
             </thead>
             <tbody class="">
             {% for user in users %}
-                <tr>
+                <tr {% if user.suspend == TRUE %} class="bg-danger" {% endif %} >
                     <td>{{ loop.index }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.fullName }}</td>
+                    <td>{{ user.nationalCode }}</td>
                     <td style="direction: ltr">{{ user.mobileNum }}</td>
                     <td>
                         <a class="btn btn-info" href="{{ path('adminUserEditUser',{'id':user.id}) }}">ویرایش</a>

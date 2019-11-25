@@ -966,27 +966,56 @@ class AdminController extends AbstractController
         $user = $entityMGR->find('App:SysUser',$id);
         $form = $this->createFormBuilder($user)
             ->add('fullName', TextType::class,['label'=>'نام و نام‌خانوادگی'])
-            ->add('username', TextType::class,['label'=>'نام کاربری'])
+            ->add('username', TextType::class,[
+                'label'=>'نام کاربری',
+                'attr'=>[
+                    'readonly'=>'readonly',
+                ]])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
             ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
+            ->add('suspend', ChoiceType::class, [
+                'label'=>'مسدود کردن کاربر',
+                'choices' => [
+                    'خیر.کاربر فعال باشد' => false,
+                    'بله! کاربر مسدود شود' => true,
+                ],
+                'multiple'=>false
+            ])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $form->getData();
-            $entityMGR->update($user);
 
-            //update position labels
-            $positions = $entityMGR->findBy('App:SysPosition',['userID'=>$user->getId()]);
-            foreach ($positions as $position)
-            {
-                $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
-                $entityMGR->update($position);
+            $checkedUser = $entityMGR->getORM()->createQueryBuilder('m')
+                ->select('u')
+                ->from('App:SysUser','u')
+                ->where('u.nationalCode = :nationalCode')
+                ->andWhere('u.id != :sid')
+                ->setParameters(['sid'=>$id,'nationalCode'=>$user->getNationalCode()])
+                ->getQuery()
+                ->getResult();
+            if(count($checkedUser) == 0){
+                //clear session id if user suspended
+                if($user->getSuspend() && $user->getUsername() != 'admin')
+                    $user->setUniqueID('');
+                if( $user->getUsername() == 'admin')
+                    $user->setSuspend(null);
+                $entityMGR->update($user);
+
+                //update position labels
+                $positions = $entityMGR->findBy('App:SysPosition',['userID'=>$user->getId()]);
+                foreach ($positions as $position)
+                {
+                    $position->setPublicLabel($user->getFullname() . ' - ' . $position->getLabel());
+                    $entityMGR->update($position);
+                }
+
+                $logMGR->addEvent('4ert','ویرایش','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
+                $logger->info(sprintf('user %s edit user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
+                return $this->redirectToRoute('adminUsers',['msg'=>2]);
             }
-            $logMGR->addEvent('4ert','ویرایش','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
-            $logger->info(sprintf('user %s edit user with id %s', $userMgr->currentUser()->getUsername() , $user->getId()));
-            return $this->redirectToRoute('adminUsers',['msg'=>2]);
+            return $this->redirectToRoute('adminUsers',['msg'=>5]);
 
         }
 

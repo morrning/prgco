@@ -58,6 +58,11 @@ class SysUser
      */
     private $nationalCode;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $suspend;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -199,6 +204,18 @@ class SysUser
     public function setNationalCode(string $nationalCode): self
     {
         $this->nationalCode = $nationalCode;
+
+        return $this;
+    }
+
+    public function getSuspend(): ?bool
+    {
+        return $this->suspend;
+    }
+
+    public function setSuspend(?bool $suspend): self
+    {
+        $this->suspend = $suspend;
 
         return $this;
     }

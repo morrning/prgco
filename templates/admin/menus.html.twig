@@ -1,12 +1,13 @@
 {% extends 'admin/base.html.twig' %}
 
 {% block title %}گزینه‌های منو{% endblock %}
-
-{% block pageBody %}
-    <a class="btn btn-success" href="{{ path('adminMenuItemAdd') }}">
+{% block appTop %}
+    <a class="btn btn-success border" href="{{ path('adminMenuItemAdd') }}">
         <span class="fa fa-plus"></span>
-        پیوند جدید</a>
-
+        پیوند جدید
+    </a>
+{% endblock %}
+{% block pageBody %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12">

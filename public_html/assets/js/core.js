@@ -1,7 +1,7 @@
 function jsCoreRun()
 {
     //add small size to bootstrap controls
-    $('.appTopMenu a.btn').addClass('btn-sm');
+    $('.appTopMenu a.btn, td a.btn').addClass('btn-sm');
     $('.card-header').addClass('py-2');
 }
 
