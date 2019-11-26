@@ -6,7 +6,81 @@
         مشاهده پیام
     </div>
     <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <b class="col-xs-12 col-md-12 pt-2">
+                    <i class="fa fa-user-circle"></i>
+                    فرستنده:
+                    <span class="text-success">
+                       {{ message.sender.publicLabel }}
+                    </span>
+                </b>
+                <b class="col-xs-12 col-md-12 pt-2">
+                    <i class="fa fa-user-circle"></i>
+                    گیرنده:
+                    <span class="text-success">
+                       {{ message.reciver.publicLabel }}
+                    </span>
+                </b>
+            </div>
 
+            <div class="row pt-1">
+                <div class="col-xs-12 col-md-12 pt-2">
+                    <i class="fa fa-clock"></i>
+                    تاریخ ارسال:
+                    <span class="text-success">
+                       {{ Jdate.jdate('Y/n/d ساعت h:i',message.dateSend) }}
+                    </span>
+                </div>
+                <div class="col-xs-12 col-md-12 pt-2">
+                    <i class="fa fa-alarm-clock"></i>
+                    تاریخ اولین رویت توسط گیرنده:
+                    <span class="text-success">
+                       {% if message.dateView is not null %}
+                           {{ Jdate.jdate('Y/n/d ساعت h:i',message.dateView) }}
+                        {% else %}
+                            <span class="text-danger">تاکنون پیام توسط گیرنده خوانده نشده است.</span>
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+            <div class="row m-4 border rounded">
+                <div class="col-12 pt-2">
+                    <b class="pt-3">
+                        <span class="fa fa-sticky-note"></span>
+                        عنوان پیام:
+                        {{ message.mtitle }}
+                    </b>
+                    <hr>
+                    <p>
+                        <b>متن پیام:</b>
+                        {{ message.mdes }}
+                    </p>
+                    {% if message.attachedFile is not null %}
+                        <hr>
+                        <p>
+                            <i class="fa fa-file-download"></i>
+                            <b>
+                                فایل ضمیمه:
+                                <a class="btn btn-link" href="{{ asset('/files/' ~ message.attachedFile) }}">{{ message.attachedFile }}</a>
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="row pt-1">
+            <div class="col-12">
+                <a class="btn btn-secondary" href="{{ path('messageIbox') }}">
+                    <i class="fa fa-inbox-in"></i>
+                    صندوق ورودی
+                </a>
+                <a class="btn btn-secondary" href="{{ path('messageOutbox') }}">
+                    <i class="fa fa-inbox-out"></i>
+                    صندوق خروجی
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

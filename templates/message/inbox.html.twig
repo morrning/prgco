@@ -4,6 +4,12 @@
 <div class="card">
     <div class="card-header bg-info text-light">
         صندوق پیام‌های دریافتی
+        <span class="float-left appTopMenu">
+            <a class="btn btn-success border" href="{{ path('messageNew') }}">
+                <span class="fa fa-plus"></span>
+                پیام جدید
+            </a>
+        </span>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -12,6 +18,7 @@
                 <tr>
                     <th>ردیف</th>
                     <th>فرستنده</th>
+                    <th>موضوع پيام</th>
                     <th>تاریخ ارسال</th>
                     <th>امکانات</th>
                 </tr>
@@ -21,9 +28,10 @@
                     <tr class="">
                         <td>{{ loop.index }}</td>
                         <td>{{ message.sender.publicLabel }}</td>
-                        <td>{{ Jdate.jdate('Y/n/d',message.dateSend) }}</td>
+                        <td>{{ message.mtitle }}</td>
+                        <td>{{ Jdate.jdate('Y/n/d H:i',message.dateSend) }}</td>
                         <td>
-                            <a class="btn btn-block btn-info" href="{{ path('home') }}">
+                            <a class="btn btn-block btn-info" href="{{ path('messageView',{'id':message.id}) }}">
                                 <i class="fas fa-eye"></i>
                                 مشاهده
                             </a>

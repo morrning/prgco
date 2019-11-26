@@ -33,6 +33,15 @@ use Twig\Extension\SandboxExtension;
 class MessageController extends AbstractController
 {
     /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+
+    /**
      * @Route("/message/inbox", name="messageIbox")
      */
     public function messageIbox(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
@@ -43,7 +52,7 @@ class MessageController extends AbstractController
         $alerts = [];
 
         return $this->render('message/inbox.html.twig', [
-            'messages'=>$entityMGR->findBy('App:SysMessage',['reciver'=>$userMgr->currentPosition()]),
+            'messages'=>$entityMGR->findBy('App:SysMessage',['reciver'=>$userMgr->currentPosition()],['id'=>'DESC']),
             'alerts'=>$alerts
         ]);
     }
@@ -61,7 +70,7 @@ class MessageController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'پیام با موفقیت ارسال شد.']);
 
         return $this->render('message/oubox.html.twig', [
-            'messages'=>$entityMGR->findBy('App:SysMessage',['sender'=>$userMgr->currentPosition()]),
+            'messages'=>$entityMGR->findBy('App:SysMessage',['sender'=>$userMgr->currentPosition()],['id'=>'DESC']),
             'alerts'=>$alerts
         ]);
     }
@@ -81,11 +90,14 @@ class MessageController extends AbstractController
                 'choice_label'=>'publicLabel',
                 'choice_value' => 'id',
                 'label'=>'فرستنده',
+                'attr'=>[
+                    'pattern'=>'position'
+                ]
             ])
             ->add('mtitle', TextType::class,['label'=>'عنوان'])
             ->add('mdes', TextareaType::class,['label'=>'متن پیام'])
-            ->add('submit', SubmitType::class,['label'=>'ارسال پیام'])
             ->add('attachedFile', FileType::class,['data_class' => null,'required'=>false,'label'=>'فایل ضمیمه:'])
+            ->add('submit', SubmitType::class,['label'=>'ارسال پیام'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -144,6 +156,10 @@ class MessageController extends AbstractController
         if(is_null($message))
             return $this->redirectToRoute('404');
         if($message->getSender() == $userMgr->currentPosition() or $message->getReciver() == $userMgr->currentPosition() ){
+            if(is_null($message->getDateView()) and $message->getReciver() == $userMgr->currentPosition()){
+                $message->setDateView(time());
+                $entityMGR->update($message);
+            }
 
             return $this->render('message/view.html.twig',
                 [
