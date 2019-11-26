@@ -1,12 +1,34 @@
-{% extends 'withNavbar.html.twig' %}
+{% extends 'withoutNavbar.html.twig' %}
 
-{% block title %}ورود به پورتال{% endblock %}
+{% block title %}ورود{% endblock %}
 
 {% block pageBody %}
-    <div class="row justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-4">
+    <style>
+        body {
+        {% if ConfigMGR.getConfig.SYSLOGINBGRND is null %}
+            background-image: url("{{asset('/assets/images/public/bgrnd2.jpeg')}}"); /* The image used */
+        {% else %}
+            background-image: url("{{asset('/files/' ~ ConfigMGR.getConfig.SYSLOGINBGRND)}}");
+        {% endif %}
+            /* Full height */
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .card {
+            opacity: 0.9;
+            filter: alpha(opacity=90); /* For IE8 and earlier */
+        }
+    </style>
+    <script>
+
+    </script>
+    <div class="row py-md-5 my-md-5">
+        <div class="col-xs-12 col-sm-12 col-md-4 px-md-5">
             <div class="card">
-                <img class="card-img-top" src="{{ asset('assets/images/public/loginbackgrount.webp') }}" alt="Card image cap">
                 <div class="card-header text-center bg-success text-light">
                     <i class="fas fa-question-square" onclick="SysLoadMsg('1002');"></i>
                     ورود به پورتال
@@ -30,17 +52,26 @@
                                     </div>
                                 </div>
                                 {{ form_widget(form.password) }}
+                                <div class="input-group-append">
+                                    <span class="input-group-text" onclick="SysLoadMsg('1003');">
+                                        <i class="fa fa-question-circle"></i>
+                                    </span>
+                                </div>
                             </div>
                             <br>
                             {{ form_widget(form.submit) }}
                             <a class="btn btn-warning" href="{{ path('home') }}">
+                                <i class="fa fa-undo"></i>
                                 بازگشت
                             </a>
                             {{ form_end(form) }}
-                            <hr>
-                            <div class="alert alert-warning" onclick="SysLoadMsg('1003');">نام کاربری یا کلمه عبور خود را فراموش کرده اید؟</div>
                         </div>
                     </div>
+                </div>
+                <div class="card-footer">
+                    <b>
+                        سامانه مدیریت یکپارچه راهکار
+                    </b>
                 </div>
             </div>
         </div>

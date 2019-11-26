@@ -41,7 +41,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/progect/admin/list/{msg}", name="ProjectAdminProjects")
+     * @Route("/project/admin/list/{msg}", name="ProjectAdminProjects")
      */
     public function ProjectAdminProjects($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
@@ -69,7 +69,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/progect/admin/new/Project", name="ProjectAdminNewProject")
+     * @Route("/project/admin/new/Project", name="ProjectAdminNewProject")
      */
     public function ProjectAdminNewProject(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
@@ -115,7 +115,7 @@ class ProjectController extends AbstractController
     }
 
     /**
-     * @Route("/progect/adminEdit/Project/{id}", name="ProjectAdminEditProject")
+     * @Route("/project/adminEdit/Project/{id}", name="ProjectAdminEditProject")
      */
     public function ProjectAdminEditProject($id,Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {

@@ -1,10 +1,16 @@
 {% extends 'ict/base.html.twig' %}
 
 {% block title %}آرشیو درخواست‌های اینفورماتیک{% endblock %}
+{% block appTop %}
+    <a class="btn btn-success border" href="{{ path('ictreqNew') }}">
+        <span class="fa fa-plus"></span>
+        درخواست جدید
+    </a>
+{% endblock %}
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
-            <thead class="thead-dark">
+            <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
                 <th>نوع درخواست</th>

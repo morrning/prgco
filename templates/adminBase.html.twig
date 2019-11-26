@@ -12,8 +12,7 @@
     <!-- jquery UI css files -->
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
-    <!-- main CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+
     <!-- chartist CSS -->
     <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
@@ -22,6 +21,13 @@
     <!-- Custom CSS -->
     <link href="{{ asset('assets/css/admin/sb-admin-2.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
+    {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
+        <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    {% else %}
+        <style>
+            font-family: 'tahoma' !important;
+        </style>
+    {% endif %}
     <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
 
     <!-- Optional JavaScript -->
@@ -43,11 +49,32 @@
     <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
 
     {% block stylesheets %}{% endblock %}
-
+    <script>
+        $(document).ready(function(){
+            //create datatable
+            $('.table').DataTable({
+                "language": {
+                    "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
+                    buttons: {
+                        colvis: 'ستون‌ها',
+                        print: "چاپ",
+                        excel: "اکسل",
+                        copy: "رونوشت"
+                    }
+                },
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                dom: 'Blftip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'colvis',
+                    'print'
+                ]
+            });
+        });
+    </script>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-
-
-
 </head>
 <body id="page-top" onload="jsCoreRun()">
 <div class="">
@@ -56,16 +83,5 @@
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 <script src="{{ asset('assets/js/sb-admin.js') }}"></script>
-<script>
-    $(document).ready(function(){
-        //create datatable
-        $('.table').DataTable({
-            "language": {
-                "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
-            }
-        });
-
-    });
-</script>
 </body>
 </html>

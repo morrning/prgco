@@ -154,7 +154,7 @@
                     {% if notifiCount == 0 %}
                         <a class="btn btn-secondary" href="{{ path('userNotifications') }}">
                             <span class="fa fa-inbox"></span>
-                            {{ UserMGR.notificationCount() }}
+                            0
                         </a>
                     {% else %}
                         <div class="btn-group dropright" role="group">
@@ -201,9 +201,17 @@
                                 </a>
                                 <div class="dropdown-divider"></div>
                             {% endif %}
-                            <a class="dropdown-item text-success" href="{{ path('apps') }}">
-                                <i class="fal fa-window-alt"></i>
-                                برنامه‌ها
+                            <a class="dropdown-item text-success" href="{{ path('messageNew') }}">
+                                <i class="fal fa-plus"></i>
+                                پیام جدید
+                            </a>
+                            <a class="dropdown-item" href="{{ path('messageIbox') }}">
+                                <i class="fal fa-inbox-in"></i>
+                                پیام‌های دریافتی
+                            </a>
+                            <a class="dropdown-item" href="{{ path('messageOutbox') }}">
+                                <i class="fal fa-inbox-out"></i>
+                                پیام‌های ارسالی
                             </a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{{ path('userPositions') }}">

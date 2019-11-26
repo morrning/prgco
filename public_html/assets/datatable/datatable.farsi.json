@@ -1,23 +1,24 @@
 {
-  "sEmptyTable":   	"اطلاعاتی جهت نمایش وجود ندارد.",
-  "sInfo":         	"نمایش نتایج _START_ تا _END_ از مجموع _TOTAL_ نتیجه",
-  "sInfoEmpty":    	"هیچ نتیجه ای یافت نشد.",
-  "sInfoFiltered": 	"(از _MAX_ رکورد)",
-  "sInfoPostFix":  	"",
-  "sInfoThousands":  	".",
-  "sLengthMenu":   	" تعداد نتایج در صفحه:_MENU_",
-  "sLoadingRecords": 	"لطفا صبر کنید...",
-  "sProcessing":   	"در حال پردازش...",
-  "sSearch":       	"جست و جو",
-  "sZeroRecords":  	"نتیجه ای یافت نشد.",
+  "sEmptyTable":     "هیچ داده‌ای در جدول وجود ندارد",
+  "sInfo":           "نمایش _START_ تا _END_ از _TOTAL_ ردیف",
+  "sInfoEmpty":      "نمایش 0 تا 0 از 0 ردیف",
+  "sInfoFiltered":   "(فیلتر شده از _MAX_ ردیف)",
+  "sInfoPostFix":    "",
+  "sInfoThousands":  ",",
+  "sLengthMenu":     "نمایش _MENU_ ردیف",
+  "sLoadingRecords": "در حال بارگزاری...",
+  "sProcessing":     "در حال پردازش...",
+  "sSearch":         "جستجو:",
+  "sZeroRecords":    "رکوردی با این مشخصات پیدا نشد",
   "oPaginate": {
-    "sFirst":    	"اولین",
-    "sPrevious": 	"قبلی",
-    "sNext":     	"بعدی",
-    "sLast":     	"آخرین"
+    "sFirst":    "برگه‌ی نخست",
+    "sLast":     "برگه‌ی آخر",
+    "sNext":     "بعدی",
+    "sPrevious": "قبلی"
   },
+  "oPrint":          "چاپ",
   "oAria": {
-    "sSortAscending":  ": aktivieren, um Spalte aufsteigend zu sortieren",
-    "sSortDescending": ": aktivieren, um Spalte absteigend zu sortieren"
+    "sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+    "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
   }
 }

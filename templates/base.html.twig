@@ -12,8 +12,6 @@
     <!-- jquery UI css files -->
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
-    <!-- main CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
     <!-- chartist CSS -->
     <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
@@ -40,27 +38,44 @@
     <script src="{{ asset('assets/chartjs/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
     <script src="{{ asset('assets/lightbox/js/lightbox.min.js') }}"></script>
+    {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
+        <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    {% else %}
+        <style>
+            font-family: 'tahoma' !important;
+        </style>
+    {% endif %}
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-
     {% block stylesheets %}{% endblock %}
+    <script>
+        $(document).ready(function(){
+            //create datatable
+            $('.table').DataTable({
+                "language": {
+                    "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
+                    buttons: {
+                        colvis: 'ستون‌ها',
+                        print: "چاپ",
+                        excel: "اکسل",
+                        copy: "رونوشت"
+                    }
+                },
+                "pageLength": 25,
+                "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+                dom: 'Blftip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'colvis',
+                    'print'
+                ]
+            });
+        });
+    </script>
 </head>
 <body onload="jsCoreRun()">
 <div class="SystemModal" id="SystemModal"></div>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
-<script>
-    $(document).ready(function(){
-        //create datatable
-        $('.table').DataTable({
-            "language": {
-                "url": "{{ asset('assets/datatable/datatable.farsi.json') }}"
-            },
-            buttons: [
-                'excel'
-            ]
-        });
-
-    });
-</script>
 </body>
 </html>

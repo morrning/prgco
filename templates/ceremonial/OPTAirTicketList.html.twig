@@ -8,14 +8,14 @@
 {% endif %}
 {% endblock %}
 {% block appTop %}
-<a class="btn btn-success mb-1" href="{{ path('ceremonialOPTDashboard') }}">
+<a class="btn btn-success border" href="{{ path('ceremonialOPTDashboard') }}">
         <i class="fas fa-chalkboard"></i>
         داشبورد
     </a>{% endblock %}
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
-            <thead class="thead-dark">
+            <thead class="bg-blue text-light">
             {% if type == 'all' %}
                 <tr>
                     <th>ردیف</th>

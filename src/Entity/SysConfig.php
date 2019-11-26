@@ -56,6 +56,16 @@ class SysConfig
      */
     private $USERS_MAX_COOKIE_TIME;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $SYS_LOGIN_BGRND;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $SYS_FONT_NAME;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -153,6 +163,30 @@ class SysConfig
     public function setUSERSMAXCOOKIETIME(?string $USERS_MAX_COOKIE_TIME): self
     {
         $this->USERS_MAX_COOKIE_TIME = $USERS_MAX_COOKIE_TIME;
+
+        return $this;
+    }
+
+    public function getSYSLOGINBGRND(): ?string
+    {
+        return $this->SYS_LOGIN_BGRND;
+    }
+
+    public function setSYSLOGINBGRND(?string $SYS_LOGIN_BGRND): self
+    {
+        $this->SYS_LOGIN_BGRND = $SYS_LOGIN_BGRND;
+
+        return $this;
+    }
+
+    public function getSYSFONTNAME(): ?string
+    {
+        return $this->SYS_FONT_NAME;
+    }
+
+    public function setSYSFONTNAME(?string $SYS_FONT_NAME): self
+    {
+        $this->SYS_FONT_NAME = $SYS_FONT_NAME;
 
         return $this;
     }

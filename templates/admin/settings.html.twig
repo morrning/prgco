@@ -19,6 +19,12 @@
                             کاربران و گروه‌ها
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="view-tab" data-toggle="tab" href="#view" role="tab" aria-controls="profile" aria-selected="false">
+                            <i class="fa fa-tv-retro"></i>
+                            نمایش و ظاهر
+                        </a>
+                    </li>
                 </ul>
                 {{ form_start(form) }}
                 <div class="tab-content" id="myTabContent">
@@ -57,6 +63,17 @@
                             <div class="col-6">
                                 {{ form_label(form.USERS_MAX_COOKIE_TIME) }}
                                 {{ form_widget(form.USERS_MAX_COOKIE_TIME) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="view" role="tabpanel" aria-labelledby="view-tab">
+                        <div class="row mb-2 pt-2">
+                            <div class="col-6">
+                                {{ form_label(form.SYS_FONT_NAME) }}
+                                {{ form_widget(form.SYS_FONT_NAME) }}
+
+                                {{ form_label(form.SYS_LOGIN_BGRND) }}
+                                {{ form_widget(form.SYS_LOGIN_BGRND) }}
                             </div>
                         </div>
                     </div>

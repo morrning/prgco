@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
 use Symfony\Component\HttpFoundation\Request;
@@ -232,6 +233,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('403');
 
         $config = $configMGR->getConfig();
+        $oldConfig = clone $config;
         $form = $this->createFormBuilder($config)
             ->add('siteName', TextType::class,['label'=>'نام شرکت'])
             ->add('activeationCode', TextType::class,['label'=>'کد فعالسازی'])
@@ -249,16 +251,44 @@ class AdminController extends AbstractController
                     'یک سال' => 365,
                 ],
             ])
+            ->add('SYS_FONT_NAME', ChoiceType::class, [
+                'label'=>'فونت پیشفرض سامانه',
+                'choices'  => [
+                    'تاهما > پیشفرض ویندوز' => 'tahoma',
+                    'شبنم > اختصاصی' => 'shabnam',
+                ],
+            ])
+            ->add('SYS_LOGIN_BGRND', FileType::class,['data_class' => null,'required'=>false,'label'=>'تصویر پس زمینه صفحه ورود'])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 
         $form->handleRequest($request);
-        $alerts = null;
+        $alerts = [];
         if ($form->isSubmitted() && $form->isValid()) {
+            $file = $form->get('SYS_LOGIN_BGRND')->getData();
+            if(!is_null($file)){
+                if($file->getClientOriginalExtension() == 'gif'  || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
+                    if($file->getSize() < 2097152){
+                        $guid = $this->RandomString(32);
+                        $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
+                        $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
+                        $config->setSYSLOGINBGRND($tempFileName);
+                    }
+                    else{
+                        array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 4 مگابایت می باشد.']);
+                    }
+                }
+                else{
+                    array_push($alerts,['type'=>'danger','message'=>'پسوند فایل ارسال شده غیرمجاز می‌باشد.']);
+                }
+            }
+            else{
+                $config->setSYSLOGINBGRND($oldConfig->getSYSLOGINBGRND());
+            }
             $entityMGR->update($form->getData());
             $logMGR->addEvent('4ert','ویرایش','تنظیمات کلی سامانه','ADMINISTRATOR',$request->getClientIp());
             $logger->info('user ' . $userMgr->currentUser()->getUsername() . ' change system settings.');
-            $alerts = [['message'=>'تنظیمات با موفقیت ذخیره شد.','type'=>'success']];
+            array_push($alerts,['type'=>'success','message'=>'تنظیمات با موفقیت ذخیره شد.']);
         }
 
         return $this->render('admin/settings.html.twig', [
