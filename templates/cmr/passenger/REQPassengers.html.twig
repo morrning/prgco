@@ -22,7 +22,7 @@
             </thead>
             <tbody class="">
             {% for passenger in passengers %}
-                <tr class="">
+                <tr class="tr{{ loop.index }}">
                     <td>
                         <div class="form-check">
                             <input class="CKBPassengers form-check-input position-static" type="checkbox" id="CKBPassengers" value="{{ passenger.id }}" aria-label="انتخاب مسافر">
