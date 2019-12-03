@@ -91,7 +91,7 @@ class MessageController extends AbstractController
                 'choice_value' => 'id',
                 'label'=>'فرستنده',
                 'attr'=>[
-                    'pattern'=>'position'
+                    'pattern'=>'positions'
                 ]
             ])
             ->add('mtitle', TextType::class,['label'=>'عنوان'])

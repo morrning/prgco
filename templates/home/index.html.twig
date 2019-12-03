@@ -53,6 +53,17 @@
                         <div class="card-header">
                             <i class="fas fa-question-square" onclick="SysLoadMsg('1001');"></i>
                             نمودار پیشرفت
+                            :
+                            <span class="text-secondary projectsLabel"></span>
+                            <script>
+                                $(document).ready(function(){
+                                    var typed = new Typed('.projectsLabel', {
+                                        strings: {{ pn | json_encode | raw }},
+                                        typeSpeed: 30,
+                                        loop: true
+                                    });
+                                });
+                            </script>
                         </div>
                         <div class="card-body">
                             <div class="chart-container">

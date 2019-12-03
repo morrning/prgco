@@ -17,12 +17,6 @@ class CMVisaReq
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CMPassenger", inversedBy="cMVisaReqs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $passenger;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
      */
     private $accepter;
@@ -63,11 +57,6 @@ class CMVisaReq
      */
     private $area;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\CMVisaState", inversedBy="cMVisaReqs")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $visaState;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
@@ -85,15 +74,6 @@ class CMVisaReq
      */
     private $waySendToCo;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $DateReciveToCo;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $DateSendToCo;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\CMVisaCountry")
@@ -107,398 +87,240 @@ class CMVisaReq
     private $submitter;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="allvisaReq")
+     * @ORM\ManyToOne(targetEntity="App\Entity\CMList")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $reciver;
+    private $cmlist;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $hseState;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $hseedu;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $hseSubmitdate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="visaReqHse")
-     */
-    private $hseAR;
-
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $hseDes;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $ARSubmitDate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $dateInputConsulate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $dateOutputConsulate;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
-     */
-    private $consulateImporter;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition")
-     */
-    private $consulateExporter;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getPassenger(): ?CMPassenger
-    {
-        return $this->passenger;
-    }
-
-    public function setPassenger(?CMPassenger $passenger): self
-    {
-        $this->passenger = $passenger;
-
-        return $this;
-    }
-
-    public function getAccepter(): ?SysPosition
+    /**
+     * @return mixed
+     */
+    public function getAccepter()
     {
         return $this->accepter;
     }
 
-    public function setAccepter(?SysPosition $accepter): self
+    /**
+     * @param mixed $accepter
+     */
+    public function setAccepter($accepter): void
     {
         $this->accepter = $accepter;
-
-        return $this;
     }
 
-    public function getRejecter(): ?SysPosition
+    /**
+     * @return mixed
+     */
+    public function getRejecter()
     {
         return $this->rejecter;
     }
 
-    public function setRejecter(?SysPosition $rejecter): self
+    /**
+     * @param mixed $rejecter
+     */
+    public function setRejecter($rejecter): void
     {
         $this->rejecter = $rejecter;
-
-        return $this;
     }
 
-    public function getARdes(): ?string
+    /**
+     * @return mixed
+     */
+    public function getARdes()
     {
         return $this->ARdes;
     }
 
-    public function setARdes(?string $ARdes): self
+    /**
+     * @param mixed $ARdes
+     */
+    public function setARdes($ARdes): void
     {
         $this->ARdes = $ARdes;
-
-        return $this;
     }
 
-    public function getMoneyType(): ?ACCMoney
+    /**
+     * @return mixed
+     */
+    public function getMoneyType()
     {
         return $this->moneyType;
     }
 
-    public function setMoneyType(?ACCMoney $moneyType): self
+    /**
+     * @param mixed $moneyType
+     */
+    public function setMoneyType($moneyType): void
     {
         $this->moneyType = $moneyType;
-
-        return $this;
     }
 
-    public function getMoneyValue(): ?string
+    /**
+     * @return mixed
+     */
+    public function getMoneyValue()
     {
         return $this->moneyValue;
     }
 
-    public function setMoneyValue(?string $moneyValue): self
+    /**
+     * @param mixed $moneyValue
+     */
+    public function setMoneyValue($moneyValue): void
     {
         $this->moneyValue = $moneyValue;
-
-        return $this;
     }
 
-    public function getDateSubmit(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDateSubmit()
     {
         return $this->dateSubmit;
     }
 
-    public function setDateSubmit(string $dateSubmit): self
+    /**
+     * @param mixed $dateSubmit
+     */
+    public function setDateSubmit($dateSubmit): void
     {
         $this->dateSubmit = $dateSubmit;
-
-        return $this;
     }
 
-    public function getDes(): ?string
+    /**
+     * @return mixed
+     */
+    public function getDes()
     {
         return $this->des;
     }
 
-    public function setDes(?string $des): self
+    /**
+     * @param mixed $des
+     */
+    public function setDes($des): void
     {
         $this->des = $des;
-
-        return $this;
     }
 
-    public function getArea(): ?SysArea
+    /**
+     * @return mixed
+     */
+    public function getArea()
     {
         return $this->area;
     }
 
-    public function setArea(?SysArea $area): self
+    /**
+     * @param mixed $area
+     */
+    public function setArea($area): void
     {
         $this->area = $area;
-
-        return $this;
     }
 
-    public function getVisaState(): ?CMVisaState
-    {
-        return $this->visaState;
-    }
-
-    public function setVisaState(?CMVisaState $visaState): self
-    {
-        $this->visaState = $visaState;
-
-        return $this;
-    }
-
-    public function getBuyer(): ?SysPosition
+    /**
+     * @return mixed
+     */
+    public function getBuyer()
     {
         return $this->buyer;
     }
 
-    public function setBuyer(?SysPosition $buyer): self
+    /**
+     * @param mixed $buyer
+     */
+    public function setBuyer($buyer): void
     {
         $this->buyer = $buyer;
-
-        return $this;
     }
 
-    public function getBuyDate(): ?string
+    /**
+     * @return mixed
+     */
+    public function getBuyDate()
     {
         return $this->buyDate;
     }
 
-    public function setBuyDate(?string $buyDate): self
+    /**
+     * @param mixed $buyDate
+     */
+    public function setBuyDate($buyDate): void
     {
         $this->buyDate = $buyDate;
-
-        return $this;
     }
 
-    public function getWaySendToCo(): ?CMVisaSendWay
+    /**
+     * @return mixed
+     */
+    public function getWaySendToCo()
     {
         return $this->waySendToCo;
     }
 
-    public function setWaySendToCo(?CMVisaSendWay $waySendToCo): self
+    /**
+     * @param mixed $waySendToCo
+     */
+    public function setWaySendToCo($waySendToCo): void
     {
         $this->waySendToCo = $waySendToCo;
-
-        return $this;
     }
 
-    public function getDateReciveToCo(): ?string
-    {
-        return $this->DateReciveToCo;
-    }
-
-    public function setDateReciveToCo(?string $DateReciveToCo): self
-    {
-        $this->DateReciveToCo = $DateReciveToCo;
-
-        return $this;
-    }
-
-    public function getDateSendToCo(): ?string
-    {
-        return $this->DateSendToCo;
-    }
-
-    public function setDateSendToCo(?string $DateSendToCo): self
-    {
-        $this->DateSendToCo = $DateSendToCo;
-
-        return $this;
-    }
-
-    public function getCountryDes(): ?CMVisaCountry
+    /**
+     * @return mixed
+     */
+    public function getCountryDes()
     {
         return $this->countryDes;
     }
 
-    public function setCountryDes(?CMVisaCountry $countryDes): self
+    /**
+     * @param mixed $countryDes
+     */
+    public function setCountryDes($countryDes): void
     {
         $this->countryDes = $countryDes;
-
-        return $this;
     }
 
-    public function getSubmitter(): ?SysPosition
+    /**
+     * @return mixed
+     */
+    public function getSubmitter()
     {
         return $this->submitter;
     }
 
-    public function setSubmitter(?SysPosition $submitter): self
+    /**
+     * @param mixed $submitter
+     */
+    public function setSubmitter($submitter): void
     {
         $this->submitter = $submitter;
-
-        return $this;
     }
 
-    public function getReciver(): ?SysPosition
+    /**
+     * @return mixed
+     */
+    public function getCmlist()
     {
-        return $this->reciver;
+        return $this->cmlist;
     }
 
-    public function setReciver(?SysPosition $reciver): self
+    /**
+     * @param mixed $cmlist
+     */
+    public function setCmlist($cmlist): void
     {
-        $this->reciver = $reciver;
-
-        return $this;
+        $this->cmlist = $cmlist;
     }
 
-    public function getHseState(): ?string
-    {
-        return $this->hseState;
-    }
 
-    public function setHseState(?string $hseState): self
-    {
-        $this->hseState = $hseState;
-
-        return $this;
-    }
-
-    public function getHseedu(): ?string
-    {
-        return $this->hseedu;
-    }
-
-    public function setHseedu(?string $hseedu): self
-    {
-        $this->hseedu = $hseedu;
-
-        return $this;
-    }
-
-    public function getHseSubmitdate(): ?string
-    {
-        return $this->hseSubmitdate;
-    }
-
-    public function setHseSubmitdate(?string $hseSubmitdate): self
-    {
-        $this->hseSubmitdate = $hseSubmitdate;
-
-        return $this;
-    }
-
-    public function getHseAR(): ?SysPosition
-    {
-        return $this->hseAR;
-    }
-
-    public function setHseAR(?SysPosition $hseAR): self
-    {
-        $this->hseAR = $hseAR;
-
-        return $this;
-    }
-
-    public function getHseDes(): ?string
-    {
-        return $this->hseDes;
-    }
-
-    public function setHseDes(?string $hseDes): self
-    {
-        $this->hseDes = $hseDes;
-
-        return $this;
-    }
-
-    public function getARSubmitDate(): ?string
-    {
-        return $this->ARSubmitDate;
-    }
-
-    public function setARSubmitDate(?string $ARSubmitDate): self
-    {
-        $this->ARSubmitDate = $ARSubmitDate;
-
-        return $this;
-    }
-
-    public function getDateInputConsulate(): ?string
-    {
-        return $this->dateInputConsulate;
-    }
-
-    public function setDateInputConsulate(?string $dateInputConsulate): self
-    {
-        $this->dateInputConsulate = $dateInputConsulate;
-
-        return $this;
-    }
-
-    public function getDateOutputConsulate(): ?string
-    {
-        return $this->dateOutputConsulate;
-    }
-
-    public function setDateOutputConsulate(?string $dateOutputConsulate): self
-    {
-        $this->dateOutputConsulate = $dateOutputConsulate;
-
-        return $this;
-    }
-
-    public function getConsulateImporter(): ?SysPosition
-    {
-        return $this->consulateImporter;
-    }
-
-    public function setConsulateImporter(?SysPosition $consulateImporter): self
-    {
-        $this->consulateImporter = $consulateImporter;
-
-        return $this;
-    }
-
-    public function getConsulateExporter(): ?SysPosition
-    {
-        return $this->consulateExporter;
-    }
-
-    public function setConsulateExporter(?SysPosition $consulateExporter): self
-    {
-        $this->consulateExporter = $consulateExporter;
-
-        return $this;
-    }
 }
