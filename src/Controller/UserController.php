@@ -212,7 +212,7 @@ class UserController extends AbstractController
 
         return $this->render('user/notifications.html.twig',
             [
-                'notifis' => $userMgr->currentPosition()->getSysNotifications()
+                'notifis' => $entityMGR->findBy('App:SysNotification',['userID'=>$userMgr->currentPosition()],['id'=>'DESC'])
             ]
         );
     }
