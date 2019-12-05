@@ -92,6 +92,16 @@ class CMVisaReq
      */
     private $cmlist;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CMVisaState")
+     */
+    private $visaState;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $ADDateSubmit;
+
 
     public function getId(): ?int
     {
@@ -320,6 +330,30 @@ class CMVisaReq
     public function setCmlist($cmlist): void
     {
         $this->cmlist = $cmlist;
+    }
+
+    public function getVisaState(): ?CMVisaState
+    {
+        return $this->visaState;
+    }
+
+    public function setVisaState(?CMVisaState $visaState): self
+    {
+        $this->visaState = $visaState;
+
+        return $this;
+    }
+
+    public function getADDateSubmit(): ?string
+    {
+        return $this->ADDateSubmit;
+    }
+
+    public function setADDateSubmit(?string $ADDateSubmit): self
+    {
+        $this->ADDateSubmit = $ADDateSubmit;
+
+        return $this;
     }
 
 

@@ -67,6 +67,21 @@ class SysRoll
      */
     private $projectAdmin;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $CeremonailOPTDashboard;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $CeremonailREQ;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $CeremonailMNGDashboard;
+
 
     public function getId(): ?int
     {
@@ -189,6 +204,42 @@ class SysRoll
     public function setProjectAdmin(?bool $projectAdmin): self
     {
         $this->projectAdmin = $projectAdmin;
+
+        return $this;
+    }
+
+    public function getCeremonailOPTDashboard(): ?bool
+    {
+        return $this->CeremonailOPTDashboard;
+    }
+
+    public function setCeremonailOPTDashboard(?bool $CeremonailOPTDashboard): self
+    {
+        $this->CeremonailOPTDashboard = $CeremonailOPTDashboard;
+
+        return $this;
+    }
+
+    public function getCeremonailREQ(): ?bool
+    {
+        return $this->CeremonailREQ;
+    }
+
+    public function setCeremonailREQ(?bool $CeremonailREQ): self
+    {
+        $this->CeremonailREQ = $CeremonailREQ;
+
+        return $this;
+    }
+
+    public function getCeremonailMNGDashboard(): ?bool
+    {
+        return $this->CeremonailMNGDashboard;
+    }
+
+    public function setCeremonailMNGDashboard(?bool $CeremonailMNGDashboard): self
+    {
+        $this->CeremonailMNGDashboard = $CeremonailMNGDashboard;
 
         return $this;
     }

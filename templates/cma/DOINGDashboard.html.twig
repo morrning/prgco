@@ -1,4 +1,4 @@
-{% extends 'ceremonial/DOINGbase.html.twig' %}
+{% extends 'cma/DOINGbase.html.twig' %}
 
 {% block title %}داشبورد مدیریت تشریفات{% endblock %}
 
@@ -126,7 +126,7 @@
                                         <p>
                                             <i class="fas fa-check-circle"></i>
                                             تعداد درخواست‌های تایید شده:
-                                            {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':4})}) | length}}
+                                            {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':1})}) | length}}
                                             عدد
                                         </p>
                                     </div>
@@ -157,9 +157,9 @@
                                                             borderWidth: 1,
                                                             data: [
                                                                 {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':2})}) | length}},
-                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':3})}) | length}},
-                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':-2})}) | length}},
-                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':4})}) | length}},
+                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':0})}) | length}},
+                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':-1})}) | length}},
+                                                                {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':1})}) | length}},
                                                             ],
                                                             backgroundColor: [
                                                                 color(window.chartColors.blue).alpha(0.5).rgbString(),

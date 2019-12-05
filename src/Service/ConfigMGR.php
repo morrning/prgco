@@ -271,32 +271,16 @@ class ConfigMGR
             $entity->setStateName('رد از طرف مدیریت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
+            $entity->setStateCode(0);
+            $entity->setStateName('در انتظار تایید');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaState();
             $entity->setStateCode(1);
-            $entity->setStateName('ارسال به دفتر شرکت');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(2);
-            $entity->setStateName('دریافت شده توسط واحد تشریفات');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(3);
             $entity->setStateName('تایید شده توسط مدیریت');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaState();
-            $entity->setStateCode(4);
-            $entity->setStateName('ارسال شده به سفارت');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(5);
-            $entity->setStateName('بازگشت از سفارت');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(6);
-            $entity->setStateName('ارسال به مرز');
-            $this->em->insertEntity($entity);
-            $entity = new Entity\CMVisaState();
-            $entity->setStateCode(7);
-            $entity->setStateName('تحویل داده شده');
+            $entity->setStateCode(2);
+            $entity->setStateName('انجام شده');
             $this->em->insertEntity($entity);
         }
         //import CM default accept if conjections

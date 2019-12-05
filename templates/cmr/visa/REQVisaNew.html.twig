@@ -1,0 +1,77 @@
+{% extends 'cmr/REQbase.html.twig' %}
+{% block title %}درخواست ویزا{% endblock %}
+{% block pageBody %}
+    <div class="container-fluid py-3">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="row border rounded p-2 m-1">
+                    <div class="col-sm-12 col-md-12 pb-2">
+                        <div class="col-sm-12 col-md-12 pb-2">
+                            {{ form_start(form) }}
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    {{ form_label(form.countryDes) }}
+                                    {{ form_widget(form.countryDes) }}
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    {{ form_label(form.WaySendToCo) }}
+                                    {{ form_widget(form.WaySendToCo) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border rounded p-2 m-1">
+                    <div class="col-sm-12 col-md-12 pb-2">
+                        <div class="col-sm-12 col-md-12 pb-2">
+                            <h5>اطلاعات اضافی:</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12">
+                                    {{ form_label(form.des) }}
+                                    {{ form_widget(form.des) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-12">
+                        {{ form_widget(form.submit) }}
+                        <a class="btn btn-warning" href="{{ path('ceremonialREQpasengers') }}">
+                            <i class="fa fa-undo"></i>
+                            بازگشت
+                        </a>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <h3 class="text-primary">فهرست افراد انتخابی</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="bg-blue text-light">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام و نام‌خانوادگی</th>
+                            <th>نام پدر</th>
+                            <th>کد ملی</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for userList in userLIsts %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ userList.cmpassenger.pname }} {{ userList.cmpassenger.pfamily }}</td>
+                                <td>{{ userList.cmpassenger.pfather }}</td>
+                                <td>{{ userList.cmpassenger.pcodemeli }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

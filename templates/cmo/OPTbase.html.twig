@@ -24,9 +24,11 @@
                 <span>درخواست‌های ویزا</span>
             </a>
             <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'wfd'}) }}">درخواست‌های در انتظار</a>
-                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'accepted'}) }}">درخواست های تایید شده</a>
-                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'all'}) }}">آرشیو درخواست‌ها</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'wfd'}) }}">درخواست‌های در انتظار تایید</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'acp'}) }}">درخواست های تایید شده</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'rej'}) }}">درخواست های رد شده</a>
+                <a class="dropdown-item" href="{{ path('ceremonialOPTVisaList',{'type':'all'}) }}">آرشیو تمام درخواست‌ها</a>
+
             </div>
         </li>
     </ul>

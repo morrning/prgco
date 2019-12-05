@@ -201,19 +201,6 @@ class CeremonialController extends AbstractController
 
     //--------------------------------------------MANAGER PART ----------------------------------------
 
-    /**
-     * @Route("/ceremonial/doing/dashboard", name="ceremonialDOINGDashboard")
-     */
-    public function ceremonialDOINGDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
-    {
-        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL'))
-            return $this->redirectToRoute('403');
-        $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
-
-        return $this->render('ceremonial/DOINGDashboard.html.twig', [
-            'controller_name' => 'CeremonialController',
-        ]);
-    }
 
     /**
      * @Route("/ceremonial/doing/acc/balance/{msg}", name="ceremonialDOINGACCBalance")
@@ -342,19 +329,7 @@ class CeremonialController extends AbstractController
     }
 
     //--------------------------------------------OPERATOR PART ----------------------------------------
-    /**
-     * @Route("/ceremonial/opt/dashboard", name="ceremonialOPTDashboard")
-     */
-    public function ceremonialOPTDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
-    {
-        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
-            return $this->redirectToRoute('403');
-        $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
 
-        return $this->render('ceremonial/OPTDashboard.html.twig', [
-            'controller_name' => 'CeremonialController',
-        ]);
-    }
 
     /**
      * @Route("/ceremonial/opt/air/ticket/list/{type}", name="ceremonialOPTAIRpaneList")
@@ -498,61 +473,6 @@ class CeremonialController extends AbstractController
 
 
     //--------------------------------------------- passport proccess ---------------------------------->
-    /**
-     * @Route("/ceremonial/req/passport/new/{id}", name="ceremonialPassportNew")
-     */
-    public function ceremonialPassportNew($id,Request $request,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
-    {
-        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-        $passenger = $entityMGR->find('App:CMPassenger',$id);
-        if(is_null($passenger))
-            return $this->redirectToRoute('404');
-        elseif ($passenger->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
-            return $this->redirectToRoute('403');
 
-        $visa = new Entity\CMVisaReq();
-        $form = $this->createFormBuilder($visa)
-            ->add('countryDes', EntityType::class, [
-                'class'=>Entity\CMVisaCountry::class,
-                'choice_label'=>'countryName',
-                'choice_value' => 'id',
-                'label'=>'مقصد مسافرت:'
-            ])
-            ->add('WaySendToCo', EntityType::class, [
-                'class'=>Entity\CMVisaSendWay::class,
-                'choice_label'=>'WayName',
-                'choice_value' => 'id',
-                'label'=>'روش ارسال ویزا:'
-            ])
-            ->add('dateSendToCo',Type\JdateType::class,['label'=>'تاریخ مسافرت:','data'=>$jdate->GetTodayDate()])
-            ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
-
-            ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
-            ->getForm();
-        $alerts = [];
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $visa->setPassenger($passenger);
-            $visa->setDateSubmit(time());
-            $visa->setSubmitter($userMGR->currentPosition());
-            $visa->setArea($userMGR->currentPosition()->getDefaultArea());
-            $visa->setVisaState($entityMGR->findOneBy('App:CMVisaState',['StateCode'=>1]));
-
-            $entityMGR->insertEntity($visa);
-
-            $logMGR->addEvent('CERVISA'.$visa->getId(),'ایجاد','درخواست ویزا','CEREMONIAL',$request->getClientIp());
-            $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
-            $des = sprintf('درخواست ویزا توسط %s ثبت شد.',$visa->getSubmitter()->getPublicLabel());
-            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa->getId()]);
-            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
-            return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
-        }
-        return $this->render('ceremonial/REQVisaNew.html.twig',[
-            'passenger'=>$passenger,
-            'form'=>$form->createView(),
-            'alerts'=>$alerts
-        ]);
-    }
 
 }

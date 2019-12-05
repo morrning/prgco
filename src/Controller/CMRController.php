@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use http\Client;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -243,9 +244,9 @@ class CMRController extends AbstractController
 
 
     /**
-     * @Route("/ceremonial/list/create/{ids}/", name="ceremonialREQVisa", options={"expose" = true} ,requirements={"ids"=".+"})
+     * @Route("/ceremonial/request/visa/{ids}/", name="ceremonialREQVisa", options={"expose" = true} ,requirements={"ids"=".+"})
      */
-    public function ceremonialREQCreatList($ids,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialREQVisa($ids,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(!$userMGR->isLogedIn())      return $this->redirectToRoute('userLogin');
 
@@ -253,8 +254,131 @@ class CMRController extends AbstractController
             return $this->redirectToRoute('403');
 
         $idsArray = explode(',',$ids);
-        var_dump($idsArray);
+        $mlist = new Entity\CMList();
+        $mlist->setSubmitter($userMGR->currentPosition());
+        $mlist->setDes('Visa Request');
+        $mlist->setListLabel('VisaRequest');
+        $entityMGR->insertEntity($mlist);
 
+        foreach ($idsArray as $id){
+            $passenger = $entityMGR->find('App:CMPassenger',$id);
+            if(! is_null($passenger)){
+                if($passenger->getSubmitter() == $userMGR->currentPosition()){
+                    $listUser = new Entity\CMListUser();
+                    $listUser->setCmlist($mlist);
+                    $listUser->setCmpassenger($passenger);
+                    $entityMGR->insertEntity($listUser);
+                }
+            }
+        }
+        if(count($idsArray) != 0)
+            return new Response($mlist->getId());
+        return new Response('error');
+
+    }
+
+    /**
+     * @Route("/ceremonial/req/new/visa/{id}", name="ceremonialREQCompleteVisaRequest", options={"expose" = true})
+     */
+    public function ceremonialREQCompleteVisaRequest($id,Request $request,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $mlist = $entityMGR->find('App:CMList',$id);
+        if(is_null($mlist))
+            return $this->redirectToRoute('404');
+
+        elseif ($mlist->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        $visa = new Entity\CMVisaReq();
+        $form = $this->createFormBuilder($visa)
+            ->add('countryDes', EntityType::class, [
+                'class'=>Entity\CMVisaCountry::class,
+                'choice_label'=>'countryName',
+                'choice_value' => 'id',
+                'label'=>'مقصد مسافرت:'
+            ])
+            ->add('WaySendToCo', EntityType::class, [
+                'class'=>Entity\CMVisaSendWay::class,
+                'choice_label'=>'WayName',
+                'choice_value' => 'id',
+                'label'=>'روش ارسال ویزا:'
+            ])
+            ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
+            ->getForm();
+        $alerts = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $visa->setCmlist($mlist);
+            $visa->setDateSubmit(time());
+            $visa->setVisaState($entityMGR->findOneBy('App:CMVisaState',['StateCode'=>0]));
+            $visa->setSubmitter($userMGR->currentPosition());
+            $visa->setArea($userMGR->currentPosition()->getDefaultArea());
+            $entityMGR->insertEntity($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'ایجاد','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $logMGR->addEvent('CERPASSENGER'.$mlist->getId(),'افزودن','درخواست ویزا','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزا توسط %s ثبت شد.',$visa->getSubmitter()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialDOINGVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
+            return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
+        }
+        return $this->render('cmr/visa/REQVisaNew.html.twig',[
+            'mlist'=>$mlist,
+            'form'=>$form->createView(),
+            'alerts'=>$alerts,
+            'userLIsts'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist])
+        ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/visa/list", name="ceremonialREQVisaList")
+     */
+    public function ceremonialREQVisaList(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $visas = $entityMGR->findBy('App:CMVisaReq',['submitter'=>$userMGR->currentPosition()]);
+
+        return $this->render('cmr/visa/REQVisaList.html.twig',
+            [
+                'visas'=>$visas
+            ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/Visa/view/{id}/{msg}", name="ceremonialREQVisaView")
+     */
+    public function ceremonialREQVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('404');
+
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+        elseif ($visa->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        $mlist = $entityMGR->find('App:CMList',$visa->getCMlist()->getId());
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت ثبت شد.']);
+
+        return $this->render('cmr/visa/REQVisaView.html.twig', [
+            'passengers' => $passengers,
+            'visa'=>$visa,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
+            'alerts'=>$alerts
+        ]);
     }
 
 }

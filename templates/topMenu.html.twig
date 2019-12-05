@@ -68,22 +68,16 @@
                                 سامانه کنترل پروژه کل
                             </a>
                         {% endif %}
-                        {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL') == true %}
-                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
-                                سامانه مدیریت تشریفات
+                        {% if UserMGR.hasPermission('HSSETOTAL','HSSE') == true %}
+                            <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-lamp"></i>
+                                سامانه جامع ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
                         {% if UserMGR.hasPermission('CeremonailOPTDashboard','CEREMONIAL') == true %}
                             <a class="dropdown-item" href="{{ path('ceremonialOPTDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-passport"></i>
                                 سامانه اپراتوری تشریفات
-                            </a>
-                        {% endif %}
-                        {% if UserMGR.hasPermission('HSSETOTAL','HSSE') == true %}
-                            <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-lamp"></i>
-                                سامانه جامع ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
                     </div>
@@ -114,16 +108,16 @@
                                 مجری خدمات فناوری اطلاعات
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
+                            <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
+                                <i class="fas fa-passport"></i>
+                                سامانه مدیریت تشریفات
+                            </a>
+                        {% endif %}
                         {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-passport"></i>
                                 سامانه درخواست تشریفات
-                            </a>
-                        {% endif %}
-                        {% if UserMGR.hasPermission('HSSEAREA','HSSE',null,area.id) == true %}
-                            <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-lamp"></i>
-                                سامانه ناحیه‌ای ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
                         {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}

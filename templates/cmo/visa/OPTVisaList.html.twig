@@ -1,14 +1,13 @@
-{% extends 'ceremonial/OPTbase.html.twig' %}
-
+{% extends 'cmo/OPTbase.html.twig' %}
 {% block title %}{{ typeName }}{% endblock %}
+
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
-                <th>نام و نام‌خانوادگی</th>
-                <th>شماره ملی</th>
+                <th>شماره درخواست</th>
                 <th>وضعیت درخواست</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -16,10 +15,9 @@
             </thead>
             <tbody class="">
             {% for visa in visas %}
-                <tr class="{% if visa.visaState.stateCode == 10 %}bg-success text-light{% endif %}">
+                <tr class="{% if visa.visaState.stateCode == 2 %}bg-success text-light{% elseif visa.visaState.StateCode == -1 %}bg-danger text-light{% endif %}">
                     <td>{{ loop.index }}</td>
-                    <td>{{ visa.passenger.pname }} {{ visa.passenger.pfamily }}</td>
-                    <td>{{ visa.passenger.pcodemeli }}</td>
+                    <td>{{ visa.id }}</td>
                     <td>{{ visa.visaState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
                     <td>

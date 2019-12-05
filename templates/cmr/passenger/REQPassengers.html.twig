@@ -22,10 +22,10 @@
             </thead>
             <tbody class="">
             {% for passenger in passengers %}
-                <tr class="tr{{ loop.index }}">
+                <tr class="trp{{ passenger.id }}">
                     <td>
                         <div class="form-check">
-                            <input class="CKBPassengers form-check-input position-static" type="checkbox" id="CKBPassengers" value="{{ passenger.id }}" aria-label="انتخاب مسافر">
+                            <input class="CKBPassengers form-check-input position-static" type="checkbox"  id="CKBPassengers" value="{{ passenger.id }}" aria-label="انتخاب مسافر">
                         </div>
                     </td>
                     <td>{{ loop.index }}</td>
@@ -65,10 +65,11 @@
         function visaReq() {
             var passengersID = [];
             $( ".CKBPassengers:checked" ).each(function( index ) {
-                passengersID.push($( this ).text());
+                passengersID.push($( this ).val());
             });
             if(passengersID.length != 0)
             {
+                console.log(passengersID);
                 $.ajax({
                     url: Routing.generate('ceremonialREQVisa', { 'ids':  passengersID.toString()  }),
                     beforeSend: function(){
@@ -78,13 +79,13 @@
                         $('.spinner-grow').attr('hidden','hidden');
                     },
                     success: function(data) {
-                        if(data != 'ok')
+                        if(data != 'error')
                         {
-
+                            window.location.replace(Routing.generate('ceremonialREQCompleteVisaRequest', { 'id': data }),);
                         }
                         else
                         {
-
+                            window.location.replace(Routing.generate('home'));
                         }
 
                     }
