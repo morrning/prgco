@@ -381,4 +381,159 @@ class CMRController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/ceremonial/req/air/ticket/list", name="ceremonialREQAIRpaneList")
+     */
+    public function ceremonialREQAIRpaneList(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('404');
+
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $tickets = $entityMGR->findBy('App:CMAirTicket',['submitter'=>$userMGR->currentPosition()]);
+
+        return $this->render('cmr/ticket/REQAirTicketsList.html.twig',
+            [
+                'tickets'=>$tickets
+            ]);
+    }
+
+    /**
+     * @Route("/ceremonial/air/ticket/{ids}/", name="ceremonialAirticketRequest", options={"expose" = true} ,requirements={"ids"=".+"})
+     */
+    public function ceremonialAirticketRequest($ids,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(!$userMGR->isLogedIn())      return $this->redirectToRoute('userLogin');
+
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $idsArray = explode(',',$ids);
+        $mlist = new Entity\CMList();
+        $mlist->setSubmitter($userMGR->currentPosition());
+        $mlist->setDes('Visa Request');
+        $mlist->setListLabel('VisaRequest');
+        $entityMGR->insertEntity($mlist);
+
+        foreach ($idsArray as $id){
+            $passenger = $entityMGR->find('App:CMPassenger',$id);
+            if(! is_null($passenger)){
+                if($passenger->getSubmitter() == $userMGR->currentPosition()){
+                    $listUser = new Entity\CMListUser();
+                    $listUser->setCmlist($mlist);
+                    $listUser->setCmpassenger($passenger);
+                    $entityMGR->insertEntity($listUser);
+                }
+            }
+        }
+        if(count($idsArray) != 0)
+            return new Response($mlist->getId());
+        return new Response('error');
+
+    }
+
+
+    /**
+     * @Route("/ceremonial/req/air/ticket/new/{id}", name="ceremonialREQAIRpaneNew", options={"expose" = true})
+     */
+    public function ceremonialREQAIRpaneNew($id,Request $request,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('404');
+
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $mlist = $entityMGR->find('App:CMList',$id);
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
+        if(is_null($mlist))
+            return $this->redirectToRoute('404');
+
+        elseif ($mlist->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        $ticket = new Entity\CMAirTicket();
+        $form = $this->createFormBuilder($ticket)
+            ->add('suggestTime', EntityType::class, [
+                'class'=>Entity\CMdaytime::class,
+                'choice_label'=>'label',
+                'choice_value' => 'id',
+                'label'=>'ساعت پیشنهادی:'
+            ])
+            ->add('source', EntityType::class, [
+                'class'=>Entity\CMCities::class,
+                'choice_label'=>'cname',
+                'choice_value' => 'id',
+                'label'=>'مبدا حرکت:'
+            ])
+            ->add('destination', EntityType::class, [
+                'class'=>Entity\CMCities::class,
+                'choice_label'=>'cname',
+                'choice_value' => 'id',
+                'label'=>'مقصد حرکت:'
+            ])
+            ->add('dateSuggest',Type\JdateType::class,['label'=>'تاریخ مسافرت:','data'=>$jdate->GetTodayDate()])
+            ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])
+            ->getForm();
+        $alerts = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($ticket->getSource() == $ticket->getDestination()){
+                array_push($alerts,['type'=>'warning','message'=>'مبدا و مقصد سفر نمیتواند یکسان باشد.']);
+            }
+            else{
+                $ticket->setCmlist($mlist);
+                $ticket->setDateSubmit(time());
+                $ticket->setArea($userMGR->currentPosition()->getDefaultArea());
+                $ticket->setSubmitter($userMGR->currentPosition());
+                $ticket->setTicketState($entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>0]));
+                $entityMGR->insertEntity($ticket);
+                $logMGR->addEvent('CERTICKET'.$ticket->getId(),'ایجاد','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+                $des = sprintf('درخواست بلیط هواپیما توسط %s ثبت شد.',$ticket->getSubmitter()->getPublicLabel());
+                $url = $this->generateUrl('ceremonialDOINGTicketView',['id'=>$ticket->getId()]);
+                $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
+                return $this->redirectToRoute('ceremonialREQTicketView',['id'=>$ticket->getId(),'msg'=>1]);
+            }
+        }
+        return $this->render('cmr/ticket/reqAIRpane.html.twig',[
+            'userLIsts'=>$passengers,
+            'form'=>$form->createView(),
+            'alerts'=>$alerts
+        ]);
+    }
+
+    /**
+     * @Route("/ceremonial/req/ticket/view/{id}/{msg}", name="ceremonialREQTicketView")
+     */
+    public function ceremonialREQTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('404');
+
+        if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $ticket = $entityMGR->find('App:CMAirTicket',$id);
+        if(is_null($ticket))
+            return $this->redirectToRoute('404');
+        elseif ($ticket->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$ticket->getCmlist()]);
+        $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست بلیط با موفقیت ثبت شد.']);
+
+        return $this->render('cmr/ticket/REQTicketView.html.twig', [
+            'passengers' => $passengers,
+            'ticket'=>$ticket,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
+            'alerts'=>$alerts
+        ]);
+    }
+
 }

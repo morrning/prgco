@@ -166,9 +166,22 @@
                         <span class="text-danger">غیرقابل بازگشت</span>
                          است.
                     </p>
+                    <hr>
+                    <h5 class="text-primary">هزینه اخذ ویزا</h5>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.moneyType) }}
+                            {{ form_widget(form.moneyType) }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.moneyValue) }}
+                            {{ form_widget(form.moneyValue) }}
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    {{ form_start(form) }}
+
                     {{ form_widget(form.submit) }}
                     {{ form_end(form) }}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">

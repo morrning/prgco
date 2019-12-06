@@ -333,15 +333,15 @@ class ConfigMGR
             $entity->setStateName('در انتظار بررسی');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMAirTicketState();
-            $entity->setStateCode(1);
+            $entity->setStateCode(-1);
             $entity->setStateName('رد شده');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMAirTicketState();
-            $entity->setStateCode(2);
+            $entity->setStateCode(1);
             $entity->setStateName('تایید شده');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMAirTicketState();
-            $entity->setStateCode(3);
+            $entity->setStateCode(2);
             $entity->setStateName('خریداری شده');
             $this->em->insertEntity($entity);
 

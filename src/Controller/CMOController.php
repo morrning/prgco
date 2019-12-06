@@ -6,6 +6,7 @@ use http\Client;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
@@ -95,8 +96,15 @@ class CMOController extends AbstractController
         $alerts = [];
         if($msg == 1)
             array_push($alerts,['type'=>'success','message'=>'اعلام ارسال پاسپورت به کنسولگری با موفقیت ثبت شد.']);
-        $message = ['message'=>'default'];
-        $form = $this->createFormBuilder($message)
+
+        $form = $this->createFormBuilder($visa)
+            ->add('moneyType', EntityType::class, [
+                'class'=>Entity\ACCMoney::class,
+                'choice_label'=>'moneyName',
+                'choice_value' => 'id',
+                'label'=>'واحد پول'
+            ])
+            ->add('moneyValue', NumberType::class,['label'=>'مبلغ:','data'=>0,'required'=>true,'attr'=>['class'=>'MoneyInput']])
             ->add('submit', SubmitType::class,['label'=>'ثبت اعلام وصول ویزا'])
             ->getForm();
         $form->handleRequest($request);
@@ -105,9 +113,6 @@ class CMOController extends AbstractController
             $visa->setBuyer($userMGR->currentPosition());
             $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>2]);
             $visa->setVisaState($state);
-            $visa->setMoneyValue(0);
-            $moneyType = $entityMGR->findOneBy('App:ACCMoney',['moneyCode'=>1]);
-            $visa->setMoneyType($moneyType);
             $entityMGR->update($visa);
             $logMGR->addEvent('CERVISA'.$visa->getId(),'اعلام وصول ویزا','درخواست ویزا','CEREMONIAL',$request->getClientIp());
             $des = sprintf(' ویزای شما توسط %s اعلام وصول شد.',$userMGR->currentPosition()->getPublicLabel());

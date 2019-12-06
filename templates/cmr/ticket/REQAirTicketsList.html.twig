@@ -1,4 +1,4 @@
-{% extends 'ceremonial/REQbase.html.twig' %}
+{% extends 'cmr/REQbase.html.twig' %}
 
 {% block title %}لیست بلیط‌های درخواستی{% endblock %}
 {% block appTop %}
@@ -19,8 +19,6 @@
             <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
-                <th>نام و نام‌خانوادگی</th>
-                <th>شماره ملی</th>
                 <th>وضعیت بلیط</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -28,10 +26,8 @@
             </thead>
             <tbody class="">
             {% for ticket in tickets %}
-                <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success text-light{% elseif ticket.ticketState.stateCode == 1 %}bg-danger text-light{% elseif ticket.ticketState.stateCode == 0 %}bg-info text-light{% endif %}">
+                <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success text-light{% elseif ticket.ticketState.stateCode == -1 %}bg-danger text-light{% endif %}">
                     <td>{{ loop.index }}</td>
-                    <td>{{ ticket.passengerID.pname }} {{ ticket.passengerID.pfamily }}</td>
-                    <td>{{ ticket.passengerID.pcodemeli }}</td>
                     <td>{{ ticket.ticketState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                     <td>

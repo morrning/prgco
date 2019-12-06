@@ -1,5 +1,5 @@
 {% extends 'cmr/REQbase.html.twig' %}
-{% block title %}درخواست ویزا{% endblock %}
+{% block title %}درخواست بلیط هواپیما{% endblock %}
 {% block pageBody %}
     <div class="container-fluid py-3">
         <div class="row">
@@ -7,15 +7,29 @@
                 <div class="row border rounded p-2 m-1">
                     <div class="col-sm-12 col-md-12 pb-2">
                         <div class="col-sm-12 col-md-12 pb-2">
+                            <h5>اطلاعات سفر:</h5>
+                            <p class=" py-0 text-danger">
+                                <i class="fa fa-info-square"></i>
+                                تاریخ مسافرت ممکن است با زمان اخذ بلیط برای شما متفاوت باشد.بنا بر ساعت و تاریخ شرکت های هواپیمایی قابل تغییر است.
+                            </p>
+                            <hr>
                             {{ form_start(form) }}
                             <div class="row">
-                                <div class="col-sm-12 col-md-6">
-                                    {{ form_label(form.countryDes) }}
-                                    {{ form_widget(form.countryDes) }}
+                                <div class="col-sm-12 col-md-6 pb-2">
+                                    {{ form_label(form.source) }}
+                                    {{ form_widget(form.source) }}
+                                </div>
+                                <div class="col-sm-12 col-md-6 pb-2">
+                                    {{ form_label(form.destination) }}
+                                    {{ form_widget(form.destination) }}
                                 </div>
                                 <div class="col-sm-12 col-md-6">
-                                    {{ form_label(form.WaySendToCo) }}
-                                    {{ form_widget(form.WaySendToCo) }}
+                                    {{ form_label(form.dateSuggest) }}
+                                    {{ form_widget(form.dateSuggest) }}
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    {{ form_label(form.suggestTime) }}
+                                    {{ form_widget(form.suggestTime) }}
                                 </div>
                             </div>
                         </div>

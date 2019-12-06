@@ -31,7 +31,7 @@
                                         <p>
                                             <i class="fas fa-ticket-alt"></i>
                                             تعداد بلیط‌های خریداری شده:
-                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':3})}) | length}}
+                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
                                             عدد
                                         </p>
                                         <p>
@@ -43,13 +43,13 @@
                                         <p>
                                             <i class="fas fa-minus-circle"></i>
                                             تعداد درخواست‌های رد شده:
-                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
+                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':-1})}) | length}}
                                             عدد
                                         </p>
                                         <p>
                                             <i class="fas fa-check-circle"></i>
                                             تعداد درخواست‌های تایید شده:
-                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
+                                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
                                             عدد
                                         </p>
                                     </div>
@@ -79,15 +79,15 @@
                                                         {
                                                             borderWidth: 1,
                                                             data: [
-                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':3})}) | length}},
+                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}},
                                                                 {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':0})}) | length}},
-                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}},
-                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
+                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':-1})}) | length}},
+                                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
                                                             ],
                                                             backgroundColor: [
                                                                 color(window.chartColors.blue).alpha(0.5).rgbString(),
-                                                                color(window.chartColors.red).alpha(0.5).rgbString(),
                                                                 color(window.chartColors.grey).alpha(0.5).rgbString(),
+                                                                color(window.chartColors.red).alpha(0.5).rgbString(),
                                                                 color(window.chartColors.yellow).alpha(0.5).rgbString(),
                                                             ]
 
@@ -163,8 +163,8 @@
                                                             ],
                                                             backgroundColor: [
                                                                 color(window.chartColors.blue).alpha(0.5).rgbString(),
-                                                                color(window.chartColors.red).alpha(0.5).rgbString(),
                                                                 color(window.chartColors.grey).alpha(0.5).rgbString(),
+                                                                color(window.chartColors.red).alpha(0.5).rgbString(),
                                                                 color(window.chartColors.yellow).alpha(0.5).rgbString(),
 
                                                             ]
