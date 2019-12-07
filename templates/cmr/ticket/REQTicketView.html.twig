@@ -119,7 +119,7 @@
                                             {% if ticket.ARdes != null %}
                                                 <p>
                                                     توضیحات:
-                                                    <span class="text-success">{{ ticket.acceptDes }}</span>
+                                                    <span class="text-success">{{ ticket.ARdes }}</span>
                                                 </p>
                                             {% endif %}
                                         {% endif %}
@@ -230,13 +230,13 @@
                             </h4>
                             <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}  توسط {{ ticket.submitter.publicLabel }} ثبت شد.</p>
                         </div>
-                        {% if ticket.ticketState.StateCode == 3 or ticket.ticketState.StateCode == 2 %}
+                        {% if ticket.ticketState.StateCode == 2 or ticket.ticketState.StateCode == 1 %}
                             <div class="alert alert-info" role="alert">
                                 <h4 class="alert-heading">
                                     <i class="fas fa-thumbs-up"></i>
                                     تایید درخواست
                                 </h4>
-                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.acceptDate) }}  توسط {{ ticket.accepter.publicLabel }} تایید شد.</p>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}  توسط {{ ticket.accepter.publicLabel }} تایید شد.</p>
                             </div>
                         {% endif %}
                         {% if ticket.ticketState.StateCode == 3 %}
@@ -248,13 +248,13 @@
                                 <p> بلیط مورد درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.buyDate) }}  توسط {{ ticket.buyer.publicLabel }} خریداری شد.</p>
                             </div>
                         {% endif %}
-                        {% if ticket.ticketState.StateCode == 1 %}
+                        {% if ticket.ticketState.StateCode == -1 %}
                             <div class="alert alert-danger" role="alert">
                                 <h4 class="alert-heading">
                                     <i class="fas fa-window-close"></i>
                                     رد درخواست
                                 </h4>
-                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.rejectDate) }}  توسط {{ ticket.rejecter.publicLabel }} رد شد.</p>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}  توسط {{ ticket.rejecter.publicLabel }} رد شد.</p>
                             </div>
                         {% endif %}
                     </div>

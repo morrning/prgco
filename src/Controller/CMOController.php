@@ -28,6 +28,16 @@ use App\Entity;
 class CMOController extends AbstractController
 {
     /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
+
+
+    /**
      * @Route("/ceremonial/opt/dashboard", name="ceremonialOPTDashboard")
      */
     public function ceremonialOPTDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
@@ -128,5 +138,107 @@ class CMOController extends AbstractController
             'alerts'=>$alerts
         ]);
 
+    }
+
+
+    /**
+     * @Route("/ceremonial/opt/ticket/view/{id}/{msg}", name="ceremonialOPTTicketView")
+     */
+    public function ceremonialOPTTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,Service\ACC $ACC)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+        $ticket = $entityMGR->find('App:CMAirTicket',$id);
+        if(is_null($ticket))
+            return $this->redirectToRoute('404');
+
+        $mlist = $entityMGR->find('App:CMList',$ticket->getCMlist()->getId());
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
+
+        $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت رد شد.']);
+        if($msg == 2)
+            array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت تایید شد.']);
+
+        $form = $this->createFormBuilder($ticket)
+            ->add('flyAirway', EntityType::class, [
+                'class'=>Entity\CMAirway::class,
+                'choice_label'=>'airwayName',
+                'choice_value' => 'id',
+                'label'=>'شرکت هواپیمایی'
+            ])
+            ->add('moneyType', EntityType::class, [
+                'class'=>Entity\ACCMoney::class,
+                'choice_label'=>'moneyName',
+                'choice_value' => 'id',
+                'label'=>'واحد پولی'
+            ])
+            ->add('fileID', Type\FileboxType::class,['label'=>'فایل اسکن','data_class'=>null])
+            ->add('moneyValue', Type\NumbermaskType::class,['data'=>0,'label'=>'مقدار هزینه','attr'=>['class'=>'MoneyInput']])
+            ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>$ticket->getDateSuggest()])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $guid = $this->RandomString(32);
+            $file = $form->get('fileID')->getData();
+            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
+                if($file->getSize() < 4097152){
+                    $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
+                    $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
+                    $ticket->setFileID($tempFileName);
+                    $ticket->setMoneyValue(str_replace(',','',$ticket->getMoneyValue()));
+                    $ticket->setBuyer($userMGR->currentPosition());
+                    $ticket->setBuyDate(time());
+                    $acceptState = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>2]);
+                    $ticket->setTicketState($acceptState);
+                    $entityMGR->update($ticket);
+                    $logMGR->addEvent('CERTICKET'.$ticket->getId(),'خرید بلیط','درخواست بلیط','CEREMONIAL',$request->getClientIp());
+                    $des = sprintf(' بلیط شما توسط %s خریداری شد.',$ticket->getBuyer()->getPublicLabel());
+                    $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
+                    $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+                    array_push($alerts,['type'=>'success','message'=>'اطلاعات بلیط با موفقیت ثبت شد.']);
+                }
+                else{
+                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);
+                }
+            }
+            else{
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,png,pdf,jpeg  ارسال فرمایید.']);
+            }
+
+        }
+
+        return $this->render('cmo/ticket/OPTTicketView.html.twig', [
+            'passengers' => $passengers,
+            'ticket'=>$ticket,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERTICKET'.$ticket->getId()),
+            'alerts'=>$alerts,
+            'form'=>$form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/ceremonial/opt/air/ticket/list/{type}", name="ceremonialOPTAIRpaneList")
+     */
+    public function ceremonialOPTAIRpaneList($type,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+
+        $tickets = $entityMGR->findBy('App:CMAirTicket',[],['dateSubmit'=>'DESC']);
+
+        if($type == 'acp'){
+            $state = $entityMGR->findOneBy('App:CMAirTicketState',['StateCode'=>'1']);
+            $tickets = $entityMGR->findBy('App:CMAirTicket',['ticketState'=>$state],['dateSubmit'=>'DESC']);
+        }
+        return $this->render('cmo/ticket/OPTAirTicketList.html.twig',
+            [
+                'tickets'=>$tickets,
+                'type'=>$type
+            ]);
     }
 }
