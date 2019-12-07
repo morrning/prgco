@@ -1,4 +1,4 @@
-{% extends 'ceremonial/DOINGbase.html.twig' %}
+{% extends 'cma/DOINGbase.html.twig' %}
 
 {% block title %}گزارش مالی کل بلیط‌های هواپیما{% endblock %}
 {% block appTop %}
@@ -80,7 +80,7 @@
                 <div class="card-body">
                     <p>
                         تعداد کل فاکتورها:
-                        <span class="text-success">{{ docs | length }}</span>
+                        <span class="text-success">{{ tickets | length }}</span>
                     </p>
                     {% for moneyLabel in moneyLabels %}
                         <p>

@@ -90,12 +90,6 @@
                         ناحیه کاری:{{ area.areaName }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                        {% if UserMGR.hasPermission('HRMACCESS','HRM',null,area.id) == true %}
-                        <a class="dropdown-item" href="{{ path('HRMadmin') }}" class="list-group-item list-group-item-action">
-                            <i class="fas fa-user-clock"></i>
-                            مدیریت منابع انسانی
-                        </a>
-                        {% endif %}
                         {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-desktop"></i>

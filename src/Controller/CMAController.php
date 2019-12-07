@@ -242,4 +242,37 @@ class CMAController extends AbstractController
             'form1'=>$form1->createView()
         ]);
     }
+
+    /**
+     * @Route("/ceremonial/doing/acc/balance/{msg}", name="ceremonialDOINGACCBalance")
+     */
+    public function ceremonialDOINGACCBalance($msg=0,Request $request,Service\ACC $ACC,Service\LogMGR $logMGR, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $moneyLabels=[];
+        $moneyTypes = $entityMGR->findAll('App:ACCMoney');
+        $moneyTotal = [];
+        foreach ($moneyTypes as $moneyType)
+        {
+            $tickets = $entityMGR->findBy('App:CMAirTicket',['Area'=>$userMGR->currentPosition()->getDefaultArea(),'moneyType'=>$moneyType]);
+            array_push($moneyLabels, $moneyType->getMoneyName());
+            $total = 0;
+            foreach ($tickets as $ticket){
+                $total = $total + $ticket->getMoneyValue();
+            }
+            array_push($moneyTotal,$total);
+        }
+
+        return $this->render('cma/ticket/DOINGACCTicket.html.twig', [
+            'moneys' => $moneyTypes,
+            'moneyLabels'=>$moneyLabels,
+            'moneyTotals'=>$moneyTotal,
+            'tickets'=>$entityMGR->findBy('App:CMAirTicket',['Area'=>$userMGR->currentPosition()->getDefaultArea()])
+        ]);
+    }
+
 }
