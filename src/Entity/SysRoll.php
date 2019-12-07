@@ -82,6 +82,16 @@ class SysRoll
      */
     private $CeremonailMNGDashboard;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $superAdmin;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $pmAccess;
+
 
     public function getId(): ?int
     {
@@ -240,6 +250,30 @@ class SysRoll
     public function setCeremonailMNGDashboard(?bool $CeremonailMNGDashboard): self
     {
         $this->CeremonailMNGDashboard = $CeremonailMNGDashboard;
+
+        return $this;
+    }
+
+    public function getSuperAdmin(): ?bool
+    {
+        return $this->superAdmin;
+    }
+
+    public function setSuperAdmin(?bool $superAdmin): self
+    {
+        $this->superAdmin = $superAdmin;
+
+        return $this;
+    }
+
+    public function getPmAccess(): ?bool
+    {
+        return $this->pmAccess;
+    }
+
+    public function setPmAccess(?bool $pmAccess): self
+    {
+        $this->pmAccess = $pmAccess;
 
         return $this;
     }
