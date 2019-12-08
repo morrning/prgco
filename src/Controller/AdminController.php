@@ -1269,6 +1269,33 @@ class AdminController extends AbstractController
                 'expanded'=>true,
                 'multiple'=>false
             ])
+            ->add('CeremonailOPTDashboard', ChoiceType::class, [
+                'label'=>'اوپراتوری سامانه تشریفات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('CeremonailREQ', ChoiceType::class, [
+                'label'=>'درخواست تشریفات سازمانی',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
+            ->add('CeremonailMNGDashboard', ChoiceType::class, [
+                'label'=>'مدیریت تایید سامانه تشریفات',
+                'choices' => [
+                    'غیرمجاز' => false,
+                    'مجاز' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false
+            ])
             ->add('MostUsedFiles', ChoiceType::class, [
                 'label'=>'مدیریت فایل‌های پراستفاده',
                 'choices' => [
