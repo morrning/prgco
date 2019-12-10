@@ -304,7 +304,7 @@ class CMRController extends AbstractController
                 'class'=>Entity\CMVisaSendWay::class,
                 'choice_label'=>'WayName',
                 'choice_value' => 'id',
-                'label'=>'روش ارسال ویزا:'
+                'label'=>'روش ارسال گذرنامه:'
             ])
             ->add('des', TextareaType::class,['label'=>'علت سفر:','required'=>false])
             ->add('submit', SubmitType::class,['label'=>'ثبت درخواست'])

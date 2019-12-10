@@ -39,7 +39,6 @@ class CMAController extends AbstractController
         $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
 
         return $this->render('cma/DOINGDashboard.html.twig', [
-            'controller_name' => 'CeremonialController',
         ]);
     }
     /**
@@ -53,17 +52,17 @@ class CMAController extends AbstractController
             return $this->redirectToRoute('403');
 
         if($type == 'all'){
-            $visas = $entityMGR->findAll('App:CMVisaReq');
+            $visas = $entityMGR->findBy('App:CMVisaReq',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
             $typeName = 'آرشیو تمام درخواست‌ها';
         }
         elseif ($type == 'wfd'){
             $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>0]);
-            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state]);
+            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state,'area'=>$userMGR->currentPosition()->getDefaultArea()]);
             $typeName = 'پاسپورت‌های در انتظار تایید';
         }
         elseif ($type == 'accepted'){
             $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>1]);
-            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state]);
+            $visas = $entityMGR->findBy('App:CMVisaReq',['visaState'=>$state,'area'=>$userMGR->currentPosition()->getDefaultArea()]);
             $typeName = 'پاسپورت‌های تایید شده';
         }
         else
@@ -184,6 +183,8 @@ class CMAController extends AbstractController
 
         $ticket = $entityMGR->find('App:CMAirTicket',$id);
         if(is_null($ticket))
+            return $this->redirectToRoute('404');
+        if($ticket->getArea()->getId() != $userMGR->currentPosition()->getDefaultArea()->getId())
             return $this->redirectToRoute('404');
 
         $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$ticket->getCmlist()]);
