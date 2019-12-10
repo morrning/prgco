@@ -1,0 +1,42 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}مدیریت زیرسیستم و افزونه‌ها{% endblock %}
+
+{% block pageBody %}
+    <style>
+        .form-check{
+            float: right;
+        }
+    </style>
+    <div class="container-fluid">
+        <h4 class="text-primary">
+            <i class="fa fa-arrow-down"></i>
+            فعال / غیرفعال‌سازی زیرسیستم‌ها
+        </h4>
+        <div class="row">
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.ICT) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.ICT) }}
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_label(form.CEREMONIAL) }}
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_widget(form.CEREMONIAL) }}
+            </div>
+        </div>
+        <hr>
+        <div class="row pt-2">
+            <div class="col-12">
+                {{ form_widget(form.submit) }}
+                <a class="btn btn-secondary" href="{{ path('adminRollsList') }}">
+                    <i class="fa fa-undo"></i>
+                    بازگشت
+                </a>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

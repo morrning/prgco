@@ -488,5 +488,19 @@ class ConfigMGR
             $entityItem->setUrl('https://mail.prgco.ir/');
             $this->em->insertEntity($entityItem);
         }
+
+        //import Menu default data
+        if(count($this->em->findAll('App:SysBundle')) == 0) {
+            $entity = new Entity\SysBundle();
+            $entity->setBundleName('ICT');
+            $entity->setDes('مدیریت خدمات فناوری اطلاعات و ارتباطات و پشتیبانی ذی نفعان');
+            $entity->setIsDisabled(false);
+            $this->em->insertEntity($entity);
+            $entity = new Entity\SysBundle();
+            $entity->setBundleName('CEREMONIAL');
+            $entity->setDes('مدیریت تشریفات سازمانی');
+            $entity->setIsDisabled(false);
+            $this->em->insertEntity($entity);
+        }
     }
 }

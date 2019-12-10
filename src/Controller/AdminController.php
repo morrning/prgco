@@ -1377,4 +1377,57 @@ class AdminController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
+    /**
+     * @Route("/admin/plugins/edit", name="adminPluginEdit")
+     */
+    public function adminPluginEdit(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
+        $dataForm = ['messsage'=>'default'];
+
+        $form = $this->createFormBuilder($dataForm)
+            ->add('ICT', ChoiceType::class, [
+                'label'=>'زیرسیستم فناوری اطلاعات و ارتباطات',
+                'choices' => [
+                    'فعال' => false,
+                    'غیرفعال' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false,
+            ])
+            ->add('CEREMONIAL', ChoiceType::class, [
+                'label'=>'زیرسیستم تشریفات',
+                'choices' => [
+                    'فعال' => false,
+                    'غیرفعال' => true,
+                ],
+                'expanded'=>true,
+                'multiple'=>false,
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $alerts = [];
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ceremonial = $entityMGR->findOneBy('App:SysBundle',['bundleName'=>'CEREMONIAL']);
+            $ceremonial->setIsDisabled($form->get('CEREMONIAL')->getData());
+            $entityMGR->update($ceremonial);
+
+            $ict = $entityMGR->findOneBy('App:SysBundle',['bundleName'=>'ICT']);
+            $ict->setIsDisabled($form->get('ICT')->getData());
+            $entityMGR->update($ict);
+
+            $logMGR->addEvent('adminPlugins','ویرایش','مدیریت زیرسیستم‌ها','ADMINISTRATOR',$request->getClientIp());
+            $logger->info(sprintf('user %s edit system plugins', $userMgr->currentUser()->getUsername() ));
+
+            array_push($alerts,['type'=>'success','message'=>'نقش کاربری مورد نظر با موفقیت ایجاد شد.']);
+
+        }
+        return $this->render('admin/pluginsManage.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
 }
