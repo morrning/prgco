@@ -99,6 +99,11 @@ class UserMGR
     //--------------- PERMISSION CONTROLL ---------------
     public function hasPermission($permissionName,$bundle='CORE',$option=null,$pid = 1)
     {
+        $bundleState = $this->em->findOneBy('App:SysBundle',['bundleName'=>$bundle]);
+        if(! is_null($bundleState))
+            if($bundleState->getIsDisabled() == true)
+                return false;
+
         if($permissionName != 'superAdmin'){
             if($this->hasPermission('superAdmin')){
                 return true;
