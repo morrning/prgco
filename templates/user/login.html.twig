@@ -10,18 +10,16 @@
         {% else %}
             background-image: url("{{asset('/files/' ~ ConfigMGR.getConfig.SYSLOGINBGRND)}}");
         {% endif %}
-            /* Full height */
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
             background-size: cover;
+            -o-background-size: cover;
         }
         .card {
             opacity: 0.9;
             filter: alpha(opacity=90); /* For IE8 and earlier */
         }
+        
     </style>
     <script>
 
