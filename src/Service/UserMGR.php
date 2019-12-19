@@ -168,6 +168,9 @@ class UserMGR
             ->setParameter('group3', '%,' . $groupID . '%')
             ->getQuery()
             ->getResult();
+        foreach ($singlePermissionResult as $item)
+            $item->setPermissionFromRoll(false);
+
         $group = $this->em->find('App:SysGroup',$groupID);
 
         $rolls = $this->em->findBy('App:SysRoll',[$group->getGroupName()=>true]);
@@ -178,7 +181,9 @@ class UserMGR
                 foreach ($temp as $tmp)
                     array_push($rollRes,$tmp);
         }
-        echo count($rollRes);
+        foreach ($rollRes as $item)
+            $item->setPermissionFromRoll(true);
+
         return array_merge($singlePermissionResult,$rollRes);
     }
 

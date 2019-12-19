@@ -103,6 +103,11 @@ class SysPosition
      */
     private $roll;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $permissionFromRoll;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -514,6 +519,18 @@ class SysPosition
     public function setRoll(?SysRoll $roll): self
     {
         $this->roll = $roll;
+
+        return $this;
+    }
+
+    public function getPermissionFromRoll(): ?bool
+    {
+        return $this->permissionFromRoll;
+    }
+
+    public function setPermissionFromRoll(?bool $permissionFromRoll): self
+    {
+        $this->permissionFromRoll = $permissionFromRoll;
 
         return $this;
     }

@@ -31,7 +31,11 @@
                             <tr>
                                 <td>{{ loop.index }}</td>
                                 <td>{{ position.publicLabel }}</td>
-                                <td><a class="btn btn-danger" href="{{ path('adminDeletePositionOfGroup',{'GID':group.id,'UID':position.id}) }}">حذف</a></td>
+                                {% if position.PermissionFromRoll == false %}
+                                    <td><a class="btn btn-danger" href="{{ path('adminDeletePositionOfGroup',{'GID':group.id,'UID':position.id}) }}">حذف</a></td>
+                                {% else %}
+                                    <td><span class="badge badge-danger">از نقش کاربری</span></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
