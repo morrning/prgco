@@ -176,7 +176,7 @@ class UserMGR
         $rolls = $this->em->findBy('App:SysRoll',[$group->getGroupName()=>true]);
         $rollRes=[];
         foreach ($rolls as $roll){
-            $temp = $this->em->findBy('App:SysPosition',['roll'=>$roll]);
+            $temp = $this->em->findBy('App:SysPosition',['roll'=>$roll,'defaultArea'=>$group->getPID()]);
             if(! is_null($temp))
                 foreach ($temp as $tmp)
                     array_push($rollRes,$tmp);
@@ -249,12 +249,8 @@ class UserMGR
 
     public function addNotificationForGroup($GroupName,$boundle,$des,$url,$pid=1){
         $group = $this->em->findOneBy('App:SysGroup',['groupName'=>$GroupName,'bundle'=>$boundle,'PID'=>$pid]);
-
-        if(is_null($group))
-            return false;
-
+        if(is_null($group)) return false;
         $users = $this->positionsOfGroup($group->getId());
-
         foreach ($users as $user)
         {
             $notification = new Entity\SysNotification();
