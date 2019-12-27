@@ -89,7 +89,7 @@ class MessageController extends AbstractController
                 'class'=>Entity\SysPosition::class,
                 'choice_label'=>'publicLabel',
                 'choice_value' => 'id',
-                'label'=>'فرستنده',
+                'label'=>'گیرنده',
                 'attr'=>[
                     'pattern'=>'positions'
                 ]

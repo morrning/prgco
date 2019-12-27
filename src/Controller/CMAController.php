@@ -140,7 +140,7 @@ class CMAController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت رد شد.']);
 
         }
-        return $this->render('cma/visa/DoingVisaView.html.twig', [
+        return $this->render('cma/visa/DOINGVisaView.html.twig', [
             'passengers' => $passengers,
             'visa'=>$visa,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
