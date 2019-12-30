@@ -113,6 +113,26 @@ class CMPassenger
      */
     private $cMVisaReqs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $passportExpireDate;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $PersonOutCountryDay;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $PersonOutCounteryLetterNum;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $PersonOutCountryLetterFile;
+
     public function __construct()
     {
         $this->cMAirTickets = new ArrayCollection();
@@ -406,6 +426,54 @@ class CMPassenger
                 $cMVisaReq->setPassenger(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPassportExpireDate(): ?string
+    {
+        return $this->passportExpireDate;
+    }
+
+    public function setPassportExpireDate(?string $passportExpireDate): self
+    {
+        $this->passportExpireDate = $passportExpireDate;
+
+        return $this;
+    }
+
+    public function getPersonOutCountryDay(): ?string
+    {
+        return $this->PersonOutCountryDay;
+    }
+
+    public function setPersonOutCountryDay(?string $PersonOutCountryDay): self
+    {
+        $this->PersonOutCountryDay = $PersonOutCountryDay;
+
+        return $this;
+    }
+
+    public function getPersonOutCounteryLetterNum(): ?string
+    {
+        return $this->PersonOutCounteryLetterNum;
+    }
+
+    public function setPersonOutCounteryLetterNum(?string $PersonOutCounteryLetterNum): self
+    {
+        $this->PersonOutCounteryLetterNum = $PersonOutCounteryLetterNum;
+
+        return $this;
+    }
+
+    public function getPersonOutCountryLetterFile(): ?string
+    {
+        return $this->PersonOutCountryLetterFile;
+    }
+
+    public function setPersonOutCountryLetterFile(?string $PersonOutCountryLetterFile): self
+    {
+        $this->PersonOutCountryLetterFile = $PersonOutCountryLetterFile;
 
         return $this;
     }

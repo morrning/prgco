@@ -116,9 +116,12 @@
                             <td>{{ passenger.cmpassenger.pfather }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
                             <td>
-                                <a class="btn btn-info" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">مشاهده</a>
-                                <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.cmpassenger.id}) }}">ویرایش</a>
-                            </td>
+                                <a href="#"
+                                   class="btn btn-info"
+                                   target="popup"
+                                   onclick="window.open(Routing.generate('ceremonialDOINGpasengerView',{'id':'{{ passenger.cmpassenger.id }}'}),'popup','location=0,width=600,height=400'); return false;">
+                                    مشاهده
+                                </a>                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>

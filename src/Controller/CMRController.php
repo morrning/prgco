@@ -89,6 +89,7 @@ class CMRController extends AbstractController
             ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
             ->add('pfather', TextType::class,['label'=>' نام پدر'])
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
+            ->add('passportExpireDate',Type\JdateType::class,['label'=>'پایان اعتبار گذرنامه'])
             ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
             ->add('tel1', TextType::class,['label'=>'شماره تماس1:','attr'=>['class'=>'tel']])
             ->add('tel2', TextType::class,['label'=>'شماره تماس2:','attr'=>['class'=>'tel']])

@@ -9,7 +9,7 @@ use App\Service as Service;
 class HomeController extends AbstractController
 {
     /**
-     * @Route("/", name="home")
+     * @Route("/", name="home", options={"expose" = true})
      */
     public function home(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
