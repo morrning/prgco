@@ -252,15 +252,15 @@ class ConfigMGR
         if(count($this->em->findAll('App:CMVisaType')) == 0){
             $entity = new Entity\CMVisaType();
             $entity->setTypeCode(1);
-            $entity->setCountryName('زیارتی و توریستی');
+            $entity->setTypeName('زیارتی و توریستی');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaType();
-            $entity->setTypeCode(1);
-            $entity->setCountryName('تجاری');
+            $entity->setTypeCode(2);
+            $entity->setTypeName('تجاری');
             $this->em->insertEntity($entity);
             $entity = new Entity\CMVisaType();
-            $entity->setTypeCode(1);
-            $entity->setCountryName('متعدده');
+            $entity->setTypeCode(3);
+            $entity->setTypeName('تجاری متعدده');
             $this->em->insertEntity($entity);
         }
 
