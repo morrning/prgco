@@ -114,6 +114,14 @@ class CMOController extends AbstractController
                 'choice_value' => 'id',
                 'label'=>'واحد پول'
             ])
+            ->add('visaType', EntityType::class, [
+                'class'=>Entity\CMVisaType::class,
+                'choice_label'=>'typeName',
+                'choice_value' => 'id',
+                'label'=>'نوع ویزا'
+            ])
+            ->add('DateStart',Type\JdateType::class,['label'=>'شروع اعتبار ویزا'])
+            ->add('DateEnd',Type\JdateType::class,['label'=>'پایان اعتبار ویزا'])
             ->add('moneyValue', NumberType::class,['label'=>'مبلغ:','data'=>0,'required'=>true,'attr'=>['class'=>'MoneyInput']])
             ->add('submit', SubmitType::class,['label'=>'ثبت اعلام وصول ویزا'])
             ->getForm();
@@ -124,6 +132,9 @@ class CMOController extends AbstractController
             $state = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>2]);
             $visa->setVisaState($state);
             $entityMGR->update($visa);
+
+            //set visa Log for passengers
+
             $logMGR->addEvent('CERVISA'.$visa->getId(),'اعلام وصول ویزا','درخواست ویزا','CEREMONIAL',$request->getClientIp());
             $des = sprintf(' ویزای شما توسط %s اعلام وصول شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);

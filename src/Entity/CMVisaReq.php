@@ -102,6 +102,21 @@ class CMVisaReq
      */
     private $ADDateSubmit;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\CMVisaType")
+     */
+    private $VisaType;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $DateStart;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $DateEnd;
+
 
     public function getId(): ?int
     {
@@ -352,6 +367,42 @@ class CMVisaReq
     public function setADDateSubmit(?string $ADDateSubmit): self
     {
         $this->ADDateSubmit = $ADDateSubmit;
+
+        return $this;
+    }
+
+    public function getVisaType(): ?CMVisaType
+    {
+        return $this->VisaType;
+    }
+
+    public function setVisaType(?CMVisaType $VisaType): self
+    {
+        $this->VisaType = $VisaType;
+
+        return $this;
+    }
+
+    public function getDateStart(): ?string
+    {
+        return $this->DateStart;
+    }
+
+    public function setDateStart(?string $DateStart): self
+    {
+        $this->DateStart = $DateStart;
+
+        return $this;
+    }
+
+    public function getDateEnd(): ?string
+    {
+        return $this->DateEnd;
+    }
+
+    public function setDateEnd(?string $DateEnd): self
+    {
+        $this->DateEnd = $DateEnd;
 
         return $this;
     }

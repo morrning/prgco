@@ -69,11 +69,6 @@ class CMPassenger
     private $passNO;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $visaNO;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\SysPosition", inversedBy="cMPassengers")
      */
     private $submitter;
@@ -133,11 +128,17 @@ class CMPassenger
      */
     private $PersonOutCountryLetterFile;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\CMVisaLog", mappedBy="passenger")
+     */
+    private $cMVisaLogs;
+
     public function __construct()
     {
         $this->cMAirTickets = new ArrayCollection();
         $this->cMPassengerPersonalDocs = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
+        $this->cMVisaLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -261,18 +262,6 @@ class CMPassenger
     public function setPassNO(?string $passNO): self
     {
         $this->passNO = $passNO;
-
-        return $this;
-    }
-
-    public function getVisaNO(): ?string
-    {
-        return $this->visaNO;
-    }
-
-    public function setVisaNO(?string $visaNO): self
-    {
-        $this->visaNO = $visaNO;
 
         return $this;
     }
@@ -474,6 +463,37 @@ class CMPassenger
     public function setPersonOutCountryLetterFile(?string $PersonOutCountryLetterFile): self
     {
         $this->PersonOutCountryLetterFile = $PersonOutCountryLetterFile;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|CMVisaLog[]
+     */
+    public function getCMVisaLogs(): Collection
+    {
+        return $this->cMVisaLogs;
+    }
+
+    public function addCMVisaLog(CMVisaLog $cMVisaLog): self
+    {
+        if (!$this->cMVisaLogs->contains($cMVisaLog)) {
+            $this->cMVisaLogs[] = $cMVisaLog;
+            $cMVisaLog->setPassenger($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCMVisaLog(CMVisaLog $cMVisaLog): self
+    {
+        if ($this->cMVisaLogs->contains($cMVisaLog)) {
+            $this->cMVisaLogs->removeElement($cMVisaLog);
+            // set the owning side to null (unless already changed)
+            if ($cMVisaLog->getPassenger() === $this) {
+                $cMVisaLog->setPassenger(null);
+            }
+        }
 
         return $this;
     }

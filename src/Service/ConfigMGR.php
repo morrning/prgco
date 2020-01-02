@@ -248,6 +248,22 @@ class ConfigMGR
             $this->em->insertEntity($entity);
         }
 
+        //import default Visa countries
+        if(count($this->em->findAll('App:CMVisaType')) == 0){
+            $entity = new Entity\CMVisaType();
+            $entity->setTypeCode(1);
+            $entity->setCountryName('زیارتی و توریستی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaType();
+            $entity->setTypeCode(1);
+            $entity->setCountryName('تجاری');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\CMVisaType();
+            $entity->setTypeCode(1);
+            $entity->setCountryName('متعدده');
+            $this->em->insertEntity($entity);
+        }
+
         //import default Visa send ways
         if(count($this->em->findAll('App:CMVisaSendWay')) == 0){
             $entity = new Entity\CMVisaSendWay();

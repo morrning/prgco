@@ -100,7 +100,6 @@ class CMRController extends AbstractController
                     'class'  => 'codeMeli',
                 ),
             ])
-            ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
             ->add('lfamily', TextType::class,['label'=>'Family:'])
@@ -123,7 +122,7 @@ class CMRController extends AbstractController
                 $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
                 return $this->redirectToRoute('ceremonialREQpasengers', ['msg' => 1]);
             }
-            $alert = [['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.']];
+            $alert = [['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.اگر اخیرا در ارتباط شما با شرکت و یا شرکت‌های زیر مجموعه تغییری رخ داده است با مدیر سامانه تماس بگیرید.']];
         }
         return $this->render('cmr/passenger/newPasenger.html.twig', [
             'alerts'=>$alert,
@@ -150,7 +149,6 @@ class CMRController extends AbstractController
             ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
             ->add('pfather', TextType::class,['label'=>' نام پدر'])
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
-            ->add('visaNo', TextType::class,['label'=>'Visa Number:'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
             ->add('ptype', EntityType::class, [
