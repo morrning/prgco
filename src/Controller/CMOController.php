@@ -134,7 +134,18 @@ class CMOController extends AbstractController
             $entityMGR->update($visa);
 
             //set visa Log for passengers
-
+            $listUsers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$visa->getCmlist()]);
+            foreach ($listUsers as $listUser){
+                $userLog = new Entity\CMVisaLog();
+                $userLog->setRequestID($visa);
+                $userLog->setCountry($visa->getCountryDes());
+                $userLog->setDateStart($visa->getDateStart());
+                $userLog->setDateEnd($visa->getDateEnd());
+                $userLog->setPassenger($listUser->getCMPassenger());
+                $userLog->setVisaType($visa->getVisaType());
+                $entityMGR->insertEntity($userLog);
+            }
+            //system notifications and logs
             $logMGR->addEvent('CERVISA'.$visa->getId(),'اعلام وصول ویزا','درخواست ویزا','CEREMONIAL',$request->getClientIp());
             $des = sprintf(' ویزای شما توسط %s اعلام وصول شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);

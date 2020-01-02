@@ -167,7 +167,7 @@
                          است.
                     </p>
                     <hr>
-                    <h5 class="text-primary">هزینه اخذ ویزا</h5>
+                    <h5 class="text-primary">هزینه اخذ ویزا برای هر نفر</h5>
                     {{ form_start(form) }}
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
@@ -177,6 +177,23 @@
                         <div class="col-sm-12 col-md-6">
                             {{ form_label(form.moneyValue) }}
                             {{ form_widget(form.moneyValue) }}
+                        </div>
+                    </div>
+                    <h5 class="text-primary pt-2">اطلاعات ویزا</h5>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.visaType) }}
+                            {{ form_widget(form.visaType) }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.DateStart) }}
+                            {{ form_widget(form.DateStart) }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.DateEnd) }}
+                            {{ form_widget(form.DateEnd) }}
                         </div>
                     </div>
                 </div>
