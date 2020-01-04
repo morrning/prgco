@@ -5,7 +5,7 @@ function showModal(onclick,type='info',title=null,body=null){
     if(body == null)
         body = 'آیا برای انجام این عملیات مطمئن هستید؟';
 
-    var modalTemplate ='<div class="modal fade" id="SystemModalCenter" tabindex="-1" role="dialog" aria-labelledby="SystemModalCenter" aria-hidden="true">\n' +
+    var modalTemplate ='<div class="modal fade modal-backdrop" id="SystemModalCenter" tabindex="-1" role="dialog" aria-labelledby="SystemModalCenter" aria-hidden="true">\n' +
         '    <div class="modal-dialog" role="document">\n' +
         '        <div class="modal-content">\n' +
         '            <div class="modal-header bg-success text-light">\n' +
@@ -46,7 +46,7 @@ function showModal(onclick,type='info',title=null,body=null){
 
 function showModalNotification(title,body,type, reload=false){
     var modalString =
-        '<div class="modal" tabindex="-1" role="dialog">\n' +
+        '<div class="modal modal-backdrop" tabindex="-1" role="dialog">\n' +
         '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
         '    <div class="modal-content">\n' +
         '      <div class="modal-header bg-' + type + ' text-light">\n' +

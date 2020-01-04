@@ -241,7 +241,6 @@ class CMRController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/ceremonial/request/visa/{ids}/", name="ceremonialREQVisa", options={"expose" = true} ,requirements={"ids"=".+"})
      */

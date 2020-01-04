@@ -106,7 +106,12 @@
                             <td>{{ passenger.cmpassenger.pfather }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
                             <td>
-                                <a class="btn btn-info" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">مشاهده</a>
+                                <a href="#"
+                                   class="btn btn-info"
+                                   target="popup"
+                                   onclick="window.open(Routing.generate('ceremonialOPTpasengerView',{'id':'{{ passenger.cmpassenger.id }}'}),'popup','location=0,width=600,height=400'); return false;">
+                                    مشاهده
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
@@ -149,7 +154,7 @@
     </div>
 
     <!-- Modal Accept ticket -->
-    <div class="modal fade" id="Acceptmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Acceptmodal" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success text-light">

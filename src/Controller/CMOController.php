@@ -162,6 +162,29 @@ class CMOController extends AbstractController
 
     }
 
+    /**
+     * @Route("/ceremonial/opt/pasenger/view/{id}", name="ceremonialOPTpasengerView", options={"expose" = true})
+     */
+    public function ceremonialDOINGpasengerView($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('CeremonailOPTDashboard','CEREMONIAL'))
+            return $this->redirectToRoute('403');
+
+        $passenger = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($passenger))
+            return $this->redirectToRoute('404');
+        elseif ($passenger->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
+
+        return $this->render('cma/passenger/viewInfo.html.twig', [
+            'passenger' => $passenger,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
+            'docs'=>$passenger->getCMPassengerPersonalDocs()
+        ]);
+    }
 
     /**
      * @Route("/ceremonial/opt/ticket/view/{id}/{msg}", name="ceremonialOPTTicketView")
