@@ -66,6 +66,26 @@ class SysConfig
      */
     private $SYS_FONT_NAME;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_PW_SERVERNAME;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_PW_DATABASE;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_PW_USERNAME;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $HRM_PW_PASSWORD;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -187,6 +207,54 @@ class SysConfig
     public function setSYSFONTNAME(?string $SYS_FONT_NAME): self
     {
         $this->SYS_FONT_NAME = $SYS_FONT_NAME;
+
+        return $this;
+    }
+
+    public function getHRMPWSERVERNAME(): ?string
+    {
+        return $this->HRM_PW_SERVERNAME;
+    }
+
+    public function setHRMPWSERVERNAME(?string $HRM_PW_SERVERNAME): self
+    {
+        $this->HRM_PW_SERVERNAME = $HRM_PW_SERVERNAME;
+
+        return $this;
+    }
+
+    public function getHRMPWDATABASE(): ?string
+    {
+        return $this->HRM_PW_DATABASE;
+    }
+
+    public function setHRMPWDATABASE(?string $HRM_PW_DATABASE): self
+    {
+        $this->HRM_PW_DATABASE = $HRM_PW_DATABASE;
+
+        return $this;
+    }
+
+    public function getHRMPWUSERNAME(): ?string
+    {
+        return $this->HRM_PW_USERNAME;
+    }
+
+    public function setHRMPWUSERNAME(?string $HRM_PW_USERNAME): self
+    {
+        $this->HRM_PW_USERNAME = $HRM_PW_USERNAME;
+
+        return $this;
+    }
+
+    public function getHRMPWPASSWORD(): ?string
+    {
+        return $this->HRM_PW_PASSWORD;
+    }
+
+    public function setHRMPWPASSWORD(?string $HRM_PW_PASSWORD): self
+    {
+        $this->HRM_PW_PASSWORD = $HRM_PW_PASSWORD;
 
         return $this;
     }
