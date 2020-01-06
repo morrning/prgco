@@ -557,7 +557,7 @@ class AdminController extends AbstractController
         if($msg==2)
             $alerts = [['message'=>'کاربر با موفقیت ویرایش شد.','type'=>'success']];
         if($msg==5)
-            $alerts = [['message'=>'این نام کاربری یا کد ملی قبلا ثبت شده است.','type'=>'warning']];
+            $alerts = [['message'=>'این نام کاربری یا کد ملی یا کد پرسنلی قبلا ثبت شده است.','type'=>'warning']];
 
         $users = $entityMGR->findAll('App:SysUser');
         $logMGR->addEvent('4ert','مشاهده','کاربران کل سامانه','ADMINISTRATOR',$request->getClientIp());
@@ -965,13 +965,14 @@ class AdminController extends AbstractController
             ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
             ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
+            ->add('employeNum', TextType::class,['label'=>'شماره پرسنلی'])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
             ->getForm();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
-            if(is_null($entityMGR->findOneBy('App:SysUser',['username'=>$user->getUsername()])) && is_null($entityMGR->findOneBy('App:SysUser',['nationalCode'=>$user->getNationalCode()])))
+            if(is_null($entityMGR->findOneBy('App:SysUser',['username'=>$user->getUsername()])) && is_null($entityMGR->findOneBy('App:SysUser',['nationalCode'=>$user->getNationalCode()])) && is_null($entityMGR->findOneBy('App:SysUser',['employeNum'=>$user->getEmployeNum()])))
             {
                 $user->setPassword(md5($user->getPassword()));
                 $entityMGR->insertEntity($user);
@@ -1007,6 +1008,7 @@ class AdminController extends AbstractController
                 ]])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
             ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
+            ->add('employeNum', TextType::class,['label'=>'شماره پرسنلی'])
             ->add('suspend', ChoiceType::class, [
                 'label'=>'مسدود کردن کاربر',
                 'choices' => [

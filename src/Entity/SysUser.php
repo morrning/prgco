@@ -63,6 +63,11 @@ class SysUser
      */
     private $suspend;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $employeNum;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -216,6 +221,18 @@ class SysUser
     public function setSuspend(?bool $suspend): self
     {
         $this->suspend = $suspend;
+
+        return $this;
+    }
+
+    public function getEmployeNum(): ?string
+    {
+        return $this->employeNum;
+    }
+
+    public function setEmployeNum(string $employeNum): self
+    {
+        $this->employeNum = $employeNum;
 
         return $this;
     }

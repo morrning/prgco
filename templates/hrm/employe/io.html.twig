@@ -1,0 +1,83 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}
+    ترددهای ۳۰ روز اخیر شما
+{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            ترددهای ۳۰ روز اخیر شما
+        </div>
+        <div class="card-body">
+            <div class="row border rounded border-danger">
+                <div class="col-sm-12 col-md-2 p-2">
+                    <img class="img-thumbnail img-fluid" style="max-height: 150px;" src="http://pw.prgco.ir:1210/Employee/EmployeePhoto/{{ UserMGR.CurrentUser.employeNum }}">
+                </div>
+                <div class="col-sm-12 col-md-10 pt-2">
+                    <p>
+                        نام و نام خانوادگی:
+                        <span class="text-danger">{{ UserMGR.CurrentUser.fullName }}</span>
+                    </p>
+                    <p>
+                        کد ملی:
+                        <span class="text-danger">{{ UserMGR.CurrentUser.nationalCode }}</span>
+                    </p>
+                    <p>
+                        شماره پرسنلی:
+                        <span class="text-danger">{{ UserMGR.CurrentUser.employeNum }}</span>
+                    </p>
+                    <p>
+                        پست سازمانی:
+                        <span class="text-danger">{{ UserMGR.CurrentPosition.publicLabel }}</span>
+                    </p>
+
+                </div>
+            </div>
+            <hr>
+            {% if UserMGR.currentUser.employeNum == null %}
+                <div class="alert alert-danger">
+                    <i class="fa fa-info"></i>
+
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="bg-blue text-light">
+                        <tr>
+                            <th>تاریخ</th>
+                            <th>ورود</th>
+                            <th>خروج</th>
+                            <th>ورود</th>
+                            <th>خروج</th>
+                            <th>ورود</th>
+                            <th>خروج</th>
+                            <th>ورود</th>
+                            <th>خروج</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for key, day in days %}
+                            <tr {% if day | length is odd %}class="bg-warning text-light" {% endif %}>
+                                <td class="bg-secondary text-light">{{ key }}</td>
+                                {% for i in 1 .. 8 %}
+                                    {% if day | length > i -1 %}
+                                        {% set min = day[i -1]['Time'] % 100%}
+                                        {% set hr = day[i -1]['Time'] // 100%}
+                                        <td {% if day[i -1]['DeviceNumber'] == null  %}data-toggle="tooltip" data-placement="top" title="توسط اپراتور سامانه تغییر یافته"{% endif %}>
+                                            {{ hr ~ ':' ~ min }}
+                                            {% if day[i -1]['DeviceNumber'] == null  %}<i class="fa fa-star text-success"></i>{% endif %}
+                                        </td>
+                                    {% else %}
+                                        <td></td>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

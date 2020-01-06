@@ -16,6 +16,7 @@
                 <th>نام کاربری</th>
                 <th>نام و نام‌خانوادگی</th>
                 <th>کد ملی</th>
+                <th>شماره پرسنلی</th>
                 <th>تلفن تماس</th>
                 <th>امکانات</th>
             </tr>
@@ -27,6 +28,7 @@
                     <td>{{ user.username }}</td>
                     <td>{{ user.fullName }}</td>
                     <td>{{ user.nationalCode }}</td>
+                    <td>{{ user.employeNum }}</td>
                     <td style="direction: ltr">{{ user.mobileNum }}</td>
                     <td>
                         <a class="btn btn-info" href="{{ path('adminUserEditUser',{'id':user.id}) }}">ویرایش</a>
