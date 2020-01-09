@@ -4,10 +4,14 @@
 {{ hotel.hotelName }}
 {% endblock %}
 {% block appTop %}
-    <a class="btn btn-success" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
+    <a class="btn btn-success border" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
         <i class="fa fa-plus"></i>
         افزودن اتاق جدید
     </a>
+    <a class="btn btn-success border" href="{{ path('hotelingHotelList') }}">
+    <i class="fa fa-undo"></i>
+    بازگشت
+</a>
 {% endblock %}
 {% block pageBody %}
     <div class="table-responsive">
@@ -17,15 +21,19 @@
                 <th>ردیف</th>
                 <th>شماره اتاق</th>
                 <th>ظرفیت(نفر)</th>
+                <th>نوع توالت</th>
+                <th>قابل استفاده</th>
                 <th>امکانات</th>
             </tr>
             </thead>
             <tbody class="">
             {% for room in rooms %}
-                <tr class="">
+                <tr class="{% if room.canUse.typeCode == 0 %}bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ room.num }}</td>
                     <td>{{ room.dep }}</td>
+                    <td>{{ room.WC.typeName }}</td>
+                    <td>{{ room.canUse.typeName }}</td>
                     <td>
                         <a class="btn btn-warning" href="{{ path('hotelingHotelEditRoom',{'id':room.id}) }}"> ویرایش اتاق</a>
                     </td>

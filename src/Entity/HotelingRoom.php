@@ -37,6 +37,18 @@ class HotelingRoom
      */
     private $isFull;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\HotelingRoomWCType")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $wc;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\DTyesNo")
+     */
+    private $canUse;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,6 +98,30 @@ class HotelingRoom
     public function setIsFull(?bool $isFull): self
     {
         $this->isFull = $isFull;
+
+        return $this;
+    }
+
+    public function getWc(): ?HotelingRoomWCType
+    {
+        return $this->wc;
+    }
+
+    public function setWc(?HotelingRoomWCType $wc): self
+    {
+        $this->wc = $wc;
+
+        return $this;
+    }
+
+    public function getCanUse(): ?DTyesNo
+    {
+        return $this->canUse;
+    }
+
+    public function setCanUse(?DTyesNo $canUse): self
+    {
+        $this->canUse = $canUse;
 
         return $this;
     }

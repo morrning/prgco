@@ -58,10 +58,17 @@ class HotelingController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'هتل با موفقیت افزوده شد.']);
         elseif($msg == 3)
             array_push($alerts,['type'=>'success','message'=>'هتل با موفقیت ویرایش شد.']);
-
+        $hotels = $entityMGR->findBy('App:hotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        foreach ($hotels as $hotel){
+            $rooms = $entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]);
+            $hotel->setDep(0);
+            foreach ($rooms as $room){
+                $hotel->setDep($hotel->getDep() + $room->getDep());
+            }
+        }
         return $this->render('hoteling/OPThotels.html.twig',
             [
-                'hotels'=>$entityMGR->findBy('App:hotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]),
+                'hotels'=>$hotels,
                 'alerts'=>$alerts
             ]);
     }
@@ -89,6 +96,14 @@ class HotelingController extends AbstractController
                     'class'  => 'codeMeli',
                 ),
             ])
+            ->add('WC', EntityType::class,
+                [
+                    'label'=>'نوع سرویس بهداشتی',
+                    'class'=>Entity\HotelingRoomWCType::class,
+                    'choice_value'=>'typeCode',
+                    'choice_label'=>'typeName'
+                ]
+            )
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 
@@ -96,15 +111,17 @@ class HotelingController extends AbstractController
         $alert = null;
         if ($form->isSubmitted() && $form->isValid()) {
             if (is_null($entityMGR->findOneBy('App:hotelingRoom', ['hotel' => $hotel,'num'=>$form->get('num')->getData()]))) {
+                $room->setCanUse($entityMGR->findOneBy('App:DTyesNo',['typeCode'=>1]));
                 $entityMGR->insertEntity($room);
                 $logMGR->addEvent('HOTLING' . $hotel->getId() . 'ROOM'.$room->getId(),'افزودن','اطلاعات اتاق','HOTELING',$request->getClientIp());
-                return $this->redirectToRoute('hotelingHotelList', ['msg' => 1]);
+                return $this->redirectToRoute('hotelingRoomsList', ['id'=>$hotel->getId(),'msg' => 1]);
             }
             $alert = [['type' => 'danger', 'message' => 'این شماره اتاق قبلا ثبت شده است.']];
         }
         return $this->render('hoteling/OPTaddRoom.html.twig', [
             'alerts'=>$alert,
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'hotel'=>$hotel
         ]);
     }
 
@@ -122,13 +139,28 @@ class HotelingController extends AbstractController
             return $this->redirectToRoute('403');
 
         $form = $this->createFormBuilder($room)
-            ->add('num', TextType::class,['label'=>'شماره اتاق'])
             ->add('dep', TextType::class,[
                 'label'=>'ظرفیت اقامتگاه',
                 'attr'     => array(
                     'class'  => 'codeMeli',
                 ),
             ])
+            ->add('WC', EntityType::class,
+                [
+                    'label'=>'نوع سرویس بهداشتی',
+                    'class'=>Entity\HotelingRoomWCType::class,
+                    'choice_value'=>'typeCode',
+                    'choice_label'=>'typeName'
+                ]
+            )
+            ->add('canUse', EntityType::class,
+                [
+                    'label'=>'اتاق فعال است؟',
+                    'class'=>Entity\DTyesNo::class,
+                    'choice_value'=>'typeCode',
+                    'choice_label'=>'typeName'
+                ]
+            )
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
 
@@ -157,10 +189,10 @@ class HotelingController extends AbstractController
         $hotel = new Entity\HotelingHotel();
         $hotel->setArea($userMGR->currentPosition()->getDefaultArea());
         $form = $this->createFormBuilder($hotel)
-            ->add('hotelName', TextType::class,['label'=>'نام مرکز اسکان:'])
-            ->add('adr', TextType::class,['label'=>'آدرس مرکز:'])
+             ->add('hotelName', TextType::class,['label'=>'نام مرکز اسکان:'])
+             ->add('adr', TextType::class,['label'=>'آدرس مرکز:'])
              ->add('tel', TextType::class,['label'=>'تلفن تماس:'])
-             ->add('des', TextType::class,['label'=>'توضیحات بیشتر'])
+             ->add('des', TextareaType::class,['label'=>'توضیحات بیشتر'])
             ->add('submit', SubmitType::class,['label'=>'افزودن هتل'])
             ->getForm();
         $form->handleRequest($request);
@@ -191,7 +223,9 @@ class HotelingController extends AbstractController
         $form = $this->createFormBuilder($hotel)
             ->add('hotelName', TextType::class,['label'=>'نام هتل:'])
             ->add('adr', TextType::class,['label'=>'آدرس هتل:'])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->add('tel', TextType::class,['label'=>'تلفن تماس:'])
+            ->add('des', TextareaType::class,['label'=>'توضیحات بیشتر'])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
         $form->handleRequest($request);
         $alert = null;

@@ -49,6 +49,11 @@ class HotelingHotel
      */
     private $des;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $dep;
+
     public function __construct()
     {
         $this->hotelingRooms = new ArrayCollection();
@@ -146,6 +151,18 @@ class HotelingHotel
     public function setDes(?string $des): self
     {
         $this->des = $des;
+
+        return $this;
+    }
+
+    public function getDep(): ?int
+    {
+        return $this->dep;
+    }
+
+    public function setDep(?int $dep): self
+    {
+        $this->dep = $dep;
 
         return $this;
     }

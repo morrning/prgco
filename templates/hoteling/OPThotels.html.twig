@@ -2,7 +2,7 @@
 
 {% block title %}مراکز اسکان{% endblock %}
 {% block appTop %}
-<a class="btn btn-success" href="{{ path('hotelingHotelAddHotel') }}">
+<a class="btn btn-success border" href="{{ path('hotelingHotelAddHotel') }}">
     <i class="fa fa-plus"></i>
     افزودن هتل جدید
 </a>
@@ -16,6 +16,7 @@
                 <th>نام مرکز</th>
                 <th>آدرس</th>
                 <th>تعداد اتاق / سوئیت</th>
+                <th>ظرفیت (نفر)</th>
                 <th>امکانات</th>
             </tr>
             </thead>
@@ -26,6 +27,7 @@
                     <td>{{ hotel.hotelName }}</td>
                     <td>{{ hotel.adr }}</td>
                     <td>{{ hotel.hotelingRooms | length }}</td>
+                    <td>{{ hotel.dep }}</td>
                     <td>
                         <a class="btn btn-success" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">افزودن اتاق</a>
                         <a class="btn btn-primary" href="{{ path('hotelingRoomsList',{'id':hotel.id}) }}">لیست اتاق‌ها</a>

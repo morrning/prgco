@@ -6,15 +6,18 @@
 {% endblock %}
 {% block pageBody %}
     <div class="row">
-        <div class="col-sm-12 col-md-4 pb-3">
-            {{ form_start(form) }}
-            {{ form_label(form.num) }}
-            {{ form_widget(form.num) }}
-        </div>
-        <div class="col-sm-12 col-md-4 pb-3">
+        <div class="col-sm-12 col-md-3 pb-3">
             {{ form_start(form) }}
             {{ form_label(form.dep) }}
             {{ form_widget(form.dep) }}
+        </div>
+        <div class="col-sm-12 col-md-3 pb-3">
+            {{ form_label(form.WC) }}
+            {{ form_widget(form.WC) }}
+        </div>
+        <div class="col-sm-12 col-md-3 pb-3">
+            {{ form_label(form.canUse) }}
+            {{ form_widget(form.canUse) }}
         </div>
     </div>
     <hr>

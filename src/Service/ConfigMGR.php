@@ -37,6 +37,19 @@ class ConfigMGR
     }
 
     public function importBasicData(){
+        //import default hoteling WC type
+        if(count($this->em->findAll('App:DTyesNo')) == 0){
+            $entity = new Entity\DTyesNo();
+            $entity->setTypeCode(1);
+            $entity->setTypeName('بله');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\DTyesNo();
+            $entity->setTypeCode(0);
+            $entity->setTypeName('خیر');
+            $this->em->insertEntity($entity);
+        }
+
+
         //import iso forms type
         if(count($this->em->findAll('App:StaticMonth')) == 0) {
             $entity = new Entity\StaticMonth();
@@ -387,6 +400,17 @@ class ConfigMGR
             $entity->setCname('بغداد');
             $this->em->insertEntity($entity);
 
+        }
+        //import default hoteling WC type
+        if(count($this->em->findAll('App:HotelingRoomWCType')) == 0){
+            $entity = new Entity\HotelingRoomWCType();
+            $entity->setTypeCode(1);
+            $entity->setTypeName('توالت ایرانی');
+            $this->em->insertEntity($entity);
+            $entity = new Entity\HotelingRoomWCType();
+            $entity->setTypeCode(2);
+            $entity->setTypeName('توالت فرنگی');
+            $this->em->insertEntity($entity);
         }
 
         //import CM default passenger type

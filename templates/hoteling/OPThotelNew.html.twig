@@ -3,33 +3,31 @@
 {% block pageBody %}
     <div class="container-fluid">
         <div class="row">
-            {{ form_start(form) }}
-            <div class="col-sm-12 col-md-12">
+            <div class="col-sm-12 col-md-4">
+                <img src="{{ asset('assets/images/public/hotel.jpg') }}" class="img-thumbnail">
+                <hr>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                {{ form_start(form) }}
                 {{ form_label(form.hotelName) }}
                 {{ form_widget(form.hotelName) }}
-            </div>
-            <div class="col-sm-12 col-md-6 pb-2">
                 {{ form_label(form.adr) }}
                 {{ form_widget(form.adr) }}
-            </div>
-            <div class="col-sm-12 col-md-4 pb-2">
                 {{ form_label(form.tel) }}
-                {{ form_widget(form.tel) }}
-            </div>
-            <div class="col-sm-12 col-md-12 pb-2">
+                {{ form_widget(form.tel,{'attr':{'class':'tel'}}) }}
                 {{ form_label(form.des) }}
                 {{ form_widget(form.des) }}
+                <div class="row pt-3">
+                    <div class="col-12">
+                        {{ form_widget(form.submit) }}
+                        <a class="btn btn-warning" href="{{ path('hotelingHotelList') }}">
+                            <i class="fa fa-undo"></i>
+                            بازگشت
+                        </a>
+                    </div>
+                </div>
+                {{ form_end(form) }}
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                {{ form_widget(form.submit) }}
-                <a class="btn btn-warning" href="{{ path('hotelingHotelList') }}">
-                    <i class="fa fa-undo"></i>
-                    بازگشت
-                </a>
-            </div>
-        </div>
-        {{ form_end(form) }}
     </div>
 {% endblock %}
