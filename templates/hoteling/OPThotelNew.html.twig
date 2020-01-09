@@ -1,23 +1,35 @@
-{% extends 'ceremonial/REQbase.html.twig' %}
+{% extends 'hoteling/OPTbase.html.twig' %}
 {% block title %}هتل جدید{% endblock %}
 {% block pageBody %}
-    <div class="row">
-        {{ form_start(form) }}
-        <div class="col-sm-12 col-md-12 pb-2">
-            {{ form_label(form.hotelName) }}
-            {{ form_widget(form.hotelName) }}
-            {{ form_label(form.adr) }}
-            {{ form_widget(form.adr) }}
+    <div class="container-fluid">
+        <div class="row">
+            {{ form_start(form) }}
+            <div class="col-sm-12 col-md-12">
+                {{ form_label(form.hotelName) }}
+                {{ form_widget(form.hotelName) }}
+            </div>
+            <div class="col-sm-12 col-md-6 pb-2">
+                {{ form_label(form.adr) }}
+                {{ form_widget(form.adr) }}
+            </div>
+            <div class="col-sm-12 col-md-4 pb-2">
+                {{ form_label(form.tel) }}
+                {{ form_widget(form.tel) }}
+            </div>
+            <div class="col-sm-12 col-md-12 pb-2">
+                {{ form_label(form.des) }}
+                {{ form_widget(form.des) }}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            {{ form_widget(form.submit) }}
-            <a class="btn btn-warning" href="{{ path('hotelingHotelList') }}">
-                <i class="fa fa-undo"></i>
-                بازگشت
-            </a>
+        <div class="row">
+            <div class="col-12">
+                {{ form_widget(form.submit) }}
+                <a class="btn btn-warning" href="{{ path('hotelingHotelList') }}">
+                    <i class="fa fa-undo"></i>
+                    بازگشت
+                </a>
+            </div>
         </div>
+        {{ form_end(form) }}
     </div>
-    {{ form_end(form) }}
 {% endblock %}

@@ -32,3 +32,7 @@ body{
 .bg-blue{
     background-color: #043a62; !important;
 }
+
+.btn{
+    border-radius: 0;
+}

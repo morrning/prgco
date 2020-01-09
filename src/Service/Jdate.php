@@ -397,16 +397,16 @@ class Jdate
                     if($jm===''){
                         return mktime($h,$m,$s);
                     }else{
-                        $jdate=explode('_',jdate('Y_j','','',$timezone,'en'));
+                        $jdate=explode('_',$this->jdate('Y_j','','',$timezone,'en'));
                         if($jd===''){
-                            list($gy,$gm,$gd)=jalali_to_gregorian($jdate[0],$jm,$jdate[1]);
+                            list($gy,$gm,$gd)=$this->jalali_to_gregorian($jdate[0],$jm,$jdate[1]);
                             return mktime($h,$m,$s,$gm);
                         }else{
                             if($jy===''){
-                                list($gy,$gm,$gd)=jalali_to_gregorian($jdate[0],$jm,$jd);
+                                list($gy,$gm,$gd)=$this->jalali_to_gregorian($jdate[0],$jm,$jd);
                                 return mktime($h,$m,$s,$gm,$gd);
                             }else{
-                                list($gy,$gm,$gd)=jalali_to_gregorian($jy,$jm,$jd);
+                                list($gy,$gm,$gd)=$this->jalali_to_gregorian($jy,$jm,$jd);
                                 return mktime($h,$m,$s,$gm,$gd,$gy);
                             }
                         }

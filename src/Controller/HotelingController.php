@@ -157,8 +157,10 @@ class HotelingController extends AbstractController
         $hotel = new Entity\HotelingHotel();
         $hotel->setArea($userMGR->currentPosition()->getDefaultArea());
         $form = $this->createFormBuilder($hotel)
-            ->add('hotelName', TextType::class,['label'=>'نام هتل:'])
-            ->add('adr', TextType::class,['label'=>'آدرس هتل:'])
+            ->add('hotelName', TextType::class,['label'=>'نام مرکز اسکان:'])
+            ->add('adr', TextType::class,['label'=>'آدرس مرکز:'])
+             ->add('tel', TextType::class,['label'=>'تلفن تماس:'])
+             ->add('des', TextType::class,['label'=>'توضیحات بیشتر'])
             ->add('submit', SubmitType::class,['label'=>'افزودن هتل'])
             ->getForm();
         $form->handleRequest($request);

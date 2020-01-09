@@ -39,6 +39,16 @@ class HotelingHotel
      */
     private $hotelingRooms;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tel;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $des;
+
     public function __construct()
     {
         $this->hotelingRooms = new ArrayCollection();
@@ -112,6 +122,30 @@ class HotelingHotel
                 $hotelingRoom->setHotel(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTel(): ?string
+    {
+        return $this->tel;
+    }
+
+    public function setTel(?string $tel): self
+    {
+        $this->tel = $tel;
+
+        return $this;
+    }
+
+    public function getDes(): ?string
+    {
+        return $this->des;
+    }
+
+    public function setDes(?string $des): self
+    {
+        $this->des = $des;
 
         return $this;
     }
