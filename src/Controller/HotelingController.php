@@ -72,6 +72,23 @@ class HotelingController extends AbstractController
                 'alerts'=>$alerts
             ]);
     }
+    /**
+     * @Route("/hoteling/opt/room/view/{id}", name="hotelingViewRoom")
+     */
+    public function hotelingViewRoom($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $room = $entityMGR->find('App:HotelingRoom',$id);
+        if(is_null($room))
+            return $this->redirectToRoute('404');
+        $alert = [];
+
+        return $this->render('hoteling/OPTviewRoom.html.twig', [
+            'alerts'=>$alert,
+            'room'=>$room
+        ]);
+    }
 
     /**
      * @Route("/hoteling/opt/hotel/add/room/{id}", name="hotelingHotelAddRoom")
