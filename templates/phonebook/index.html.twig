@@ -30,7 +30,9 @@
                         <th>ردیف</th>
                         <th>نام و نام خانوادگی</th>
                         <th>شماره تلفن</th>
+                        <th>داخلی</th>
                         <th>موبایل</th>
+                        <th>توضیحات</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -40,7 +42,9 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ num.username }}</td>
                             <td style="direction: ltr">{{ num.tel1 }}</td>
+                            <td style="direction: ltr">{{ num.tel2 }}</td>
                             <td style="direction: ltr">{{ num.mobile1 }}</td>
+                            <td style="direction: ltr">{{ num.des }}</td>
                             <td>
                                 <a class="btn btn-block btn-success" href="{{ path('phonebookView',{'id':num.id}) }}">نمایش</a>
                             </td>

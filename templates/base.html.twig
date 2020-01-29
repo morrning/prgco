@@ -38,6 +38,7 @@
     <script src="{{ asset('assets/js/modal.js') }}"></script>
     <script src="{{ asset('assets/chartjs/Chart.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/datatable/ColReorderWithResize.js') }}"></script>
     <script src="{{ asset('assets/lightbox/js/lightbox.min.js') }}"></script>
     {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
         <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
@@ -51,7 +52,7 @@
     <script>
         $(document).ready(function(){
             //create datatable
-            $('.table').DataTable({
+            var table = $('.table').DataTable({
                 "language": {
                     "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
                     buttons: {
@@ -62,6 +63,8 @@
                     }
                 },
                 "pageLength": 32,
+                "autoWidth": false,
+                "colReorder": true,
                 "lengthMenu": [[10, 32, 100, -1], [10, 32, 100, "همه"]],
                 dom: 'Blftip',
                 buttons: [
@@ -71,6 +74,8 @@
                     'print'
                 ]
             });
+
+            new $.fn.dataTable.ColReorder(table);
         });
     </script>
 </head>
