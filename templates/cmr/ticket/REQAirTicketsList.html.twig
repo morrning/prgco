@@ -1,37 +1,42 @@
 {% extends 'cmr/REQbase.html.twig' %}
 
-{% block title %}لیست بلیط‌های درخواستی{% endblock %}
-{% block appTop %}
-<a class="btn btn-success border" href="{{ path('ceremonialREQpasengers') }}">
-        <i class="fa fa-list-alt"></i>
-        لیست مسافرها
-    </a>{% endblock %}
+{% block title %}لیست درخواست‌های بلیط‌ هواپیما{% endblock %}
+
 {% block pageBody %}
-    <div class="alert alert-info">
-        <i class="fa fa-info-circle"></i>
-        برای ثبت درخواست بلیط جدید ابتدا به بخش
-        <a class="btn btn-link" href="{{ path('ceremonialREQpasengers') }}"> فهرست مسافرها </a>
-        مراجعه نمایید
-        سپس از بخش مشاهده اطلاعات مسافر نسبت به ثبت درخواست اقدام نمایید.
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <p class="m-0">
+            <i class="fa fa-info-circle"></i>
+            برای ثبت درخواست بلیط جدید ابتدا به بخش
+            <a class="text-success px-1" href="{{ path('ceremonialREQpasengers') }}"> لیست مسافران </a>
+            مراجعه نمایید.
+            پس از انتخاب افراد نسبت به ثبت درخواست اقدام نمایید.
+            </p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span style="font-size: 1.2rem;" aria-hidden="true">&times;</span>
+        </button>
     </div>
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
             <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
+                <th>شماره درخواست</th>
+                <th>درخواست کننده</th>
                 <th>وضعیت بلیط</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
             </tr>
             </thead>
-            <tbody class="">
+            <tbody>
             {% for ticket in tickets %}
                 <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success text-light{% elseif ticket.ticketState.stateCode == -1 %}bg-danger text-light{% endif %}">
-                    <td>{{ loop.index }}</td>
-                    <td>{{ ticket.ticketState.stateName }}</td>
-                    <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialREQTicketView',{'id':ticket.id}) }}">مشاهده</a>
+                    <td class="w-auto">{{ loop.index }}</td>
+                    <td class="w-auto">{{ ticket.id }}</td>
+                    <td class="w-auto">{{ ticket.submitter.publicLabel }}</td>
+                    <td class="w-auto">{{ ticket.ticketState.stateName }}</td>
+                    <td class="w-auto">{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
+                    <td class="select-w200px">
+                        <a class="btn btn-info rounded btn-small" href="{{ path('ceremonialREQTicketView',{'id':ticket.id}) }}">مشاهده</a>
                     </td>
                 </tr>
             {% endfor %}

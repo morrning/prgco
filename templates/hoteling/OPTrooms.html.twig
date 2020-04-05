@@ -4,11 +4,11 @@
 {{ hotel.hotelName }}
 {% endblock %}
 {% block appTop %}
-    <a class="btn btn-success border" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
+    <a class="btn btn-warning" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
         <i class="fa fa-plus"></i>
         افزودن اتاق جدید
     </a>
-    <a class="btn btn-success border" href="{{ path('hotelingHotelList') }}">
+    <a class="btn btn-outline-light" href="{{ path('hotelingHotelList') }}">
     <i class="fa fa-undo"></i>
     بازگشت
 </a>

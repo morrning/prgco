@@ -15,13 +15,13 @@
             </thead>
             <tbody class="">
             {% for visa in visas %}
-                <tr class="{% if visa.visaState.stateCode == 2 %}bg-success text-light{% elseif visa.visaState.StateCode == -1 %}bg-danger text-light{% endif %}">
+                <tr class="{% if visa.visaState.stateCode == 2 %}row-bg-success{% elseif visa.visaState.StateCode == -1 %}row-bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ visa.id }}</td>
                     <td>{{ visa.visaState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialOPTVisaView',{'id':visa.id}) }}">مشاهده</a>
+                        <a class="btn btn-info rounded btn-small btn-sm" href="{{ path('ceremonialOPTVisaView',{'id':visa.id}) }}">مشاهده</a>
                     </td>
                 </tr>
             {% endfor %}

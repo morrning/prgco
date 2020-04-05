@@ -4,12 +4,12 @@
 
 {% block appBody %}
     <div class="card">
-        <div class="card-header">
-            <span class="float-right">
+        <div class="card-header bg-success text-light">
+            <span class="d-inline-block text-right mt-2">
                 مدیریت روزشمار رویدادها
             </span>
             <span class="float-left">
-                <a class="btn btn-success" href="{{ path('countdownNew') }}"> <i class="fas fa-plus"></i>
+                <a class="btn btn-warning" href="{{ path('countdownNew') }}"> <i class="fas fa-plus"></i>
                     جدید
                 </a>
             </span>
@@ -35,7 +35,7 @@
                             <td>{{ Jdate.jdate('Y/n/d',countdown.timearrive) }}</td>
                             <td>
                                 <a class="btn btn-danger" href="{{ path('countdownDelete',{'id':countdown.id}) }}">حذف</a>
-                                <a class="btn btn-warning" href="{{ path('countdownEdit',{'id':countdown.id}) }}">ویرایش</a>
+                                <a class="btn btn-info" href="{{ path('countdownEdit',{'id':countdown.id}) }}">ویرایش</a>
                             </td>
                         </tr>
                     {% endfor %}

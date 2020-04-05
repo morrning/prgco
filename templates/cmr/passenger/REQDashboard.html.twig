@@ -5,78 +5,70 @@
     <i class="fas fa-question-square" onclick="SysLoadMsg('1005');"></i>
 {% endblock %}
 {% block pageBody %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">سامانه درخواست تشریفات</h4>
-                    <p>به کارپوشه خود خوش آمدید.در این سامانه امکان درخواست خدمات تشریفات از جمله بلیط هواپیما،درخواست ویزا و اسکان برای شما فراهم شده است.</p>
-                    <hr>
-                    <p class="mb-0">در صورت هرگونه سوال درباره سامانه میتوانید به بخش راهنمای سامانه مراجعه نمایید یا با مدیر فناوری اطلاعات و ارتباطات تماس بگیرید.
-                        <br>
-                        همچنین در هر بخش با کلیک با روی آیکون علامت سوال
-                        <i class="fas fa-question-square" onclick="SysLoadMsg('1005');"></i>
-                        می توانید به اطلاعات مختصری درباره آن بخش دسترسی داشته باشید.</p>
-                    <hr>
+            <div class="col-12 px-2 px-md-0">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <p class="mb-0">
-                        برای درخواست بلیط هواپیما ، ویزا و اسکان ابتدا به بخش
-                        مسافران مراجعه نمایید سپس از امکان درخواست استفاده نمایید.
+                        برای درخواست "بلیط هواپیما و ویزا" ابتدا به بخش
+                        فهرست مسافران مراجعه نمایید. سپس از امکان درخواست استفاده نمایید.
                     </p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span style="font-size: 1.2rem;" aria-hidden="true">&times;</span>
+                    </button>
+
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-6 col-md-4 col-lg-3 mb-3 mb-md-0 pr-2 pr-md-0 pl-2 pl-md-3 d-flex align-items-stretch">
                 <div class="card">
-                    <div class="card-header">مسافرها</div>
-                    <a href="{{ path('ceremonialREQpasengers') }}"><img class="card-img" src="{{ asset('assets/images/cm/passenger.png') }}"></a>
-                    <div class="card-body">
-                        <p>
-                            مسافرهای ثبت شده:
-                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
-                             نفر
+                    <div class="card-header">مسافران</div>
+                    <a href="{{ path('ceremonialREQpasengers') }}" class="m-2 m-sm-3 m-md-4"><img class="card-img op-hover show fade" src="{{ asset('assets/images/cm/passengers.png') }}"></a>
+                    <div class="card-body p-0">
+                        <hr class=" mx-2 mx-sm-3 mt-0">
+                        <p class="text-center mx-2 mx-sm-3">
+                            <span class="w-100 text-wrap">
+                                مسافرهای ثبت شده:
+                            </span>
+                            <span class="d-inline-block w-auto badge-danger badge-pill">
+                                {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            </span>
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-6 col-md-4 col-lg-3 mb-3 mb-md-0 px-2 px-md-2 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">بلیط و تشریفات</div>
-                    <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/airplane.png') }}"></a>
-                    <div class="card-body">
-                        <p>
-                            بلیط های خریداری شده:
-                            {{ EntityMGR.findBy('App:CMPassenger',{'submitter':UserMGR.CurrentPosition()}) | length}}
-                            عدد
+                    <a href="{{ path('ceremonialREQAIRpaneList') }}" class="m-2 m-sm-3 m-md-4"><img class="card-img op-hover show fade" src="{{ asset('assets/images/cm/tickets.png') }}"></a>
+                    <div class="card-body p-0">
+                        <hr class=" mx-2 mx-sm-3 mt-0">
+                        <p class="text-center mx-2 mx-sm-3">
+                            <span class="w-auto">
+                                بلیط های خریداری شده:
+                            </span>
+                            <span class="d-inline-block w-auto badge-danger badge-pill">
+                                {{ EntityMGR.findBy('App:CMAirTicket',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            <span class="w-auto">
                         </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
+            <div class="col-6 col-md-4 col-lg-3 mb-3 mb-md-0 pr-2 pr-md-3 pl-2 pl-md-0 d-flex align-items-stretch">
                 <div class="card">
                     <div class="card-header">ویزاها</div>
-                    <a href="{{ path('ceremonialREQAIRpaneList') }}"><img class="card-img" src="{{ asset('assets/images/cm/passport.png') }}"></a>
-                    <div class="card-body">
-                        <p>
-                            درخواست‌های ویزا:
-                            {{ EntityMGR.findBy('App:CMVisaReq',{'submitter':UserMGR.CurrentPosition()}) | length}}
-                            بار
+                    <a href="{{ path('ceremonialREQVisaList') }}" class="m-2 m-sm-3 m-md-4"><img class="card-img op-hover show fade" src="{{ asset('assets/images/cm/visas.png') }}"></a>
+                    <div class="card-body p-0">
+                        <hr class=" mx-2 mx-sm-3 mt-0">
+                        <p class="text-center mx-2 mx-sm-3">
+                            <span class="w-auto">
+                                درخواست‌های ویزا:
+                            </span>
+                            <span class="d-inline-block w-auto badge-danger badge-pill">
+                                {{ EntityMGR.findBy('App:CMVisaReq',{'submitter':UserMGR.CurrentPosition()}) | length}}
+                            </span>
                         </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 col-xs-12 d-flex align-items-stretch">
-                <div class="card">
-                    <div class="card-header">
-                        تابلو اعلانات
-                    </div>
-                    <div class="card-body">
-                        <ul class="pr-1">
-                            {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
-                            {% for post in posts %}
-                                <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
-                            {% endfor %}
-                        </ul>
                     </div>
                 </div>
             </div>

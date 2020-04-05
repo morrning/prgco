@@ -1,26 +1,103 @@
 {% extends 'appBase.html.twig' %}
 {% block appName %}درخواست تشریفات{% endblock %}
 {% block appMenu %}
-    <ul class="sidebar navbar-nav">
-        <li class="nav-item border-bottom">
-            <a class="nav-link" href="{{ path('ceremonialREQDashboard') }}">
-                <i class="fas fa-chalkboard"></i>
-                <span>داشبورد</span>
-            </a>
-            <a class="nav-link" href="{{ path('ceremonialREQpasengers') }}">
-                <i class="fas fa-user-alt"></i>
-                <span>فهرست مسافران</span>
-            </a>
-            <a class="nav-link" href="{{ path('ceremonialREQAIRpaneList') }}">
-                <i class="fas fa-plane"></i>
-                <span>درخواست‌های بلیط هواپیما</span>
-            </a>
-            <a class="nav-link" href="{{ path('ceremonialREQVisaList') }}">
-                <i class="fas fa-passport"></i>
-                <span>درخواست‌های ویزا</span>
-            </a>
-        </li>
-    </ul>
+    <div class="d-none d-lg-block sidebar border-left min-vh-100">
+        <ul class="navbar-nav side-bg-btn py-3">
+            <li class="nav-item side-bg-btn">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQDashboard') }}">
+                    <i class="fas fa-chalkboard"></i>
+                    <span>داشبورد</span>
+                </a>
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengerNew') }}">
+                    <i class="fas fa-plus"></i>
+                    <span>مسافر جدید</span>
+                </a>
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengers') }}">
+                    <i class="fas fa-user-alt"></i>
+                    <span>لیست مسافران</span>
+                </a>
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQVisaList') }}">
+                    <i class="fas fa-passport"></i>
+                    <span>درخواست‌های ویزا</span>
+                </a>
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQAIRpaneList') }}">
+                    <i class="fas fa-plane"></i>
+                    <span>درخواست‌های بلیط هواپیما</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="d-none d-sm-block d-md-block d-lg-none">
+        <ul class="nav side-bg-btn py-3">
+            <li class="nav-item side-bg-btn w-33">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQDashboard') }}">
+                    <i class="fas fa-chalkboard"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-33 border-right brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengerNew') }}">
+                    <i class="fas fa-plus"></i>
+                    <span>مسافر جدید</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-33 border-right brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengers') }}">
+                    <i class="fas fa-user-alt"></i>
+                    <span>فهرست مسافران</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-33">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQVisaList') }}">
+                    <i class="fas fa-passport"></i>
+                    <span>درخواست‌های ویزا</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn border-right brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQAIRpaneList') }}">
+                    <i class="fas fa-plane"></i>
+                    <span>درخواست‌های بلیط هواپیما</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="d-block d-sm-none">
+        <ul class="nav side-bg-btn py-3">
+            <li class="nav-item side-bg-btn w-50 brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQDashboard') }}">
+                    <i class="fas fa-chalkboard"></i>
+                    <span>داشبورد</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-50 border-right brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengerNew') }}">
+                    <i class="fas fa-plus"></i>
+                    <span>مسافر جدید</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-50">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQpasengers') }}">
+                    <i class="fas fa-user-alt"></i>
+                    <span>فهرست مسافران</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-50 border-right brd-color">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQVisaList') }}">
+                    <i class="fas fa-passport"></i>
+                    <span>درخواست‌های ویزا</span>
+                </a>
+            </li>
+            <li class="nav-item side-bg-btn w-100">
+                <a class="nav-link side-btn" href="{{ path('ceremonialREQAIRpaneList') }}">
+                    <i class="fas fa-plane"></i>
+                    <span>درخواست‌های بلیط هواپیما</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
 {% endblock %}
 
 

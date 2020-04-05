@@ -36,3 +36,69 @@ body{
 .btn{
     border-radius: 0;
 }
+
+#samane .list-group-item-action:hover {
+    color: #007df5;
+    background-color: #f4fcff;
+}
+
+#nahye .list-group-item-action:hover {
+    color: #00a60f;
+    background-color: #f4fff5;
+}
+
+.z-index-999 {
+    z-index: 999 !important;
+}
+
+.move-3 {
+    padding-left: 0;
+}
+.move-3:hover {
+    padding-right: .5rem;
+    transition: opacity 0.15s ease-out;
+}
+
+.link-hover {
+    color: #343a40;
+}
+
+.link-hover:hover {
+    color: #007df5;
+}
+
+.countdown {
+    position: absolute;
+    top: 9%;
+    right: 2.5%;
+    width: 15rem;
+    z-index: 100;
+    opacity: 90%;
+}
+
+.carousel-caption-2 {
+    position: absolute;
+    top: 2.5%;
+    left: 2.5%;
+    z-index: 10;
+    margin-top: .75rem;
+    margin-bottom: 1.25rem;
+    padding: .75rem 1.5rem;
+    color: rgba(255, 255, 255, .95);
+    background-color: rgba(0, 0, 0, .5);
+    text-align: center;
+    line-height: .8rem;
+}
+
+.carousel-caption-2 h5 {
+    font-size: 1rem;
+    margin-bottom: .5rem;
+    line-height: 1;
+}
+
+.carousel-caption-2 p {
+    font-size: .75rem;
+    color: #ddd;
+    margin: 0;
+    padding-bottom: .15rem;
+}

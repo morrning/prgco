@@ -5,7 +5,7 @@
 {% block pageBody %}
     <div class="container">
         <div class="row">
-            <div class="col-xs-12 col-md-4 align-items-stretch">
+            <div class="col-12 col-md-6 mb-2 mb-md-3 px-0 px-sm-1 px-md-2">
                 <div class="card">
                     <div class="card-header bg-primary text-light">
                         <i class="fas fa-chart-line"></i>
@@ -51,7 +51,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 align-items-stretch">
+            <div class="col-12 col-md-6 mb-2 mb-md-3 px-0 px-sm-1 px-md-2">
                 <div class="card">
                     <div class="card-header bg-primary text-light">
                         <i class="fas fa-chart-pie"></i>
@@ -104,19 +104,21 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-4 align-items-stretch">
-                <div class="card">
-                    <div class="card-header bg-primary text-light">
-                        <i class="fas fa-newspaper"></i>
-                        تابلو اعلانات
-                    </div>
-                    <div class="card-body">
-                        <ul class="pr-1">
-                            {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
-                            {% for post in posts %}
-                                <li><a href="{{ path('newsShowPost',{'id':post.id}) }}">{{ post.title }}</a></li>
-                            {% endfor %}
-                        </ul>
+            <div class="col-12 col-md-6 px-0 px-sm-1 px-md-2">
+                <div class="col px-3 px-md-0">
+                    <div class="card">
+                        <div class="card-header text-right bg-primary text-light">
+                            <i class="fas fa-newspaper"></i>
+                            تابلو اعلانات
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                                {% for post in posts %}
+                                    <li><a href="{{ path('newsShowPost',{'id':post.id}) }}" class="text-decoration-none d-inline-block py-1 move-3 link-hover"><i class="fas fa-angle-left text-dark small pl-1"></i><span>{{ post.title }}</span></a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>

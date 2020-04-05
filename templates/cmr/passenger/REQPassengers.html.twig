@@ -1,12 +1,7 @@
 {% extends 'cmr/REQbase.html.twig' %}
 
 {% block title %}لیست مسافران{% endblock %}
-{% block appTop %}
-    <a class="btn btn-success border" href="{{ path('ceremonialREQpasengerNew') }}">
-        <i class="fa fa-plus"></i>
-        مسافر جدید
-    </a>
-{% endblock %}
+
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
@@ -20,21 +15,21 @@
                 <th>امکانات</th>
             </tr>
             </thead>
-            <tbody class="">
+            <tbody>
             {% for passenger in passengers %}
                 <tr class="trp{{ passenger.id }}">
-                    <td>
+                    <td class="select-w50px">
                         <div class="form-check">
                             <input class="CKBPassengers form-check-input position-static" type="checkbox"  id="CKBPassengers" value="{{ passenger.id }}" aria-label="انتخاب مسافر">
                         </div>
                     </td>
-                    <td>{{ loop.index }}</td>
+                    <td class="select-w50px">{{ loop.index }}</td>
                     <td>{{ passenger.pname }} {{ passenger.pfamily }}</td>
                     <td>{{ passenger.pfather }}</td>
                     <td>{{ passenger.pbirthday }}</td>
                     <td>
-                        <a class="btn btn-info" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}">مشاهده</a>
-                        <a class="btn btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">ویرایش</a>
+                        <a class="btn btn-info rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}">مشاهده</a>
+                        <a class="btn btn-info rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">ویرایش</a>
                     </td>
                 </tr>
             {% endfor %}
@@ -47,7 +42,7 @@
                 <span class="spinner-visa spinner-grow spinner-grow-sm" hidden=hidden role="status" aria-hidden="true"></span>
                 درخواست ویزا
             </button>
-            <button class="btn btn-success" type="button" onclick="showModal('ticketReq();','info')">
+            <button class="btn btn-primary" type="button" onclick="showModal('ticketReq();','info')">
                 <span class="spinner-ticket spinner-grow spinner-grow-sm" hidden=hidden role="status" aria-hidden="true"></span>
                 درخواست بلیط هواپیما
             </button>

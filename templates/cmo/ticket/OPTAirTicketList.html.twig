@@ -7,11 +7,10 @@
     آرشیو بلیط‌ها
 {% endif %}
 {% endblock %}
+
 {% block appTop %}
-<a class="btn btn-success border" href="{{ path('ceremonialOPTDashboard') }}">
-        <i class="fas fa-chalkboard"></i>
-        داشبورد
-    </a>{% endblock %}
+{% endblock %}
+
 {% block pageBody %}
     <div class="table-responsive">
         <table class="table table-sm table-bordered table-hover rounded text-center">
@@ -26,13 +25,13 @@
             </thead>
             <tbody class="">
             {% for ticket in tickets %}
-                <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success text-light{% elseif ticket.ticketState.stateCode == -1 %}bg-danger text-light{% endif %}">
+                <tr class="{% if ticket.ticketState.stateCode == 2 %}row-bg-success{% elseif ticket.ticketState.stateCode == -1 %}row-bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ ticket.submitter.publicLabel }}</td>
                     <td>{{ ticket.ticketState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialOPTTicketView',{'id':ticket.id}) }}">مشاهده</a>
+                        <a class="btn btn-info rounded btn-small btn-sm" href="{{ path('ceremonialOPTTicketView',{'id':ticket.id}) }}">مشاهده</a>
                     </td>
                 </tr>
             {% endfor %}

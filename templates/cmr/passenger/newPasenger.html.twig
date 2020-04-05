@@ -3,7 +3,7 @@
 {% block title %}مسافر جدید{% endblock %}
 {% block pageBody %}
     <div class="row">
-        <div class="col-sm-12 col-md-4 pb-3">
+        <div class="col-sm-12 col-md-4 pb-3 label-reset">
             {{ form_start(form) }}
             {{ form_label(form.ptype) }}
             {{ form_widget(form.ptype) }}
@@ -12,7 +12,7 @@
     <hr>
     <h5 class="text-success">اطلاعات فردی</h5>
     <div class="row">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 label-reset">
             {{ form_label(form.pname) }}
             {{ form_widget(form.pname) }}
             {{ form_label(form.pfamily) }}
@@ -27,9 +27,9 @@
             {{ form_widget(form.pcodemeli) }}
             {{ form_label(form.passportExpireDate) }}
             {{ form_widget(form.passportExpireDate) }}
-
         </div>
-        <div class="col-sm-12 col-md-6 text-left"  style="direction: ltr; !important;">
+
+        <div class="col-sm-12 col-md-6 text-left label-reset"  style="direction: ltr; !important;">
             {{ form_start(form) }}
             {{ form_label(form.lname) }}
             {{ form_widget(form.lname) }}
@@ -44,15 +44,15 @@
     <hr>
     <h5 class="text-success">اطلاعات تماس</h5>
     <div class="row mt-2">
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 label-reset">
             {{ form_label(form.tel1) }}
             {{ form_widget(form.tel1) }}
         </div>
-        <div class="col-sm-12 col-md-6">
+        <div class="col-sm-12 col-md-6 label-reset">
             {{ form_label(form.tel2) }}
             {{ form_widget(form.tel2) }}
         </div>
-        <div class="col-sm-12 col-md-12 pt-2">
+        <div class="col-sm-12 col-md-12 label-reset">
             {{ form_label(form.adr) }}
             {{ form_widget(form.adr) }}
         </div>

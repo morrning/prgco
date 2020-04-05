@@ -5,36 +5,23 @@
 {% endblock %}
 {% block body %}
     {% include 'topMenu.html.twig' %}
-    <div class="container-fluid ">
-        <div class="row mb-5">
-            <div class="col-xs-12 col-md-2 sidebar border-left border-top">
+    <div class="container-fluid px-0 px-sm-3">
+        <div class="row min-vh-100">
+            <div class="col-12 col-lg-2 px-sm-0">
                 <!-- Sidebar -->
                 {% block appMenu %}{% endblock %}
             </div>
-            <div class="col-xs-12 col-md-10">
-                <ol class="breadcrumb my-1">
-                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
-                            <i class="fas fa-home"></i>
-                            پورتال اصلی
-                        </a></li>
-                    <li class="breadcrumb-item text-primary">
-                        <i class="fas fa-warehouse"></i>
-                        {{ UserMGR.currentPosition.defaultArea.areaName}}
-                    </li>
-                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
-                            <i class="fal fa-window-alt"></i>
-                            برنامه‌ها
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item">{{ block('appName') }}</li>
-                    <li class="breadcrumb-item active">{{ block('title') }}</li>
-                </ol>
-                <div class="card my-0">
+
+            <div class="col-12 col-lg-10 mb-3 min-vh-100">
+
+                {% block breadcrumb %}{% endblock %}
+
+                <div class="card my-0 mt-3">
                     <div class="card-header bg-success text-light">
                         <span class="float-right">{{ block('title') }}</span>
                         <span class="float-left appTopMenu">{% block appTop %}{% endblock %}</span>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body px-2 px-sm-4">
                         <div class="container-fluid">
                             <div class="row">
                                 <div class="col-12">
@@ -58,11 +45,13 @@
             </div>
         </div>
     </div>
-    <nav class="navbar navbar-expand-sm bg-secondary fixed-bottom py-0 mt-5">
+    <nav class="navbar navbar-expand-sm bg-secondary py-0">
         <!-- Navbar text-->
-        <a class="navbar-brand text-light" href="http://sarkesh.org">
-            <img src="{{asset('/assets/images/public/rahkar.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
-            سامانه مدیریت یکپارچه راهکار
+        <a class="navbar-brand text-light align-items-center" style="display: flex; font-size: inherit;" href="http://sarkesh.org">
+            <img src="{{ asset('assets/images/public/rahkar.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+            <span class="mr-1">
+               سامانه مدیریت یکپارچه راهکار
+            </span>
         </a>
         <span class="navbar-text text-light mr-auto">
             {{ ConfigMGR.getConfig.footerText }}

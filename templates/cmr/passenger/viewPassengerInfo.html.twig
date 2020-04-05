@@ -1,5 +1,25 @@
 {% extends 'cmr/REQbase.html.twig' %}
 
+    {% block breadcrumb %}
+        <ol class="breadcrumb mt-2">
+            <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
+                    <i class="fas fa-home"></i>
+                    پورتال اصلی
+                </a></li>
+            <li class="breadcrumb-item text-primary">
+                <i class="fas fa-warehouse"></i>
+                {{ UserMGR.currentPosition.defaultArea.areaName}}
+            </li>
+            <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
+                    <i class="fal fa-window-alt"></i>
+                    برنامه‌ها
+                </a>
+            </li>
+            <li class="breadcrumb-item">{{ block('appName') }}</li>
+            <li class="breadcrumb-item active">{{ block('title') }}</li>
+        </ol>
+    {% endblock %}
+
 {% block title %}اطلاعات مسافر:{{ passenger.pname ~ ' ' ~ passenger.pfamily }}{% endblock %}
 {% block pageBody %}
     <nav>

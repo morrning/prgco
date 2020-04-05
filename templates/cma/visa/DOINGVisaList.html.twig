@@ -8,6 +8,7 @@
             <tr>
                 <th>ردیف</th>
                 <th>شماره درخواست</th>
+                <th>درخواست کننده</th>
                 <th>وضعیت درخواست</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -15,13 +16,14 @@
             </thead>
             <tbody class="">
             {% for visa in visas %}
-                <tr class="{% if visa.visaState.stateCode == 1 %}bg-success text-light{% elseif visa.visaState.StateCode == -1 %}bg-danger text-light{% endif %}">
-                    <td>{{ loop.index }}</td>
-                    <td>{{ visa.id }}</td>
-                    <td>{{ visa.visaState.stateName }}</td>
-                    <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
-                    <td>
-                        <a class="btn btn-primary" href="{{ path('ceremonialDOINGVisaView',{'id':visa.id}) }}">مشاهده</a>
+                <tr class="{% if visa.visaState.stateCode == 1 %} row-bg-success {% elseif visa.visaState.StateCode == -1 %} row-bg-danger {% endif %}">
+                    <td class="w-auto">{{ loop.index }}</td>
+                    <td class="w-auto">{{ visa.id }}</td>
+                    <td class="w-auto">{{ visa.submitter.publicLabel }}</td>
+                    <td class="w-auto">{{ visa.visaState.stateName }}</td>
+                    <td class="w-auto">{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
+                    <td class="select-w200px">
+                        <a class="btn btn-info rounded btn-small" href="{{ path('ceremonialDOINGVisaView',{'id':visa.id}) }}">مشاهده</a>
                     </td>
                 </tr>
             {% endfor %}

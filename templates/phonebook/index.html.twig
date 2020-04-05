@@ -8,13 +8,15 @@
         <div class="card-body">
             {{ form_start(form) }}
             <div class="row">
-                <div class="col-sm-12 col-md-6 pb-2">
+                <div class="col-9 col-md-6 pb-1 pl-0">
                     {{ form_widget(form.search) }}
                 </div>
-                <div class="col-sm-12 col-md-12 pb-2">
+                <div class="col-3 col-md-2 pb-1 pl-3 pl-sm-0 pr-0 rounded-left">
                     {{ form_widget(form.submit) }}
+                </div>
+                <div class="col-12 col-md-4 text-left pb-1">
                     {% if UserMGR.hasPermission('phonebookAdmin','PHONEBOOK') == true %}
-                        <a class="btn btn-success" href="{{ path('phonebookAddNew') }}">
+                        <a class="btn btn-warning" href="{{ path('phonebookAddNew') }}">
                             <i class="fas fa-user-plus"></i>
                             شماره جدید
                         </a>
@@ -22,7 +24,7 @@
                 </div>
             </div>
             {{ form_end(form) }}
-            <hr>
+            <hr class="mt-0">
             <div class="table-responsive">
                 <table class="table table-sm table-bordered table-hover rounded text-center">
                     <thead class="bg-blue text-light">
@@ -46,7 +48,7 @@
                             <td style="direction: ltr">{{ num.mobile1 }}</td>
                             <td style="direction: ltr">{{ num.des }}</td>
                             <td>
-                                <a class="btn btn-block btn-success" href="{{ path('phonebookView',{'id':num.id}) }}">نمایش</a>
+                                <a class="btn btn-block btn-primary btn-sm rounded" href="{{ path('phonebookView',{'id':num.id}) }}">نمایش</a>
                             </td>
                         </tr>
                     {% endfor %}
