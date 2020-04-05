@@ -1,0 +1,35 @@
+{% extends 'cmm/CMMbase.html.twig' %}
+
+{% block title %}کلیه مسافران ثبت شده{% endblock %}
+
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-hover rounded text-center">
+            <thead class="bg-blue text-light">
+            <tr>
+                <th>ردیف</th>
+                <th>نام و نام خانوادگی</th>
+                <th>نام پدر</th>
+                <th>کد ملی</th>
+                <th>معرف</th>
+                <th>پایان اعتبار گذرنامه</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            {% for passenger in passengers %}
+                <tr class="">
+                    <td>{{ loop.index }}</td>
+                    <td>{{ passenger.pname ~ ' ' ~ passenger.pfamily }}</td>
+                    <td>{{ passenger.pfather }}</td>
+                    <td>{{ passenger.pcodemeli }}</td>
+                    <td>{{ passenger.submitter.publicLabel }}</td>
+                    <td>{{ passenger.passportExpireDate }}</td>
+                    <td>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

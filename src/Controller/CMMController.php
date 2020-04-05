@@ -41,4 +41,22 @@ class CMMController extends AbstractController
         return $this->render('cmm/cmmDashboard.html.twig', [
         ]);
     }
+
+    /**
+     * @Route("/ceremonial/mngtotal/list/passengers", name="ceremonialMNGTOTALPassengers")
+     */
+    public function ceremonialMNGTOTALPassengers(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $logMGR->addEvent('FRE56','مشاهده','داشبورد مدیریت کل سامانه تشریفات','CEREMONIAL',$request->getClientIp());
+
+        $passengers = $entityMGR->findAll('App:CMPassenger');
+        return $this->render('cmm/cmmPassengers.html.twig', [
+            'passengers'=>$passengers
+        ]);
+    }
+
 }
