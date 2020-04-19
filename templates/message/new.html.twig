@@ -7,9 +7,32 @@
     </div>
     <div class="card-body">
         <div class="row">
-            <div class="col-sm-12">
+            <div class="col">
                 {{ form_start(form) }}
-                {{ form_widget(form) }}
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        {{ form_label(form.reciver) }}
+                        {{ form_widget(form.reciver) }}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        {{ form_label(form.mtitle) }}
+                        {{ form_widget(form.mtitle) }}
+                    </div>
+                    <div class="col-sm-12 col-md-9">
+                        {{ form_label(form.mdes) }}
+                        {{ form_widget(form.mdes) }}
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        {{ form_label(form.attachedFile) }}
+                        {{ form_widget(form.attachedFile) }}
+                        <span class="">پسوند‌های مجاز برای ارسال فایل zip و rar هستند.حداکثر حجم ارسال فایل ۴ مگابایت می‌باشد.</span>
+                    </div>
+                </div>
+                <div class="row pt-4">
+                    <div class="col">
+                        {{ form_widget(form.submit) }}
+                    </div>
+                </div>
                 {{ form_end(form) }}
             </div>
         </div>

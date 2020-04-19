@@ -94,7 +94,8 @@ class HomeController extends AbstractController
             'pn'=>$projectNames,
             'pp'=>$pprogress,
             'cp'=>$cprogress,
-            'form'=>$form->createView()
+            'form'=>$form->createView(),
+            'alert'=>$alert
         ]);
     }
 

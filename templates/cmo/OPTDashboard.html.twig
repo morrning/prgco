@@ -3,126 +3,181 @@
 {% block title %}داشبورد اپراتوری تشریفات{% endblock %}
 
 {% block pageBody %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-12 col-md-6 mb-2 mb-md-3 px-0 px-sm-1 px-md-2">
+            <div class="col-12">
                 <div class="card">
                     <div class="card-header bg-primary text-light">
                         <i class="fas fa-chart-line"></i>
                         آمار و اطلاعات بلیط‌های هواپیما
                     </div>
                     <div class="card-body">
-                        <p>
-                            <i class="fas fa-users"></i>
-                            تعداد کل مسافرها:
-                            {{ EntityMGR.findAll('App:CMPassenger') | length}}
-                            نفر
-                        </p>
-                        <p>
-                            <i class="fas fa-clipboard-list"></i>
-                            تعداد کل درخواست های بلیط:
-                            {{ EntityMGR.findAll('App:CMAirTicket') | length}}
-                            عدد
-                        </p>
-                        <p>
-                            <i class="fas fa-ticket-alt"></i>
-                            تعداد بلیط‌های خریداری شده:
-                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':3})}) | length}}
-                            عدد
-                        </p>
-                        <p>
-                            <i class="fas fa-hourglass-half"></i>
-                            تعداد درخواست‌های در انتظار:
-                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':0})}) | length}}
-                            عدد
-                        </p>
-                        <p>
-                            <i class="fas fa-minus-circle"></i>
-                            تعداد درخواست‌های رد شده:
-                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
-                            عدد
-                        </p>
-                        <p>
-                            <i class="fas fa-check-circle"></i>
-                            تعداد درخواست‌های تایید شده:
-                            {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
-                            عدد
-                        </p>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p>
+                                    <i class="fas fa-users"></i>
+                                    تعداد کل مسافرها:
+                                    {{ EntityMGR.findAll('App:CMPassenger') | length}}
+                                    نفر
+                                </p>
+                                <p>
+                                    <i class="fas fa-clipboard-list"></i>
+                                    تعداد کل درخواست های بلیط:
+                                    {{ EntityMGR.findAll('App:CMAirTicket') | length}}
+                                    عدد
+                                </p>
+                                <p>
+                                    <i class="fas fa-ticket-alt"></i>
+                                    تعداد بلیط‌های خریداری شده:
+                                    {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
+                                    عدد
+                                </p>
+                                <p>
+                                    <i class="fas fa-hourglass-half"></i>
+                                    تعداد درخواست‌های در انتظار:
+                                    {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':0})}) | length}}
+                                    عدد
+                                </p>
+                                <p>
+                                    <i class="fas fa-minus-circle"></i>
+                                    تعداد درخواست‌های رد شده:
+                                    {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':-1})}) | length}}
+                                    عدد
+                                </p>
+                                <p>
+                                    <i class="fas fa-check-circle"></i>
+                                    تعداد درخواست‌های تایید شده:
+                                    {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
+                                    عدد
+                                </p>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="chart-container">
+                                    <canvas id="myChart"></canvas>
+                                </div>
+                                <script>
+
+                                    var ctx = document.getElementById('myChart');
+                                    var color = Chart.helpers.color;
+                                    Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                                    window.chartColors = {
+                                        red: 'rgb(255, 99, 132)',
+                                        orange: 'rgb(255, 159, 64)',
+                                        yellow: 'rgb(255, 205, 86)',
+                                        green: 'rgb(75, 192, 192)',
+                                        blue: 'rgb(54, 162, 235)',
+                                        purple: 'rgb(153, 102, 255)',
+                                        grey: 'rgb(201, 203, 207)'
+                                    };
+                                    var myChart = new Chart(ctx, {
+                                        type: 'pie',
+                                        data: {
+                                            labels: ['خریداری شده','در انتظار','رد شده','تایید شده'],
+                                            datasets: [
+                                                {
+                                                    borderWidth: 1,
+                                                    data: [
+                                                        {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':0})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':-1})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}}
+                                                    ],
+                                                    backgroundColor: [
+                                                        color(window.chartColors.blue).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.grey).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.red).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.yellow).alpha(0.5).rgbString(),
+                                                    ]
+
+                                                }
+
+                                            ]
+                                        }
+                                    });
+                                </script>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-6 mb-2 mb-md-3 px-0 px-sm-1 px-md-2">
+            <div class="col-12 pt-2">
                 <div class="card">
                     <div class="card-header bg-primary text-light">
-                        <i class="fas fa-chart-pie"></i>
-                       نمودارهای بلیط هواپیمایی
+                        <i class="fas fa-chart-line"></i>
+                        آمار و اطلاعات درخواست‌های ویزا
                     </div>
                     <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                        <script>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <p>
+                                    <i class="fas fa-users"></i>
+                                    تعداد کل مسافرها:
+                                    {{ EntityMGR.findAll('App:CMPassenger') | length}}
+                                    نفر
+                                </p>
+                                <p>
+                                    <i class="fas fa-clipboard-list"></i>
+                                    تعداد کل درخواست های ویزا:
+                                    {{ EntityMGR.findAll('App:CMVisaReq') | length}}
+                                    عدد
+                                </p>
+                                <p>
+                                    <i class="fas fa-check-circle"></i>
+                                    تعداد درخواست‌های تایید شده:
+                                    {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':1})}) | length}}
+                                    عدد
+                                </p>
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <div class="chart-container">
+                                    <canvas id="myChart1"></canvas>
+                                </div>
+                                <script>
 
-                            var ctx = document.getElementById('myChart');
-                            var color = Chart.helpers.color;
-                            Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
-                            window.chartColors = {
-                                red: 'rgb(255, 99, 132)',
-                                orange: 'rgb(255, 159, 64)',
-                                yellow: 'rgb(255, 205, 86)',
-                                green: 'rgb(75, 192, 192)',
-                                blue: 'rgb(54, 162, 235)',
-                                purple: 'rgb(153, 102, 255)',
-                                grey: 'rgb(201, 203, 207)'
-                            };
-                            var myChart = new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ['خریداری شده','در انتظار','رد شده','تایید شده'],
-                                    datasets: [
-                                        {
-                                            borderWidth: 1,
-                                            data: [
-                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':3})}) | length}},
-                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':0})}) | length}},
-                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':1})}) | length}},
-                                                {{ EntityMGR.findBy('App:CMAirTicket',{'ticketState':EntityMGR.findOneBy('App:CMAirTicketState',{'StateCode':2})}) | length}}
-                                            ],
-                                            backgroundColor: [
-                                                color(window.chartColors.blue).alpha(0.5).rgbString(),
-                                                color(window.chartColors.red).alpha(0.5).rgbString(),
-                                                color(window.chartColors.grey).alpha(0.5).rgbString(),
-                                                color(window.chartColors.yellow).alpha(0.5).rgbString(),
+                                    var ctx = document.getElementById('myChart1');
+                                    var color = Chart.helpers.color;
+                                    Chart.defaults.global.defaultFontFamily = 'Shabnam FD';
+                                    window.chartColors = {
+                                        red: 'rgb(255, 99, 132)',
+                                        orange: 'rgb(255, 159, 64)',
+                                        yellow: 'rgb(255, 205, 86)',
+                                        green: 'rgb(75, 192, 192)',
+                                        blue: 'rgb(54, 162, 235)',
+                                        purple: 'rgb(153, 102, 255)',
+                                        grey: 'rgb(201, 203, 207)'
+                                    };
+                                    var myChart = new Chart(ctx, {
+                                        type: 'pie',
+                                        data: {
+                                            labels: ['وصول شده','در انتظار','رد شده','تایید شده'],
+                                            datasets: [
+                                                {
+                                                    borderWidth: 1,
+                                                    data: [
+                                                        {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':2})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':0})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':-1})}) | length}},
+                                                        {{ EntityMGR.findBy('App:CMVisaReq',{'visaState':EntityMGR.findOneBy('App:CMVisaState',{'StateCode':1})}) | length}},
+                                                    ],
+                                                    backgroundColor: [
+                                                        color(window.chartColors.blue).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.grey).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.red).alpha(0.5).rgbString(),
+                                                        color(window.chartColors.yellow).alpha(0.5).rgbString(),
+
+                                                    ]
+
+                                                }
+
                                             ]
-
                                         }
-
-                                    ]
-                                }
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 px-0 px-sm-1 px-md-2">
-                <div class="col px-3 px-md-0">
-                    <div class="card">
-                        <div class="card-header text-right bg-primary text-light">
-                            <i class="fas fa-newspaper"></i>
-                            تابلو اعلانات
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-unstyled">
-                                {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
-                                {% for post in posts %}
-                                    <li><a href="{{ path('newsShowPost',{'id':post.id}) }}" class="text-decoration-none d-inline-block py-1 move-3 link-hover"><i class="fas fa-angle-left text-dark small pl-1"></i><span>{{ post.title }}</span></a></li>
-                                {% endfor %}
-                            </ul>
+                                    });
+                                </script>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 {% endblock %}

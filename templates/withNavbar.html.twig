@@ -4,23 +4,6 @@
 
 {% block body %}
     {% include 'topMenu.html.twig' %}
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                {% block alert %}
-                    {% if alert is defined %}
-                        {% if alert|length != 0 %}
-                            {% for alt in alert %}
-                                <div class="alert alert-{{ alt.type }} mt-3" role="alert">
-                                    {{ alt.message }}
-                                </div>
-                            {% endfor %}
-                        {% endif %}
-                    {% endif %}
-                {% endblock %}
-            </div>
-        </div>
-    </div>
     <div class="container-fluid">
         {% block pageBody %}{% endblock %}
     </div>

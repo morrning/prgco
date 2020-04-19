@@ -54,7 +54,7 @@ class CMAController extends AbstractController
         $passenger = $entityMGR->find('App:CMPassenger',$id);
         if(is_null($passenger))
             return $this->redirectToRoute('404');
-        elseif ($passenger->getSubmitter()->getId() != $userMGR->currentPosition()->getId())
+        elseif ($passenger->getSubmitter()->getDefaultArea()->getId() != $userMGR->currentPosition()->getDefaultArea()->getId())
             return $this->redirectToRoute('403');
         $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
 
@@ -240,7 +240,7 @@ class CMAController extends AbstractController
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
             $des = sprintf('درخواست بلیط توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialOPTTicketView',['id'=>$ticket->getId()]);
-            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
+            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
         }
 

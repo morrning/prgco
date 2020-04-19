@@ -106,7 +106,7 @@ class CMOController extends AbstractController
         $alerts = [];
         if($msg == 1)
             array_push($alerts,['type'=>'success','message'=>'اعلام ارسال پاسپورت به کنسولگری با موفقیت ثبت شد.']);
-
+        $jdate = new Service\Jdate();
         $form = $this->createFormBuilder($visa)
             ->add('moneyType', EntityType::class, [
                 'class'=>Entity\ACCMoney::class,
@@ -120,8 +120,8 @@ class CMOController extends AbstractController
                 'choice_value' => 'id',
                 'label'=>'نوع ویزا'
             ])
-            ->add('DateStart',Type\JdateType::class,['label'=>'شروع اعتبار ویزا'])
-            ->add('DateEnd',Type\JdateType::class,['label'=>'پایان اعتبار ویزا'])
+            ->add('DateStart',Type\JdateType::class,['label'=>'شروع اعتبار ویزا','data'=>$jdate->jdate('Y/m/d',time())])
+            ->add('DateEnd',Type\JdateType::class,['label'=>'پایان اعتبار ویزا','data'=>$jdate->jdate('Y/m/d',time() + (3600*24*90))])
             ->add('moneyValue', NumberType::class,['label'=>'مبلغ:','data'=>0,'required'=>true,'attr'=>['class'=>'MoneyInput']])
             ->add('submit', SubmitType::class,['label'=>'ثبت اعلام وصول ویزا'])
             ->getForm();
@@ -230,7 +230,7 @@ class CMOController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $guid = $this->RandomString(32);
             $file = $form->get('fileID')->getData();
-            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
+            if( $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
                 if($file->getSize() < 4097152){
                     $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
                     $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
@@ -252,7 +252,7 @@ class CMOController extends AbstractController
                 }
             }
             else{
-                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,png,pdf,jpeg  ارسال فرمایید.']);
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,png,jpeg  ارسال فرمایید.']);
             }
 
         }

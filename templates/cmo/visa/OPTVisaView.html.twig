@@ -68,7 +68,7 @@
                                     <span class="text-danger">{{ visa.des }}</span>
                                 </p>
                             </div>
-                            <div class="col-sm-12 col-md-4">
+                            <div class="col-sm-12 col-md-8">
                                 <h6 class="text-success">
                                     <i class="fas fa-cogs"></i>
                                     اقدام:
@@ -79,6 +79,34 @@
                                         <i class="fa fa-inbox-in"></i>
                                         اعلام وصول ویزا
                                     </button>
+                                    <hr>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  == -1 %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-times-circle"></i>
+                                            رد درخواست توسط مدیریت مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.rejecter.publicLabel }} رد شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 1 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            تایید مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.accepter.publicLabel }} تایید شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 2 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            خاتمه
+                                        </h4>
+                                        <p> ویزا در {{ Jdate.jdate('Y/n/d H:i:s',visa.buyDate) }}  توسط {{ visa.buyer.publicLabel }} اعلام وصول شد.</p>
+                                    </div>
                                 {% endif %}
                             </div>
                         </div>
@@ -94,6 +122,7 @@
                         <th>ردیف</th>
                         <th>نام و نام‌خانوادگی</th>
                         <th>نام پدر</th>
+                        <th>کدملی</th>
                         <th>تاریخ تولد</th>
                         <th>امکانات</th>
                     </tr>
@@ -104,6 +133,7 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                             <td>{{ passenger.cmpassenger.pfather }}</td>
+                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
                             <td>
                                 <a href="#"

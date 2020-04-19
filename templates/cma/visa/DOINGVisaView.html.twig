@@ -68,26 +68,50 @@
                                     <span class="text-danger">{{ visa.des }}</span>
                                 </p>
                             </div>
-                            <div class="col-sm-12 col-md-4">
+                            <div class="col-sm-12 col-md-4 text-center justify-content-center">
                                 <h6 class="text-success">
                                     <i class="fas fa-cogs"></i>
                                     اقدام:
+                                    <span class="text-dark">
+                                        تایید درخواست جهت اخذ ویزا
+                                    </span>
                                 </h6>
                                 <hr>
                                 {% if visa.visaState.stateCode == 0 %}
-                                    <div class="alert alert-info">
-                                        <i class="fa fa-check"></i>
-                                        تایید درخواست جهت اخذ ویزا
-                                    </div>
-                                    <div class="btn-group btn-group-lg" role="group" aria-label="Basic example">
-                                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#Acceptmodal">
-                                            <i class="fas fa-check-circle"></i>
-                                            تایید درخواست
-                                        </button>
-                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#rejectmodal">
+                                    <a href="#" class="btn btn-sq-lg btn-success" data-toggle="modal" data-target="#Acceptmodal">
+                                        <i class="fa fa-check-circle fa-5x"></i><br/>
+                                        تایید درخواست
+                                    </a>
+                                    <a href="#" class="btn btn-sq-lg btn-danger" data-toggle="modal" data-target="#rejectmodal">
+                                        <i class="fa fa-times-circle fa-5x"></i><br/>
+                                        رد درخواست
+                                    </a>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  == -1 %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <h4 class="alert-heading">
                                             <i class="fas fa-times-circle"></i>
-                                            رد درخواست
-                                        </button>
+                                            رد درخواست توسط مدیریت مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.rejecter.publicLabel }} رد شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 1 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            تایید مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.accepter.publicLabel }} تایید شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 2 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            خاتمه
+                                        </h4>
+                                        <p> ویزا در {{ Jdate.jdate('Y/n/d H:i:s',visa.buyDate) }}  توسط {{ visa.buyer.publicLabel }} اعلام وصول شد.</p>
                                     </div>
                                 {% endif %}
                             </div>
@@ -104,6 +128,7 @@
                         <th>ردیف</th>
                         <th>نام و نام‌خانوادگی</th>
                         <th>نام پدر</th>
+                        <th>کدملی</th>
                         <th>تاریخ تولد</th>
                         <th>امکانات</th>
                     </tr>
@@ -114,14 +139,16 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                             <td>{{ passenger.cmpassenger.pfather }}</td>
+                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
                             <td>
                                 <a href="#"
-                                   class="btn btn-info"
+                                   class="btn btn-primary"
                                    target="popup"
                                    onclick="window.open(Routing.generate('ceremonialDOINGpasengerView',{'id':'{{ passenger.cmpassenger.id }}'}),'popup','location=0,width=600,height=400'); return false;">
-                                    مشاهده
-                                </a>                            </td>
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -176,10 +203,10 @@
                 </div>
                 <div class="modal-body text-justify">
                     <div class="row">
-                        <div class="col-sm-12 col-md-12 pb-3">
+                        <div class="col-sm-12 col-md-12 pb-3 justify-content-center">
                             <div class="alert alert-info">
                                 <span class="fa fa-info-circle"></span>
-                                آیا برای رد درخواست ویزا برای {{ visa.submitter.publicLabel }} به مقصد {{ visa.countryDes.countryName }}  مطمئن هستید؟
+                                آیا برای رد درخواست ویزا توسط {{ visa.submitter.publicLabel }} به مقصد {{ visa.countryDes.countryName }}  مطمئن هستید؟
                                 <br>
                                 این عملیات غیرقابل بازگشت است!
                                 </span>

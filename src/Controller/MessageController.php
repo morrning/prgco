@@ -76,9 +76,9 @@ class MessageController extends AbstractController
     }
 
     /**
-     * @Route("/message/new", name="messageNew")
+     * @Route("/message/new/{msg}", name="messageNew")
      */
-    public function messageNew(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,LoggerInterface $logger)
+    public function messageNew($msg = 0,Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,LoggerInterface $logger)
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('403');
@@ -96,12 +96,15 @@ class MessageController extends AbstractController
             ])
             ->add('mtitle', TextType::class,['label'=>'عنوان'])
             ->add('mdes', TextareaType::class,['label'=>'متن پیام'])
-            ->add('attachedFile', FileType::class,['data_class' => null,'required'=>false,'label'=>'فایل ضمیمه:'])
+            ->add('attachedFile', Type\FileboxType::class,['data_class' => null,'required'=>false,'label'=>'فایل ضمیمه:'])
             ->add('submit', SubmitType::class,['label'=>'ارسال پیام'])
             ->getForm();
 
         $form->handleRequest($request);
-        $alerts = null;
+        $alerts = [];
+        if($msg == 1){
+            array_push($alerts,['type'=>'danger','message'=>'پشوند فایل ارسال شده قابل قبول نیست.']);
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $isValid = true;
             $file = $form->get('attachedFile')->getData();
@@ -136,6 +139,9 @@ class MessageController extends AbstractController
                 $logMGR->addEvent('message','ارسال','ارسال پیام داخلی','message',$request->getClientIp());
                 $logger->info(sprintf('user %s send message with id %s', $userMgr->currentUser()->getUsername() , $message->getId()));
                 return $this->redirectToRoute('messageOutbox',['msg'=>1]);
+            }
+            else{
+                return $this->redirectToRoute('messageNew',['msg'=>1]);
             }
         }
 

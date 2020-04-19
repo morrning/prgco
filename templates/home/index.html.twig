@@ -119,6 +119,7 @@
                                             نظام پیشنهادات و انتقادات
                                         </a>
                                         <a href="{{ path('ISOformsView') }}" class="list-group-item list-group-item-action col-6 rounded-0">
+                                            <span class="badge badge-danger">آزمایشی</span>
                                             <i class="far fa-books"></i>
                                             سامانه IMS
                                         </a>
@@ -148,42 +149,48 @@
                                     ناحیه کاری: {{ area.areaName }}
                                 </div>
                                 <div id="nahye">
-                                    {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
-                                        <a href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0 border-top-0">
-                                            <i class="fas fa-desktop"></i>
-                                            درخواست خدمات فناوری اطلاعات
-                                        </a>
-                                    {% endif %}
-                                    {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
-                                        <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
-                                            <i class="fas fa-server"></i>
-                                            مجری خدمات فناوری اطلاعات
-                                        </a>
-                                    {% endif %}
+                                    {#
+                                        {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
+                                            <a href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0 border-top-0">
+                                                <i class="fas fa-desktop"></i>
+                                                درخواست خدمات فناوری اطلاعات
+                                            </a>
+                                        {% endif %}
+                                        {% if UserMGR.hasPermission('ictDoing','ICT',null,area.id) == true %}
+                                            <a href="{{ path('ictDoingDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
+                                                <i class="fas fa-server"></i>
+                                                مجری خدمات فناوری اطلاعات
+                                            </a>
+                                        {% endif %}
+                                    #}
+
                                     {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
                                         <a href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
-                                            <i class="fas fa-passport"></i>
-                                            سامانه مدیریت تشریفات ناحیه‌‌ای
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            سامانه مدیریت تشریفات
                                         </a>
                                     {% endif %}
                                     {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
                                         <a href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
-                                            <i class="fas fa-passport"></i>
+                                            <span class="badge badge-danger">آزمایشی</span>
                                             سامانه درخواست تشریفات
                                         </a>
                                     {% endif %}
-                                    {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
-                                        <a href="{{ path('hotelingOPTDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
-                                            <i class="fas fa-hotel"></i>
-                                            سامانه اپراتوری اسکان و اقامت
-                                        </a>
-                                    {% endif %}
-                                    {% if UserMGR.hasPermission('CMOPTARBAEIN','CMARBAEIN',null,area.id) == true %}
-                                        <a href="{{ path('cmarbainDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
-                                            <i class="fas fa-circle"></i>
-                                            سامانه اپراتوری اربعین
-                                        </a>
-                                    {% endif %}
+                                    {#
+                                        {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
+                                            <a href="{{ path('hotelingOPTDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
+                                                <i class="fas fa-hotel"></i>
+                                                سامانه اپراتوری اسکان و اقامت
+                                            </a>
+                                        {% endif %}
+                                        {% if UserMGR.hasPermission('CMOPTARBAEIN','CMARBAEIN',null,area.id) == true %}
+                                            <a href="{{ path('cmarbainDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
+                                                <i class="fas fa-circle"></i>
+                                                سامانه اپراتوری اربعین
+                                            </a>
+                                        {% endif %}
+                                    #}
+
                                 </div>
                             {% else %}
                                 <div class="card-header text-center bg-success text-light">
@@ -193,6 +200,23 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 justify-content-center">
+                                            <div class="container">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        {% block alert %}
+                                                            {% if alert is defined %}
+                                                                {% if alert|length != 0 %}
+                                                                    {% for alt in alert %}
+                                                                        <div class="alert alert-{{ alt.type }} mt-3" role="alert">
+                                                                            {{ alt.message }}
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endif %}
+                                                        {% endblock %}
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {{ form_start(form) }}
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">

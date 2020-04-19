@@ -6,7 +6,8 @@ twig:
                   'Form/Type/autocomplete.html.twig',
                   'Form/Type/autocompleteentity.html.twig',
                   'Form/Type/autoentity.html.twig',
-                  'Form/Type/Jdate.html.twig']
+                  'Form/Type/Jdate.html.twig',
+                  'Form/Type/filebox.html.twig']
     globals:
         UserMGR: "@UserMGR"
         EntityMGR:  "@EntityMGR"

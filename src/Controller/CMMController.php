@@ -28,21 +28,6 @@ use App\Entity;
 class CMMController extends AbstractController
 {
     /**
-     * @Route("/ceremonial/mngtotal/dashboard", name="ceremonialMNGTOTALDashboard")
-     */
-    public function ceremonialMNGTOTALDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
-    {
-        if(! $userMGR->isLogedIn())
-            return $this->redirectToRoute('403');
-        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-        $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
-
-        return $this->render('cmm/cmmDashboard.html.twig', [
-        ]);
-    }
-
-    /**
      * @Route("/ceremonial/mngtotal/list/passengers", name="ceremonialMNGTOTALPassengers")
      */
     public function ceremonialMNGTOTALPassengers(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)

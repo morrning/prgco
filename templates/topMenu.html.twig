@@ -27,15 +27,19 @@
                         {% endfor %}
                         <div class="dropdown-divider"></div>
                         {% if UserMGR.isLogedin() == true %}
+                            {#
                             <a class="dropdown-item" href="{{ path('HRMReportEarn') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-ticket-alt"></i>
                                 سامانه فیش حقوقی (آزمایشی)
                             </a>
+                            #}
                             <a class="dropdown-item" href="{{ path('HRMReportUserIO') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-clock"></i>
+                                <span class="badge badge-danger">آزمایشی</span>
                                 ترددهای ۳۰ روز اخیر
                             </a>
                         {% endif %}
+
+
                         {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
                             <a class="dropdown-item" href="{{ path('mostusedfilesDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-box-alt"></i>
@@ -50,7 +54,7 @@
                         {% endif %}
                         {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
                             <a class="dropdown-item" href="{{ path('isoformsDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-box-alt"></i>
+                                <span class="badge badge-danger">آزمایشی</span>
                                 مدیریت سامانه IMS
                             </a>
                         {% endif %}
@@ -72,22 +76,19 @@
                                 سامانه کنترل پروژه کل
                             </a>
                         {% endif %}
+                        {#
                         {% if UserMGR.hasPermission('HSSETOTAL','HSSE') == true %}
                             <a class="dropdown-item" href="{{ path('HSSEDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-lamp"></i>
                                 سامانه جامع ایمنی و اقدامات تامینی
                             </a>
                         {% endif %}
+                        #}
+
                         {% if UserMGR.hasPermission('CeremonailOPTDashboard','CEREMONIAL') == true %}
                             <a class="dropdown-item" href="{{ path('ceremonialOPTDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
+                                <span class="badge badge-danger">آزمایشی</span>
                                 سامانه اپراتوری تشریفات
-                            </a>
-                        {% endif %}
-                        {% if UserMGR.hasPermission('CeremonailMNGTOTALDashboard','CEREMONIAL') == true %}
-                            <a class="dropdown-item" href="{{ path('ceremonialMNGTOTALDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
-                                 مدیریت کل سامانه تشریفات
                             </a>
                         {% endif %}
                     </div>
@@ -100,6 +101,7 @@
                         ناحیه کاری:{{ area.areaName }}
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        {#
                         {% if UserMGR.hasPermission('ictRequest','ICT',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('ictreqDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-desktop"></i>
@@ -112,30 +114,37 @@
                                 مجری خدمات فناوری اطلاعات
                             </a>
                         {% endif %}
+                        #}
+
                         {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('ceremonialDOINGDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
+                                <span class="badge badge-danger">آزمایشی</span>
                                  سامانه مدیریت تشریفات ناحیه‌‌ای
                             </a>
                         {% endif %}
                         {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-passport"></i>
-                                سامانه درخواست تشریفات
+                                <span>
+                                    <span class="badge badge-danger">آزمایشی</span>
+                                    سامانه درخواست تشریفات
+
+                                </span>
                             </a>
                         {% endif %}
                         {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('hotelingOPTDashboard') }}" class="list-group-item list-group-item-action">
-                                <i class="fas fa-hotel"></i>
+                                <span class="badge badge-danger">آزمایشی</span>
                                 سامانه اپراتوری اسکان و اقامت
                             </a>
                         {% endif %}
+                        {#
                         {% if UserMGR.hasPermission('CMOPTARBAEIN','CMARBAEIN',null,area.id) == true %}
                             <a class="dropdown-item" href="{{ path('cmarbainDashboard') }}" class="list-group-item list-group-item-action">
                                 <i class="fas fa-circle"></i>
                                 سامانه اپراتوری اربعین
                             </a>
                         {% endif %}
+                        #}
                     </div>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ path('help') }}">

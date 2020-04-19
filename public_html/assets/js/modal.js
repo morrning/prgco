@@ -45,37 +45,43 @@ function showModal(onclick,type='info',title=null,body=null){
 }
 
 function showModalNotification(title,body,type, reload=false){
-    var modalString =
-        '<div class="modal" tabindex="-1" role="dialog">\n' +
-        '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
-        '    <div class="modal-content">\n' +
-        '      <div class="modal-header bg-' + type + ' text-light">\n' +
-        '        <h5 class="modal-title">' +
-        title +
-        '</h5>\n' +
-        '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
-        '          <span aria-hidden="true">&times;</span>\n' +
-        '        </button>\n' +
-        '      </div>\n' +
-        '      <div class="modal-body">\n' +
-        '        <p>' +
+    var modalTemplate ='<div class="modal fade" id="SystemModalCenter" tabindex="-1" role="dialog" aria-labelledby="SystemModalCenter" aria-hidden="true">\n' +
+        '    <div class="modal-dialog" role="document">\n' +
+        '        <div class="modal-content">\n' +
+        '            <div class="modal-header bg-'+
+        type +
+        ' text-light">\n' +
+        '                <h5 class="modal-title" id="exampleModalLabel">' + title +'</h5>\n' +
+        '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+        '                    <span aria-hidden="true">&times;</span>\n' +
+        '                </button>\n' +
+        '            </div>\n' +
+        '            <div class="modal-body">\n' +
+        '                <p>' +
         body +
         '</p>\n' +
-        '      </div>\n' +
+        '            </div>\n' +
         '      <div class="modal-footer">\n' +
-        '        <button type="button" class="btn btn-secondary" data-dismiss="modal"' ;
-        if(reload == true){
-            modalString +=
-                ' onclick="' + 'location.reload(true);' + '" '
-        }
-        modalString +=
-        '>بازگشت</button>\n' +
+        '        <button type="button" class="btn btn-primary" onclick="$(' + "'.modal').modal(" + "'toggle');"  +
+        '">قبول</button>\n' +
         '      </div>\n' +
+        '        </div>\n' +
         '    </div>\n' +
-        '  </div>\n' +
-        '</div>';
-    $('#modalPart').html(modalString);
-    $('.modal').modal('show');
+        '</div>'
+
+    if(SysIsModalOn == false)
+    {
+        $('.SystemModal').empty();
+        $('.SystemModal').append(modalTemplate);
+        $('#SystemModalCenter').on('show.bs.modal', function (e) {
+            SysIsModalOn = true;
+        })
+
+        $('#SystemModalCenter').on('hidden.bs.modal', function (e) {
+            SysIsModalOn = false;
+        })
+        $('#SystemModalCenter').modal();
+    }
 
 }
 

@@ -192,6 +192,7 @@
                                             <th>ردیف</th>
                                             <th>نام و نام‌خانوادگی</th>
                                             <th>نام پدر</th>
+                                            <th>کد ملی</th>
                                             <th>تاریخ تولد</th>
                                             <th>امکانات</th>
                                         </tr>
@@ -202,10 +203,15 @@
                                                 <td class="select-w50px">{{ loop.index }}</td>
                                                 <td class="w-auto">{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                                                 <td class="w-auto">{{ passenger.cmpassenger.pfather }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.pcodemeli }}</td>
                                                 <td class="w-auto">{{ passenger.cmpassenger.pbirthday }}</td>
                                                 <td class="select-w300px">
-                                                    <a class="btn btn-info rounded btn-small" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">مشاهده</a>
-                                                    <a class="btn btn-info rounded btn-small" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.cmpassenger.id}) }}">ویرایش</a>
+                                                    <a class="btn btn-info rounded btn-small btn-primary" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                    <a class="btn btn-info rounded btn-small btn-warning" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.cmpassenger.id}) }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         {% endfor %}

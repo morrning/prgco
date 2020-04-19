@@ -31,10 +31,22 @@
                 </div>
             </li>
             <li class="nav-item">
-                <a class="nav-link side-btn" href="{{ path('ceremonialDOINGACCBalance') }}">
-                    <i class="fas fa-chart-line"></i>
-                    <span>گزارش مالی</span>
+                <a class="nav-link side-btn dropdown-toggle" data-toggle="collapse" href="#reportMenu" role="button" aria-expanded="false" aria-controls="visaMenu">
+                    <i class="fas fa-passport"></i>
+                    <span>گزارش‌ها</span>
                 </a>
+                <div id="reportMenu" class="collapse multi-collapse">
+                    <a class="nav-link side-btn-child" href="{{ path('ceremonialDOINGACCBalance') }}">
+                        <i class="fas fa-chart-line"></i>
+                        گزارش مالی
+                    </a>
+                    {% if UserMGR.hasPermission('CeremonailMNGTOTALDashboard','CEREMONIAL') == true %}
+                        <a class="nav-link side-btn-child" href="{{ path('ceremonialMNGTOTALPassengers') }}">
+                            <i class="fas fa-chalkboard"></i>
+                            <span>گزارش مسافرها</span>
+                        </a>
+                    {% endif %}
+                </div>
             </li>
         </ul>
     </div>

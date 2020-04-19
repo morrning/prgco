@@ -28,8 +28,12 @@
                     <td>{{ passenger.pfather }}</td>
                     <td>{{ passenger.pbirthday }}</td>
                     <td>
-                        <a class="btn btn-info rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}">مشاهده</a>
-                        <a class="btn btn-info rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}">ویرایش</a>
+                        <a class="btn btn-primary rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerView',{'id':passenger.id}) }}" title="مشاهده">
+                            <i class="fa fa-eye"></i>
+                        </a>
+                        <a class="btn btn-info rounded btn-small mb-1 m-md-0" href="{{ path('ceremonialREQpasengerEdit',{'id':passenger.id}) }}" title="ویرایش">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -38,11 +42,11 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <button class="btn btn-primary" type="button" onclick="showModal('visaReq();','info')">
+            <button class="btn btn-sm btn-primary" type="button" onclick="visaReqPre();">
                 <span class="spinner-visa spinner-grow spinner-grow-sm" hidden=hidden role="status" aria-hidden="true"></span>
                 درخواست ویزا
             </button>
-            <button class="btn btn-primary" type="button" onclick="showModal('ticketReq();','info')">
+            <button class="btn btn-sm btn-primary" type="button" onclick="ticketReqPre();">
                 <span class="spinner-ticket spinner-grow spinner-grow-sm" hidden=hidden role="status" aria-hidden="true"></span>
                 درخواست بلیط هواپیما
             </button>
@@ -61,7 +65,7 @@
                 toggledAll = true;
             }
         }
-        function visaReq() {
+        function visaReqPre(){
             var passengersID = [];
             $( ".CKBPassengers:checked" ).each(function( index ) {
                 passengersID.push($( this ).val());
@@ -83,18 +87,23 @@
                         }
                         else
                         {
-                            window.location.replace(Routing.generate('home'));
+                            showModalNotification('هشدار','خطایی رخ داده است.ما در حال پیگیری موضوع هستیم و به زودی این درخواست بررسی می‌شود.','warning');
+
                         }
 
                     }
                 });
             }
+            else{
+                showModalNotification('هشدار','هیچ مسافری انتخاب نشده است.لطفا ابتدا یک مسافر را انتخاب کنید.','warning');
+            }
         }
-        function ticketReq(){
+        function ticketReqPre(){
             var passengersID = [];
             $( ".CKBPassengers:checked" ).each(function( index ) {
                 passengersID.push($( this ).val());
             });
+
             if(passengersID.length != 0)
             {
                 $.ajax({
@@ -116,6 +125,9 @@
                         }
                     }
                 });
+            }
+            else{
+                showModalNotification('هشدار','هیچ مسافری انتخاب نشده است.لطفا ابتدا یک مسافر را انتخاب کنید.','warning');
             }
         }
     </script>
