@@ -53,6 +53,8 @@ class ISOFormController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت حذف شد']);
         elseif($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت اضافه شد.']);
+        elseif($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'فرم با موفقیت ویرایش شد.']);
 
         return $this->render('iso_form/dashboard.html.twig', [
             'forms' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>1])],['dateSubmit'=>'DESC']),
@@ -137,6 +139,71 @@ class ISOFormController extends AbstractController
                 array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,xls,pdf,docx  ارسال فرمایید.']);
         }
         return $this->render('iso_form/adminNewFile.html.twig', [
+            'form' => $form->createView(),
+            'alerts' => $alerts,
+        ]);
+    }
+
+    /**
+     * @Route("/isoforms/edit/file/{id}", name="isoformsEditFile")
+     */
+    public function isoformsEditFile($id, Request $request, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
+    {
+        if(! $userMGR->hasPermission('ISOfORMS','ISOFORM'))
+            return $this->redirectToRoute('403');
+        $data = $entityMGR->find('App:ISOForm',$id);
+        if(is_null($data))
+            return $this->redirectToRoute('404');
+
+        $lastFileID = $data->getFileID();
+        $data->setFileID(null);
+
+        $alerts = [];
+        $form = $this->createFormBuilder($data)
+            ->add('title', TextType::class,['label'=>'عنوان:'])
+            ->add('cat',EntityType::class,['label'=>'دسته بندی','class'=>Entity\ISOFormCat::class,'choice_label'=>'catName','choice_value'=>'id'])
+            ->add('isoCode', TextType::class,['label'=>'شناسه ایزو:'])
+            ->add('fileID',FileType::class,['label'=>'فایل :','required'=>false])
+            ->add('formType', EntityType::class, [
+                'class'=>Entity\ISOFormType::class,
+                'choice_label'=>'typeName',
+                'choice_value' => 'id',
+                'label'=>'نوع مدرک'
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $file = $form->get('fileID')->getData();
+        $guid = $this->RandomString(32);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if(is_null($data->getFileID())){
+                $data->setFileID($lastFileID);
+                $entityMGR->update($data);
+                return $this->redirectToRoute('isoformsDashboard',['msg'=>3]);
+            }
+            else{
+                if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'docx' || $file->getClientOriginalExtension() == 'xls' || $file->getClientOriginalExtension() == 'doc' || $file->getClientOriginalExtension() == 'xlsx'){
+                    if($file->getSize() < 1010920907152){
+                        $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
+                        $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
+                        $data->setSubmitter($userMGR->currentPosition()->getId());
+                        $data->setFileID($tempFileName);
+                        $data->setDateSubmit(time());
+                        $data->setFileExt($file->getClientOriginalExtension());
+                        $entityMGR->update($data);
+                        return $this->redirectToRoute('isoformsDashboard',['msg'=>3]);
+                    }
+                    else{
+                        array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 8 مگابایت می باشد.']);
+                    }
+                }
+                else
+                    array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,xls,pdf,docx  ارسال فرمایید.']);
+            }
+
+        }
+        return $this->render('iso_form/adminEditFile.html.twig', [
             'form' => $form->createView(),
             'alerts' => $alerts,
         ]);

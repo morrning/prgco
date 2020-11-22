@@ -1,0 +1,12 @@
+{% extends 'iso_form/base.html.twig' %}
+
+{% block title %}ویرایش فرم{% endblock %}
+{% block pageBody %}
+    <div class="row">
+        <div class="col-sm-12">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
