@@ -322,6 +322,7 @@ class CMRController extends AbstractController
             $des = sprintf('درخواست ویزا توسط %s ثبت شد.',$visa->getSubmitter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialDOINGVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
+            $userMGR->sendSmsToGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$userMGR->currentPosition()->getDefaultArea());
             return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
         }
         return $this->render('cmr/visa/REQVisaNew.html.twig',[
@@ -493,6 +494,8 @@ class CMRController extends AbstractController
                 $des = sprintf('درخواست بلیط هواپیما توسط %s ثبت شد.',$ticket->getSubmitter()->getPublicLabel());
                 $url = $this->generateUrl('ceremonialDOINGTicketView',['id'=>$ticket->getId()]);
                 $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
+                $userMGR->sendSmsToGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$userMGR->currentPosition()->getDefaultArea());
+                $userMGR->sendSmsToUser($userMGR->currentPosition(),'درخواست بلیط هواپیما برای شما ثبت شد.');
                 return $this->redirectToRoute('ceremonialREQTicketView',['id'=>$ticket->getId(),'msg'=>1]);
             }
         }

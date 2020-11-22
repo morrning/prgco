@@ -258,6 +258,7 @@ class AdminController extends AbstractController
                     'شبنم > اختصاصی' => 'shabnam',
                 ],
             ])
+            ->add('SMS_API',TextType::class,['label'=>'کد api پنل پیامک در سایت پارس گرین'])
             ->add('SYS_LOGIN_BGRND', FileType::class,['data_class' => null,'required'=>false,'label'=>'تصویر پس زمینه صفحه ورود'])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();

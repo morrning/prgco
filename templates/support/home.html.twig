@@ -1,0 +1,49 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}پشتیبانی سامانه{% endblock %}
+{% block appBody %}
+<div class="card">
+    <div class="card-header bg-info text-light">
+        پشتیبانی سامانه
+    </div>
+    <div class="card-body">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            لطفا ابتدا از بین سوالات مطرح شده موضوع خود را جست و جو نمایید در غیر این صورت یک درخواست جدید ثبت کنید.
+        </div>
+        <a class="btn btn-primary" href="{{ path('supportNewTicket') }}">
+            <i class="fa fa-plus-circle"></i>
+            درخواست جدید
+        </a>
+        <br>
+        <div class="p-2">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover rounded text-center">
+                    <thead class="bg-blue text-light">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>عنوان</th>
+                        <th>ایجاد کننده</th>
+                        <th>تاریخ</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for ticket in tickets %}
+                        <tr class="">
+                            <td>{{ loop.index }}</td>
+                            <td>{{ ticket.subject }}</td>
+                            <td>{{ ticket.submitter.fullName}}</td>
+                            <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
+                            <td>
+                                <a class="btn btn-success" href="{{ path('supportViewicket',{'id':ticket.UID}) }}">
+                                    <i class="fa fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}

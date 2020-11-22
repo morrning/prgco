@@ -25,6 +25,12 @@
                             نمایش و ظاهر
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="sms-tab" data-toggle="tab" href="#sms" role="tab" aria-controls="profile" aria-selected="false">
+                            <i class="fa fa-inbox"></i>
+                            پنل پیامک
+                        </a>
+                    </li>
                 </ul>
                 {{ form_start(form) }}
                 <div class="tab-content" id="myTabContent">
@@ -74,6 +80,21 @@
 
                                 {{ form_label(form.SYS_LOGIN_BGRND) }}
                                 {{ form_widget(form.SYS_LOGIN_BGRND) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="sms" role="tabpanel" aria-labelledby="sms-tab">
+                        <div class="row mb-2 pt-2">
+                            <div class="col-12">
+                                <div class="input-group mb-3 pt-2">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fa fa-key"></i>
+                                            ParsGreen API
+                                        </div>
+                                    </div>
+                                    {{ form_widget(form.SMS_API) }}
+                                </div>
                             </div>
                         </div>
                     </div>

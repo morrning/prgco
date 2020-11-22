@@ -86,6 +86,11 @@ class SysConfig
      */
     private $HRM_PW_PASSWORD;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $SMS_API;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -255,6 +260,18 @@ class SysConfig
     public function setHRMPWPASSWORD(?string $HRM_PW_PASSWORD): self
     {
         $this->HRM_PW_PASSWORD = $HRM_PW_PASSWORD;
+
+        return $this;
+    }
+
+    public function getSMSAPI(): ?string
+    {
+        return $this->SMS_API;
+    }
+
+    public function setSMSAPI(?string $SMS_API): self
+    {
+        $this->SMS_API = $SMS_API;
 
         return $this;
     }

@@ -68,10 +68,16 @@ class SysUser
      */
     private $employeNum;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\SuuportTicket", mappedBy="submitter", orphanRemoval=true)
+     */
+    private $suuportTickets;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
+        $this->suuportTickets = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -233,6 +239,37 @@ class SysUser
     public function setEmployeNum(string $employeNum): self
     {
         $this->employeNum = $employeNum;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SuuportTicket[]
+     */
+    public function getSuuportTickets(): Collection
+    {
+        return $this->suuportTickets;
+    }
+
+    public function addSuuportTicket(SuuportTicket $suuportTicket): self
+    {
+        if (!$this->suuportTickets->contains($suuportTicket)) {
+            $this->suuportTickets[] = $suuportTicket;
+            $suuportTicket->setSubmitter($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSuuportTicket(SuuportTicket $suuportTicket): self
+    {
+        if ($this->suuportTickets->contains($suuportTicket)) {
+            $this->suuportTickets->removeElement($suuportTicket);
+            // set the owning side to null (unless already changed)
+            if ($suuportTicket->getSubmitter() === $this) {
+                $suuportTicket->setSubmitter(null);
+            }
+        }
 
         return $this;
     }

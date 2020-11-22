@@ -1,0 +1,36 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}ثبت درخواست پشتیبانی{% endblock %}
+{% block appBody %}
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            ثبت درخواست جدید در بخش پشتیبانی سامانه
+        </div>
+
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row pt-1">
+                <div class="col-sm-12 col-md-12">
+                    {{ form_label(form.subject) }}
+                    {{ form_widget(form.subject) }}
+                </div>
+            </div>
+            <div class="row py-1">
+                <div class="col-sm-12 col-md-12">
+                    {{ form_label(form.body) }}
+                    {{ form_widget(form.body) }}
+                </div>
+            </div>
+
+            <div class="row pt-1">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-secondary" href="{{ path('support') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Cookie;
@@ -261,6 +262,63 @@ class UserMGR
             $notification->setLinkTarget($url);
             $this->em->insertEntity($notification);
         }
+        return true;
+    }
+
+    public function sendSmsToGroup($GroupName,$boundle,$des,$pid=1){
+        $config = $this->em->findAll('App:SysConfig');
+        $config = $config[0];
+
+        $group = $this->em->findOneBy('App:SysGroup',['groupName'=>$GroupName,'bundle'=>$boundle,'PID'=>$pid]);
+        if(is_null($group)) return false;
+        $users = $this->positionsOfGroup($group->getId());
+        $des = $des . '.' . $config->getSiteName();
+        $userNums = [];
+        foreach ($users as $user)
+        {
+            array_push($userNums,$user->getUserID()->getMobileNum());
+        }
+        $webServiceURL  = "http://sms.parsgreen.ir/Apiv2/Message/SendSms";
+        $req= new \App\DataObject\SendSms();
+        $req-> SmsBody  =$des;
+        $req-> Mobiles = $userNums;
+
+        $ch = curl_init($webServiceURL);
+        $jsonDataEncoded = json_encode($req);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $header =array('authorization: BASIC APIKEY:'. $config->getSMSAPI(),'Content-Type: application/json;charset=utf-8');
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$header);
+        $result = curl_exec($ch);
+        $res = json_decode($result);
+        curl_close($ch);
+        return true;
+    }
+    public function sendSmsToUser($user,$des){
+        $config = $this->em->findAll('App:SysConfig');
+        $config = $config[0];
+        $des = $des . ' ' . $config->getSiteName();
+
+        $webServiceURL  = "http://sms.parsgreen.ir/Apiv2/Message/SendSms";
+        $req= new \App\DataObject\SendSms();
+        $req-> SmsBody  =$des;
+        $req-> Mobiles = [$user->getUserID()->getMobileNum()];
+
+        $ch = curl_init($webServiceURL);
+        $jsonDataEncoded = json_encode($req);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonDataEncoded);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        $header =array('authorization: BASIC APIKEY:'. $config->getSMSAPI(),'Content-Type: application/json;charset=utf-8');
+        curl_setopt($ch, CURLOPT_HTTPHEADER,$header);
+        $result = curl_exec($ch);
+        $res = json_decode($result);
+        curl_close($ch);
         return true;
     }
 }

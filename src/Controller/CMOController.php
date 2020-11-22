@@ -150,6 +150,8 @@ class CMOController extends AbstractController
             $des = sprintf(' ویزای شما توسط %s اعلام وصول شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
+
             array_push($alerts,['type'=>'success','message'=>'اعلام ارسال ویزا با موفقیت ثبت شد.']);
         }
         return $this->render('cmo/visa/OPTVisaView.html.twig', [
@@ -245,6 +247,7 @@ class CMOController extends AbstractController
                     $des = sprintf(' بلیط شما توسط %s خریداری شد.',$ticket->getBuyer()->getPublicLabel());
                     $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
                     $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+                    $userMGR->sendSmsToUser($ticket->getSubmitter(),$des . ' برای دریافت اطلاعات بلیط به کارتابل خود مراجعه کنید.');
                     array_push($alerts,['type'=>'success','message'=>'اطلاعات بلیط با موفقیت ثبت شد.']);
                 }
                 else{

@@ -17,6 +17,23 @@
                     <li class="breadcrumb-item active">{{ block('title') }}</li>
                 </ol>
             {% endif %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        {% block alerts %}
+                            {% if alerts is defined %}
+                                {% if alerts|length != 0 %}
+                                    {% for alt in alerts %}
+                                        <div class="alert alert-{{ alt.type }}" role="alert">
+                                            {{ alt.message }}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        {% endblock %}
+                    </div>
+                </div>
+            </div>
             {% block appBody %}{% endblock %}
         </div>
     </div>

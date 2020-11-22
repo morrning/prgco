@@ -141,10 +141,12 @@ class CMAController extends AbstractController
             $des = sprintf('درخواست ویزای شما توسط %s تایید شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
 
-            $des = 'درخواست ویزا توسط مدیریت تایید شد.';
+            $des = sprintf('درخواست ویزا برای %s توسط %s تایید شد.',$visa->getSubmitter()->getPublicLabel(),$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
+            $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
 
             array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);
         }
@@ -159,6 +161,7 @@ class CMAController extends AbstractController
             $des = sprintf('درخواست ویزای شما توسط %s رد شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
 
             array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت رد شد.']);
 
@@ -238,8 +241,11 @@ class CMAController extends AbstractController
             $des = sprintf('درخواست بلیط شما توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
-            $des = sprintf('درخواست بلیط توسط %s تایید شد.',$ticket->getAccepter()->getPublicLabel());
+            $userMGR->sendSmsToUser($userMGR->currentPosition(),$des);
+
+            $des = sprintf('درخواست بلیط هواپیما برای  %s توسط %s تایید شد.',$ticket->getSubmitter()->getPublicLabel(),$ticket->getAccepter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialOPTTicketView',['id'=>$ticket->getId()]);
+            $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
             $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
         }
@@ -252,6 +258,7 @@ class CMAController extends AbstractController
             $entityMGR->update($ticket);
             $logMGR->addEvent('CERTICKET'.$ticket->getId(),'رد درخواست','درخواست بلیط','CEREMONIAL',$request->getClientIp());
             $des = sprintf('درخواست بلیط شما توسط %s رد شد.',$ticket->getRejecter()->getPublicLabel());
+            $userMGR->sendSmsToUser($userMGR->currentPosition(),$des);
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>1]);

@@ -147,12 +147,19 @@
                         #}
                     </div>
                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('support') }}">
+                        <i class="fas fa-ticket"></i>
+                        پشتیبانی پورتال
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="{{ path('help') }}">
                         <i class="fas fa-info-circle"></i>
                         راهنمای سامانه
                     </a>
                 </li>
             {% endif %}
+
         </ul>
         <ul class="navbar-nav mr-auto pl-5">
             {% if UserMGR.isLogedIn() %}
