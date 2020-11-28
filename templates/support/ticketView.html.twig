@@ -1,0 +1,57 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}مشاهده درخواست{% endblock %}
+{% block appBody %}
+    {% if msg == true %}
+        <div class="alert alert-success" role="alert">
+            پاسخ شما با موفقیت ارسال شد.
+        </div>
+    {% endif %}
+    {% for ticket in tickets %}
+        <div class="card">
+            <div class="card-header bg-white">
+                <a class="btn btn-link" href="">
+                    {{ loop.index }} - {{ ticket.subject }}
+                </a>
+            </div>
+            <div class="card-body">
+                <p>{{ ticket.body }}</p>
+            </div>
+            <div class="card-footer">
+                <span>
+                    ارسال شده در
+                    {{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}
+                     توسط
+                    <td>{{ ticket.submitter.fullName}}</td>
+                </span>
+            </div>
+        </div>
+        <br>
+    {% endfor %}
+    <hr>
+    <div class="card">
+        <div class="card-header bg-info text-light">
+            ارسال پاسخ جدید
+        </div>
+
+        <div class="card-body">
+            {{ form_start(form) }}
+            <div class="row py-1">
+                <div class="col-sm-12 col-md-12">
+                    {{ form_label(form.body) }}
+                    {{ form_widget(form.body) }}
+                </div>
+            </div>
+
+            <div class="row pt-1">
+                <div class="col-12">
+                    {{ form_widget(form.submit) }}
+                    <a class="btn btn-secondary" href="{{ path('support') }}">
+                        <i class="fa fa-undo"></i>
+                        بازگشت
+                    </a>
+                </div>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

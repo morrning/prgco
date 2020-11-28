@@ -73,6 +73,11 @@ class SysUser
      */
     private $suuportTickets;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $contractor;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -270,6 +275,18 @@ class SysUser
                 $suuportTicket->setSubmitter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getContractor(): ?bool
+    {
+        return $this->contractor;
+    }
+
+    public function setContractor(?bool $contractor): self
+    {
+        $this->contractor = $contractor;
 
         return $this;
     }

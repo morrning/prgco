@@ -92,6 +92,16 @@ class SysRoll
      */
     private $pmAccess;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $HRMACCESS;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $HRMACCESSTOTAL;
+
 
     public function getId(): ?int
     {
@@ -274,6 +284,30 @@ class SysRoll
     public function setPmAccess(?bool $pmAccess): self
     {
         $this->pmAccess = $pmAccess;
+
+        return $this;
+    }
+
+    public function getHRMACCESS(): ?bool
+    {
+        return $this->HRMACCESS;
+    }
+
+    public function setHRMACCESS(?bool $HRMACCESS): self
+    {
+        $this->HRMACCESS = $HRMACCESS;
+
+        return $this;
+    }
+
+    public function getHRMACCESSTOTAL(): ?bool
+    {
+        return $this->HRMACCESSTOTAL;
+    }
+
+    public function setHRMACCESSTOTAL(?bool $HRMACCESSTOTAL): self
+    {
+        $this->HRMACCESSTOTAL = $HRMACCESSTOTAL;
 
         return $this;
     }

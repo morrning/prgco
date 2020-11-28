@@ -89,26 +89,28 @@ class SupportController extends AbstractController
 
         if(count($ticket) == 0)
             return $this->redirectToRoute('404');
-        $ticket = new Entity\SuuportTicket();
-        $form = $this->createFormBuilder($ticket)
-            ->add('subject', TextType::class,['label'=>'عنوان:'])
+        $ticketForm = new Entity\SuuportTicket();
+        $isSubmitted = false;
+        $form = $this->createFormBuilder($ticketForm)
             ->add('body',TextareaType::class,['label'=>'موضوع:'])
-
-            ->add('submit', SubmitType::class,['label'=>'افزودن'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت پاسخ'])
             ->getForm();
 
         $form->handleRequest($request);
-        $guid = $this->RandomString(32);
         if ($form->isSubmitted() && $form->isValid()) {
-            $ticket->setDateSubmit(time());
-            $ticket->setSubmitter($userMGR->currentUser());
-            $ticket->setMainTicket(true);
-            $ticket->setUID($guid);
-            $entityMGR->insertEntity($ticket);
-            return $this->redirectToRoute('support',['msg'=>1]);
+            $ticketForm->setDateSubmit(time());
+            $ticketForm->setSubject('پاسخ به : ' . $ticket[0]->getSubject());
+            $ticketForm->setSubmitter($userMGR->currentUser());
+            $ticketForm->setMainTicket(false);
+            $ticketForm->setUID($ticket[0]->getUID());
+            $entityMGR->insertEntity($ticketForm);
+            $isSubmitted = true;
         }
-        return $this->render('support/ticketNew.html.twig', [
-            'form' => $form->createView()
+        $ticket = $entityMGR->findBy('App:SuuportTicket',['UID'=>$id]);
+        return $this->render('support/ticketView.html.twig', [
+            'form' => $form->createView(),
+            'tickets' => $ticket,
+            'msg' => $isSubmitted
         ]);
     }
 }

@@ -91,6 +91,12 @@
                                 سامانه اپراتوری تشریفات
                             </a>
                         {% endif %}
+                        {% if UserMGR.hasPermission('HRMACCESS','HRM',null) == true %}
+                            <a class="dropdown-item" href="{{ path('HRMadmin') }}" class="list-group-item list-group-item-action">
+                                <span class="badge badge-danger">آزمایشی</span>
+                                سامانه منابع انسانی
+                            </a>
+                        {% endif %}
                     </div>
                 </li>
 
@@ -126,7 +132,7 @@
                             <a class="dropdown-item" href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action">
                                 <span>
                                     <span class="badge badge-danger">آزمایشی</span>
-                                    سامانه درخواست تشریفات
+                                    سامانه تشریفات
 
                                 </span>
                             </a>

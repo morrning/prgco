@@ -31,11 +31,19 @@
                     {% for ticket in tickets %}
                         <tr class="">
                             <td>{{ loop.index }}</td>
-                            <td>{{ ticket.subject }}</td>
+                            <td>
+
+                                <a class="btn btn-link" href="{{ path('supportViewicket',{'id':ticket.UID}) }}">
+                                    {{ ticket.subject }}
+                                </a>
+                            </td>
                             <td>{{ ticket.submitter.fullName}}</td>
                             <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                             <td>
-                                
+                                <a class="btn btn-primary" href="{{ path('supportViewicket',{'id':ticket.UID}) }}">
+                                    <i class="fa fa-eye"></i>
+                                    مشاهده
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

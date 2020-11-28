@@ -151,31 +151,9 @@ class HRMController extends AbstractController
             return $this->redirectToRoute('403');
 
         return $this->render('hrm/employes.html.twig', [
-            'employes' => $entityMGR->findBy('App:HRMemploye',['area'=>$userMGR->currentPosition()->getDefaultArea()]),
+            'users' => $entityMGR->findBy('App:SysUser',['contractor'=>null])
         ]);
     }
 
-    /**
-     * @Route("/hrm/add/employe/s1", name="HRMEmployeAddSTP1")
-     */
-    public function HRMEmployeAddSTP1(Request $request,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
-    {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
-            return $this->redirectToRoute('403');
-
-        $employe = new Entity\SysUser();
-        $form = $this->createFormBuilder($employe)
-            ->add('nationalCode', TextType::class,['label'=>'کد ملی:','required'=>true,'attr'=>['class'=>'autoClear activeInput']])
-            ->add('submit', SubmitType::class,['label'=>'ثبت'])
-            ->getForm();
-        $alerts = [];
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-        }
-        return $this->render('hrm/addEmploySTP1.html.twig', [
-            'form' => $form->createView()
-        ]);
-    }
 
 }
