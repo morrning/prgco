@@ -14,7 +14,9 @@
                 <tr>
                     <th>ردیف</th>
                     <th>نام و نام خانوادگی</th>
+                    <th>کد ملی</th>
                     <th>شماره پرسنلی</th>
+                    <th>شماره تماس</th>
                     <th>امکانات</th>
                 </tr>
                 </thead>
@@ -22,12 +24,12 @@
                 {% for user in users %}
                     <tr class="">
                         <td>{{ loop.index }}</td>
+                        <td>{{ user.fullname }}</td>
+                        <td>{{ user.nationalCode }}</td>
+                        <td>{{ user.employeNum }}</td>
+                        <td>{{ user.mobileNum }}</td>
                         <td>
-                            {{ user.fullname }}
-                        </td>
-                        <td>1</td>
-                        <td>
-                            <a class="btn btn-primary" href="">
+                            <a class="btn btn-primary" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
                                 <i class="fa fa-eye"></i>
                                 پرونده پرسنلی
                             </a>

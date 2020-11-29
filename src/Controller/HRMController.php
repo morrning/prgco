@@ -155,5 +155,46 @@ class HRMController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/hrm/employe/folder/{id}", name="HRMEmployeFolder")
+     */
+    public function HRMEmployeFolder($id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:SysUser',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        return $this->render('hrm/employeFolder.html.twig', [
+            'user' => $user,
+            'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user])
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/employe/letteroutcountry/new/{id}", name="HRMEmployeLetterOutCountryNew")
+     */
+    public function HRMEmployeLetterOutCountryNew(Request $request, $id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:SysUser',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        $letter = new Entity\HRMLetterOutCountry();
+        $form = $this->createForm(\App\Form\HRMLetterOutCountryType::class,$letter);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityMGR->insertEntity($letter);
+            return $this->redirectToRoute('HRMEmployeFolder',['msg'=>'letter_add']);
+        }
+        return $this->render('hrm/employeLetterCountryOutAdd.html.twig', [
+            'user' => $user,
+            'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user])
+        ]);
+    }
+
 
 }

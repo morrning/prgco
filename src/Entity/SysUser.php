@@ -78,11 +78,17 @@ class SysUser
      */
     private $contractor;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\HRMLetterOutCountry", mappedBy="user", orphanRemoval=true)
+     */
+    private $hRMLetterOutCountries;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
         $this->cMVisaReqs = new ArrayCollection();
         $this->suuportTickets = new ArrayCollection();
+        $this->hRMLetterOutCountries = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -287,6 +293,37 @@ class SysUser
     public function setContractor(?bool $contractor): self
     {
         $this->contractor = $contractor;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HRMLetterOutCountry[]
+     */
+    public function getHRMLetterOutCountries(): Collection
+    {
+        return $this->hRMLetterOutCountries;
+    }
+
+    public function addHRMLetterOutCountry(HRMLetterOutCountry $hRMLetterOutCountry): self
+    {
+        if (!$this->hRMLetterOutCountries->contains($hRMLetterOutCountry)) {
+            $this->hRMLetterOutCountries[] = $hRMLetterOutCountry;
+            $hRMLetterOutCountry->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHRMLetterOutCountry(HRMLetterOutCountry $hRMLetterOutCountry): self
+    {
+        if ($this->hRMLetterOutCountries->contains($hRMLetterOutCountry)) {
+            $this->hRMLetterOutCountries->removeElement($hRMLetterOutCountry);
+            // set the owning side to null (unless already changed)
+            if ($hRMLetterOutCountry->getUser() === $this) {
+                $hRMLetterOutCountry->setUser(null);
+            }
+        }
 
         return $this;
     }

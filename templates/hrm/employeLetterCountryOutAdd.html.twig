@@ -1,0 +1,50 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}ثبت نامه خروج از کشور برای {{ user.fullname }}{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-outline-light" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
+        بازگشت
+    </a>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="card">
+            <div class="card-header">
+                اطلاعات اصلی
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            نام و نام خانوادگی:
+                            {{ user.fullname }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            شماره ملی:
+                            {{ user.nationalCode }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            شماره پرسنلی:
+                            {{ user.employeNum }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <span class="text-right">اطلاعات نامه</span>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

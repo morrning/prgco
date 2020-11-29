@@ -1,0 +1,85 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}پرونده پرسنلی{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-outline-light" href="{{ path('HRMEmployelist') }}">
+        بازگشت
+    </a>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="card">
+            <div class="card-header">
+                اطلاعات اصلی
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-4">
+                            نام و نام خانوادگی:
+                            {{ user.fullname }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            شماره ملی:
+                            {{ user.nationalCode }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            شماره پرسنلی:
+                            {{ user.employeNum }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-danger">در صورت وجود مغایرت در اطلاعات فوق با مدیر سامانه تماس بگیرید.</div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <span class="text-right">آرشیو نامه های مجوز خروج از کشور</span>
+                <span class="text-left float-left">
+                    <a class="btn btn-sm btn-success" href="{{ path('HRMEmployeLetterOutCountryNew',{'id':user.id}) }}">
+                        <i class="fa fa-plus-circle"></i>
+                        جدید
+                    </a>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="bg-blue text-light">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>شماره نامه</th>
+                                    <th>تاریخ صدور</th>
+                                    <th>تاریخ پایان اعتبار</th>
+                                    <th>مرجع صدور</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for letter in letters %}
+                                    <tr class="">
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ letter.letterNum }}</td>
+                                        <td>{{ letter.letterStartDate }}</td>
+                                        <td>{{ letter.letterEndDate }}</td>
+                                        <td>{{ letter.letterSource }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br>
+
+    </div>
+{% endblock %}
