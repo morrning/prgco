@@ -130,15 +130,16 @@ class HRMController extends AbstractController
     /**
      * @Route("/hrm/admin", name="HRMadmin")
      */
-    public function HRMadmin(Service\MssqlMGR $mssqlMgr,Service\ConfigMGR $configMGR,Service\UserMGR $userMGR)
+    public function HRMadmin(Service\EntityMGR $entityMGR, Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
 
-        $siteConfig = $configMGR->getConfig();
-        $mssqlMgr->configure($siteConfig->getHRMSGSERVERNAME(),$siteConfig->getHRMSGDATABASE(),$siteConfig->getHRMSGUSERNAME(),$siteConfig->getHRMSGPASSWORD());
+        $info['allUsers'] = count($entityMGR->findAll('App:SysUser'));
+        $info['employers'] = count($entityMGR->findBy('App:SysUser',['contractor'=>null]));
+        $info['contractor'] = $info['allUsers'] - $info['employers'];
         return $this->render('hrm/dashboard.html.twig', [
-
+            'info'=> $info
         ]);
     }
 
@@ -156,9 +157,9 @@ class HRMController extends AbstractController
     }
 
     /**
-     * @Route("/hrm/employe/folder/{id}", name="HRMEmployeFolder")
+     * @Route("/hrm/employe/folder/{id}/{msg}", name="HRMEmployeFolder")
      */
-    public function HRMEmployeFolder($id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    public function HRMEmployeFolder($id,$msg=0,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
         if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
@@ -166,9 +167,14 @@ class HRMController extends AbstractController
         if(is_null($user))
             return $this->redirectToRoute('404');
 
+        $alerts = [];
+        if($msg === 'letter_add')
+            array_push($alerts,['type'=>'success','message'=>'مکاتبه با موفقیت ثبت شد.']);
+
         return $this->render('hrm/employeFolder.html.twig', [
             'user' => $user,
-            'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user])
+            'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user]),
+            'alerts' => $alerts
         ]);
     }
 
@@ -187,12 +193,13 @@ class HRMController extends AbstractController
         $form = $this->createForm(\App\Form\HRMLetterOutCountryType::class,$letter);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $letter->setUser($user);
             $entityMGR->insertEntity($letter);
-            return $this->redirectToRoute('HRMEmployeFolder',['msg'=>'letter_add']);
+            return $this->redirectToRoute('HRMEmployeFolder',['id'=>$user->getId(), 'msg'=>'letter_add']);
         }
         return $this->render('hrm/employeLetterCountryOutAdd.html.twig', [
             'user' => $user,
-            'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user])
+            'form' => $form->createView()
         ]);
     }
 

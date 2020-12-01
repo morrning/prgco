@@ -61,7 +61,8 @@ class CMAController extends AbstractController
         return $this->render('cma/passenger/viewInfo.html.twig', [
             'passenger' => $passenger,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
-            'docs'=>$passenger->getCMPassengerPersonalDocs()
+            'docs'=>$passenger->getCMPassengerPersonalDocs(),
+            'contractor' => ''
         ]);
     }
     /**

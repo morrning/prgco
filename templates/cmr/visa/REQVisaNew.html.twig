@@ -3,9 +3,51 @@
 {% block pageBody %}
     <div class="container-fluid py-3">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
+            <div class="col-12">
+                <div class="row border rounded p-2 m-1">
+                    <div class="col-12">
+                        <h3 class="text-primary">فهرست افراد انتخابی</h3>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="bg-blue text-light">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>نام و نام‌خانوادگی</th>
+                                    <th>نام پدر</th>
+                                    <th>کد ملی</th>
+                                    <th>ارتباط</th>
+                                    <th>نیاز به مجوز</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for userList in userLIsts %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ userList.cmpassenger.pname }} {{ userList.cmpassenger.pfamily }}</td>
+                                        <td>{{ userList.cmpassenger.pfather }}</td>
+                                        <td>{{ userList.cmpassenger.pcodemeli }}</td>
+                                        <td>{{ userList.cmpassenger.ptype.typeName }}</td>
+                                        <td>
+                                            {% if userList.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                                <span class="text-danger">دارد</span>
+                                            {% else %}
+                                                <span class="text-success">ندارد</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <div class="col-12">
                 <div class="row border rounded p-2 m-1">
                     <div class="col-sm-12 col-md-12 pb-2">
+                        <h3 class="text-primary">اطلاعات درخواست</h3>
                         <div class="col-sm-12 col-md-12 pb-2">
                             {{ form_start(form) }}
                             <div class="row">
@@ -45,31 +87,6 @@
                     </div>
                 </div>
                 {{ form_end(form) }}
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <h3 class="text-primary">فهرست افراد انتخابی</h3>
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered table-hover rounded text-center">
-                        <thead class="bg-blue text-light">
-                        <tr>
-                            <th>ردیف</th>
-                            <th>نام و نام‌خانوادگی</th>
-                            <th>نام پدر</th>
-                            <th>کد ملی</th>
-                        </tr>
-                        </thead>
-                        <tbody class="">
-                        {% for userList in userLIsts %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ userList.cmpassenger.pname }} {{ userList.cmpassenger.pfamily }}</td>
-                                <td>{{ userList.cmpassenger.pfather }}</td>
-                                <td>{{ userList.cmpassenger.pcodemeli }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

@@ -41,7 +41,31 @@
             <div class="card-body">
                 <div class="container">
                     <div class="row">
-
+                        <div class="col-sm-12 col-md-4">
+                            {{ form_start(form) }}
+                            {{ form_label(form.letterNum) }}
+                            {{ form_widget(form.letterNum) }}
+                            {{ form_label(form.letterSource) }}
+                            {{ form_widget(form.letterSource) }}
+                        </div>
+                        <div class="col-sm-12 col-md-4">
+                            {{ form_label(form.letterStartDate) }}
+                            {{ form_widget(form.letterStartDate) }}
+                            {{ form_label(form.letterEndDate) }}
+                            {{ form_widget(form.letterEndDate) }}
+                        </div>
+                        <div class="col-12">
+                            <div class="row pt-3">
+                                <div class="col">
+                                    {{ form_widget(form.submit) }}
+                                    <a class="btn btn-warning" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
+                                        <i class="fa fa-undo"></i>
+                                        بازگشت
+                                    </a>
+                                </div>
+                            </div>
+                            {{ form_end(form) }}
+                        </div>
                     </div>
                 </div>
             </div>

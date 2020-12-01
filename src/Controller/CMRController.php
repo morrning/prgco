@@ -114,16 +114,26 @@ class CMRController extends AbstractController
             ->getForm();
 
         $form->handleRequest($request);
-        $alert = null;
+        $alert = [];
         if ($form->isSubmitted() && $form->isValid()) {
-            if (is_null($entityMGR->findOneBy('App:CMPassenger', ['pcodemeli' => $passenger->getPcodemeli()]))) {
+            if($passenger->getPtype()->getTypeName() == 'پرسنل شرکت') {
+                if (is_null($entityMGR->findOneBy('App:SysUser', ['nationalCode' => $passenger->getPcodemeli(),'contractor'=> null]))) {
+                    array_push($alert,['type' => 'danger', 'message' => 'این کد ملی در لیست پرسنل شرکت موجود نیست.']);
+                }
+            }
+            elseif (!is_null($entityMGR->findOneBy('App:CMPassenger', ['pcodemeli' => $passenger->getPcodemeli()]))) {
+                    array_push($alert, ['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.اگر اخیرا در ارتباط شما با شرکت و یا شرکت‌های زیر مجموعه تغییری رخ داده است با مدیر سامانه تماس بگیرید.']);
+            }
+            if(count($alert ) == 0)
+            {
                 $passenger->setSubmitter($userMGR->currentPosition());
                 $entityMGR->insertEntity($passenger);
                 $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
                 return $this->redirectToRoute('ceremonialREQpasengers', ['msg' => 1]);
             }
-            $alert = [['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.اگر اخیرا در ارتباط شما با شرکت و یا شرکت‌های زیر مجموعه تغییری رخ داده است با مدیر سامانه تماس بگیرید.']];
+
         }
+
         return $this->render('cmr/passenger/newPasenger.html.twig', [
             'alerts'=>$alert,
             'form' => $form->createView()
@@ -151,13 +161,6 @@ class CMRController extends AbstractController
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
-            ->add('ptype', EntityType::class, [
-                'class'=>Entity\CMPassengerType::class,
-                'choice_label'=>'typeName',
-                'choice_value' => 'id',
-                'label'=>'ارتباط مسافر با شما؟',
-                'data'=>$passenger->getPtype(),
-            ])
             ->add('tel1', TextType::class,['label'=>'شماره تماس1:','attr'=>['class'=>'tel']])
             ->add('tel2', TextType::class,['label'=>'شماره تماس2:','attr'=>['class'=>'tel']])
             ->add('adr', TextareaType::class,['label'=>'آدرس:'])
