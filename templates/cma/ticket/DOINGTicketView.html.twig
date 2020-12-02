@@ -203,7 +203,11 @@
                                             <th>نام و نام‌خانوادگی</th>
                                             <th>نام پدر</th>
                                             <th>تاریخ تولد</th>
-                                            <th>ارتباط مسافر</th>
+                                            <th>کد ملی</th>
+                                            <th>ارتباط</th>
+                                            <th>نیاز به مجوز</th>
+                                            <th>وضعیت مجوز</th>
+                                            <th>امکانات</th>
                                         </tr>
                                         </thead>
                                         <tbody class="">
@@ -213,7 +217,42 @@
                                                 <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                                                 <td>{{ passenger.cmpassenger.pfather }}</td>
                                                 <td>{{ passenger.cmpassenger.pbirthday }}</td>
+                                                <td>{{ passenger.cmpassenger.pcodemeli }}</td>
                                                 <td>{{ passenger.cmpassenger.ptype.typeName }}</td>
+                                                <td>
+                                                    {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                                        <span class="text-danger">دارد</span>
+                                                    {% else %}
+                                                        <span class="text-success">ندارد</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% set letters = EntityMGR.findBy('App:HRMLetterOutCountry',{'user' : EntityMGR.findOneBy('App:SysUser',{'nationalCode':passenger.cmpassenger.pcodemeli})}) %}
+                                                    {% set break = false %}
+                                                    {% for letter in letters %}
+                                                        {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                                        {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                                        {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                                        {% if  valueNow >= valueStart and valueNow < valueEnd and break == false %}
+                                                            {% set break = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if break == true %}
+                                                        <span class="badge badge-success"> دارای مجوز </span>
+                                                    {% elseif passenger.cmpassenger.ptype.typeName != 'پرسنل شرکت' %}
+
+                                                    {% else %}
+                                                        <span class="badge badge-danger"> فاقد مجوز </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    <a href="#"
+                                                       class="btn btn-primary"
+                                                       target="popup"
+                                                       onclick="window.open(Routing.generate('ceremonialDOINGpasengerView',{'id':'{{ passenger.cmpassenger.id }}'}),'popup','location=0,width=800,height=600'); return false;">
+                                                        <i class="fa fa-eye"></i>
+                                                    </a>
+                                                </td>
                                             </tr>
                                         {% endfor %}
                                         </tbody>

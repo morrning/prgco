@@ -122,7 +122,7 @@ class CMOController extends AbstractController
             ])
             ->add('DateStart',Type\JdateType::class,['label'=>'شروع اعتبار ویزا','data'=>$jdate->jdate('Y/m/d',time())])
             ->add('DateEnd',Type\JdateType::class,['label'=>'پایان اعتبار ویزا','data'=>$jdate->jdate('Y/m/d',time() + (3600*24*90))])
-            ->add('moneyValue', NumberType::class,['label'=>'مبلغ:','data'=>0,'required'=>true,'attr'=>['class'=>'MoneyInput']])
+            ->add('moneyValue', NumberType::class,['label'=>'مبلغ:','data'=>0,'required'=>true])
             ->add('submit', SubmitType::class,['label'=>'ثبت اعلام وصول ویزا'])
             ->getForm();
         $form->handleRequest($request);
@@ -184,7 +184,9 @@ class CMOController extends AbstractController
         return $this->render('cma/passenger/viewInfo.html.twig', [
             'passenger' => $passenger,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
-            'docs'=>$passenger->getCMPassengerPersonalDocs()
+            'docs'=>$passenger->getCMPassengerPersonalDocs(),
+            'coutLetters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])])
+
         ]);
     }
 
@@ -223,7 +225,7 @@ class CMOController extends AbstractController
                 'label'=>'واحد پولی'
             ])
             ->add('fileID', Type\FileboxType::class,['label'=>'فایل اسکن','data_class'=>null])
-            ->add('moneyValue', Type\NumbermaskType::class,['data'=>0,'label'=>'مقدار هزینه','attr'=>['class'=>'MoneyInput']])
+            ->add('moneyValue', Type\NumbermaskType::class,['data'=>0,'label'=>'مقدار هزینه'])
             ->add('flyDate',Type\JdateType::class,['label'=>'تاریخ پرواز','data'=>$ticket->getDateSuggest()])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();

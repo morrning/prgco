@@ -62,7 +62,7 @@ class CMAController extends AbstractController
             'passenger' => $passenger,
             'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
             'docs'=>$passenger->getCMPassengerPersonalDocs(),
-            'contractor' => ''
+            'coutLetters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])])
         ]);
     }
     /**

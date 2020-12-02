@@ -122,8 +122,10 @@
                         <th>ردیف</th>
                         <th>نام و نام‌خانوادگی</th>
                         <th>نام پدر</th>
-                        <th>کدملی</th>
                         <th>تاریخ تولد</th>
+                        <th>کد ملی</th>
+                        <th>ارتباط</th>
+                        <th>نیاز به مجوز</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -133,8 +135,16 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                             <td>{{ passenger.cmpassenger.pfather }}</td>
-                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
+                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
+                            <td>{{ passenger.cmpassenger.ptype.typeName }}</td>
+                            <td>
+                                {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                    <span class="text-danger">دارد</span>
+                                {% else %}
+                                    <span class="text-success">ندارد</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="#"
                                    class="btn btn-info"

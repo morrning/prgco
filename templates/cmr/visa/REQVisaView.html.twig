@@ -117,8 +117,10 @@
                         <th>ردیف</th>
                         <th>نام و نام‌خانوادگی</th>
                         <th>نام پدر</th>
-                        <th>کد ملی</th>
                         <th>تاریخ تولد</th>
+                        <th>کد ملی</th>
+                        <th>ارتباط</th>
+                        <th>نیاز به مجوز</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
@@ -128,8 +130,16 @@
                             <td>{{ loop.index }}</td>
                             <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
                             <td>{{ passenger.cmpassenger.pfather }}</td>
-                            <td class="w-auto">{{ passenger.cmpassenger.pcodemeli }}</td>
                             <td>{{ passenger.cmpassenger.pbirthday }}</td>
+                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
+                            <td>{{ passenger.cmpassenger.ptype.typeName }}</td>
+                            <td>
+                                {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                    <span class="text-danger">دارد</span>
+                                {% else %}
+                                    <span class="text-success">ندارد</span>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a class="btn btn-primary rounded" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">
                                     <i class="fa fa-eye"></i>

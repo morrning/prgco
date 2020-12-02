@@ -59,6 +59,7 @@
                                     <th>تاریخ صدور</th>
                                     <th>تاریخ پایان اعتبار</th>
                                     <th>مرجع صدور</th>
+                                    <th>وضعیت مجوز</th>
                                 </tr>
                                 </thead>
                                 <tbody class="">
@@ -69,6 +70,16 @@
                                         <td>{{ letter.letterStartDate }}</td>
                                         <td>{{ letter.letterEndDate }}</td>
                                         <td>{{ letter.letterSource }}</td>
+                                        <td>
+                                            {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                            {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                            {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                            {% if  valueNow >= valueStart and valueNow < valueEnd %}
+                                                <span class="badge badge-success">دارای اعتبار</span>
+                                            {% else %}
+                                                <span class="badge badge-danger">منقضی شده</span>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

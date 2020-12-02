@@ -203,5 +203,35 @@ class HRMController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/hrm/air/ticket/list", name="HRMAirTicketList")
+     */
+    public function HRMAirTicketList(Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
 
+        return $this->render('hrm/ticket/airTicketRequests.html.twig', [
+            'tickets' => $entityMGR->findBy('App:CMAirTicket',[],['dateSubmit'=>'DESC']),
+        ]);
+    }
+    /**
+     * @Route("/hrm/air/ticket/view/{id}", name="HRMAirTicketView")
+     */
+    public function HRMAirTicketView($id, Request $request, Service\UserMGR $userMGR,Service\EntityMGR $entityMGR,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $ticket = $entityMGR->find('App:CMAirTicket',$id);
+        if(is_null($ticket))
+            return $this->redirectToRoute('404');
+
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$ticket->getCmlist()]);
+        $logMGR->addEvent('CERTICKET'.$ticket->getId(),'مشاهده','اطلاعات درخواست بلیط','CEREMONIAL',$request->getClientIp());
+
+        return $this->render('hrm/ticket/airTicketView.html.twig', [
+            'passengers' => $passengers,
+            'ticket'=>$ticket,
+        ]);
+    }
 }

@@ -1,0 +1,283 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}مشاهده درخواست بلیط هواپیما{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-outline-light" href="{{ path('HRMAirTicketList') }}">
+        بازگشت
+    </a>
+{% endblock %}
+
+{% block pageBody %}
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                <i class="fas fa-receipt"></i>
+                اطلاعات درخواست
+            </a>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container py-3">
+                <div class="row rounded border py-3 mb-2">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-12 pb-3 border-bottom">
+                                <h3>
+                                    وضعیت درخواست:
+                                    <span class="text-success">{{ ticket.ticketState.stateName }}</span>
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="row py-2">
+                            <div class="col-sm-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-info-square"></i>
+                                        اطلاعات درخواست:
+                                    </div>
+                                    <div class="card-body">
+                                        <p>
+                                            درخواست کننده:
+                                            <span class="text-danger">{{ ticket.submitter.publicLabel }}</span>
+                                        </p>
+                                        <p>
+                                            تاریخ درخواست:
+                                            <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}</span>
+                                        </p>
+                                        {% if ticket.suggestTime != null %}
+                                            <p>
+                                                زمان پیشنهادی:
+                                                <span class="text-danger">{{ ticket.suggestTime.label }}</span>
+                                            </p>
+                                        {% endif %}
+                                        <p>
+                                            تاریخ سفر:
+                                            <span class="text-danger">{{ ticket.dateSuggest }}</span>
+                                        </p>
+                                        <p>
+                                            مبدا سفر:
+                                            <span class="text-danger">{{ ticket.source.cname }}</span>
+                                        </p>
+                                        <p>
+                                            مقصد سفر:
+                                            <span class="text-danger">{{ ticket.destination.cname }}</span>
+                                        </p>
+                                        <p>
+                                            وضعیت درخواست:
+                                            <span class="text-danger">{{ ticket.ticketState.stateName }}</span>
+                                        </p>
+                                        <p>
+                                            علت سفر:
+                                            <span class="text-danger">{{ ticket.des }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-thumbs-up"></i>
+                                        اقدامات و ارجاعات
+                                    </div>
+                                    <div class="card-body">
+                                        {% if ticket.ticketState.StateCode == -1 %}
+                                            <p>
+                                                رد کننده:
+                                                <span class="text-danger">{{ ticket.rejecter.publicLabel }}</span>
+                                            </p>
+                                            <p>
+                                                تاریخ رد درخواست:
+                                                <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}</span>
+                                            </p>
+                                            {% if ticket.ARdes != null %}
+                                                <p>
+                                                    توضیحات:
+                                                    <span class="text-danger">{{ ticket.ARdes }}</span>
+                                                </p>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if ticket.ticketState.StateCode == 1 or ticket.ticketState.StateCode == 2 %}
+                                            <p>
+                                                تایید کننده:
+                                                <span class="text-success">{{ ticket.accepter.publicLabel }}</span>
+                                            </p>
+                                            <p>
+                                                تاریخ تایید:
+                                                <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}</span>
+                                            </p>
+                                            {% if ticket.ARdes != null %}
+                                                <p>
+                                                    توضیحات:
+                                                    <span class="text-success">{{ ticket.ARdes }}</span>
+                                                </p>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% if ticket.ticketState.StateCode == 2 %}
+                                            <p>
+                                                اقدام کننده:
+                                                <span class="text-success">{{ ticket.buyer.publicLabel }}</span>
+                                            </p>
+                                            <p>
+                                                تاریخ اقدام به خرید:
+                                                <span class="text-success">{{ Jdate.jdate('Y/n/d H:i:s',ticket.buyDate) }}</span>
+                                            </p>
+                                        {% endif %}
+                                        {% if ticket.ticketState.StateCode == 0 %}
+                                            <p>
+                                                <i class="fa fa-info-square"></i>
+                                                درخواست شما در حال بررسی است.
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-plane-departure"></i>
+                                        اطلاعات بلیط:
+                                    </div>
+                                    <div class="card-body">
+                                        {% if ticket.ticketState.StateCode == 2 %}
+                                            <p>
+                                                شرکت هواپیمایی:
+                                                <span class="text-success">{{ ticket.FlyAirway.airwayName }}</span>
+                                            </p>
+                                            <p>
+                                                تاریخ  پرواز:
+                                                <span class="text-success">{{ ticket.flyDate }}</span>
+                                            </p>
+                                            <p>
+                                                مبلغ:
+                                                <span class="text-success">
+                                            {{ ticket.moneyValue | number_format() }} {{ ticket.moneyType.moneyName }}
+                                        </span>
+                                            </p>
+                                        {% endif %}
+                                        {% if ticket.ticketState.StateCode == 0 %}
+                                            <p>
+                                                <i class="fa fa-info-square"></i>
+                                                تاکنون اقدامی صورت نگرفته است.
+                                            </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row border">
+                    <div class="col-12 p-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <i class="fa fa-users"></i>
+                                فهرست مسافرین
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table2 table-sm table-bordered table-hover rounded text-center">
+                                        <thead class="bg-blue text-light">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام و نام‌خانوادگی</th>
+                                            <th>نام پدر</th>
+                                            <th>کد ملی</th>
+                                            <th>تاریخ تولد</th>
+                                            <th>ارتباط</th>
+                                            <th>نیاز به مجوز</th>
+                                            <th>مجوز خروج</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for passenger in passengers %}
+                                            <tr>
+                                                <td class="select-w50px">{{ loop.index }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.pfather }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.pcodemeli }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.pbirthday }}</td>
+                                                <td class="w-auto">{{ passenger.cmpassenger.ptype.typeName }}</td>
+                                                <td class="w-auto">
+                                                    {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                                        <span class="text-danger">دارد</span>
+                                                    {% else %}
+                                                        <span class="text-success">ندارد</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% set letters = EntityMGR.findBy('App:HRMLetterOutCountry',{'user' : EntityMGR.findOneBy('App:SysUser',{'nationalCode':passenger.cmpassenger.pcodemeli})}) %}
+                                                    {% set break = false %}
+                                                    {% for letter in letters %}
+                                                        {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                                        {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                                        {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                                        {% if  valueNow >= valueStart and valueNow < valueEnd and break == false %}
+                                                            {% set break = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if break == true %}
+                                                        <span class="badge badge-success"> دارای مجوز </span>
+                                                    {% elseif passenger.cmpassenger.ptype.typeName != 'پرسنل شرکت' %}
+
+                                                    {% else %}
+                                                        <span class="badge badge-danger"> فاقد مجوز </span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-forward" role="tabpanel" aria-labelledby="nav-forward-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 mx-auto">
+                        <div class="alert alert-secondary" role="alert">
+                            <h4 class="alert-heading">
+                                <i class="fas fa-save"></i>
+                                ثبت درخواست
+                            </h4>
+                            <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.dateSubmit) }}  توسط {{ ticket.submitter.publicLabel }} ثبت شد.</p>
+                        </div>
+                        {% if ticket.ticketState.StateCode == 2 or ticket.ticketState.StateCode == 1 %}
+                            <div class="alert alert-info" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-thumbs-up"></i>
+                                    تایید درخواست
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}  توسط {{ ticket.accepter.publicLabel }} تایید شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if ticket.ticketState.StateCode == 3 %}
+                            <div class="alert alert-success" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    خرید بلیط
+                                </h4>
+                                <p> بلیط مورد درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.buyDate) }}  توسط {{ ticket.buyer.publicLabel }} خریداری شد.</p>
+                            </div>
+                        {% endif %}
+                        {% if ticket.ticketState.StateCode == -1 %}
+                            <div class="alert alert-danger" role="alert">
+                                <h4 class="alert-heading">
+                                    <i class="fas fa-window-close"></i>
+                                    رد درخواست
+                                </h4>
+                                <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',ticket.ARdate) }}  توسط {{ ticket.rejecter.publicLabel }} رد شد.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

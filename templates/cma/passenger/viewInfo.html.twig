@@ -12,6 +12,12 @@
                     <i class="fas fa-user"></i>
                     اطلاعات مسافر
                 </a>
+                {% if passenger.ptype.typeName == 'پرسنل شرکت' %}
+                    <a class="nav-item nav-link" id="nav-cout-tab" data-toggle="tab" href="#nav-cout" role="tab" aria-controls="nav-cout" aria-selected="true">
+                        <i class="fas fa-not-equal"></i>
+                        مجوزهای خروج از کشور
+                    </a>
+                {% endif %}
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
                     <i class="fas fa-history"></i>
                     تاریخچه رویدادها
@@ -105,10 +111,56 @@
                         {% endfor %}
                     {% else %}
                         <hr>
-                        <h5 class="text-warning">تاکنون هیچ یک از اسناد را ارسال نکرده اید.</h5>
+                        <h5 class="text-warning">تاکنون هیچ مدارکی ارسال نشده است.</h5>
                     {% endif %}
                 </div>
             </div>
+            {% if passenger.ptype.typeName == 'پرسنل شرکت' %}
+                <div class="tab-pane fade" id="nav-cout" role="tabpanel" aria-labelledby="nav-cout-tab">
+                    <div class="container py-3">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12 mx-auto">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                                        <thead class="bg-blue text-light">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>شماره مکاتبه</th>
+                                            <th>مرجع صدور</th>
+                                            <th>شروع اعتبار</th>
+                                            <th>پایان اعتبار</th>
+                                            <th>وضعیت</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for coutLetter in coutLetters %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ coutLetter.letterNum }}</td>
+                                                <td>{{ coutLetter.letterSource }}</td>
+                                                <td>{{ coutLetter.letterStartDate }}</td>
+                                                <td>{{ coutLetter.letterEndDate }}</td>
+                                                <td>
+                                                    {% set valueStart = coutLetter.letterStartDate |replace({'/': ''}) %}
+                                                    {% set valueEnd = coutLetter.letterEndDate |replace({'/': ''}) %}
+                                                    {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                                    {% if  valueNow >= valueStart and valueNow < valueEnd %}
+                                                        <span class="badge badge-success">دارای اعتبار</span>
+                                                    {% else %}
+                                                        <span class="badge badge-danger">منقضی شده</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <div class="container py-3">
                     <div class="row">

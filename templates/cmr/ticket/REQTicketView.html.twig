@@ -194,6 +194,9 @@
                                             <th>نام پدر</th>
                                             <th>کد ملی</th>
                                             <th>تاریخ تولد</th>
+                                            <th>ارتباط</th>
+                                            <th>نیاز به مجوز</th>
+                                            <th>مجوز خروج</th>
                                             <th>امکانات</th>
                                         </tr>
                                         </thead>
@@ -205,7 +208,34 @@
                                                 <td class="w-auto">{{ passenger.cmpassenger.pfather }}</td>
                                                 <td class="w-auto">{{ passenger.cmpassenger.pcodemeli }}</td>
                                                 <td class="w-auto">{{ passenger.cmpassenger.pbirthday }}</td>
-                                                <td class="select-w300px">
+                                                <td class="w-auto">{{ passenger.cmpassenger.ptype.typeName }}</td>
+                                                <td class="w-auto">
+                                                    {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                                        <span class="text-danger">دارد</span>
+                                                    {% else %}
+                                                        <span class="text-success">ندارد</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {% set letters = EntityMGR.findBy('App:HRMLetterOutCountry',{'user' : EntityMGR.findOneBy('App:SysUser',{'nationalCode':passenger.cmpassenger.pcodemeli})}) %}
+                                                    {% set break = false %}
+                                                    {% for letter in letters %}
+                                                        {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                                        {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                                        {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                                        {% if  valueNow >= valueStart and valueNow < valueEnd and break == false %}
+                                                            {% set break = true %}
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if break == true %}
+                                                        <span class="badge badge-success"> دارای مجوز </span>
+                                                    {% elseif passenger.cmpassenger.ptype.typeName != 'پرسنل شرکت' %}
+
+                                                    {% else %}
+                                                        <span class="badge badge-danger"> فاقد مجوز </span>
+                                                    {% endif %}
+                                                </td>
+                                                <td class="w-auto">
                                                     <a class="btn btn-info rounded btn-small btn-primary" href="{{ path('ceremonialREQpasengerView',{'id':passenger.cmpassenger.id}) }}">
                                                         <i class="fa fa-eye"></i>
                                                     </a>

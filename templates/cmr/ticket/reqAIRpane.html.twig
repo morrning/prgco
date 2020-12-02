@@ -3,48 +3,78 @@
 {% block pageBody %}
     <div class="container-fluid py-3">
         <div class="row">
-            <div class="col-sm-12 col-md-6">
-                <div class="row border rounded p-2 m-1">
-                    <div class="col-sm-12 col-md-12 pb-2">
-                        <div class="col-sm-12 col-md-12 pb-2">
-                            <h5>اطلاعات سفر:</h5>
-                            <p class=" py-0 text-danger">
-                                <i class="fa fa-info-square"></i>
-                                تاریخ مسافرت ممکن است با زمان اخذ بلیط برای شما متفاوت باشد.بنا بر ساعت و تاریخ شرکت های هواپیمایی قابل تغییر است.
-                            </p>
-                            <hr>
-                            {{ form_start(form) }}
-                            <div class="row">
-                                <div class="col-sm-12 col-md-6 pb-2">
-                                    {{ form_label(form.source) }}
-                                    {{ form_widget(form.source) }}
-                                </div>
-                                <div class="col-sm-12 col-md-6 pb-2">
-                                    {{ form_label(form.destination) }}
-                                    {{ form_widget(form.destination) }}
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    {{ form_label(form.dateSuggest) }}
-                                    {{ form_widget(form.dateSuggest) }}
-                                </div>
-                                <div class="col-sm-12 col-md-6">
-                                    {{ form_label(form.suggestTime) }}
-                                    {{ form_widget(form.suggestTime) }}
-                                </div>
-                            </div>
+            <div class="col-sm-12 col-md-12 border rounded p-3">
+                <h3 class="text-primary">فهرست افراد انتخابی</h3>
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="bg-blue text-light">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام و نام‌خانوادگی</th>
+                            <th>نام پدر</th>
+                            <th>کد ملی</th>
+                            <th>ارتباط</th>
+                            <th>نیاز به مجوز</th>
+                        </tr>
+                        </thead>
+                        <tbody class="">
+                        {% for userList in userLIsts %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ userList.cmpassenger.pname }} {{ userList.cmpassenger.pfamily }}</td>
+                                <td>{{ userList.cmpassenger.pfather }}</td>
+                                <td>{{ userList.cmpassenger.pcodemeli }}</td>
+                                <td>{{ userList.cmpassenger.ptype.typeName }}</td>
+                                <td>
+                                    {% if userList.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                        <span class="text-danger">دارد</span>
+                                    {% else %}
+                                        <span class="text-success">ندارد</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-sm-12 col-md-12 border rounded p-3 mt-2">
+                <div class="col-sm-12 col-md-12 pb-2">
+                    <h5>اطلاعات سفر:</h5>
+                    <p class=" py-0 text-danger">
+                        <i class="fa fa-info-square"></i>
+                        تاریخ مسافرت ممکن است با زمان اخذ بلیط برای شما متفاوت باشد.بنا بر ساعت و تاریخ شرکت های هواپیمایی قابل تغییر است.
+                    </p>
+                    <hr>
+                    {{ form_start(form) }}
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6 pb-2">
+                            {{ form_label(form.source) }}
+                            {{ form_widget(form.source) }}
+                        </div>
+                        <div class="col-sm-12 col-md-6 pb-2">
+                            {{ form_label(form.destination) }}
+                            {{ form_widget(form.destination) }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.dateSuggest) }}
+                            {{ form_widget(form.dateSuggest) }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            {{ form_label(form.suggestTime) }}
+                            {{ form_widget(form.suggestTime) }}
                         </div>
                     </div>
                 </div>
-                <div class="row border rounded p-2 m-1">
+                <div class="col-sm-12 col-md-12 pb-2">
                     <div class="col-sm-12 col-md-12 pb-2">
-                        <div class="col-sm-12 col-md-12 pb-2">
-                            <h5>توضیحات:</h5>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-12">
-                                    {{ form_label(form.des) }}
-                                    {{ form_widget(form.des) }}
-                                </div>
+                        <h5>توضیحات:</h5>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-12">
+                                {{ form_label(form.des) }}
+                                {{ form_widget(form.des) }}
                             </div>
                         </div>
                     </div>
@@ -59,31 +89,6 @@
                     </div>
                 </div>
                 {{ form_end(form) }}
-            </div>
-            <div class="col-sm-12 col-md-6">
-                <h3 class="text-primary">فهرست افراد انتخابی</h3>
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered table-hover rounded text-center">
-                        <thead class="bg-blue text-light">
-                        <tr>
-                            <th>ردیف</th>
-                            <th>نام و نام‌خانوادگی</th>
-                            <th>نام پدر</th>
-                            <th>کد ملی</th>
-                        </tr>
-                        </thead>
-                        <tbody class="">
-                        {% for userList in userLIsts %}
-                            <tr>
-                                <td>{{ loop.index }}</td>
-                                <td>{{ userList.cmpassenger.pname }} {{ userList.cmpassenger.pfamily }}</td>
-                                <td>{{ userList.cmpassenger.pfather }}</td>
-                                <td>{{ userList.cmpassenger.pcodemeli }}</td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>

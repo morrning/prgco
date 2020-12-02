@@ -17,6 +17,7 @@
                     <th>کد ملی</th>
                     <th>شماره پرسنلی</th>
                     <th>شماره تماس</th>
+                    <th>خروج از کشور</th>
                     <th>امکانات</th>
                 </tr>
                 </thead>
@@ -28,6 +29,23 @@
                         <td>{{ user.nationalCode }}</td>
                         <td>{{ user.employeNum }}</td>
                         <td>{{ user.mobileNum }}</td>
+                        <td>
+                            {% set letters = EntityMGR.findBy('App:HRMLetterOutCountry',{'user' : user }) %}
+                            {% set break = false %}
+                            {% for letter in letters %}
+                                {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                {% if  valueNow >= valueStart and valueNow < valueEnd and break == false %}
+                                    {% set break = true %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if break == true %}
+                                <span class="badge badge-success"> دارای مجوز </span>
+                            {% else %}
+                                <span class="badge badge-danger"> فاقد مجوز </span>
+                            {% endif %}
+                        </td>
                         <td>
                             <a class="btn btn-primary" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
                                 <i class="fa fa-eye"></i>
