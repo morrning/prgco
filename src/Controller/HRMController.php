@@ -132,7 +132,7 @@ class HRMController extends AbstractController
      */
     public function HRMadmin(Service\EntityMGR $entityMGR, Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
 
         $info['allUsers'] = count($entityMGR->findAll('App:SysUser'));
@@ -148,7 +148,7 @@ class HRMController extends AbstractController
      */
     public function employes(Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
 
         return $this->render('hrm/employes.html.twig', [
@@ -161,7 +161,7 @@ class HRMController extends AbstractController
      */
     public function HRMEmployeFolder($id,$msg=0,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
         $user = $entityMGR->find('App:SysUser',$id);
         if(is_null($user))
@@ -183,7 +183,7 @@ class HRMController extends AbstractController
      */
     public function HRMEmployeLetterOutCountryNew(Request $request, $id,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
         $user = $entityMGR->find('App:SysUser',$id);
         if(is_null($user))
@@ -208,7 +208,7 @@ class HRMController extends AbstractController
      */
     public function HRMAirTicketList(Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
 
         return $this->render('hrm/ticket/airTicketRequests.html.twig', [
@@ -220,7 +220,7 @@ class HRMController extends AbstractController
      */
     public function HRMAirTicketView($id, Request $request, Service\UserMGR $userMGR,Service\EntityMGR $entityMGR,Service\LogMGR $logMGR)
     {
-        if(! $userMGR->hasPermission('HRMAREAACCESS','HRM',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
         $ticket = $entityMGR->find('App:CMAirTicket',$id);
         if(is_null($ticket))
