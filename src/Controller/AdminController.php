@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\File\MimeType\FileinfoMimeTypeGuesser;
@@ -679,6 +680,7 @@ class AdminController extends AbstractController
             ])
             ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
             ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
+            ->add('constractor',CheckboxType::class,['label'=>'پیمانکار'])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
@@ -921,6 +923,8 @@ class AdminController extends AbstractController
                 'class'=>Entity\SysRoll::class,'choice_label'=>'label',
                 'label'=>'نقش کاربری'
             ])
+            ->add('constractor',CheckboxType::class,['label'=>'پیمانکار'])
+
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
@@ -965,6 +969,7 @@ class AdminController extends AbstractController
             ->add('username', TextType::class,['label'=>'نام کاربری'])
             ->add('password', PasswordType::class,['label'=>'کلمه عبور'])
             ->add('mobileNum', TextType::class,['label'=>'تلفن همراه'])
+            ->add('SocialMobile', TextType::class,['label'=>'تلفن همراه شبکه‌های اجتماعی'])
             ->add('nationalCode', Type\NumbermaskType::class,['label'=>'کد ملی','attr'=>['class'=>'codeMeli']])
             ->add('employeNum', TextType::class,['label'=>'شماره پرسنلی'])
             ->add('submit', SubmitType::class,['label'=>'افزودن'])
@@ -1018,6 +1023,7 @@ class AdminController extends AbstractController
                 ],
                 'multiple'=>false
             ])
+            ->add('SocialMobile', TextType::class,['label'=>'تلفن همراه شبکه‌های اجتماعی'])
             ->add('submit', SubmitType::class,['label'=>'ذخیره تغییرات'])
             ->getForm();
 

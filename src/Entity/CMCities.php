@@ -21,6 +21,11 @@ class CMCities
      */
     private $cname;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $permission;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -34,6 +39,18 @@ class CMCities
     public function setCname(string $cname): self
     {
         $this->cname = $cname;
+
+        return $this;
+    }
+
+    public function getPermission(): ?bool
+    {
+        return $this->permission;
+    }
+
+    public function setPermission(?bool $permission): self
+    {
+        $this->permission = $permission;
 
         return $this;
     }

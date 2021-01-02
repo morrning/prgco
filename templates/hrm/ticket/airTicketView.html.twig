@@ -223,6 +223,7 @@
 
                                                     {% else %}
                                                         <span class="badge badge-danger"> فاقد مجوز </span>
+                                                        <a class="btn btn-sm btn-primary" href="{{ path('HRMEmployeLetterOutCountryNew',{'id':passenger.cmpassenger.pcodemeli}) }}">ثبت مجوز</a>
                                                     {% endif %}
                                                 </td>
                                             </tr>

@@ -108,6 +108,11 @@ class SysPosition
      */
     private $permissionFromRoll;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $constractor;
+
     public function __construct()
     {
         $this->newsPosts = new ArrayCollection();
@@ -531,6 +536,18 @@ class SysPosition
     public function setPermissionFromRoll(?bool $permissionFromRoll): self
     {
         $this->permissionFromRoll = $permissionFromRoll;
+
+        return $this;
+    }
+
+    public function getConstractor(): ?bool
+    {
+        return $this->constractor;
+    }
+
+    public function setConstractor(?bool $constractor): self
+    {
+        $this->constractor = $constractor;
 
         return $this;
     }

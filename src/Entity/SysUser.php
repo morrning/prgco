@@ -83,6 +83,11 @@ class SysUser
      */
     private $hRMLetterOutCountries;
 
+    /**
+     * @ORM\Column(type="string", length=20, nullable=true)
+     */
+    private $SocialMobile;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -324,6 +329,18 @@ class SysUser
                 $hRMLetterOutCountry->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSocialMobile(): ?string
+    {
+        return $this->SocialMobile;
+    }
+
+    public function setSocialMobile(?string $SocialMobile): self
+    {
+        $this->SocialMobile = $SocialMobile;
 
         return $this;
     }

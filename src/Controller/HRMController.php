@@ -185,7 +185,7 @@ class HRMController extends AbstractController
     {
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
-        $user = $entityMGR->find('App:SysUser',$id);
+        $user = $entityMGR->findOneBy('App:SysUser',['nationalCode'=>$id]);
         if(is_null($user))
             return $this->redirectToRoute('404');
 
@@ -215,6 +215,7 @@ class HRMController extends AbstractController
             'tickets' => $entityMGR->findBy('App:CMAirTicket',[],['dateSubmit'=>'DESC']),
         ]);
     }
+
     /**
      * @Route("/hrm/air/ticket/view/{id}", name="HRMAirTicketView")
      */
@@ -234,4 +235,98 @@ class HRMController extends AbstractController
             'ticket'=>$ticket,
         ]);
     }
+
+    /**
+     * @Route("/hrm/visa/reqs/list", name="HRMVisaList")
+     */
+    public function HRMVisaList(Request $request, Service\UserMGR $userMGR,Service\EntityMGR $entityMGR,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $visas = $entityMGR->findBy('App:CMVisaReq',[],['id'=>'DESC']);
+
+        return $this->render('hrm/visa/VisaList.html.twig',
+            [
+                'visas'=>$visas
+            ]);
+    }
+    /**
+     * @Route("/hrm/visa/view/{id}/{msg}", name="HRMVisaView")
+     */
+    public function HRMVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $visa = $entityMGR->find('App:CMVisaReq',$id);
+        $visa1 = $entityMGR->find('App:CMVisaReq',$id);
+        if(is_null($visa))
+            return $this->redirectToRoute('404');
+
+        $mlist = $entityMGR->find('App:CMList',$visa->getCMlist()->getId());
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
+
+        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+
+        $form = $this->createFormBuilder($visa)
+            ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $form1 = $this->createFormBuilder($visa1)
+            ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
+            ->add('submit1', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $form1->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $visa->setADDateSubmit(time());
+            $visa->setAccepter($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>1]);
+            $visa->setVisaState($acceptState);
+            $entityMGR->update($visa);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'تایید','مدیریت تشریفات','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزای شما توسط %s تایید شد.',$userMGR->currentPosition()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
+
+            $des = sprintf('درخواست ویزا برای %s توسط %s تایید شد.',$visa->getSubmitter()->getPublicLabel(),$userMGR->currentPosition()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialOPTVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
+            $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
+
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);
+        }
+        if ($form1->isSubmitted() && $form1->isValid()) {
+            $visa1->setADDateSubmit(time());
+            $visa1->setRejecter($userMGR->currentPosition());
+            $acceptState = $entityMGR->findOneBy('App:CMVisaState',['StateCode'=>-1]);
+            $visa1->setVisaState($acceptState);
+            $entityMGR->update($visa1);
+
+            $logMGR->addEvent('CERVISA'.$visa->getId(),'رد درخواست','مدیریت تشریفات','CEREMONIAL',$request->getClientIp());
+            $des = sprintf('درخواست ویزای شما توسط %s رد شد.',$userMGR->currentPosition()->getPublicLabel());
+            $url = $this->generateUrl('ceremonialREQVisaView',['id'=>$visa->getId()]);
+            $userMGR->addNotificationForUser($visa->getSubmitter(),$des,$url);
+            $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
+
+            array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت رد شد.']);
+
+        }
+        return $this->render('hrm/visa/VisaView.html.twig', [
+            'passengers' => $passengers,
+            'visa'=>$visa,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERVISA'.$visa->getId()),
+            'alerts'=>$alerts,
+            'form'=>$form->createView(),
+            'form1'=>$form1->createView()
+        ]);
+    }
+
 }

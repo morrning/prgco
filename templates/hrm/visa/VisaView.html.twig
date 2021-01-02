@@ -1,0 +1,272 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}درخواست ویزا به مقصد {{ visa.countryDes.countryName }} به{% endblock %}
+{% block appTop %}
+    <a class="btn btn-outline-light" href="{{ path('HRMVisaList') }}">
+        <i class="fa fa-undo"></i>
+        بازگشت
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                    <i class="fas fa-receipt"></i>
+                    اطلاعات درخواست
+                </a>
+                <a class="nav-item nav-link" id="nav-passengers-tab" data-toggle="tab" href="#nav-passengers" role="tab" aria-controls="nav-passengers" aria-selected="false">
+                    <i class="fas fa-users"></i>
+                    لیست افراد
+                </a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
+                    <i class="fas fa-history"></i>
+                    تاریخچه رویدادها
+                    <div class="badge badge-danger">{{ events | length }}</div>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <div class="container py-3">
+                <div class="row rounded border py-3 mb-1">
+                    <div class="col-12">
+                        <h3>
+                            وضعیت درخواست:
+                            <span class="text-success">{{ visa.visaState.stateName }}</span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="row rounded border py-3 mb-1">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <h6>
+                                    <i class="fas fa-info-square"></i>
+                                    اطلاعات درخواست:
+                                </h6>
+                                <hr>
+                                <p>
+                                    درخواست کننده:
+                                    <span class="text-danger">{{ visa.submitter.publicLabel }}</span>
+                                </p>
+                                <p>
+                                    تاریخ درخواست:
+                                    <span class="text-danger">{{ Jdate.jdate('Y/n/d H:i:s',visa.dateSubmit) }}</span>
+                                </p>
+                                <p>
+                                    مقصد سفر:
+                                    <span class="text-danger">{{ visa.countryDes.countryName }}</span>
+                                </p>
+                                <p>
+                                    وضعیت درخواست:
+                                    <span class="text-danger">{{ visa.visaState.stateName }}</span>
+                                </p>
+                                <p>
+                                    علت سفر:
+                                    <span class="text-danger">{{ visa.des }}</span>
+                                </p>
+                            </div>
+                            <div class="col-sm-12 col-md-8 text-center justify-content-center">
+                                <h6 class="text-success">
+                                    <i class="fas fa-cogs"></i>
+                                    اقدام:
+                                    <span class="text-dark">
+                                        تایید درخواست جهت اخذ ویزا
+                                    </span>
+                                </h6>
+                                <hr>
+                                {% if visa.visaState.stateCode == 0 %}
+                                    <a href="#" class="btn btn-sq-lg btn-success" data-toggle="modal" data-target="#Acceptmodal">
+                                        <i class="fa fa-check-circle fa-5x"></i><br/>
+                                        تایید درخواست
+                                    </a>
+                                    <a href="#" class="btn btn-sq-lg btn-danger" data-toggle="modal" data-target="#rejectmodal">
+                                        <i class="fa fa-times-circle fa-5x"></i><br/>
+                                        رد درخواست
+                                    </a>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  == -1 %}
+                                    <div class="alert alert-danger" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-times-circle"></i>
+                                            رد درخواست توسط مدیریت مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.rejecter.publicLabel }} رد شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 1 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            تایید مدیریت
+                                        </h4>
+                                        <p> درخواست در {{ Jdate.jdate('Y/n/d H:i:s',visa.ADDateSubmit) }}  توسط {{ visa.accepter.publicLabel }} تایید شد.</p>
+                                    </div>
+                                {% endif %}
+                                {% if visa.visaState.StateCode  >= 2 and visa.visaState.StateCode  > 0  %}
+                                    <div class="alert alert-success" role="alert">
+                                        <h4 class="alert-heading">
+                                            <i class="fas fa-check"></i>
+                                            خاتمه
+                                        </h4>
+                                        <p> ویزا در {{ Jdate.jdate('Y/n/d H:i:s',visa.buyDate) }}  توسط {{ visa.buyer.publicLabel }} اعلام وصول شد.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-passengers" role="tabpanel" aria-labelledby="nav-passengers-tab">
+            <div class="table-responsive">
+                <table class="table2 table-sm table-bordered table-hover rounded text-center mt-3">
+                    <thead class="bg-blue text-light">
+                    <tr>
+                        <th>ردیف</th>
+                        <th>نام و نام‌خانوادگی</th>
+                        <th>نام پدر</th>
+                        <th>تاریخ تولد</th>
+                        <th>کد ملی</th>
+                        <th>ارتباط</th>
+                        <th>نیاز به مجوز</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody class="">
+                    {% for passenger in passengers %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ passenger.cmpassenger.pname }} {{ passenger.cmpassenger.pfamily }}</td>
+                            <td>{{ passenger.cmpassenger.pfather }}</td>
+                            <td>{{ passenger.cmpassenger.pbirthday }}</td>
+                            <td>{{ passenger.cmpassenger.pcodemeli }}</td>
+                            <td>{{ passenger.cmpassenger.ptype.typeName }}</td>
+                            <td>
+                                {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                    <span class="text-danger">دارد</span>
+                                {% else %}
+                                    <span class="text-success">ندارد</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if passenger.cmpassenger.ptype.typeName == 'پرسنل شرکت' %}
+                                    <a class="btn btn-primary" href="{{ path('HRMEmployeLetterOutCountryNew',{'id':passenger.cmpassenger.pcodemeli}) }}">ثبت مجوز</a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+            <div class="container py-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 mx-auto">
+                        <div class="table-responsive">
+                            <table class="table table-sm table-bordered table-hover rounded text-center">
+                                <thead class="bg-blue text-light">
+                                <tr>
+                                    <th>ردیف</th>
+                                    <th>تاریخ</th>
+                                    <th>نام کاربر</th>
+                                    <th>توضیحات</th>
+                                    <th>عملیات</th>
+                                </tr>
+                                </thead>
+                                <tbody class="">
+                                {% for event in events %}
+                                    <tr>
+                                        <td>{{ loop.index }}</td>
+                                        <td>{{ Jdate.jdate('Y/n/d H:i:s',event.dateSubmit) }}</td>
+                                        <td>{{ event.fullname }}</td>
+                                        <td>{{ event.des }}</td>
+                                        <td>{{ event.operation }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal REject ticket -->
+    <div class="modal fade" id="rejectmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-light">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        رد درخواست
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-justify">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 pb-3 justify-content-center">
+                            <div class="alert alert-info">
+                                <span class="fa fa-info-circle"></span>
+                                آیا برای رد درخواست ویزا توسط {{ visa.submitter.publicLabel }} به مقصد {{ visa.countryDes.countryName }}  مطمئن هستید؟
+                                <br>
+                                این عملیات غیرقابل بازگشت است!
+                                </span>
+                            </div>
+                            <br>
+                            {{ form_start(form1) }}
+                            {{ form_label(form1.ARDes) }}
+                            {{ form_widget(form1.ARDes) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ form_widget(form1.submit1) }}
+                    {{ form_end(form1) }}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                        انصراف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Accept ticket -->
+    <div class="modal fade" id="Acceptmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-light">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        تایید درخواست
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body text-justify">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 pb-3">
+                            {{ form_start(form) }}
+                            {{ form_label(form.ARDes) }}
+                            {{ form_widget(form.ARDes) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    {{ form_widget(form.submit) }}
+                    {{ form_end(form) }}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                        <i class="fas fa-times"></i>
+                        انصراف
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

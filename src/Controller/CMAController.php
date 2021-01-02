@@ -243,7 +243,13 @@ class CMAController extends AbstractController
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
             $userMGR->sendSmsToUser($userMGR->currentPosition(),$des);
-
+            // send to HRM for get letters
+            if(is_null($ticket->getSubmitter()->getConstractor()) && !is_null($ticket->getDestination()->getPermission())  ){
+                $des = sprintf('درخواست بلیط هواپیما برای  %s توسط %s تایید شد.',$ticket->getSubmitter()->getPublicLabel(),$ticket->getAccepter()->getPublicLabel());
+                $url = $this->generateUrl('HRMAirTicketView',['id'=>$ticket->getId()]);
+                $userMGR->sendSmsToGroup('HRMACCESS','HRM',$des);
+                $userMGR->addNotificationForGroup('HRMACCESS','HRM',$des,$url);
+            }
             $des = sprintf('درخواست بلیط هواپیما برای  %s توسط %s تایید شد.',$ticket->getSubmitter()->getPublicLabel(),$ticket->getAccepter()->getPublicLabel());
             $url = $this->generateUrl('ceremonialOPTTicketView',['id'=>$ticket->getId()]);
             $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
