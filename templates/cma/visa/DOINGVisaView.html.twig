@@ -152,6 +152,9 @@
                                 {% endif %}
                             </td>
                             <td>
+                                <a class="btn btn-danger" href="{{ path('ceremonialDOINGremovePassenger',{'pid':passenger.id,'rid':visa.id, 'type':'visa'}) }}">
+                                    حذف
+                                </a>
                                 <a href="#"
                                    class="btn btn-primary"
                                    target="popup"

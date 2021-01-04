@@ -1,0 +1,281 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="fa" />
+    <meta name="document-type" content="Public" />
+    <meta name="document-rating" content="General" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Shamim Ofoghata" />
+    <link href="Css/bootstrap.min.css" rel="stylesheet" />
+    <link href="Css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="Css/animate.css" rel="stylesheet" />
+    <link href="Css/Style.css" rel="stylesheet" />
+    <link href="Css/sina-nav.min.css" rel="stylesheet" />
+    <script src="Js/jquery-2.0.0.min.js"></script>
+    <script src="Js/bootstrap.min.js"></script>
+    <script src="Js/custom.js"></script>
+    <script src="Js/sina-nav.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+    <section id="tophead" class="container-fluid p-2 grad-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-sm-5 d-lg-block d-none">
+                    <a href="#"><img src="Images/logo2.png" class="img-fluid" /></a>
+                </div>
+
+                <div class="col-lg-3 col-6 mr-auto">
+                    <div class="d-flex flex-column">
+                        <span class="text-white">
+                            امروز : دوشنبه 22 ارديبهشت 1399
+                        </span>
+                        <form class="d-sm-block d-none">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="جستجو ..">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-1 col-6  text-left">
+                    <img src="Images/flag.png" class="pt-sm-4 flag" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <header class="nav-container">
+        <nav class="sina-nav mobile-sidebar navbar-fixed" data-top="60">
+            <div class="container">
+
+                <div class="extension-nav">
+                    <ul class="pt-2">
+                        <li>
+                            <a id="loginbtn" href="Login.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/login.svg" /> ورود
+                            </a>
+                        </li>
+                        <li>
+                            <a id="loginbtn" href="Register.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/user.svg" />عضویت
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sina-nav-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="sina-brand pl-4 d-lg-none d-block" href="Index.html">
+                        <img src="Images/logo.png" class="img-fluid" />
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="sina-menu sina-menu-center">
+                        <li><a href="Index.html">صفحه اصلی</a></li>
+                        <!--<li class="dropdown menu-item-has-mega-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <div class="mega-menu dropdown-menu">
+                                <ul class="mega-menu-row" role="menu">
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Faq.html">سوالات متداول</a></li>
+                                            <li><a href="Ourteam.html">معرفی مدیران</a></li>
+                                            <li><a href="Gallery.html">گـالری تصاویر</a></li>
+                                            <li><a href="Blog.html">اخبارها و رویدادها</a></li>
+                                            <li><a href="Blogdetails.html">جزئیات اخبار</a></li>
+
+                                        </ul>
+                                    </li>
+
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Component.html">المان ها</a></li>
+                                            <li><a href="Features.html">ویژگی ها</a></li>
+                                            <li><a href="Price.html">تعرفه خدمات</a></li>
+                                            <li><a href="AboutUs.html">دربـاره ما</a></li>
+                                            <li><a href="ContactUs.html">ارتباط با ما</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Guide.html">راهنمای استفاده</a></li>
+                                            <li><a href="Register.html">عضویت در سایت</a></li>
+                                            <li><a href="Login.html">ورود به سایت</a></li>
+                                            <li><a href="Service.html">جزئیات خدمات</a></li>
+                                            <li><a href="Blank.html">صفحه خالی</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="404.html">‌صفحه ۴۰۴</a></li>
+                                            <li><a href="Waiting.html">لطفا منتظر بمانید</a></li>
+                                            <li><a href="Success.html">ثبت موفق</a></li>
+                                            <li><a href="UnSuccess.html">ثبت ناموفق</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>-->
+                        <li><a href="Gallery.html">گالری تصاویر</a></li>
+                        <li><a href="Ourteam.html">معرفی مدیران</a></li>
+                        <li><a href="Blog.html">اخبار و رویدادها</a></li>
+                        <li><a href="Faq.html">سوالات متداول</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Blogdetails.html">جزئیات اخبار</a></li>
+                                <li><a href="Component.html">المان ها</a></li>
+                                <li><a href="Features.html">ویژگی ها</a></li>
+                                <li><a href="Guide.html">راهنمای استفاده</a></li>
+                                <li><a href="Price.html">جدول تعرفه</a></li>
+                                <li><a href="404.html">صفحه 404</a></li>
+
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">سایر برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Service.html">خدمات</a></li>
+                                <li><a href="Success.html">ثبت موفق</a></li>
+                                <li><a href="UnSuccess.html">ثبت ناموفق</a></li>
+                                <li><a href="Waiting.html">صفحه انتظار</a></li>
+                                <li><a href="Blank.html">صفحه خالی</a></li>
+
+                                <!--<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-chevron-left float-left"></i>زیر منو</a>
+                                    <ul class="dropdown-menu drop">
+                                        <li><a href="#">زیر منو 1</a></li>
+                                        <li><a href="#">زیر منو 2</a></li>
+                                        <li><a href="#">زیر منو 3</a></li>
+                                    </ul>
+                                </li>-->
+                            </ul>
+                        </li>
+
+                        <li><a href="AboutUs.html">درباره ما</a></li>
+                        <li><a href="ContactUs.html">ارتباط با ما</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <section class="container-fluid mt-3 error404">
+        <div class="container p-md-5 box p-4">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="alert alert-success my-3" role="alert">
+                        <i class="fa fa-check text-grad ml-1"></i>
+                        <span class="IRANSansWeb_Medium">
+                            تغییرات با موفقیت انجام شد ..
+                        </span>
+                    </div>
+                    <a href="Index.html" class="btn btn-outline-grad mt-3">بازگشت</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <footer class="rel-footer mt-5">
+        <div id="footer-content">
+            <div class="container">
+                <div class="row pt-4 mx-2">
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-1 order-1">
+                        <h5 class="IRANSansWeb_Medium"> لینک های سریع : </h5>
+                        <ul>
+                            <li>
+                                <a href="Ourteam.html" target="_blank" title="">مدیران و معاونان</a>
+                            </li>
+                            <li>
+                                <a href="Blog.html" target="_blank" title="">اخبار و رویدادها</a>
+                            </li>
+                            <li>
+                                <a href="Blogdetails.html" target="_blank" title="">جزئیات اخبار </a>
+                            </li>
+                            <li>
+                                <a href="Component.html" target="_blank" title="">المان ها</a>
+                            </li>
+                            <li>
+                                <a href="Features.html" target="_blank" title="">ویژگی ها </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-2  order-3">
+                        <h5 class="IRANSansWeb_Medium">پیوندها : </h5>
+                        <ul>
+                            <li>
+                                <a href="Faq.html" target="_blank" title="">سوالات متداول</a>
+                            </li>
+
+                            <li>
+                                <a href="Login.html" target="_blank" title="">ورود</a>
+                            </li>
+                            <li>
+                                <a href="Register.html" target="_blank" title="">عضویت</a>
+                            </li>
+                            <li>
+                                <a href="AboutUs.html" target="_blank" title="">درباره ما</a>
+                            </li>
+                            <li>
+                                <a href="ContactUs.html" target="_blank" title="">تماس با ما </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 col-sm-6 pr-lg-4 py-3 IRANSansWeb_FaNum  order-lg-3  order-2">
+                        <h5 class="IRANSansWeb_Medium"> ارتباط با ما : </h5>
+                        <p><i class="fas fa-2x fa-map-marker-alt ml-2"></i>آدرس : شهرستان گنبدکاووس - خیابان آزادگان - میدان فراغی  </p>
+                        <p><i class="fas fa-2x fa-phone ml-2"></i>تلفن : 01733224455</p>
+                        <p><i class="fas fa-2x fa-mobile-alt ml-2"></i>تلفن همراه : 09301234567</p>
+                        <p><i class="fas fa-2x fa-fax ml-2"></i>نمابر : 09301234567</p>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-sm-4 py-3 order-lg-4 order-4">
+                        <h5 class="IRANSansWeb_Medium">دانلود اپلیکیشن : </h5>
+                        <div class="d-flex flex-column">
+                            <a href="#"><img src="Images/googleplay.png" class="p-2" /></a>
+                            <a href="#"><img src="Images/bazar.png" class="p-2" /></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer-copyright">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="https://www.rtl-theme.com/author/shamim831/" class="text-white ">
+                            کلیه حقوق این قالب برای طراح محفوظ می باشد - عرضه شده تنها در راست چین .
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Js/sina-nav.min.js"></script>
+</body>
+</html>

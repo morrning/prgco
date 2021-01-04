@@ -98,6 +98,16 @@ class HomeController extends AbstractController
             'alert'=>$alert
         ]);
     }
+    /**
+     * @Route("/home/new", name="homeNew")
+     */
+    public function homeNew(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+
+        return $this->render('home/new.html.twig', [
+
+        ]);
+    }
 
     /**
      * @Route("/apps", name="apps")

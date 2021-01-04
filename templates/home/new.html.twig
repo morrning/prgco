@@ -1,0 +1,512 @@
+{% extends 'baseNew.html.twig' %}
+
+{% block title %}صفحه اصلی{% endblock %}
+
+{% block body %}
+    <div id="fixed-social">
+        <div>
+            <a href="#" class="fixed-linkedin" target="_blank"><i class="fab fa-linkedin"></i></a>
+        </div>
+        <div>
+            <a href="#" class="fixed-instagrem" target="_blank"><i class="fab fa-instagram"></i></a>
+        </div>
+
+        <div>
+            <a href="#" class="fixed-facebook" target="_blank"><i class="fab fa-facebook"></i></a>
+        </div>
+        <div>
+            <a href="#" class="fixed-twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+        </div>
+        <div>
+            <a href="#" class="fixed-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+        </div>
+
+
+    </div>
+
+    <section id="tophead" class="container-fluid p-2 grad-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-sm-5 d-lg-block d-none">
+                    <a href="#"><img src="{{ asset('new_face/Images/logo2.png') }}" class="img-fluid" /></a>
+                </div>
+
+                <div class="col-lg-3 col-6 mr-auto">
+                    <div class="d-flex flex-column">
+                        <span class="text-white">
+                            امروز : دوشنبه 22 ارديبهشت 1399
+                        </span>
+                        <form class="d-sm-block d-none">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="جستجو ..">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-1 col-6  text-left">
+                    <img src="{{ asset('new_face/Images/flag.png') }}" class="pt-sm-4 flag" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <header class="nav-container">
+        <nav class="sina-nav mobile-sidebar navbar-fixed" data-top="60">
+            <div class="container">
+
+                <div class="extension-nav">
+                    <ul class="pt-2">
+                        <li>
+                            <a id="loginbtn" href="Login.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/login.svg" /> ورود
+                            </a>
+                        </li>
+                        <li>
+                            <a id="loginbtn" href="Register.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/user.svg" />عضویت
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sina-nav-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="sina-brand pl-4 d-lg-none d-block" href="Index.html">
+                        <img src="Images/logo.png" class="img-fluid" />
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="sina-menu sina-menu-center">
+                        <li><a href="{{ path('home') }}">صفحه اصلی</a></li>
+                        <li><a href="{{ path('support') }}">درخواست پشتیبانی</a></li>
+                        <li><a href="{{ path('help') }}">راهنمای پورتال</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Blogdetails.html">جزئیات اخبار</a></li>
+                                <li><a href="Component.html">المان ها</a></li>
+                                <li><a href="Features.html">ویژگی ها</a></li>
+                                <li><a href="Guide.html">راهنمای استفاده</a></li>
+                                <li><a href="Price.html">جدول تعرفه</a></li>
+                                <li><a href="404.html">صفحه 404</a></li>
+
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">سایر برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Service.html">خدمات</a></li>
+                                <li><a href="Success.html">ثبت موفق</a></li>
+                                <li><a href="UnSuccess.html">ثبت ناموفق</a></li>
+                                <li><a href="Waiting.html">صفحه انتظار</a></li>
+                                <li><a href="Blank.html">صفحه خالی</a></li>
+
+                                <!--<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-chevron-left float-left"></i>زیر منو</a>
+                                    <ul class="dropdown-menu drop">
+                                        <li><a href="#">زیر منو 1</a></li>
+                                        <li><a href="#">زیر منو 2</a></li>
+                                        <li><a href="#">زیر منو 3</a></li>
+                                    </ul>
+                                </li>-->
+                            </ul>
+                        </li>
+
+                        <li><a href="AboutUs.html">درباره ما</a></li>
+                        <li><a href="ContactUs.html">ارتباط با ما</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <section class="container mt-2">
+        <div class="row">
+            <div class="col-lg-3 pt-1 order-lg-1 order-2 text-center">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12 col-6 mb-3">
+                            <a href="#"><img src="Images/banner1-min-1.png " class="img-fluid rad12"></a>
+                        </div>
+                        <div class="col-lg-12 col-6 mb-3">
+                            <a href="#"><img src="Images/banner1-min-3.png " class="img-fluid rad12"></a>
+                        </div>
+                        <div class="col-lg-12 col-6 mb-3">
+                            <a href="#"><img src="Images/banner1-min-2.png " class="img-fluid rad12"></a>
+                        </div>
+                        <div class="col-lg-12 col-6 mb-2">
+                            <a href="#"><img src="Images/banner1-min-4.png " class="img-fluid rad12"></a>
+                        </div>
+                        <img src="Images/foot.png" class="mx-auto text-center" />
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-9 mb-lg-0 mb-3 order-lg-2  order-1">
+                <div id="owl-slider" class="owl-carousel">
+                    <div class="item">
+                        <a href="#">
+                            <img src="Images/Slides/Slide-1.png" alt="slide1" class="img-fluid" />
+                            <div class="caption"><p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p></div>
+                        </a>
+                    </div>
+                    <div class="item">
+                        <a href="#">
+                            <img src="Images/Slides/Slide-2.png" alt="slide2" class="img-fluid" />
+                            <div class="caption"><p>لورم ایپسوم از صنعت چاپ و با استفاده از طراحان </p></div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="container mt-4 text-center">
+        <h5 class="IRANSansWeb_Medium  bt-color">خدمات ما</h5>
+        <p>کلیه خدمات قابل ارائه لورم ایپسوم از صنعت چاپ </p>
+        <div id="owl-Service" class="owl-carousel">
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/11.jpg" alt="">
+                    </a>
+                    <h6>عنوان یک</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/12.jpg" alt="">
+                    </a>
+                    <h6>عنوان دو</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/11.jpg" alt="">
+                    </a>
+                    <h6>عنوان سه</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/14.jpg" alt="">
+                    </a>
+                    <h6>عنوان چهار</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/16.jpg" alt="">
+                    </a>
+                    <h6>عنوان پنج</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+            <div class="card mx-1">
+                <div class="card-body">
+                    <a href="#">
+                        <img class="rounded-circle" src="Images/12.jpg" alt="">
+                    </a>
+                    <h6>عنوان شش</h6>
+                    <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
+                    <a href="#" class="btn btn-grad px-5 text-white mt-3 rad25">مشاهده</a>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="container mt-5">
+        <h5 class="IRANSansWeb_Medium text-center bt-color">آخرین اخبـارها و رویدادها</h5>
+        <div id="owl-topnews" class="owl-carousel">
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/samad9810.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center pb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/5.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="d-flex flex-column covernews">
+                        <div class="d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                            <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                            <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                            <span><i class="fas fa-comment ml-1"></i>6</span>
+                        </div>
+                    </div>
+                </a>
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/987.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/6.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center pb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/pishkhn9811.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/samad9811.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/samad9811.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+            <div class="card p-3">
+                <a href="#" class="relative">
+                    <img src="Images/News/pishkhn9811.jpg" class="mb-3 img-fluid rad12" />
+                    <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
+                        <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
+                        <span><i class="fas fa-eye ml-1"></i>28 بار</span>
+                        <span><i class="fas fa-comment ml-1"></i>6</span>
+                    </div>
+                </a>
+
+                <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ با استفاده ..</p>
+                <a href="#" class="text-danger IRANSansWeb_Medium text-center mb-3">مشاهده خبر »</a>
+            </div>
+        </div>
+
+    </section>
+
+
+    <section class="container mt-4 mb-5">
+        <div id="foottop" class="row p-3 mx-2 mt-2 grad-bg text-center text-white rad25">
+            <div class="col-lg-4">
+                <a href="#"><img src="Images/logo2.png" /></a>
+            </div>
+            <div class="col-lg-8">
+                <h6 class="mb-2 IRANSansWeb_Medium">شماره های تماس :</h6>
+                <a href="#" class="rounded-btn text-white text-center support-phone IRANSansWeb_Bold">01733265147 __ 01733265149</a>
+            </div>
+        </div>
+        <img src="Images/foot.png" class="float-left ml-5" />
+    </section>
+
+
+    <section class="container text-center pt-4 mt-5">
+        <h5 class="IRANSansWeb_Medium bt-color">نمایندگان ما</h5>
+        <p>جهت مشاهده همکاران ما در شهر خود از لینک های زیر استفاده نمایید</p>
+        <div id="owl-province" class="owl-carousel">
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/17.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/18.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/17.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/18.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/17.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/18.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/17.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+            <div class="card mx-2">
+                <a href="#">
+                    <img src="Images/18.jpg" class="rad25" />
+                    <p class="IRANSansWeb_Medium pt-2">لورم ایپسوم</p>
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer class="rel-footer mt-5">
+        <div id="footer-content">
+            <div class="container">
+                <div class="row pt-4 mx-2">
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-1 order-1">
+                        <h5 class="IRANSansWeb_Medium"> لینک های سریع : </h5>
+                        <ul>
+                            <li>
+                                <a href="Ourteam.html" target="_blank" title="">مدیران و معاونان</a>
+                            </li>
+                            <li>
+                                <a href="Blog.html" target="_blank" title="">اخبار و رویدادها</a>
+                            </li>
+                            <li>
+                                <a href="Blogdetails.html" target="_blank" title="">جزئیات اخبار </a>
+                            </li>
+                            <li>
+                                <a href="Component.html" target="_blank" title="">المان ها</a>
+                            </li>
+                            <li>
+                                <a href="Features.html" target="_blank" title="">ویژگی ها </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-2  order-3">
+                        <h5 class="IRANSansWeb_Medium">پیوندها : </h5>
+                        <ul>
+                            <li>
+                                <a href="Faq.html" target="_blank" title="">سوالات متداول</a>
+                            </li>
+
+                            <li>
+                                <a href="Login.html" target="_blank" title="">ورود</a>
+                            </li>
+                            <li>
+                                <a href="Register.html" target="_blank" title="">عضویت</a>
+                            </li>
+                            <li>
+                                <a href="AboutUs.html" target="_blank" title="">درباره ما</a>
+                            </li>
+                            <li>
+                                <a href="ContactUs.html" target="_blank" title="">تماس با ما </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 col-sm-6 pr-lg-4 py-3 IRANSansWeb_FaNum  order-lg-3  order-2">
+                        <h5 class="IRANSansWeb_Medium"> ارتباط با ما : </h5>
+                        <p><i class="fas fa-2x fa-map-marker-alt ml-2"></i>آدرس : شهرستان گنبدکاووس - خیابان آزادگان - میدان فراغی  </p>
+                        <p><i class="fas fa-2x fa-phone ml-2"></i>تلفن : 01733224455</p>
+                        <p><i class="fas fa-2x fa-mobile-alt ml-2"></i>تلفن همراه : 09301234567</p>
+                        <p><i class="fas fa-2x fa-fax ml-2"></i>نمابر : 09301234567</p>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-sm-4 py-3 order-lg-4 order-4">
+                        <h5 class="IRANSansWeb_Medium">دانلود اپلیکیشن : </h5>
+                        <div class="d-flex flex-column">
+                            <a href="#"><img src="Images/googleplay.png" class="p-2" /></a>
+                            <a href="#"><img src="Images/bazar.png" class="p-2" /></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer-copyright">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="https://www.rtl-theme.com/author/shamim831/" class="text-white ">
+                            {{ ConfigMGR.getConfig.footerText }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+
+

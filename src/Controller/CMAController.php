@@ -65,6 +65,24 @@ class CMAController extends AbstractController
             'coutLetters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])])
         ]);
     }
+
+    /**
+     * @Route("/ceremonial/mng/ticket/remove/passenger/{rid}/{pid}/{type}", name="ceremonialDOINGremovePassenger")
+     */
+    public function ceremonialDOINGremovePassenger($rid,$pid,$type = 'ticket',Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $entityMGR->remove('App:CMListUser',$pid);
+        if($type == 'ticket')
+            return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$rid,'msg'=>3]);
+        else
+            return $this->redirectToRoute('ceremonialDOINGVisaView',['id'=>$rid,'msg'=>3]);
+    }
+
+
     /**
      * @Route("/ceremonial/mng/visa/list/{type}", name="ceremonialDOINGVisaList")
      */
@@ -113,12 +131,15 @@ class CMAController extends AbstractController
         $visa1 = $entityMGR->find('App:CMVisaReq',$id);
         if(is_null($visa))
             return $this->redirectToRoute('404');
-
+        $alerts = [];
+        if($msg == 3){
+            array_push($alerts,['type'=>'success','message'=>'مسافر حذف شد.']);
+        }
         $mlist = $entityMGR->find('App:CMList',$visa->getCMlist()->getId());
         $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
 
         $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
-        $alerts = [];
+
 
         $form = $this->createFormBuilder($visa)
             ->add('ARDes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])
@@ -221,6 +242,8 @@ class CMAController extends AbstractController
             array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت رد شد.']);
         if($msg == 2)
             array_push($alerts,['type'=>'success','message'=>'درخواست با موفقیت تایید شد.']);
+        if($msg == 3)
+            array_push($alerts,['type'=>'success','message'=>'مسافر از لیست درخواست حذف شد.']);
 
         $form = $this->createFormBuilder($ticket)
             ->add('ARdes', TextareaType::class,['label'=>'توضیحات تکمیلی:','required'=>false])

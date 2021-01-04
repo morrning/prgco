@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="fa">
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="fa" />
+    <meta name="document-type" content="Public" />
+    <meta name="document-rating" content="General" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="PRGCO By Sarkesh LTD" />
+
+    <link href="{{ asset('new_face/Css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('new_face/Css/bootstrap-rtl.min.css') }}" rel="stylesheet" />
+    <!-- jquery UI css files -->
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
+    <!-- chartist CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
+    <!-- lightbox CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/lightbox/css/lightbox.min.css') }}">
+    <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
+    <!-- Optional JavaScript -->
+    <!-- Javascript JS Routing library -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{{ asset('assets/js/jquery-3.3.1.slim.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.alphanum.js') }}"></script>
+    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
+    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('assets/jstree/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/js/core.js') }}"></script>
+    <script src="{{ asset('assets/js/typed/typed.min.js') }}"></script>
+    <script src="{{ asset('assets/js/modal.js') }}"></script>
+    <script src="{{ asset('assets/chartjs/Chart.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('assets/datatable/ColReorderWithResize.js') }}"></script>
+    <script src="{{ asset('assets/lightbox/js/lightbox.min.js') }}"></script>
+    {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
+        <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    {% else %}
+        <style>
+            font-family: 'tahoma' !important;
+        </style>
+    {% endif %}
+    <link href="{{ asset('new_face/Css/animate.css') }}" rel="stylesheet" />
+    <link href="{{ asset('new_face/Css/Style.css') }}" rel="stylesheet" />
+    <link href="{{ asset('new_face/Css/owl-carousel/owl.carousel.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('new_face/Css/sina-nav.min.css') }}" rel="stylesheet" />
+    <script src="{{ asset('new_face/Js/jquery-2.0.0.min.js') }}"></script>
+    <script src="{{ asset('new_face/Js/bootstrap.min.js') }}"></script>
+
+    <script src="{{ asset('new_face/Js/owl.carousel.js') }}"></script>
+    <script src="{{ asset('new_face/Js/custom.js') }}"></script>
+    <script src="{{ asset('new_face/Js/sina-nav.min.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    {% block stylesheets %}{% endblock %}
+    <script>
+        $(document).ready(function(){
+            //create datatable
+            var table = $('.table').DataTable({
+                "language": {
+                    "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
+                    buttons: {
+                        colvis: 'ستون‌ها',
+                        print: "چاپ",
+                        excel: "اکسل",
+                        copy: "رونوشت"
+                    }
+                },
+                "pageLength": 32,
+                "autoWidth": false,
+                "colReorder": true,
+                "lengthMenu": [[10, 32, 100, -1], [10, 32, 100, "همه"]],
+                dom: 'Blftip',
+                buttons: [
+                    'copyHtml5',
+                    'excelHtml5',
+                    'colvis',
+                    'print'
+                ]
+            });
+
+            new $.fn.dataTable.ColReorder(table);
+        });
+    </script>
+</head>
+<body onload="jsCoreRun()">
+<div class="SystemModal" id="SystemModal"></div>
+{% block body %}{% endblock %}
+{% block javascripts %}{% endblock %}
+</body>
+</html>

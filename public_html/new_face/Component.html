@@ -1,0 +1,883 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="content-language" content="fa" />
+    <meta name="document-type" content="Public" />
+    <meta name="document-rating" content="General" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Shamim Ofoghata" />
+    <link href="Css/bootstrap.min.css" rel="stylesheet" />
+    <link href="Css/bootstrap-rtl.min.css" rel="stylesheet" />
+    <link href="Css/animate.css" rel="stylesheet" />
+    <link href="Css/Style.css" rel="stylesheet" />
+    <link href="Css/sina-nav.min.css" rel="stylesheet" />
+    <script src="Js/jquery-2.0.0.min.js"></script>
+    <script src="Js/bootstrap.min.js"></script>
+    <script src="Js/custom.js"></script>
+    <script src="Js/sina-nav.min.js"></script>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body id="component">
+
+    <section id="tophead" class="container-fluid p-2 grad-bg">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-sm-5 d-lg-block d-none">
+                    <a href="#"><img src="Images/logo2.png" class="img-fluid" /></a>
+                </div>
+
+                <div class="col-lg-3 col-6 mr-auto">
+                    <div class="d-flex flex-column">
+                        <span class="text-white">
+                            امروز : دوشنبه 22 ارديبهشت 1399
+                        </span>
+                        <form class="d-sm-block d-none">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" placeholder="جستجو ..">
+                                <div class="input-group-prepend">
+                                    <button class="btn btn-success" type="submit"><i class="fa fa-search"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+
+                <div class="col-lg-1 col-6  text-left">
+                    <img src="Images/flag.png" class="pt-sm-4 flag" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <header class="nav-container">
+        <nav class="sina-nav mobile-sidebar navbar-fixed" data-top="60">
+            <div class="container">
+
+                <div class="extension-nav">
+                    <ul class="pt-2">
+                        <li>
+                            <a id="loginbtn" href="Login.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/login.svg" /> ورود
+                            </a>
+                        </li>
+                        <li>
+                            <a id="loginbtn" href="Register.html" class="btn btn-link p-1 ml-2">
+                                <img src="Images/Svg/user.svg" />عضویت
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="sina-nav-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <a class="sina-brand pl-4 d-lg-none d-block" href="Index.html">
+                        <img src="Images/logo.png" class="img-fluid" />
+                    </a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="navbar-menu">
+                    <ul class="sina-menu sina-menu-center">
+                        <li><a href="Index.html">صفحه اصلی</a></li>
+                        <!--<li class="dropdown menu-item-has-mega-menu">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <div class="mega-menu dropdown-menu">
+                                <ul class="mega-menu-row" role="menu">
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Faq.html">سوالات متداول</a></li>
+                                            <li><a href="Ourteam.html">معرفی مدیران</a></li>
+                                            <li><a href="Gallery.html">گـالری تصاویر</a></li>
+                                            <li><a href="Blog.html">اخبارها و رویدادها</a></li>
+                                            <li><a href="Blogdetails.html">جزئیات اخبار</a></li>
+
+                                        </ul>
+                                    </li>
+
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Component.html">المان ها</a></li>
+                                            <li><a href="Features.html">ویژگی ها</a></li>
+                                            <li><a href="Price.html">تعرفه خدمات</a></li>
+                                            <li><a href="AboutUs.html">دربـاره ما</a></li>
+                                            <li><a href="ContactUs.html">ارتباط با ما</a></li>
+
+                                        </ul>
+                                    </li>
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="Guide.html">راهنمای استفاده</a></li>
+                                            <li><a href="Register.html">عضویت در سایت</a></li>
+                                            <li><a href="Login.html">ورود به سایت</a></li>
+                                            <li><a href="Service.html">جزئیات خدمات</a></li>
+                                            <li><a href="Blank.html">صفحه خالی</a></li>
+                                        </ul>
+                                    </li>
+                                    <li class="mega-menu-col col-md-3">
+                                        <ul class="sub-menu">
+                                            <li><a href="404.html">‌صفحه ۴۰۴</a></li>
+                                            <li><a href="Waiting.html">لطفا منتظر بمانید</a></li>
+                                            <li><a href="Success.html">ثبت موفق</a></li>
+                                            <li><a href="UnSuccess.html">ثبت ناموفق</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>-->
+                        <li><a href="Gallery.html">گالری تصاویر</a></li>
+                        <li><a href="Ourteam.html">معرفی مدیران</a></li>
+                        <li><a href="Blog.html">اخبار و رویدادها</a></li>
+                        <li><a href="Faq.html">سوالات متداول</a></li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Blogdetails.html">جزئیات اخبار</a></li>
+                                <li><a href="Component.html">المان ها</a></li>
+                                <li><a href="Features.html">ویژگی ها</a></li>
+                                <li><a href="Guide.html">راهنمای استفاده</a></li>
+                                <li><a href="Price.html">جدول تعرفه</a></li>
+                                <li><a href="404.html">صفحه 404</a></li>
+
+                            </ul>
+                        </li>
+
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">سایر برگه ها<i class="fa  fa-chevron-down pr-2"></i></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="Service.html">خدمات</a></li>
+                                <li><a href="Success.html">ثبت موفق</a></li>
+                                <li><a href="UnSuccess.html">ثبت ناموفق</a></li>
+                                <li><a href="Waiting.html">صفحه انتظار</a></li>
+                                <li><a href="Blank.html">صفحه خالی</a></li>
+
+                                <!--<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-chevron-left float-left"></i>زیر منو</a>
+                                    <ul class="dropdown-menu drop">
+                                        <li><a href="#">زیر منو 1</a></li>
+                                        <li><a href="#">زیر منو 2</a></li>
+                                        <li><a href="#">زیر منو 3</a></li>
+                                    </ul>
+                                </li>-->
+                            </ul>
+                        </li>
+
+                        <li><a href="AboutUs.html">درباره ما</a></li>
+                        <li><a href="ContactUs.html">ارتباط با ما</a></li>
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <section class="container-fluid mt-3">
+        <div class="container p-md-5 box p-4">
+            <div class="comp-sec-wrapper">
+
+                <!-- Alerts -->
+                <section class="comp-section">
+                    <h3 class="comp-title">پیغام ها</h3>
+                    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+                        لطفا برخی از قسمت های زیر را بررسی کنید ..
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-secondary alert-dismissible fade show" role="alert">
+                        لطفا برخی از قسمت های زیر را بررسی کنید ..
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>هشدار ! </strong>یک خطای اتصال رخ داد
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <strong> خطا !</strong> <a href="#" class="alert-link"> مسئله ایی </a>هنگام ارسال داده های شما رخ داده است
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        پیغام شما با موفقیت ارسال شد !
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                        <strong>توجه !</strong> لطفا قوانین زیر را با دقت مطالعه نمایید
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-light alert-dismissible fade show" role="alert">
+                        لطفا برخی از قسمت های زیر را بررسی کنید ..
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="alert alert-dark alert-dismissible fade show mb-0" role="alert">
+                        لطفا برخی از قسمت های زیر را بررسی کنید ..
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+
+                </section>
+                <!-- /Alerts -->
+                <!-- Breadcrumbs -->
+                <section class="comp-section pt-5">
+
+                    <h3 class="comp-title">راهنمای مسیر</h3>
+
+
+
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb rad25">
+                            <li class="breadcrumb-item active" aria-current="page">صفحه اصلی</li>
+                        </ol>
+                    </nav>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb rad25">
+                            <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">اخبار</li>
+                        </ol>
+                    </nav>
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb rad25 mb-0">
+                            <li class="breadcrumb-item"><a href="#">صفحه اصلی</a></li>
+                            <li class="breadcrumb-item"><a href="#">اخبار</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">نمونه خبر اول</li>
+                        </ol>
+                    </nav>
+
+                </section>
+                <!-- /Breadcrumbs -->
+                <!-- Cards -->
+                <section class="comp-section comp-cards pt-5">
+
+                    <h3 class="comp-title">باکس</h3>
+
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <img alt="Card Image" src="Images/News/987.jpg" class="card-img-top">
+                                <!--<div class="card-header">
+                                    <h5 class="card-title mb-0"> تصویر ، عنوان ، لینک </h5>
+                                </div>-->
+                                <div class="card-body">
+                                    <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                    <a class="card-link px-2" href="#">لینک 1</a>
+                                    <a class="card-link px-2" href="#">لینک 2</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <img alt="Card Image" src="Images/News/987.jpg" class="card-img-top">
+                                <!--<div class="card-header">
+                                    <h5 class="card-title mb-0">تصویر ، عنوان ، دکمه</h5>
+                                </div>-->
+                                <div class="card-body">
+                                    <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                    <a class="btn btn-grad text-white btn-block" href="#">دکمه</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <img alt="Card Image" src="Images/News/987.jpg" class="card-img-top">
+                                <!--<div class="card-header">
+                                    <h5 class="card-title mb-0">تصویر ، عنوان ، لیست</h5>
+                                </div>-->
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">لیست شماره 1</li>
+                                    <li class="list-group-item">لیست شماره 2</li>
+                                    <li class="list-group-item">لیست شماره 3</li>
+                                    <li class="list-group-item">لیست شماره 4</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">عنوان ، متن ، لینک</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                    <a class="card-link" href="#">لینک 1</a>
+                                    <a class="card-link px-3" href="#">لینک 2</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">عنوان، متن ، دکمه</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                    <a class="btn btn-grad text-white" href="#">دکمه</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <h5 class="card-title mb-0">عنوان ، لیست</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">لیست شماره 1</li>
+                                    <li class="list-group-item">لیست شماره 2</li>
+                                    <li class="list-group-item">لیست شماره 3</li>
+                                    <li class="list-group-item">لیست شماره 4</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card">
+                                <div class="card-header">
+                                    قسمت هدر
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">عنوان مورد نظر</h5>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="Images/Teleco.png" class="img-fluid" />
+                                        </div>
+                                        <div class="col-md-8">
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی ..</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-muted">
+                                    قسمت فوتر
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <ul role="tablist" class="nav nav-tabs card-header-tabs float-right">
+                                        <li class="nav-item">
+                                            <a href="#tab-1" data-toggle="tab" class="nav-link active">فعـال</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-2" data-toggle="tab" class="nav-link">لینک</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-3" data-toggle="tab" class="nav-link disabled">غیرفعال</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content pt-0">
+                                        <div role="tabpanel" id="tab-1" class="tab-pane fade show active">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                        <div role="tabpanel" id="tab-2" class="tab-pane fade text-center">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                        <div role="tabpanel" id="tab-3" class="tab-pane fade">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <ul role="tablist" class="nav nav-pills card-header-pills float-right">
+                                        <li class="nav-item">
+                                            <a href="#tab-4" data-toggle="tab" class="nav-link active">فعـال</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-5" data-toggle="tab" class="nav-link">لینک</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-6" data-toggle="tab" class="nav-link disabled">غیرفعال</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content pt-0">
+                                        <div role="tabpanel" id="tab-4" class="tab-pane fade show active">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                        <div role="tabpanel" id="tab-5" class="tab-pane fade text-center">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                        <div role="tabpanel" id="tab-6" class="tab-pane fade">
+                                            <h5 class="card-title">باکس تب دار</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="container">
+                    <div class="row">
+                        <div class="col-12 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <ul role="tablist" class="nav nav-tabs card-header-tabs float-right">
+                                        <li class="nav-item">
+                                            <a href="#tab-10" data-toggle="tab" class="nav-link active">تب 1</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="#tab-20" data-toggle="tab" class="nav-link">تب 2</a>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="card-body">
+                                    <div class="tab-content pt-0">
+                                        <div role="tabpanel" id="tab-10" class="tab-pane fade show active">
+                                            <h5 class="card-title">باکس تب دار 1</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                        <div role="tabpanel" id="tab-20" class="tab-pane fade">
+                                            <h5 class="card-title">باکس تب دار 2</h5>
+                                            <p class="card-text text-justify">متخصص ارتودنسی و ناهنجاری های فک و صورت فارغ التحصیل دوره دکترای دندانپزشکی از دانشگاه علوم پزشکی شهید بهشتی فارغ التحصیل دوره تخصصی ارتودنسی</p>
+                                            <a class="btn btn-warning" href="#">دکمه</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+                <!-- Pagination -->
+                <section class="comp-section pt-5">
+
+                    <h3 class="comp-title">صفحه بندی</h3>
+
+
+                    <div>
+                        <ul class="pagination">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">قبلی</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">2 <span class="sr-only">(فعلی)</span></a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">بعدی</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                    <span class="sr-only">قبلی</span>
+                                </a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                    <span class="sr-only">بعدی</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <ul class="pagination pagination-sm mb-0">
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1">قبلی</a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#">بعدی</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </section>
+                <!-- /Pagination -->
+                <!-- Buttons -->
+                <section class="comp-section comp-buttons pt-5">
+
+                    <h3 class="comp-title">دکمه ها</h3>
+
+                    <h4 class="card-title">دکمه های پیش فرض</h4>
+                    <button type="button" class="btn btn-grad text-white mb-3">Primary</button>
+                    <button type="button" class="btn btn-primary mb-3">Primary</button>
+                    <button type="button" class="btn btn-secondary mb-3">Secondary</button>
+                    <button type="button" class="btn btn-success mb-3">Success</button>
+                    <button type="button" class="btn btn-danger mb-3">Danger</button>
+                    <button type="button" class="btn btn-warning mb-3">Warning</button>
+                    <button type="button" class="btn btn-info mb-3">Info</button>
+                    <button type="button" class="btn btn-light mb-3">Light</button>
+                    <button type="button" class="btn btn-dark mb-3">Dark</button>
+                    <button type="button" class="btn btn-link mb-3">Link</button>
+                    <hr>
+                    <h4 class="card-title">اندازه دکمه ها</h4>
+                    <p>
+                        <button type="button" class="btn btn-grad btn-lg text-white mb-3">Primary</button>
+                        <button type="button" class="btn btn-primary btn-lg mb-3">Primary</button>
+                        <button type="button" class="btn btn-secondary btn-lg mb-3">Secondary</button>
+                        <button type="button" class="btn btn-success btn-lg mb-3">Success</button>
+                        <button type="button" class="btn btn-danger btn-lg mb-3">Danger</button>
+                        <button type="button" class="btn btn-warning btn-lg mb-3">Warning</button>
+                        <button type="button" class="btn btn-info btn-lg mb-3">Info</button>
+                        <button type="button" class="btn btn-light btn-lg mb-3">Light</button>
+                        <button type="button" class="btn btn-dark btn-lg mb-3">Dark</button>
+                    </p>
+                    <p>
+                        <button type="button" class="btn btn-grad text-white mb-3">Primary</button>
+                        <button type="button" class="btn btn-primary mb-3">Primary</button>
+                        <button type="button" class="btn btn-secondary mb-3">Secondary</button>
+                        <button type="button" class="btn btn-success mb-3">Success</button>
+                        <button type="button" class="btn btn-danger mb-3">Danger</button>
+                        <button type="button" class="btn btn-warning mb-3">Warning</button>
+                        <button type="button" class="btn btn-info mb-3">Info</button>
+                        <button type="button" class="btn btn-light mb-3">Light</button>
+                        <button type="button" class="btn btn-dark mb-3">Dark</button>
+                    </p>
+                    <p>
+                        <button type="button" class="btn btn-grad btn-sm text-white mb-3">Primary</button>
+                        <button type="button" class="btn btn-primary btn-sm mb-3">Primary</button>
+                        <button type="button" class="btn btn-secondary btn-sm mb-3">Secondary</button>
+                        <button type="button" class="btn btn-success btn-sm mb-3">Success</button>
+                        <button type="button" class="btn btn-danger btn-sm mb-3">Danger</button>
+                        <button type="button" class="btn btn-warning btn-sm">Warning</button>
+                        <button type="button" class="btn btn-info btn-sm mb-3">Info</button>
+                        <button type="button" class="btn btn-light btn-sm mb-3">Light</button>
+                        <button type="button" class="btn btn-dark btn-sm mb-3">Dark</button>
+                    </p>
+                    <hr>
+                    <h4 class="card-title">دکمه های گروهی</h4>
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-lg">
+                            <button type="button" class="btn btn-grad text-white">Left</button>
+                            <button type="button" class="btn btn-grad text-white">Middle</button>
+                            <button type="button" class="btn btn-grad text-white">Right</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="btn-toolbar">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-grad text-white">Left</button>
+                            <button type="button" class="btn btn-grad text-white">Middle</button>
+                            <button type="button" class="btn btn-grad text-white">Right</button>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="btn-toolbar">
+                        <div class="btn-group btn-group-sm">
+                            <button type="button" class="btn btn-grad text-white">Left</button>
+                            <button type="button" class="btn btn-grad text-white">Middle</button>
+                            <button type="button" class="btn btn-grad text-white">Right</button>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Rounded Button -->
+
+
+                    <h4 class="card-title pt-5">دکمه های تو خالی</h4>
+
+
+                    <div class="row row-sm align-items-center">
+                        <div class="col-12 col-xl mb-3 mb-xl-0">نرمال</div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-primary">Primary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-secondary">Secondary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-success">Success</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-warning">Warning</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-danger">Danger</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-info">Info</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-light">Light</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-dark">Dark</button>
+                        </div>
+                    </div>
+                    <div class="row row-sm align-items-center mt-3">
+                        <div class="col-12 col-xl mb-3 mb-xl-0">فـعال</div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-primary active">Primary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-secondary active">Secondary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-success active">Success</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-warning active">Warning</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-danger active">Danger</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-info active">Info</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-light active">Light</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button type="button" class="btn btn-block btn-outline-dark active">Dark</button>
+                        </div>
+                    </div>
+                    <div class="row row-sm align-items-center mt-3">
+                        <div class="col-12 col-xl mb-3 mb-xl-0">غیر فعال</div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-primary">Primary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-secondary">Secondary</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-success">Success</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-warning">Warning</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-danger">Danger</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-info">Info</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-light">Light</button>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2 col-xl mb-3 mb-xl-0">
+                            <button disabled="" type="button" class="btn btn-block btn-outline-dark">Dark</button>
+                        </div>
+                    </div>
+
+
+                </section>
+                <!-- Buttons -->
+                <!-- Typography -->
+                <section class="comp-section pt-5">
+
+                    <h3 class="comp-title">تایپوگرافی</h3>
+
+                    <div class="row">
+                        <div class="col-md-12">
+
+
+
+                            <h1>عنوان شماره 1</h1>
+                            <h2>عنوان شماره 2</h2>
+                            <h3>عنوان شماره 3</h3>
+                            <h4>عنوان شماره 4</h4>
+                            <h5>عنوان شماره 5</h5>
+                            <h6>عنوان شماره 6</h6>
+
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <span class="card-title">سبک نمایش متن</span>
+                                </div>
+                                <div class="card-body">
+                                    <p>لورم ایپسوم متن ساختگی با تولید سادگی<mark>نامفهوم</mark>از صنعت چاپ</p>
+                                    <p><del>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </del></p>
+                                    <p><u>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </u></p>
+                                    <p><small>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </small></p>
+                                    <p><strong>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </strong></p>
+                                    <p><em>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ </em></p>
+                                    <p class="text-monospace mb-0">لورم ایپسوم متن ساختگی</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <span class="card-title">متن های رنگی</span>
+                                </div>
+                                <div class="card-body">
+                                    <p class="text-primary">.text-primary</p>
+                                    <p class="text-secondary">.text-secondary</p>
+                                    <p class="text-success">.text-success</p>
+                                    <p class="text-danger">.text-danger</p>
+                                    <p class="text-warning">.text-warning</p>
+                                    <p class="text-info">.text-info</p>
+                                    <p class="text-light bg-dark">.text-light</p>
+                                    <p class="text-dark">.text-dark</p>
+                                    <p class="text-muted">.text-muted</p>
+                                    <p class="text-white bg-dark mb-0">.text-white</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-header">
+                                    <span class="card-title">لینک های رنگی</span>
+                                </div>
+                                <div class="card-body">
+                                    <p><a href="#" class="text-primary">Primary link</a></p>
+                                    <p><a href="#" class="text-secondary">Secondary link</a></p>
+                                    <p><a href="#" class="text-success">Success link</a></p>
+                                    <p><a href="#" class="text-danger">Danger link</a></p>
+                                    <p><a href="#" class="text-warning">Warning link</a></p>
+                                    <p><a href="#" class="text-info">Info link</a></p>
+                                    <p><a href="#" class="text-light bg-dark">Light link</a></p>
+                                    <p><a href="#" class="text-dark">Dark link</a></p>
+                                    <p><a href="#" class="text-muted">Muted link</a></p>
+                                    <p><a href="#" class="text-white bg-dark mb-0">White link</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- /Typography -->
+            </div>
+
+        </div>
+    </section>
+
+
+    <footer class="rel-footer mt-5">
+        <div id="footer-content">
+            <div class="container">
+                <div class="row pt-4 mx-2">
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-1 order-1">
+                        <h5 class="IRANSansWeb_Medium"> لینک های سریع : </h5>
+                        <ul>
+                            <li>
+                                <a href="Ourteam.html" target="_blank" title="">مدیران و معاونان</a>
+                            </li>
+                            <li>
+                                <a href="Blog.html" target="_blank" title="">اخبار و رویدادها</a>
+                            </li>
+                            <li>
+                                <a href="Blogdetails.html" target="_blank" title="">جزئیات اخبار </a>
+                            </li>
+                            <li>
+                                <a href="Component.html" target="_blank" title="">المان ها</a>
+                            </li>
+                            <li>
+                                <a href="Features.html" target="_blank" title="">ویژگی ها </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2 col-sm-6 py-3 order-lg-2  order-3">
+                        <h5 class="IRANSansWeb_Medium">پیوندها : </h5>
+                        <ul>
+                            <li>
+                                <a href="Faq.html" target="_blank" title="">سوالات متداول</a>
+                            </li>
+
+                            <li>
+                                <a href="Login.html" target="_blank" title="">ورود</a>
+                            </li>
+                            <li>
+                                <a href="Register.html" target="_blank" title="">عضویت</a>
+                            </li>
+                            <li>
+                                <a href="AboutUs.html" target="_blank" title="">درباره ما</a>
+                            </li>
+                            <li>
+                                <a href="ContactUs.html" target="_blank" title="">تماس با ما </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-5 col-sm-6 pr-lg-4 py-3 IRANSansWeb_FaNum  order-lg-3  order-2">
+                        <h5 class="IRANSansWeb_Medium"> ارتباط با ما : </h5>
+                        <p><i class="fas fa-2x fa-map-marker-alt ml-2"></i>آدرس : شهرستان گنبدکاووس - خیابان آزادگان - میدان فراغی  </p>
+                        <p><i class="fas fa-2x fa-phone ml-2"></i>تلفن : 01733224455</p>
+                        <p><i class="fas fa-2x fa-mobile-alt ml-2"></i>تلفن همراه : 09301234567</p>
+                        <p><i class="fas fa-2x fa-fax ml-2"></i>نمابر : 09301234567</p>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 col-sm-4 py-3 order-lg-4 order-4">
+                        <h5 class="IRANSansWeb_Medium">دانلود اپلیکیشن : </h5>
+                        <div class="d-flex flex-column">
+                            <a href="#"><img src="Images/googleplay.png" class="p-2" /></a>
+                            <a href="#"><img src="Images/bazar.png" class="p-2" /></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="footer-copyright">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="https://www.rtl-theme.com/author/shamim831/" class="text-white ">
+                            کلیه حقوق این قالب برای طراح محفوظ می باشد - عرضه شده تنها در راست چین .
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="Js/sina-nav.min.js"></script>
+
+
+</body>
+</html>
