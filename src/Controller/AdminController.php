@@ -680,7 +680,7 @@ class AdminController extends AbstractController
             ])
             ->add('userID', Type\AutoentityType::class,['class'=>'App:SysUser','choice_label'=>'fullName','label'=>'نام کاربر','attr'=>['pattern'=>'users']])
             ->add('upperID', Type\AutocompleteType::class,['label'=>'پست سازمانی بالادستی','attr'=>['pattern'=>'positions']])
-            ->add('constractor',CheckboxType::class,['label'=>'پیمانکار'])
+            ->add('constractor',CheckboxType::class,['required'=>false,'label'=>'پیمانکار'])
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
 
@@ -923,7 +923,7 @@ class AdminController extends AbstractController
                 'class'=>Entity\SysRoll::class,'choice_label'=>'label',
                 'label'=>'نقش کاربری'
             ])
-            ->add('constractor',CheckboxType::class,['label'=>'پیمانکار'])
+            ->add('constractor',CheckboxType::class,['required'=>false,'label'=>'پیمانکار'])
 
             ->add('submit', SubmitType::class,['label'=>'ثبت'])
             ->getForm();
