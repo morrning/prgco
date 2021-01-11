@@ -1,0 +1,84 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}پرونده پرسنلی{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-outline-light" href="{{ path('HRMpositionsList') }}">
+        بازگشت
+    </a>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="card">
+            <div class="card-header">
+                اطلاعات اصلی
+            </div>
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            عنوان سمت:
+                            {{ user.label }}
+                        </div>
+                        <div class="col-sm-12 col-md-6">
+                            عنوان نمایشی:
+                            {{ user.publicLabel }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-danger">در صورت وجود مغایرت در اطلاعات فوق با مدیر سامانه تماس بگیرید.</div>
+            </div>
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <span class="text-right">کارتابل تشریفات</span>
+                <span class="text-left float-left">
+                        <a class="btn btn-sm btn-success" href="{{ path('HRMPassengerNew',{'pid':user.id}) }}">
+                            <i class="fa fa-plus-circle"></i>
+                            مسافر جدید
+                        </a>
+                    </span>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-hover rounded text-center">
+                        <thead class="bg-blue text-light">
+                        <tr>
+                            <th>ردیف</th>
+                            <th>نام و نام‌خانوادگی</th>
+                            <th>نام پدر</th>
+                            <th>کد ملی</th>
+                            <th>تاریخ تولد</th>
+                            <th>ارتباط</th>
+                            <th>نیاز به مجوز</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for passenger in passengers %}
+                            <tr class="trp{{ passenger.id }}">
+                                <td class="select-w50px">{{ loop.index }}</td>
+                                <td>{{ passenger.pname }} {{ passenger.pfamily }}</td>
+                                <td>{{ passenger.pfather }}</td>
+                                <td>{{ passenger.pcodemeli }}</td>
+                                <td>{{ passenger.pbirthday }}</td>
+                                <td>{{ passenger.ptype.typeName }}</td>
+                                <td>
+                                    {% if passenger.ptype.typeName == 'پرسنل شرکت' %}
+                                        <span class="text-danger">دارد</span>
+                                    {% else %}
+                                        <span class="text-success">ندارد</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

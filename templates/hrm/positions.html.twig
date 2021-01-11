@@ -1,0 +1,37 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}جایگاه‌های سازمانی{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>عنوان</th>
+                    <th>امکانات</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for user in users %}
+                    <tr class="">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.publicLabel }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ path('HRMPositionFolder',{'id':user.id}) }}">
+                                <i class="fa fa-eye"></i>
+                                مشاهده پرونده
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

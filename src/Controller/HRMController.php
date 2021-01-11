@@ -143,6 +143,40 @@ class HRMController extends AbstractController
         ]);
     }
 
+
+    /**
+     * @Route("/hrm/positions/list", name="HRMpositionsList")
+     */
+    public function HRMpositionsList(Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hrm/positions.html.twig', [
+            'users' => $entityMGR->findBy('App:SysPosition')
+        ]);
+    }
+    /**
+     * @Route("/hrm/position/folder/{id}/{msg}", name="HRMPositionFolder")
+     */
+    public function HRMPositionFolder($id,$msg=0,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:SysPosition',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        $alerts = [];
+        if($msg === 'letter_add')
+            array_push($alerts,['type'=>'success','message'=>'مکاتبه با موفقیت ثبت شد.']);
+
+        return $this->render('hrm/positionFolder.html.twig', [
+            'user' => $user,
+            'passengers'=>$entityMGR->findBy('App:CMPassenger',['submitter'=>$user])
+        ]);
+    }
+
     /**
      * @Route("/hrm/employe/list", name="HRMEmployelist")
      */
@@ -174,7 +208,8 @@ class HRMController extends AbstractController
         return $this->render('hrm/employeFolder.html.twig', [
             'user' => $user,
             'letters' => $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$user]),
-            'alerts' => $alerts
+            'alerts' => $alerts,
+            'passengers'=>$entityMGR->findBy('App:CMPassenger',['submitter'=>$user])
         ]);
     }
 
@@ -268,8 +303,6 @@ class HRMController extends AbstractController
 
         $mlist = $entityMGR->find('App:CMList',$visa->getCMlist()->getId());
         $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
-
-        $logMGR->addEvent('CERVISA'.$visa->getId(),'مشاهده','اطلاعات درخواست ویزا','CEREMONIAL',$request->getClientIp());
         $alerts = [];
 
         $form = $this->createFormBuilder($visa)
@@ -326,6 +359,74 @@ class HRMController extends AbstractController
             'alerts'=>$alerts,
             'form'=>$form->createView(),
             'form1'=>$form1->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/position/pasenger/new/{pid}", name="HRMPassengerNew")
+     */
+    public function HRMPassengerNew($pid,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+        $position = $entityMGR->find('App:SysPosition',$pid);
+        if(is_null($position))
+            return $this->redirectToRoute('404');
+
+        $passenger = new Entity\CMPassenger();
+        $form = $this->createFormBuilder($passenger)
+            ->add('pname', TextType::class,['label'=>'نام'])
+            ->add('pfamily', TextType::class,['label'=>' نام خانوادگی'])
+            ->add('pfather', TextType::class,['label'=>' نام پدر'])
+            ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
+            ->add('passportExpireDate',Type\JdateType::class,['label'=>'پایان اعتبار گذرنامه'])
+            ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
+            ->add('tel1', TextType::class,['label'=>'شماره تماس1:','attr'=>['class'=>'tel']])
+            ->add('tel2', TextType::class,['label'=>'شماره تماس2:','attr'=>['class'=>'tel']])
+            ->add('adr', TextareaType::class,['label'=>'آدرس:'])
+            ->add('pcodemeli', TextType::class,[
+                'label'=>'کد ملی',
+                'attr'     => array(
+                    'class'  => 'codeMeli',
+                ),
+            ])
+            ->add('passNo', TextType::class,['label'=>'Passport Number:'])
+            ->add('lname', TextType::class,['label'=>'Name:'])
+            ->add('lfamily', TextType::class,['label'=>'Family:'])
+            ->add('lfather', TextType::class,['label'=>'Father Name:', 'required'=>false])
+            ->add('ptype', EntityType::class, [
+                'class'=>Entity\CMPassengerType::class,
+                'choice_label'=>'typeName',
+                'choice_value' => 'id',
+                'label'=>'ارتباط مسافر'
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $alert = [];
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($passenger->getPtype()->getTypeName() == 'پرسنل شرکت') {
+                if (is_null($entityMGR->findOneBy('App:SysUser', ['nationalCode' => $passenger->getPcodemeli(),'contractor'=> null]))) {
+                    array_push($alert,['type' => 'danger', 'message' => 'این کد ملی در لیست پرسنل شرکت موجود نیست.']);
+                }
+            }
+            elseif (!is_null($entityMGR->findOneBy('App:CMPassenger', ['pcodemeli' => $passenger->getPcodemeli()]))) {
+                array_push($alert, ['type' => 'danger', 'message' => 'این کد ملی قبلا ثبت شده است.اگر اخیرا در ارتباط فرد با شرکت و یا شرکت‌های زیر مجموعه تغییری رخ داده است با مدیر سامانه تماس بگیرید.']);
+            }
+            if(count($alert ) == 0)
+            {
+                $passenger->setSubmitter($position);
+                $entityMGR->insertEntity($passenger);
+                $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
+                return $this->redirectToRoute('HRMPositionFolder', ['id'=>$position->getId(),'msg' => 1]);
+            }
+        }
+
+        return $this->render('hrm/newPassenger.html.twig', [
+            'alerts'=>$alert,
+            'form' => $form->createView(),
+            'position'=>$position
         ]);
     }
 
