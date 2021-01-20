@@ -96,7 +96,7 @@
         </div>
 
         <div class="row" style="margin: -9rem 5rem 3rem 5rem;">
-            <div class="col-8 pr-0 pl-5">
+            <div class="col-6 pr-0 pl-5">
                 <div class="row">
                     <div class="col-12">
                         <div class="list-group shadow">
@@ -252,13 +252,18 @@
                 </div>
             </div>
         </div>
-        {#
-              {% if UserMGR.isLogedIn() %}
-                <hr class="d-none">
-              {% else %}
-                <hr class="d-none d-md-block" style="margin: 0 24rem 3rem 24rem;">
-              {% endif %}
-        #}
+
+        {% if UserMGR.isLogedIn() %}
+        <div class="col-2">
+            <div class="card">
+                <div class="card-header text-center bg-success text-light">اطلاعات کاربر</div>
+                <div class="card-body">
+                    <img class="img-thumbnail">
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
 
 

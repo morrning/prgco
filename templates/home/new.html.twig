@@ -34,7 +34,10 @@
                 <div class="col-lg-3 col-6 mr-auto">
                     <div class="d-flex flex-column">
                         <span class="text-white">
-                            امروز : دوشنبه 22 ارديبهشت 1399
+                            {% set countdowns = EntityMGR.findAll('App:Countdown') %}
+                    <span class="fa fa-clock"></span>
+                    امروز
+                    {{ Jdate.jdate('l , d/F/Y','now'|date('U')) }}
                         </span>
                         <form class="d-sm-block d-none">
                             <div class="input-group mb-3">
@@ -63,12 +66,12 @@
                     <ul class="pt-2">
                         <li>
                             <a id="loginbtn" href="Login.html" class="btn btn-link p-1 ml-2">
-                                <img src="Images/Svg/login.svg" /> ورود
+                                <img src="{{ asset('new_face/Images/Svg/login.svg') }}" /> ورود
                             </a>
                         </li>
                         <li>
                             <a id="loginbtn" href="Register.html" class="btn btn-link p-1 ml-2">
-                                <img src="Images/Svg/user.svg" />عضویت
+                                <img src="{{ asset('new_face/Images/Svg/user.svg') }}" />عضویت
                             </a>
                         </li>
                     </ul>
@@ -137,18 +140,15 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-12 col-6 mb-3">
-                            <a href="#"><img src="Images/banner1-min-1.png " class="img-fluid rad12"></a>
+                            <a href="#"><img src="{{ asset('new_face/Images/banner1-min-1.png') }} " class="img-fluid rad12"></a>
                         </div>
                         <div class="col-lg-12 col-6 mb-3">
-                            <a href="#"><img src="Images/banner1-min-3.png " class="img-fluid rad12"></a>
+                            <a href="#"><img src="{{ asset('new_face/Images/banner1-min-3.png') }} " class="img-fluid rad12"></a>
                         </div>
                         <div class="col-lg-12 col-6 mb-3">
-                            <a href="#"><img src="Images/banner1-min-2.png " class="img-fluid rad12"></a>
+                            <a href="#"><img src="{{ asset('new_face/Images/banner1-min-2.png') }} " class="img-fluid rad12"></a>
                         </div>
-                        <div class="col-lg-12 col-6 mb-2">
-                            <a href="#"><img src="Images/banner1-min-4.png " class="img-fluid rad12"></a>
-                        </div>
-                        <img src="Images/foot.png" class="mx-auto text-center" />
+                        <img src="{{ asset('new_face/Images/foot.png') }}" class="mx-auto text-center" />
 
                     </div>
                 </div>
@@ -158,14 +158,14 @@
                 <div id="owl-slider" class="owl-carousel">
                     <div class="item">
                         <a href="#">
-                            <img src="Images/Slides/Slide-1.png" alt="slide1" class="img-fluid" />
-                            <div class="caption"><p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p></div>
+                            <img src="{{ asset('assets/images/slider/11.jpg') }}" alt="slide1" class="img-fluid" />
+                            <div class="caption"><p>صحن حضرت زهرا (س) نجف اشرف</p></div>
                         </a>
                     </div>
                     <div class="item">
                         <a href="#">
-                            <img src="Images/Slides/Slide-2.png" alt="slide2" class="img-fluid" />
-                            <div class="caption"><p>لورم ایپسوم از صنعت چاپ و با استفاده از طراحان </p></div>
+                            <img src="{{ asset('assets/images/slider/22.jpg') }}" alt="slide2" class="img-fluid" />
+                            <div class="caption"><p>توسعه حرم مطهر امام حسین (ع) کربلا معلی </p></div>
                         </a>
                     </div>
                 </div>
@@ -201,7 +201,7 @@
             <div class="card mx-1">
                 <div class="card-body">
                     <a href="#">
-                        <img class="rounded-circle" src="Images/11.jpg" alt="">
+                        <img class="rounded-circle" src="{{ asset('assets/images/slider/11.jpg') }}" alt="">
                     </a>
                     <h6>عنوان سه</h6>
                     <p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم</p>
@@ -249,7 +249,7 @@
         <div id="owl-topnews" class="owl-carousel">
             <div class="card p-3">
                 <a href="#" class="relative">
-                    <img src="Images/News/samad9810.jpg" class="mb-3 img-fluid rad12" />
+                    <img src="{{ asset('new_face/Images/News/samad9810.jpg') }}" class="mb-3 img-fluid rad12" />
                     <div class="covernews d-flex flex-row justify-content-between px-3 text-white IRANSansWeb_Medium ">
                         <span class="bottom_p"><i class="fas fa-clock ml-1"></i>98/5/9</span>
                         <span><i class="fas fa-eye ml-1"></i>28 بار</span>
@@ -479,17 +479,13 @@
                     </div>
                     <div class="col-lg-5 col-sm-6 pr-lg-4 py-3 IRANSansWeb_FaNum  order-lg-3  order-2">
                         <h5 class="IRANSansWeb_Medium"> ارتباط با ما : </h5>
-                        <p><i class="fas fa-2x fa-map-marker-alt ml-2"></i>آدرس : شهرستان گنبدکاووس - خیابان آزادگان - میدان فراغی  </p>
+                        <p><i class="fas fa-2x fa-map-marker-alt ml-2"></i>آدرس : تهران - سعادت آباد نبش گل آذین  </p>
                         <p><i class="fas fa-2x fa-phone ml-2"></i>تلفن : 01733224455</p>
                         <p><i class="fas fa-2x fa-mobile-alt ml-2"></i>تلفن همراه : 09301234567</p>
                         <p><i class="fas fa-2x fa-fax ml-2"></i>نمابر : 09301234567</p>
                     </div>
                     <div class="col-lg-3 col-sm-6 col-sm-4 py-3 order-lg-4 order-4">
-                        <h5 class="IRANSansWeb_Medium">دانلود اپلیکیشن : </h5>
-                        <div class="d-flex flex-column">
-                            <a href="#"><img src="Images/googleplay.png" class="p-2" /></a>
-                            <a href="#"><img src="Images/bazar.png" class="p-2" /></a>
-                        </div>
+
                     </div>
 
                 </div>
