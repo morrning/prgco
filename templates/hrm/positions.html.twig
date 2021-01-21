@@ -14,6 +14,7 @@
                 <tr>
                     <th>ردیف</th>
                     <th>عنوان</th>
+                    <th>کد ملی کاربر سمت</th>
                     <th>امکانات</th>
                 </tr>
                 </thead>
@@ -22,6 +23,7 @@
                     <tr class="">
                         <td>{{ loop.index }}</td>
                         <td>{{ user.publicLabel }}</td>
+                        <td>{{ user.userID.nationalCode }}</td>
                         <td>
                             <a class="btn btn-primary" href="{{ path('HRMPositionFolder',{'id':user.id}) }}">
                                 <i class="fa fa-eye"></i>

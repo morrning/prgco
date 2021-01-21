@@ -1446,28 +1446,4 @@ class AdminController extends AbstractController
             'alerts'=>$alerts
         ]);
     }
-
-    /**
-     * @Route("/cer", name="adminCer")
-     */
-    public function adminCer(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
-    {
-        $rools = $entityMGR->findAll('App:SysPosition');
-        foreach ($rools as $rool){
-            $passenger = new Entity\CMPassenger();
-            $passenger->setAdr(1);
-            $passenger->setLfamily(1);
-            $passenger->setLfather(1);
-            $passenger->setLname(1);
-            $passenger->setPassNO(1);
-            $passenger->setPcodemeli($rool->getUserID()->getNationalCode());
-            $passenger->setPbirthday('1370');
-            $passenger->setPname($rool->getUserID()->getFullName());
-            $passenger->setPfamily($rool->getUserID()->getFullName());
-            $passenger->setPfather('X');
-            $passenger->setPshenasname('X');
-            $passenger->setSubmitter($rool);
-            $entityMGR->insertEntity($passenger);
-        }
-    }
 }
