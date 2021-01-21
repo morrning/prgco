@@ -155,6 +155,9 @@
             "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
         }
     },
+    "shuchkin/simplexlsx": {
+        "version": "0.8.21"
+    },
     "swiftmailer/swiftmailer": {
         "version": "v6.1.3"
     },
