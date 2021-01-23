@@ -1498,4 +1498,29 @@ class AdminController extends AbstractController
         }
         return new Response(1);
     }
+
+    /**
+     * @Route("/jobs/j1", name="jobsj1")
+     */
+    public function jobsj1(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
+    {
+        $roll = $entityMGR->find('App:SysRoll',3);
+        $area = $entityMGR->find('App:SysArea',3);
+        $user = $entityMGR->find('App:SysUser',1);
+        $passengers = \SimpleXLSX::parse('D:\projects\prgco\public_html\123.xlsx')->rows();
+        foreach ($passengers as $passenger){
+            $sysPos = new Entity\SysPosition();
+            $sysPos->setConstractor(0);
+            $sysPos->setDefaultArea($area);
+            $sysPos->setUpperID(1);
+            $sysPos->setUserID($user);
+            $sysPos->setRoll($roll);
+            $sysPos->setLabel($passenger[0]);
+            $sysPos->setPublicLabel('سرپرست سامانه - ' . $passenger[0]);
+            $sysPos->setDefaultArea($area);
+            $entityMGR->insertEntity($sysPos);
+            echo 'position  :' . $sysPos->getPublicLabel() . 'added <br>';
+            return new Response('end');
+        }
+    }
 }
