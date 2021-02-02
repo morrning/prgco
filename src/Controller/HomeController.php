@@ -21,6 +21,8 @@ class HomeController extends AbstractController
      */
     public function home(Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
     {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('userLogin');
         $area = null;
         if($userMGR->isLogedIn())
             $area = $entityMGR->find('App:SysArea',$userMGR->currentPosition()->getDefaultArea());

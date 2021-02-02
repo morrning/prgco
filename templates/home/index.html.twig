@@ -173,7 +173,7 @@
                                     {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
                                         <a href="{{ path('ceremonialREQDashboard') }}" class="list-group-item list-group-item-action py-2 border-left-0 border-right-0">
                                             <span class="badge badge-danger">آزمایشی</span>
-                                            سامانه درخواست تشریفات
+                                            سامانه تشریفات
                                         </a>
                                     {% endif %}
                                     {#
@@ -252,18 +252,6 @@
                 </div>
             </div>
         </div>
-
-        {% if UserMGR.isLogedIn() %}
-        <div class="col-2">
-            <div class="card">
-                <div class="card-header text-center bg-success text-light">اطلاعات کاربر</div>
-                <div class="card-body">
-                    <img class="img-thumbnail">
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
     </div>
 
 
