@@ -25,60 +25,65 @@
                         <div class="col-sm-12 col-md-4">
                             <img class="img-fluid img-thumbnail" src="{{ asset('files/ProfilePic/' ~ passenger.pcodemeli ~ '.jpg') }}">
                         </div>
-                        <div class="col-sm-12 col-md-4">
-                            <p>
-                                نسبت مسافر:
-                                <span class="alert alert-danger">{{ passenger.ptype.typeName }}</span>
-                            </p>
-                            <hr>
-                            <p>
-                                نام:
-                                <span class="text-danger">{{ passenger.pname }}</span>
-                            </p>
-                            <p>
-                                نام خانوادگی:
-                                <span class="text-danger">{{ passenger.pfamily }}</span>
-                            </p>
-                            <p>
-                                نام پدر:
-                                <span class="text-danger">{{ passenger.pfather }}</span>
-                            </p>
-                            <p>
-                                شماره شناسنامه:
-                                <span class="text-danger">{{ passenger.pshenasname }}</span>
-                            </p>
-                            <p>
-                                کد ملی:
-                                <span class="text-danger">{{ passenger.pcodemeli }}</span>
-                            </p>
-                            <p>
-                                پایان اعتبار گذرنامه:
-                                <span class="text-danger">{{ passenger.passportExpireDate }}</span>
-                            </p>
+                        <div class="col-sm-12 col-md-8">
+                            <div class="row">
+                                <div class="col-12">
+                                    <p>
+                                        نسبت مسافر:
+                                        <span class="alert alert-danger">{{ passenger.ptype.typeName }}</span>
+                                    </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        نام:
+                                        <span class="text-danger">{{ passenger.pname }}</span>
+                                    </p>
+                                    <p>
+                                        نام خانوادگی:
+                                        <span class="text-danger">{{ passenger.pfamily }}</span>
+                                    </p>
+                                    <p>
+                                        نام پدر:
+                                        <span class="text-danger">{{ passenger.pfather }}</span>
+                                    </p>
+                                    <p>
+                                        شماره شناسنامه:
+                                        <span class="text-danger">{{ passenger.pshenasname }}</span>
+                                    </p>
+                                    <p>
+                                        کد ملی:
+                                        <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                                    </p>
+                                    <p>
+                                        پایان اعتبار گذرنامه:
+                                        <span class="text-danger">{{ passenger.passportExpireDate }}</span>
+                                    </p>
 
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <p>
-                                Name:
-                                <span class="text-danger">{{ passenger.lname }}</span>
-                            </p>
-                            <p>
-                                FamilyName:
-                                <span class="text-danger">{{ passenger.lfamily }}</span>
-                            </p>
-                            <p>
-                                Father Name:
-                                <span class="text-danger">{{ passenger.lfather }}</span>
-                            </p>
-                            <p>
-                                National Code:
-                                <span class="text-danger">{{ passenger.pcodemeli }}</span>
-                            </p>
-                            <p>
-                                Passport Number:
-                                <span class="text-danger">{{ passenger.PassNo }}</span>
-                            </p>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <p>
+                                        Name:
+                                        <span class="text-danger">{{ passenger.lname }}</span>
+                                    </p>
+                                    <p>
+                                        FamilyName:
+                                        <span class="text-danger">{{ passenger.lfamily }}</span>
+                                    </p>
+                                    <p>
+                                        Father Name:
+                                        <span class="text-danger">{{ passenger.lfather }}</span>
+                                    </p>
+                                    <p>
+                                        National Code:
+                                        <span class="text-danger">{{ passenger.pcodemeli }}</span>
+                                    </p>
+                                    <p>
+                                        Passport Number:
+                                        <span class="text-danger">{{ passenger.PassNo }}</span>
+                                    </p>
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <hr>
