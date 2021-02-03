@@ -133,6 +133,16 @@ class CMPassenger
      */
     private $cMVisaLogs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $tel3;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $postalCode;
+
     public function __construct()
     {
         $this->cMAirTickets = new ArrayCollection();
@@ -494,6 +504,30 @@ class CMPassenger
                 $cMVisaLog->setPassenger(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTel3(): ?string
+    {
+        return $this->tel3;
+    }
+
+    public function setTel3(?string $tel3): self
+    {
+        $this->tel3 = $tel3;
+
+        return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): self
+    {
+        $this->postalCode = $postalCode;
 
         return $this;
     }
