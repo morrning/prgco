@@ -136,8 +136,13 @@ class HRMController extends AbstractController
             return $this->redirectToRoute('403');
 
         $info['allUsers'] = count($entityMGR->findAll('App:SysPosition'));
-        $info['contractor'] = count($entityMGR->findBy('App:SysPosition',['constractor'=>1]));
+        $constractors = $entityMGR->findBy('App:SysPosition',['constractor'=>1]);
+        $info['contractor'] = count($constractors);
         $info['employers'] =  $info['allUsers'] - $info['contractor'];
+        $info['contractorPassenger'] = 0;
+        foreach ($constractors as $constractor){
+            $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor]));
+        }
         return $this->render('hrm/dashboard.html.twig', [
             'info'=> $info
         ]);

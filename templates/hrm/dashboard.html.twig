@@ -5,20 +5,23 @@
 {% block pageBody %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 col-md-3">
+            <div class="col-sm-12 col-md-5">
                 <div class="card">
                     <div class="card-header">
                         اطلاعات
                     </div>
                     <div class="card-body">
                         <p>
-                            تعداد کل:{{ info.allUsers }}نفر
+                            تعداد پست های سازمانی:{{ info.allUsers }}نفر
                         </p>
                         <p>
-                            پرسنل شرکت:{{ info.employers }}نفر
+                             پست های سازمانی شرکت:{{ info.employers }}نفر
                         </p>
                         <p>
-                            پیمانکاران:{{ info.contractor }}نفر
+                            تعداد پیمانکاران:{{ info.contractor }}نفر
+                        </p>
+                        <p>
+                            تعداد پرسنل پیمانکاران:{{ info.contractorPassenger }}نفر
                         </p>
                     </div>
                 </div>
