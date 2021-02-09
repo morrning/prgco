@@ -55,6 +55,7 @@
                             <th>تاریخ تولد</th>
                             <th>ارتباط</th>
                             <th>نیاز به مجوز</th>
+                            <th>امکانات</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -72,6 +73,11 @@
                                     {% else %}
                                         <span class="text-success">ندارد</span>
                                     {% endif %}
+                                </td>
+                                <td>
+                                    <a class="btn btn-primary" href="{{ path('HRMPassengerProfile',{'id':user.nationalCode}) }}">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
                                 </td>
                             </tr>
                         {% endfor %}
