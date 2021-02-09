@@ -41,13 +41,18 @@
                                 {% endif %}
                             {% endfor %}
                             {% if break == true %}
-                                <span class="badge badge-success"> دارای مجوز </span>
+                                <a class="btn btn-link" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
+                                    <span class="badge badge-success"> دارای مجوز </span>
+                                </a>
                             {% else %}
-                                <span class="badge badge-danger"> فاقد مجوز </span>
+                                <a class="btn btn-link" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
+                                    <span class="badge badge-danger"> فاقد مجوز </span>
+                                </a>
                             {% endif %}
+
                         </td>
                         <td>
-                            <a class="btn btn-primary" href="{{ path('HRMEmployeFolder',{'id':user.id}) }}">
+                            <a class="btn btn-primary" href="{{ path('HRMPassengerProfile',{'id':user.nationalCode}) }}">
                                 <i class="fa fa-eye"></i>
                                 پرونده پرسنلی
                             </a>

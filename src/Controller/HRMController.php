@@ -23,6 +23,14 @@ use App\Service;
 use App\Entity;
 class HRMController extends AbstractController
 {
+    /**
+     * function to generate random strings
+     * @param 		int 	$length 	number of characters in the generated string
+     * @return 		string	a new string is created with random characters of the desired length
+     */
+    private function RandomString($length = 32) {
+        return substr(str_shuffle(str_repeat($x='0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length/strlen($x)) )),1,$length);
+    }
 
     /**
      * @Route("/hrm/report/user/io", name="HRMReportUserIO")
@@ -432,6 +440,67 @@ class HRMController extends AbstractController
             'alerts'=>$alert,
             'form' => $form->createView(),
             'position'=>$position
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/passenger/profile/view/{id}/{msg}", name="HRMPassengerProfile")
+     */
+    public function HRMPassengerProfile($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $passenger = $entityMGR->findOneBy('App:CMPassenger',['pcodemeli'=>$id]);
+        if(is_null($passenger))
+            return $this->redirectToRoute('404');
+
+        $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
+        $alerts = [];
+        if($msg == 1)
+            array_push($alerts,['type'=>'success','message'=>'مدارک مسافر با موفقیت اضافه شد.']);
+        $doc = new Entity\CMPassengerPersonalDoc();
+        $doc->setPassenger($passenger);
+        $form = $this->createFormBuilder($doc)
+            ->add('docName', Type\FileboxType::class,['label'=>'فایل اسکن'])
+            ->add('docType', EntityType::class, [
+                'class'=>Entity\CMPassengerDocType::class,
+                'choice_label'=>'tname',
+                'choice_value' => 'id',
+                'label'=>'نوع مدرک'
+            ])
+            ->add('submit', SubmitType::class,['label'=>'ذخیره'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $file = $form->get('docName')->getData();
+        $guid = $this->RandomString(32);
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($file->getClientOriginalExtension() == 'pdf'  || $file->getClientOriginalExtension() == 'jpg' || $file->getClientOriginalExtension() == 'jpeg' || $file->getClientOriginalExtension() == 'png'){
+                if($file->getSize() < 200971502){
+                    $tempFileName = $guid . '.' . $file->getClientOriginalExtension();
+                    $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files',$tempFileName );
+                    $doc->setDocName($tempFileName);
+                    $entityMGR->insertEntity($doc);
+                    $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'افزودن','اسکن اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
+                    array_push($alerts,['type'=>'success','message'=>'فایل مورد نظر با موفقیت ذخیره شد.']);
+                }
+                else{
+                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);
+                }
+            }
+            else{
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,png,pdf,jpeg  ارسال فرمایید.']);
+            }
+        }
+        return $this->render('hrm/passengerViewProfile.html.twig', [
+            'passenger' => $passenger,
+            'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
+            'form'=>$form->createView(),
+            'alerts'=>$alerts,
+            'docs'=>$passenger->getCMPassengerPersonalDocs()
         ]);
     }
 
