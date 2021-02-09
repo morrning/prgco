@@ -420,7 +420,7 @@ class ConfigMGR
             $entity->setHseGuide(0);
             $this->em->insertEntity($entity);
             $entity = new Entity\CMPassengerType();
-            $entity->setTypeName('همراه');
+            $entity->setTypeName('خانواده');
             $entity->setHseGuide(0);
             $this->em->insertEntity($entity);
             $entity = new Entity\CMPassengerType();

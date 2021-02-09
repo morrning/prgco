@@ -91,8 +91,10 @@ class CMRController extends AbstractController
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
             ->add('passportExpireDate',Type\JdateType::class,['label'=>'پایان اعتبار گذرنامه'])
             ->add('pshenasname', TextType::class,['label'=>' شماره شناسنامه'])
-            ->add('tel1', TextType::class,['label'=>'شماره تماس1:','attr'=>['class'=>'tel']])
-            ->add('tel2', TextType::class,['label'=>'شماره تماس2:','attr'=>['class'=>'tel']])
+            ->add('tel1', TextType::class,['label'=>'شماره همراه:','attr'=>['class'=>'tel']])
+            ->add('tel2', TextType::class,['label'=>'شماره ثابت:','attr'=>['class'=>'tel']])
+            ->add('tel3', TextType::class,['label'=>'شماره شبکه های اجتماعی:','attr'=>['class'=>'tel']])
+            ->add('postalCode', TextType::class,['required'=>false,'label'=>'کد پستی','attr'=>['class'=>'tel']])
             ->add('adr', TextareaType::class,['label'=>'آدرس:'])
             ->add('pcodemeli', TextType::class,[
                 'label'=>'کد ملی',
@@ -108,7 +110,7 @@ class CMRController extends AbstractController
                 'class'=>Entity\CMPassengerType::class,
                 'choice_label'=>'typeName',
                 'choice_value' => 'id',
-                'label'=>'ارتباط مسافر با شما؟'
+                'label'=>'هویت مسافر؟'
             ])
             ->add('submit', SubmitType::class,['label'=>'ثبت اطلاعات'])
             ->getForm();
@@ -161,8 +163,10 @@ class CMRController extends AbstractController
             ->add('pbirthday',Type\JdateType::class,['label'=>'تاریخ تولد'])
             ->add('passNo', TextType::class,['label'=>'Passport Number:'])
             ->add('lname', TextType::class,['label'=>'Name:'])
-            ->add('tel1', TextType::class,['label'=>'شماره تماس1:','attr'=>['class'=>'tel']])
-            ->add('tel2', TextType::class,['label'=>'شماره تماس2:','attr'=>['class'=>'tel']])
+            ->add('tel1', TextType::class,['label'=>'شماره همراه:','attr'=>['class'=>'tel']])
+            ->add('tel2', TextType::class,['label'=>'شماره ثابت:','attr'=>['class'=>'tel']])
+            ->add('tel3', TextType::class,['label'=>'شماره شبکه های اجتماعی:','attr'=>['class'=>'tel']])
+            ->add('postalCode', TextType::class,['required'=>false,'label'=>'کد پستی:','attr'=>['class'=>'tel']])
             ->add('adr', TextareaType::class,['label'=>'آدرس:'])
             ->add('lfamily', TextType::class,['label'=>'Family:'])
             ->add('lfather', TextType::class,['label'=>'Father Name:', 'required'=>false])

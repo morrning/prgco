@@ -3,6 +3,9 @@
 {% block title %}مسافر جدید{% endblock %}
 {% block pageBody %}
     <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger m-1">مسئولیت اشتباه بودن اطلاعات مسافر با شخص ثبت کننده می باشد.</div>
+        </div>
         <div class="col-sm-12 col-md-4 pb-3 label-reset">
             {{ form_start(form) }}
             {{ form_label(form.ptype) }}
@@ -51,6 +54,14 @@
         <div class="col-sm-12 col-md-6 label-reset">
             {{ form_label(form.tel2) }}
             {{ form_widget(form.tel2) }}
+        </div>
+        <div class="col-sm-12 col-md-6 label-reset">
+            {{ form_label(form.tel3) }}
+            {{ form_widget(form.tel3) }}
+        </div>
+        <div class="col-sm-12 col-md-6 label-reset">
+            {{ form_label(form.postalCode) }}
+            {{ form_widget(form.postalCode) }}
         </div>
         <div class="col-sm-12 col-md-12 label-reset">
             {{ form_label(form.adr) }}

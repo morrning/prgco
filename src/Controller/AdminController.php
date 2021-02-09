@@ -87,11 +87,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin", name="adminDashboard")
      */
-    public function index(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
+    public function adminDashboard(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,Service\ConfigMGR $configMGR)
     {
         if(! $userMgr->hasPermission('superAdmin'))
             return $this->redirectToRoute('403');
-
+        /*
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, 'http://auth.sarkesh.org/auth.php?id=' . $configMGR->getConfig()->getActiveationCode());
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -101,14 +101,14 @@ class AdminController extends AbstractController
 
         if ($urlData < 0)
             return $this->redirectToRoute('LE');
+        */
         $logMGR->addEvent('4ert','مشاهده','داشبورد مدیریت سامانه','ADMINISTRATOR',$request->getClientIp());
         return $this->render('admin/dashboard.html.twig', [
             'usersCount' => $entityMGR->rowsCount('App:SysUser'),
             'positionsCount' => $entityMGR->rowsCount('App:SysPosition'),
             'areaCount' => $entityMGR->rowsCount('App:SysArea'),
             'SystemVersion'=>Yaml::parseFile('../config/sarkesh.yaml')['version'],
-            'currentTime'=>time(),
-            'lisenseDayLeft'=>$urlData
+            'currentTime'=>time()
         ]);
     }
 
