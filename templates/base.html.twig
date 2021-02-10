@@ -51,6 +51,7 @@
     <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
 
     <!-- JQuery min js -->
     <script src="{{ asset('newface/assets/plugins/jquery/jquery.min.js') }}"></script>
@@ -114,6 +115,7 @@
     <script src="{{ asset('assets/js/jquery.alphanum.js') }}"></script>
     <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
     <script src="{{ asset('assets/js/typed/typed.min.js') }}"></script>
+    <script src="{{ asset('assets/jstree/jstree.min.js') }}"></script>
 
 
     {% block stylesheets %}{% endblock %}
@@ -314,7 +316,7 @@
                                     <li>
                                         <a class="slide-item" href="{{ path('ceremonialDOINGDashboard') }}" >
                                             <span class="badge badge-danger">آزمایشی</span>
-                                            مدیریت تشریفات ناحیه‌‌ای
+                                            مدیریت تشریفات
                                         </a>
                                     </li>
                                 {% endif %}
@@ -322,7 +324,6 @@
                                     <li>
                                         <a class="slide-item" href="{{ path('ceremonialREQDashboard') }}" >
                                             <span>
-                                                <span class="badge badge-danger">آزمایشی</span>
                                                 درخواست تشریفات
                                             </span>
                                         </a>
@@ -354,6 +355,8 @@
                                 {% endif %}
                             </ul>
                         </li>
+                        <li aria-haspopup="true"><a href="{{ path('support') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>درخواست پشتیبانی</a></li>
+                        <li aria-haspopup="true"><a href="{{ path('help') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>راهنمای پورتال</a></li>
                     </ul>
                 </nav>
                 <!--Nav-->
