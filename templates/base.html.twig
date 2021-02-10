@@ -1,4 +1,6 @@
-{% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+{% if UserMGR.logedIn %}
+    {% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+{% endif %}
 <!DOCTYPE html>
 <html lang="en">
 

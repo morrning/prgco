@@ -1,27 +1,152 @@
-{% extends 'base.html.twig' %}
 
+{% if ConfigMGR.getConfig.SYSLOGINBGRND is null %}
+    {% set backgroundIMG = '/assets/images/public/bgrnd2.jpeg' %}
+{% else %}
+    {% set backgroundIMG = '/files/' ~ ConfigMGR.getConfig.SYSLOGINBGRND %}
+{% endif %}
+<!DOCTYPE html>
+<html lang="en">
 
-{% block body %}
-    <main role="main" style="padding-top: 1rem">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    {% block alert %}
-                        {% if alert is defined %}
-                            {% if alert|length != 0 %}
-                                {% for alt in alert %}
-                                    <div class="alert alert-{{ alt.type }}" role="alert">
-                                        {{ alt.message }}
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        {% endif %}
-                    {% endblock %}
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="Keywords" content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
+    <!-- Title -->
+    <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <!-- Icons css -->
+    <link href="{{ asset('newface/assets/css/icons.css') }}" rel="stylesheet">
+    <!--  Right-sidemenu css -->
+    <link href="{{ asset('newface/assets/plugins/sidebar/sidebar.css') }}" rel="stylesheet">
+    <!--  Custom Scroll bar-->
+    <link href="{{ asset('newface/assets/plugins/mscrollbar/jquery.mCustomScrollbar.css') }}" rel="stylesheet"/>
+    <!--- Style css-->
+    <link href="{{ asset('newface/assets/css-rtl/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('newface/assets/css-rtl/style-dark.css') }}" rel="stylesheet">
+    <!-- Morris.js Charts Plugin -->
+    <link href="{{ asset('newface/assets/plugins/morris.js/morris.css') }}" rel="stylesheet" />
+    <!---Skinmodes css-->
+    <link href="{{ asset('newface/assets/css-rtl/skin-modes.css') }}" rel="stylesheet" />
+    <!--- Animations css-->
+    <link href="{{ asset('newface/assets/css/animate.css') }}" rel="stylesheet">
+
+    <!---Switcher css-->
+    <link href="{{ asset('newface/assets/switcher/css/switcher-rtl.css') }}" rel="stylesheet">
+    <link href="{{ asset('newface/assets/switcher/demo.css') }}" rel="stylesheet">
+    <!-- Javascript JS Routing library -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
+        <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    {% else %}
+        <style>
+            font-family: 'tahoma' !important;
+        </style>
+    {% endif %}
+    <!-- chartist CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body onload="jsCoreRun()">
+<div class="SystemModal" id="SystemModal"></div>
+<body class="main-body">
+
+<!-- Loader -->
+<div id="global-loader">
+    <img src="{{ asset('newface/assets/img/loader.svg') }}" class="loader-img" alt="Loader">
+</div>
+<!-- /Loader -->
+<!--Horizontal-main -->
+<!-- main-content opened -->
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <!-- The image half -->
+        <div class="col-md-6 col-lg-6 col-xl-7 d-none d-md-flex bg-primary-transparent">
+            <div class="row wd-100p mx-auto text-center">
+                <div class="col-md-12 col-lg-12 col-xl-12 my-auto mx-auto wd-100p">
+                    <img src="{{ asset( backgroundIMG ) }}" class="my-auto ht-xl-80p wd-md-100p wd-xl-80p mx-auto" alt="logo">
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            {% block pageBody %}{% endblock %}
-        </div>
-    </main>
-{% endblock %}
+        <!-- The content half -->
+        <div class="col-md-6 col-lg-6 col-xl-5 bg-white">
+            <div class="login d-flex align-items-center py-2">
+                <!-- Demo content-->
+                <div class="container p-0">
+                    <div class="row">
+                        <div class="col-md-10 col-lg-10 col-xl-9 mx-auto">
+                            <div class="card-sigin">
+                                {% block pageBody %}{% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- End -->
+            </div>
+        </div><!-- End -->
+    </div>
+</div>
+
+
+<!--end main -->
+
+<!--/Sidebar-right-->
+<!-- JQuery min js -->
+<script src="{{ asset('newface/assets/plugins/jquery/jquery.min.js') }}"></script>
+<!-- Bootstrap Bundle js -->
+<script src="{{ asset('newface/assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+<!-- Ionicons js -->
+<script src="{{ asset('newface/assets/plugins/ionicons/ionicons.js') }}"></script>
+<!-- Moment js -->
+<script src="{{ asset('newface/assets/plugins/raphael/raphael.min.js') }}"></script>
+<!-- Internal Piety js -->
+<script src="{{ asset('newface/assets/plugins/peity/jquery.peity.min.js') }}"></script>
+<!--Internal  Flot js-->
+<script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.pie.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.resize.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.categories.js') }}"></script>
+<script src="{{ asset('newface/assets/js/dashboard.sampledata.js') }}"></script>
+<script src="{{ asset('newface/assets/js/chart.flot.sampledata.js') }}"></script>
+<!--Internal Apexchart js-->
+<script src="{{ asset('newface/assets/js/apexcharts.js') }}"></script>
+<!-- Internal Map -->
+<script src="{{ asset('newface/assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+<!-- Internal Chart js -->
+<script src="{{ asset('newface/assets/plugins/chart.js/Chart.bundle.min.js') }}"></script>
+<!--Internal  index js -->
+<script src="{{ asset('newface/assets/js/index.js') }}"></script>
+<script src="{{ asset('newface/assets/js/jquery.vmap.sampledata.js') }}"></script>
+<!-- Moment js -->
+<script src="{{ asset('newface/assets/plugins/moment/moment.js') }}"></script>
+<!--Internal Sparkline js -->
+<script src="{{ asset('newface/assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+<!-- Sticky js -->
+<script src="{{ asset('newface/assets/js/sticky.js') }}"></script>
+<!-- Rating js-->
+<script src="{{ asset('newface/assets/plugins/rating/jquery.rating-stars.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/rating/jquery.barrating.js') }}"></script>
+<!-- P-scroll js -->
+<script src="{{ asset('newface/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
+<!-- Horizontalmenu js-->
+<script src="{{ asset('newface/assets/plugins/sidebar/sidebar-rtl.js') }}"></script>
+<script src="{{ asset('newface/assets/plugins/sidebar/sidebar-custom.js') }}"></script>
+<!-- Eva-icons js -->
+<script src="{{ asset('newface/assets/js/eva-icons.min.js') }}"></script>
+<!-- Horizontalmenu js-->
+<script src="{{ asset('newface/assets/plugins/horizontal-menu/horizontal-menu-2/horizontal-menu.js') }}"></script>
+<!-- custom js -->
+<script src="{{ asset('newface/assets/js/custom.js') }}"></script>
+
+<!-- Switcher js -->
+<script src="{{ asset('newface/assets/switcher/js/switcher-rtl.js') }}"></script>
+
+{% block javascripts %}{% endblock %}
+</body>
