@@ -1,5 +1,5 @@
 body{
-    font-size: 14px;
+    font-size: 12px;
     line-height: 1.42857143;
     color: #333;
     background: #f8f6f8;
@@ -18,9 +18,7 @@ body{
     stroke: orangered;
 }
 
-.dropdown-item{
-    text-align: right;
-}
+
 
 .dt-buttons,.dataTables_filter{
     float: left;

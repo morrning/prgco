@@ -1,40 +1,56 @@
-{% extends 'withNavbar.html.twig' %}
+{% extends 'base.html.twig' %}
 
-{% block pageBody %}
-    <div class="row min-vh-100">
-        <div class="col mx-2 mx-sm-4">
-            {% if breadcrumb is not defined %}
-                <ol class="breadcrumb my-2">
-                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
-                            <i class="fas fa-home"></i>
-                            پورتال اصلی
-                        </a></li>
-                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
-                            <i class="fal fa-window-alt"></i>
-                            برنامه‌ها
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active">{{ block('title') }}</li>
-                </ol>
-            {% endif %}
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-12">
-                        {% block alerts %}
-                            {% if alerts is defined %}
-                                {% if alerts|length != 0 %}
-                                    {% for alt in alerts %}
-                                        <div class="alert alert-{{ alt.type }}" role="alert">
-                                            {{ alt.message }}
-                                        </div>
-                                    {% endfor %}
-                                {% endif %}
-                            {% endif %}
-                        {% endblock %}
+{% block body %}
+    <!-- main-content opened -->
+    <div class="main-content horizontal-content">
+        <!-- container opened -->
+        <div class="container">
+            <!-- breadcrumb -->
+            <div class="breadcrumb-header justify-content-between">
+                <div class="my-auto">
+                    <div class="d-flex">
+                        {% if breadcrumb is not defined %}
+                            <h4 class="content-title mb-0 my-auto">
+                                <i class="fas fa-home"></i>
+                                پورتال اصلی
+                            </h4>
+                            <span class="text-muted mt-1 tx-13 mr-2 mb-0">
+                                / <i class="fal fa-window-alt"></i>
+                                        برنامه‌ها
+                            </span>
+                            <li class="breadcrumb-item active">{{ block('title') }}</li>
+                        {% endif %}
+                        <h4 class="content-title mb-0 my-auto">صفحات</h4><span class="text-muted mt-1 tx-13 mr-2 mb-0">/ صورتحساب</span>
                     </div>
                 </div>
             </div>
-            {% block appBody %}{% endblock %}
+            <!-- breadcrumb -->
+            <!-- row -->
+            <div class="row row-sm">
+                <div class="col-md-12 col-xl-12">
+                    <div class=" main-content-body-invoice">
+                        <div class="row">
+                            <div class="col-12">
+                                {% block alerts %}
+                                    {% if alerts is defined %}
+                                        {% if alerts|length != 0 %}
+                                            {% for alt in alerts %}
+                                                <div class="alert alert-{{ alt.type }}" role="alert">
+                                                    {{ alt.message }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                        {% block appBody %}{% endblock %}
+                    </div>
+                </div><!-- COL-END -->
+            </div>
+            <!-- row closed -->
         </div>
+        <!-- Container closed -->
     </div>
+    <!-- main-content closed -->
 {% endblock %}

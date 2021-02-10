@@ -176,7 +176,7 @@
                             0
                         </a>
                     {% else %}
-                        <div class="btn-group dropright" role="group">
+                        <div class="btn-group dropright" role="group" style="font-size: 10px;">
                             <button type="button" class="btn btn-warning" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fa fa-inbox"></span>
                                 {{ UserMGR.notificationCount() }}
@@ -208,57 +208,57 @@
                             </div>
                         </div>
                     {% endif %}
-                    <div class="btn-group" role="group">
-                        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ UserMGR.currentPosition.publicLabel() }}
-                        </button>
-                        <div class="dropdown-menu">
-                            {% if UserMGR.hasPermission('superAdmin') == true %}
-                                <a class="dropdown-item text-danger" href="{{ path('adminDashboard') }}">
-                                    <i class="fal fa-toolbox"></i>
-                                    داشبورد مدیریت
-                                </a>
-                                <div class="dropdown-divider"></div>
-                            {% endif %}
-                            <a class="dropdown-item text-success" href="{{ path('messageNew') }}">
-                                <i class="fal fa-plus-circle"></i>
-                                پیام جدید
-                            </a>
-                            <a class="dropdown-item" href="{{ path('messageIbox') }}">
-                                <i class="fal fa-inbox-in"></i>
-                                پیام‌های دریافتی
-                            </a>
-                            <a class="dropdown-item" href="{{ path('messageOutbox') }}">
-                                <i class="fal fa-inbox-out"></i>
-                                پیام‌های ارسالی
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ path('userPositions') }}">
-                                <i class="fal fa-users"></i>
-                                سمت‌ها و جایگاه‌ها
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ path('userEvents') }}">
-                                <i class="fal fa-history"></i>
-                                تاریخچه رویدادها
-                            </a>
-                            <a class="dropdown-item" href="{{ path('userViewProfile') }}">
-                                <i class="fal fa-sliders-h"></i>
-                                تنظیمات شخصی
-                            </a>
-                            <a class="dropdown-item" href="{{ path('userChangePassword') }}">
-                                <i class="fal fa-lock"></i>
-                                تغییر کلمه‌عبور
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{{ path('userLogout') }}">
-                                <i class="fal fa-door-open"></i>
-                                خروج
-                            </a>
-                        </div>
-                    </div>
-                </div>
 
+                </div>
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ UserMGR.currentPosition.publicLabel() }}
+                </button>
+                <div class="dropdown-menu">
+                    {% if UserMGR.hasPermission('superAdmin') == true %}
+                        <a class="dropdown-item text-danger" href="{{ path('adminDashboard') }}">
+                            <i class="fal fa-toolbox"></i>
+                            داشبورد مدیریت
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    {% endif %}
+                    <a class="dropdown-item text-success" href="{{ path('messageNew') }}">
+                        <i class="fal fa-plus-circle"></i>
+                        پیام جدید
+                    </a>
+                    <a class="dropdown-item" href="{{ path('messageIbox') }}">
+                        <i class="fal fa-inbox-in"></i>
+                        پیام‌های دریافتی
+                    </a>
+                    <a class="dropdown-item" href="{{ path('messageOutbox') }}">
+                        <i class="fal fa-inbox-out"></i>
+                        پیام‌های ارسالی
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('userPositions') }}">
+                        <i class="fal fa-users"></i>
+                        سمت‌ها و جایگاه‌ها
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('userEvents') }}">
+                        <i class="fal fa-history"></i>
+                        تاریخچه رویدادها
+                    </a>
+                    <a class="dropdown-item" href="{{ path('userViewProfile') }}">
+                        <i class="fal fa-sliders-h"></i>
+                        تنظیمات شخصی
+                    </a>
+                    <a class="dropdown-item" href="{{ path('userChangePassword') }}">
+                        <i class="fal fa-lock"></i>
+                        تغییر کلمه‌عبور
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ path('userLogout') }}">
+                        <i class="fal fa-door-open"></i>
+                        خروج
+                    </a>
+                </div>
+            </div>
             {% else %}
                 <li class="nav-item">
                     <a class="btn btn-warning" href="{{ path('userLogin') }}">

@@ -1,45 +1,41 @@
-<!doctype html>
-<html lang="fa">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+{% set area = EntityMGR.find('App:SysArea',UserMGR.currentPosition().DefaultArea) %}
+<!DOCTYPE html>
+<html lang="en">
 
-    <link rel="icon" href="{{ asset('favicon.ico') }}">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/css/bootstrap-rtl.min.css') }}">
-    <!-- jquery UI css files -->
-    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
-    <!-- chartist CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
-    <!-- lightbox CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/lightbox/css/lightbox.min.css') }}">
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+<head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="Keywords" content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
+    <!-- Title -->
     <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
-    <!-- Optional JavaScript -->
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <!-- Icons css -->
+    <link href="{{ asset('newface/assets/css/icons.css') }}" rel="stylesheet">
+    <!--  Right-sidemenu css -->
+    <link href="{{ asset('newface/assets/plugins/sidebar/sidebar.css') }}" rel="stylesheet">
+    <!--  Custom Scroll bar-->
+    <link href="{{ asset('newface/assets/plugins/mscrollbar/jquery.mCustomScrollbar.css') }}" rel="stylesheet"/>
+    <!--- Style css-->
+    <link href="{{ asset('newface/assets/css-rtl/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('newface/assets/css-rtl/style-dark.css') }}" rel="stylesheet">
+    <!-- Morris.js Charts Plugin -->
+    <link href="{{ asset('newface/assets/plugins/morris.js/morris.css') }}" rel="stylesheet" />
+    <!---Skinmodes css-->
+    <link href="{{ asset('newface/assets/css-rtl/skin-modes.css') }}" rel="stylesheet" />
+    <!--- Animations css-->
+    <link href="{{ asset('newface/assets/css/animate.css') }}" rel="stylesheet">
+
+    <!---Switcher css-->
+    <link href="{{ asset('newface/assets/switcher/css/switcher-rtl.css') }}" rel="stylesheet">
+    <link href="{{ asset('newface/assets/switcher/demo.css') }}" rel="stylesheet">
     <!-- Javascript JS Routing library -->
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="{{ asset('assets/js/jquery-3.3.1.slim.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.alphanum.js') }}"></script>
-    <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
-    <script src="{{ asset('assets/js/popper.min.js') }}"></script>
-    <script src="{{ asset('assets/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assets/jstree/jstree.min.js') }}"></script>
-    <script src="{{ asset('assets/js/core.js') }}"></script>
-    <script src="{{ asset('assets/js/typed/typed.min.js') }}"></script>
-    <script src="{{ asset('assets/js/modal.js') }}"></script>
-    <script src="{{ asset('assets/chartjs/Chart.bundle.min.js') }}"></script>
-    <script src="{{ asset('assets/datatable/datatables.min.js') }}"></script>
-    <script src="{{ asset('assets/datatable/ColReorderWithResize.js') }}"></script>
-    <script src="{{ asset('assets/lightbox/js/lightbox.min.js') }}"></script>
     {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
         <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
     {% else %}
@@ -47,41 +43,349 @@
             font-family: 'tahoma' !important;
         </style>
     {% endif %}
+    <!-- chartist CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     {% block stylesheets %}{% endblock %}
-    <script>
-        $(document).ready(function(){
-            //create datatable
-            var table = $('.table').DataTable({
-                "language": {
-                    "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
-                    buttons: {
-                        colvis: 'ستون‌ها',
-                        print: "چاپ",
-                        excel: "اکسل",
-                        copy: "رونوشت"
-                    }
-                },
-                "pageLength": 32,
-                "autoWidth": false,
-                "colReorder": true,
-                "lengthMenu": [[10, 32, 100, -1], [10, 32, 100, "همه"]],
-                dom: 'Blftip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'colvis',
-                    'print'
-                ]
-            });
-
-            new $.fn.dataTable.ColReorder(table);
-        });
-    </script>
 </head>
 <body onload="jsCoreRun()">
 <div class="SystemModal" id="SystemModal"></div>
-{% block body %}{% endblock %}
-{% block javascripts %}{% endblock %}
+<body class="main-body">
+
+    <!-- Loader -->
+    <div id="global-loader">
+        <img src="{{ asset('newface/assets/img/loader.svg') }}" class="loader-img" alt="Loader">
+    </div>
+    <!-- /Loader -->
+    <!-- main-header opened -->
+    <div class="main-header nav nav-item hor-header">
+        <div class="container">
+            <div class="main-header-left ">
+                <a class="animated-arrow hor-toggle horizontal-navtoggle"><span></span></a><!-- sidebar-toggle-->
+                <a class="header-brand" href="{{ path('home') }}">
+                    <img src="{{ asset('newface/assets/img/brand/logo-white.png') }}" class="desktop-dark">
+                    <img src="{{ asset('newface/assets/img/brand/logo.png') }}" class="desktop-logo">
+                    <img src="{{ asset('newface/assets/img/brand/favicon.png') }}" class="desktop-logo-1">
+                    <img src="{{ asset('newface/assets/img/brand/favicon-white.png') }}" class="desktop-logo-dark">
+                </a>
+            </div><!-- search -->
+            <div class="main-header-right">
+
+                <div class="nav nav-item  navbar-nav-right ml-auto">
+                    <div class="dropdown nav-item main-header-notification">
+                        <a class="new nav-link" href="#">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class=" pulse"></span></a>
+                        <div class="dropdown-menu">
+                            <div class="menu-header-content bg-primary text-right">
+                                <div class="d-flex">
+                                    <h6 class="dropdown-title mb-1 tx-15 text-white font-weight-semibold">اطلاعیه</h6>
+                                    <a href="{{ path('userClearNotifications') }}">
+                                        <span class="badge badge-pill badge-warning mr-auto my-auto float-left">علامت گذاری همه</span>
+                                    </a>
+                                </div>
+                                <p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12 ">شما {{ UserMGR.notificationCount() }} اعلان خوانده نشده دارید</p>
+                            </div>
+                            <div class="main-notification-list Notification-scroll">
+                                {%  set notifis = UserMGR.lastNotifications() %}
+                                {% for notifi in notifis %}
+                                    <a class="d-flex p-3" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
+                                        <div class="notifyimg bg-purple">
+                                            <i class="la la-gem text-white"></i>
+                                        </div>
+                                        <div class="mr-3">
+                                            <h5 class="notification-label mb-1">{{ notifi.des }}</h5>
+                                        </div>
+                                        <div class="mr-auto">
+                                            <i class="las la-angle-left text-left text-muted"></i>
+                                        </div>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            <div class="dropdown-footer">
+                                <a href="{{ path('userNotifications') }}">مشاهده همه</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="nav-item full-screen fullscreen-button">
+                        <a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+                    </div>
+                    <div class="dropdown main-profile-menu nav nav-item nav-link">
+                        <a class="profile-user d-flex" href="#"><img alt="" src="{{ asset('files/ProfilePic/' ~ UserMGR.currentUser.nationalCode ~ '.jpg') }}"></a>
+                        <div class="dropdown-menu">
+                            <div class="main-header-profile bg-primary p-3">
+                                <div class="d-flex wd-100p">
+                                    <div class="main-img-user"><img alt="" src="{{ asset('files/ProfilePic/' ~ UserMGR.currentUser.nationalCode ~ '.jpg') }}" class=""></div>
+                                    <div class="mr-3 my-auto">
+                                        <h6>{{ UserMGR.currentUser.fullName }}</h6><span>{{ UserMGR.currentPosition.label }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            {% if UserMGR.hasPermission('superAdmin') == true %}
+                                <a class="dropdown-item bg-danger text-white" href="{{ path('adminDashboard') }}"><i class="bx bx-align-justify"></i>داشبورد مدیریت</a>
+                            {% endif %}
+                            <a class="dropdown-item" href="{{ path('userViewProfile') }}"><i class="bx bx-user-circle"></i>مشخصات</a>
+                            <a class="dropdown-item" href="{{ path('userEvents') }}"><i class="bx bx-history"></i> تاریخچه رویدادها</a>
+                            <a class="dropdown-item" href="{{ path('messageNew') }}"><i class="bx bxs-plus-circle"></i>پیام جدید</a>
+                            <a class="dropdown-item" href="{{ path('messageIbox') }}"><i class="bx bxs-inbox"></i>صندوق ورودی</a>
+                            <a class="dropdown-item" href="{{ path('messageOutbox') }}"><i class="bx bx-message"></i>پیام های ارسالی</a>
+                            <a class="dropdown-item" href="{{ path('userPositions') }}"><i class="bx bx-list-ul"></i>سمت‌ها و جایگاه‌ها</a>
+                            <a class="dropdown-item" href="{{ path('userChangePassword') }}"><i class="bx bx-key"></i> تغییر کلمه عبور</a>
+                            <a class="dropdown-item" href="{{ path('userLogout') }}"><i class="bx bx-log-out"></i> خروج از سیستم</a>
+                        </div>
+                    </div>
+                    <div class="dropdown main-header-message right-toggle">
+                        <a class="nav-link pr-0" data-toggle="sidebar-left" data-target=".sidebar-left">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /main-header -->
+    <!--Horizontal-main -->
+    <div class="sticky">
+        <div class="horizontal-main hor-menu clearfix side-header">
+            <div class="horizontal-mainwrapper container clearfix">
+                <!--Nav-->
+                <nav class="horizontalMenu clearfix">
+                    <ul class="horizontalMenu-list">
+                        <li aria-haspopup="true"><a href="{{ path('home') }}" class=""><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24" ><path d="M0 0h24v24H0V0z" fill="none"/><path d="M5 5h4v6H5zm10 8h4v6h-4zM5 17h4v2H5zM15 5h4v2h-4z" opacity=".3"/><path d="M3 13h8V3H3v10zm2-8h4v6H5V5zm8 16h8V11h-8v10zm2-8h4v6h-4v-6zM13 3v6h8V3h-8zm6 4h-4V5h4v2zM3 21h8v-6H3v6zm2-4h4v2H5v-2z"/></svg>صفحه اصلی</a></li>
+                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> پیوند‌های خارجی<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                            <ul class="sub-menu">
+                                {% set menuItems = EntityMGR.findAll('App:SysMenuItem') %}
+                                {% for menuItem in menuItems %}
+                                    <li><a class="slide-item" href="{{ menuItem.url | raw}}">
+                                            {{ menuItem.fontawsome | raw }}
+                                            {{ menuItem.label | raw}}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </li>
+                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> سامانه‌ها<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                            <ul class="sub-menu">
+                                <li>
+                                    <a class="slide-item" href="{{ path('HRMReportEarn') }}">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        سامانه فیش حقوقی (آزمایشی)
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="slide-item" href="{{ path('HRMReportUserIO') }}">
+                                        <span class="badge badge-danger">آزمایشی</span>
+                                        ترددهای ۳۰ روز اخیر
+                                    </a>
+                                </li>
+                                {% if UserMGR.hasPermission('MostUsedFiles','MUF') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('mostusedfilesDashboard') }}">
+                                            <i class="fas fa-box-alt"></i>
+                                            مدیریت فرم های پرکاربرد
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('CountDown','COUNTDOWN') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('countdownDashboard') }}">
+                                            <i class="fas fa-stopwatch"></i>
+                                            مدیریت روزشمار رویدادها
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('isoformsDashboard') }}">
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            مدیریت سامانه IMS
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('newsPublish','NEWS') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('newsDashboard') }}">
+                                            <i class="fas fa-newspaper"></i>
+                                            سامانه انتشار خبر
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.isLogedin() == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('suggestionAdmin') }}">
+                                            <i class="fas fa-newspaper"></i>
+                                            نظام بررسی پیشنهادات و انتقادات
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('projectAdmin','PROJECT') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('projectAdminDashboard') }}">
+                                            <i class="fas fa-newspaper"></i>
+                                            سامانه کنترل پروژه کل
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {#
+                                {% if UserMGR.hasPermission('HSSETOTAL','HSSE') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('HSSEDashboard') }}">
+                                            <i class="fas fa-lamp"></i>
+                                            سامانه جامع ایمنی و اقدامات تامینی
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                #}
+                            </ul>
+                        </li>
+                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> سامانه تشریفات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                            <ul class="sub-menu">
+
+                                {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('ceremonialDOINGDashboard') }}" >
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            مدیریت تشریفات ناحیه‌‌ای
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('ceremonialREQDashboard') }}" >
+                                            <span>
+                                                <span class="badge badge-danger">آزمایشی</span>
+                                                درخواست تشریفات
+                                            </span>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('hotelingOPTDashboard') }}" >
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            اپراتوری اسکان و اقامت
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('CeremonailOPTDashboard','CEREMONIAL') == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('ceremonialOPTDashboard') }}" >
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            اپراتوری تشریفات
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.hasPermission('HRMACCESS','HRM',null) == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('HRMadmin') }}" >
+                                            <span class="badge badge-danger">آزمایشی</span>
+                                            کارگزینی تشریفات
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+                <!--Nav-->
+            </div>
+        </div>
+    </div>
+    <!--Horizontal-main -->
+    <!-- main-content opened -->
+    <div class="main-content horizontal-content">
+        <!-- container opened -->
+        {% block body %}{% endblock %}
+    </div>
+    <!--end main -->
+    <!-- Footer opened -->
+    <div class="main-footer ht-40">
+        <div class="container-fluid pd-t-0-f ht-100p">
+            <span>{{ ConfigMGR.getConfig.footerText }}</span>
+        </div>
+    </div>
+    <!-- Footer closed -->
+    <!-- Sidebar-right-->
+    <div class="sidebar sidebar-left sidebar-animate">
+        <div class="panel panel-primary card mb-0 box-shadow">
+            <div class="tab-menu-heading border-0 p-3">
+                <div class="card-title mb-0">اطلاعیه</div>
+                <div class="card-options mr-auto">
+                    <a href="#" class="sidebar-remove"><i class="fe fe-x"></i></a>
+                </div>
+            </div>
+            <div class="panel-body tabs-menu-body latest-tasks p-0 border-0">
+                {% set posts = EntityMGR.findByPage('App:NewsPost',1,10) %}
+                {% for post in posts %}
+                    <div class="list d-flex align-items-center border-bottom p-3">
+                        <a class="wrapper w-100 mr-3" href="{{ path('newsShowPost',{'id':post.id}) }}">
+                            <p class="mb-0 d-flex ">
+                                <b>{{ post.title }}</b>
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-clock text-muted ml-1"></i>
+                                    <small class="text-muted ml-auto">{{ Jdate.jdate('Y/n/d H:i:s',post.dateSubmit) }}</small>
+                                    <p class="mb-0"></p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!--/Sidebar-right-->
+    <!-- JQuery min js -->
+    <script src="{{ asset('newface/assets/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap Bundle js -->
+    <script src="{{ asset('newface/assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- Ionicons js -->
+    <script src="{{ asset('newface/assets/plugins/ionicons/ionicons.js') }}"></script>
+    <!-- Moment js -->
+    <script src="{{ asset('newface/assets/plugins/raphael/raphael.min.js') }}"></script>
+    <!-- Internal Piety js -->
+    <script src="{{ asset('newface/assets/plugins/peity/jquery.peity.min.js') }}"></script>
+    <!--Internal  Flot js-->
+    <script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.pie.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.resize.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/jquery.flot/jquery.flot.categories.js') }}"></script>
+    <script src="{{ asset('newface/assets/js/dashboard.sampledata.js') }}"></script>
+    <script src="{{ asset('newface/assets/js/chart.flot.sampledata.js') }}"></script>
+    <!--Internal Apexchart js-->
+    <script src="{{ asset('newface/assets/js/apexcharts.js') }}"></script>
+    <!-- Internal Map -->
+    <script src="{{ asset('newface/assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
+    <!-- Internal Chart js -->
+    <script src="{{ asset('newface/assets/plugins/chart.js/Chart.bundle.min.js') }}"></script>
+    <!--Internal  index js -->
+    <script src="{{ asset('newface/assets/js/index.js') }}"></script>
+    <script src="{{ asset('newface/assets/js/jquery.vmap.sampledata.js') }}"></script>
+    <!-- Moment js -->
+    <script src="{{ asset('newface/assets/plugins/moment/moment.js') }}"></script>
+    <!--Internal Sparkline js -->
+    <script src="{{ asset('newface/assets/plugins/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+    <!-- Sticky js -->
+    <script src="{{ asset('newface/assets/js/sticky.js') }}"></script>
+    <!-- Rating js-->
+    <script src="{{ asset('newface/assets/plugins/rating/jquery.rating-stars.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/rating/jquery.barrating.js') }}"></script>
+    <!-- P-scroll js -->
+    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
+    <!-- Horizontalmenu js-->
+    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-rtl.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-custom.js') }}"></script>
+    <!-- Eva-icons js -->
+    <script src="{{ asset('newface/assets/js/eva-icons.min.js') }}"></script>
+    <!-- Horizontalmenu js-->
+    <script src="{{ asset('newface/assets/plugins/horizontal-menu/horizontal-menu-2/horizontal-menu.js') }}"></script>
+    <!-- custom js -->
+    <script src="{{ asset('newface/assets/js/custom.js') }}"></script>
+
+    <!-- Switcher js -->
+    <script src="{{ asset('newface/assets/switcher/js/switcher-rtl.js') }}"></script>
+
+    {% block javascripts %}{% endblock %}
 </body>
-</html>

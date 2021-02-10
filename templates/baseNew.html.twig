@@ -1,79 +1,52 @@
-<!doctype html>
-<html lang="fa">
+<!DOCTYPE html>
+<html lang="en">
+
+<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 <head>
+    <meta charset="UTF-8">
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=0'>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="Description" content="Bootstrap Responsive Admin Web Dashboard HTML5 Template">
+    <meta name="Author" content="Spruko Technologies Private Limited">
+    <meta name="Keywords" content="admin,admin dashboard,admin dashboard template,admin panel template,admin template,admin theme,bootstrap 4 admin template,bootstrap 4 dashboard,bootstrap admin,bootstrap admin dashboard,bootstrap admin panel,bootstrap admin template,bootstrap admin theme,bootstrap dashboard,bootstrap form template,bootstrap panel,bootstrap ui kit,dashboard bootstrap 4,dashboard design,dashboard html,dashboard template,dashboard ui kit,envato templates,flat ui,html,html and css templates,html dashboard template,html5,jquery html,premium,premium quality,sidebar bootstrap 4,template admin bootstrap 4"/>
+    <!-- Title -->
     <title>{{ ConfigMGR.getConfig.siteName }} - {% block title %}{% endblock %}</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta http-equiv="content-language" content="fa" />
-    <meta name="document-type" content="Public" />
-    <meta name="document-rating" content="General" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="PRGCO BY SARKESH LTD" />
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('favicon.ico') }}">
+    <!-- Icons css -->
+    <link href="assets/css/icons.css" rel="stylesheet">
+    <!--  Right-sidemenu css -->
+    <link href="assets/plugins/sidebar/sidebar.css" rel="stylesheet">
+    <!--  Custom Scroll bar-->
+    <link href="assets/plugins/mscrollbar/jquery.mCustomScrollbar.css" rel="stylesheet"/>
+    <!--- Style css-->
+    <link href="assets/css-rtl/style.css" rel="stylesheet">
+    <link href="assets/css-rtl/style-dark.css" rel="stylesheet">
+    <!-- Morris.js Charts Plugin -->
+    <link href="assets/plugins/morris.js/morris.css" rel="stylesheet" />
+    <!---Skinmodes css-->
+    <link href="assets/css-rtl/skin-modes.css" rel="stylesheet" />
+    <!--- Animations css-->
+    <link href="assets/css/animate.css" rel="stylesheet">
 
-    <link href="{{ asset('Css/bootstrap.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('Css/bootstrap-rtl.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('Css/animate.css') }}" rel="stylesheet" />
-    <link href="{{ asset('Css/Style.css') }}" rel="stylesheet" />
-    <link href="{{ asset('Css/owl-carousel/owl.carousel.min.css') }}" rel="stylesheet" />
-    <link href="{{ asset('Css/sina-nav.min.css') }}" rel="stylesheet" />
-    <script src="{{ asset('Js/jquery-2.0.0.min.js') }}"></script>
-    <script src="{{ asset('Js/popper.min.js') }}"></script>
-    <script src="{{ asset('Js/bootstrap.min.js') }}"></script>
-
-    <script src="{{ asset('Js/owl.carousel.js') }}"></script>
-    <script src="{{ asset('Js/custom.js') }}"></script>
-
-    <script src="{{ asset('Js/sina-nav.min.js') }}"></script>
-
-    <!--<link href="Css/all.min.css" rel="stylesheet" />
-    <script src="Js/all.min.js"></script>-->
-
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/js/all.min.js"></script>
-
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-
-    <!-- Optional JavaScript -->
+    <!---Switcher css-->
+    <link href="assets/switcher/css/switcher-rtl.css" rel="stylesheet">
+    <link href="assets/switcher/demo.css" rel="stylesheet">
     <!-- Javascript JS Routing library -->
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
-
+    {% if ConfigMGR.getConfig.SYSFONTNAME == null or  ConfigMGR.getConfig.SYSFONTNAME == 'shabnam'%}
+        <link rel="stylesheet" href="{{ asset('assets/css/shabnam.css') }}">
+    {% else %}
+        <style>
+            font-family: 'tahoma' !important;
+        </style>
+    {% endif %}
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     {% block stylesheets %}{% endblock %}
-    <script>
-        $(document).ready(function(){
-            //create datatable
-            var table = $('.table').DataTable({
-                "language": {
-                    "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
-                    buttons: {
-                        colvis: 'ستون‌ها',
-                        print: "چاپ",
-                        excel: "اکسل",
-                        copy: "رونوشت"
-                    }
-                },
-                "pageLength": 32,
-                "autoWidth": false,
-                "colReorder": true,
-                "lengthMenu": [[10, 32, 100, -1], [10, 32, 100, "همه"]],
-                dom: 'Blftip',
-                buttons: [
-                    'copyHtml5',
-                    'excelHtml5',
-                    'colvis',
-                    'print'
-                ]
-            });
-
-            new $.fn.dataTable.ColReorder(table);
-        });
-    </script>
 </head>
 <body onload="jsCoreRun()">
 <div class="SystemModal" id="SystemModal"></div>
 {% block body %}{% endblock %}
 {% block javascripts %}{% endblock %}
 </body>
-</html>

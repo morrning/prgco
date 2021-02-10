@@ -1,61 +1,46 @@
-{% extends 'base.html.twig' %}
+{% extends 'appSimple.html.twig' %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('assets/css/app_base.css') }}">
 {% endblock %}
 {% block body %}
-    {% include 'topMenu.html.twig' %}
-    <div class="container-fluid px-0 px-sm-3">
-        <div class="row min-vh-100">
-            <div class="col-12 col-lg-2 px-sm-0">
-                <!-- Sidebar -->
-                {% block appMenu %}{% endblock %}
+    <!-- row -->
+    <div class="row row-sm">
+        <!-- Col -->
+        <div class="col-lg-4">
+            <div class="card mg-b-20">
+                <div class="card-body">
+                    {% block appMenu %}{% endblock %}
+                </div>
             </div>
+        </div>
 
-            <div class="col-12 col-lg-10 mb-3 min-vh-100">
-
-                {% block breadcrumb %}{% endblock %}
-
-                <div class="card my-0 mt-3">
-                    <div class="card-header bg-success text-light">
-                        <span class="float-right">{{ block('title') }}</span>
-                        <span class="float-left appTopMenu">{% block appTop %}{% endblock %}</span>
-                    </div>
-                    <div class="card-body px-2 px-sm-4">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12">
-                                    {% block alerts %}
-                                        {% if alerts is defined %}
-                                            {% if alerts|length != 0 %}
-                                                {% for alt in alerts %}
-                                                    <div class="alert alert-{{ alt.type }}" role="alert">
-                                                        {{ alt.message }}
-                                                    </div>
-                                                {% endfor %}
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endblock %}
-                                </div>
-                            </div>
+        <!-- Col -->
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4 main-content-label">{{ block('title') }}</div>
+                    <div class="row">
+                        <div class="col-12">
+                            {% block alerts %}
+                                {% if alerts is defined %}
+                                    {% if alerts|length != 0 %}
+                                        {% for alt in alerts %}
+                                            <div class="alert alert-{{ alt.type }}" role="alert">
+                                                {{ alt.message }}
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+                            {% endblock %}
+                            <hr>
+                            {% block pageBody %}{% endblock %}
                         </div>
-                        {% block pageBody %}{% endblock %}
                     </div>
                 </div>
             </div>
         </div>
+        <!-- /Col -->
     </div>
-    <nav class="navbar navbar-expand-sm bg-secondary py-0">
-        <!-- Navbar text-->
-        <a class="navbar-brand text-light align-items-center" style="display: flex; font-size: inherit;" href="http://sarkesh.org">
-            <img src="{{ asset('assets/images/public/rahkar.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
-            <span class="mr-1">
-               سامانه مدیریت یکپارچه راهکار
-            </span>
-        </a>
-        <span class="navbar-text text-light mr-auto">
-            {{ ConfigMGR.getConfig.footerText }}
-        </span>
-
-    </nav>
+    <!-- row closed -->
 {% endblock %}
