@@ -315,7 +315,6 @@
                                 {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('ceremonialDOINGDashboard') }}" >
-                                            <span class="badge badge-danger">آزمایشی</span>
                                             مدیریت تشریفات
                                         </a>
                                     </li>
@@ -323,16 +322,13 @@
                                 {% if UserMGR.hasPermission('CeremonailREQ','CEREMONIAL',null,area.id) == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('ceremonialREQDashboard') }}" >
-                                            <span>
-                                                درخواست تشریفات
-                                            </span>
+                                            درخواست تشریفات
                                         </a>
                                     </li>
                                 {% endif %}
                                 {% if UserMGR.hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,area.id) == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('hotelingOPTDashboard') }}" >
-                                            <span class="badge badge-danger">آزمایشی</span>
                                             اپراتوری اسکان و اقامت
                                         </a>
                                     </li>
@@ -340,7 +336,6 @@
                                 {% if UserMGR.hasPermission('CeremonailOPTDashboard','CEREMONIAL') == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('ceremonialOPTDashboard') }}" >
-                                            <span class="badge badge-danger">آزمایشی</span>
                                             اپراتوری تشریفات
                                         </a>
                                     </li>
@@ -348,7 +343,6 @@
                                 {% if UserMGR.hasPermission('HRMACCESS','HRM',null) == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('HRMadmin') }}" >
-                                            <span class="badge badge-danger">آزمایشی</span>
                                             کارگزینی تشریفات
                                         </a>
                                     </li>
