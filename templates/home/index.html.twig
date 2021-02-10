@@ -77,28 +77,7 @@
                 </div>
             </div>
         </div>
-        {#
-              {% if UserMGR.isLogedIn() %}
-              <div class="col-12 col-md-9 m-auto">
-              {% else %}
-        #}
         <div class="col-12 col-sm-12 col-md-8">
-            {#      {% endif %}#}
-            {% if breadcrumb is not defined %}
-                <ol class="breadcrumb my-2">
-                    <li class="breadcrumb-item"><a class="" href="{{ path('home') }}">
-                            <i class="fas fa-home"></i>
-                            پورتال اصلی
-                        </a></li>
-                    <li class="breadcrumb-item"><a class="" href="{{ path('apps') }}">
-                            <i class="fal fa-window-alt"></i>
-                            برنامه‌ها
-                        </a>
-                    </li>
-                    <li class="breadcrumb-item active">{{ block('title') }}</li>
-                </ol>
-            {% endif %}
-
                 <div class="row mb-2">
                     <div class="col-12 col-sm-12 col-md-12 pb-2 d-none d-sm-block">
                         <div class="row">
@@ -106,7 +85,7 @@
                                 <div class="card mb-2">
                                     <div class="card-header">
                                         <i class="fas fa-question-square" onclick="SysLoadMsg('1001');"></i>
-                                        نمودار پیشرفت
+                                        پروژه‌های در دست اجرا
                                         :
                                         <span class="text-secondary projectsLabel"></span>
                                         <script>

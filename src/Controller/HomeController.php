@@ -84,9 +84,11 @@ class HomeController extends AbstractController
 
         foreach ($projects as $project)
         {
-            array_push($projectNames, $project['areaName']);
-            array_push($pprogress,$project['Pprogress']);
-            array_push($cprogress,$project['Cprogress'] );
+            if(!(($project['Pprogress'] == $project['Cprogress']) && $project['Cprogress'] == 100 ) ){
+                array_push($projectNames, $project['areaName']);
+                array_push($pprogress,$project['Pprogress']);
+                array_push($cprogress,$project['Cprogress'] );
+            }
         }
 
         return $this->render('home/index.html.twig', [

@@ -3,22 +3,16 @@
 {% block title %}صفحه اصلی{% endblock %}
 
 {% block body %}
-    {% include 'topMenu.html.twig' %}
     <div class="container-fluid">
+        {% if alert is defined %}
+            {% if alert|length != 0 %}
+                {% for alt in alert %}
+                    <div class="alert alert-{{ alt.type }}" role="alert">
+                        {{ alt.message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endif %}
         {% block pageBody %}{% endblock %}
     </div>
-
-    <nav class="navbar navbar-expand-sm bg-secondary py-0">
-        <!-- Navbar text-->
-        <a class="navbar-brand text-light align-items-center" style="display: flex; font-size: inherit;" href="http://sarkesh.org">
-            <img src="{{asset('assets/images/public/rahkar.png')}}" width="30" height="30" class="d-inline-block align-top" alt="">
-            <span class="mr-1">
-               سامانه مدیریت یکپارچه راهکار
-            </span>
-        </a>
-        <span class="navbar-text text-light mr-auto">
-            {{ ConfigMGR.getConfig.footerText }}
-        </span>
-
-    </nav>
 {% endblock %}

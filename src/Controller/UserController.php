@@ -67,7 +67,7 @@ class UserController extends AbstractController
 
         return $this->render('user/login.html.twig', [
             'form' => $form->createView(),
-            'alert'=>$alert
+            'alerts'=>$alert
         ]);
     }
 

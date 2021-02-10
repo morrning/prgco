@@ -4,7 +4,18 @@
 
 {% block pageBody %}
     <div class="row">
-        <div class="col">
+        <div class="col-12">
+            {% if alerts is defined %}
+                {% if alerts|length != 0 %}
+                    {% for alt in alerts %}
+                        <div class="alert alert-{{ alt.type }}" role="alert">
+                            {{ alt.message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+        </div>
+        <div class="col-12">
             <div class="card">
                 <div class="card-header text-center bg-success text-light">
                     <i class="fas fa-question-square" onclick="SysLoadMsg('1002');"></i>
