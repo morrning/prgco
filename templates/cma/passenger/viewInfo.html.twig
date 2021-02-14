@@ -122,7 +122,7 @@
                         <h5 class="text-success">اسکن مدارک:</h5>
                         <div class="row">
                             {% for doc in docs %}
-                                <div class="col">
+                                <div class="-3">
                                     <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
                                 </div>
                             {% endfor %}
