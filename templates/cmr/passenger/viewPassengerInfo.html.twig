@@ -169,7 +169,7 @@
                 <div class="row">
                     {% for doc in docs %}
                         <div class="col-3">
-                            <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
+                            <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  class="img-thumbnail img-fluid" src="{{ asset('files/' ~ doc.docName) }}"></a>
                         </div>
                     {% endfor %}
                 </div>
