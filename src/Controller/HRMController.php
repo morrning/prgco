@@ -457,6 +457,15 @@ class HRMController extends AbstractController
         if(is_null($passenger))
             return $this->redirectToRoute('404');
 
+        //get visas
+        $visas = [];
+        $lists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger,'listLabel'=>'VisaRequest']);
+        foreach ($lists as $list){
+            $visa = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list]);
+            if(! is_null($visa)){
+                array_push($visas,$visa);
+            }
+        }
         $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
         $alerts = [];
         if($msg == 1)
@@ -500,7 +509,9 @@ class HRMController extends AbstractController
             'events'=>$logMGR->getEvents('CEREMONIAL','CERPASSENGER'.$passenger->getId()),
             'form'=>$form->createView(),
             'alerts'=>$alerts,
-            'docs'=>$passenger->getCMPassengerPersonalDocs()
+            'docs'=>$passenger->getCMPassengerPersonalDocs(),
+            'visas'=>$visas,
+            'letters'=> $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])]),
         ]);
     }
 

@@ -1464,7 +1464,7 @@ class AdminController extends AbstractController
             if(!is_null($user)){
                 $pos = $entityMGR->findOneBy('App:SysPosition',['userID'=>$user]);
                 if(!is_null($pos)){
-                    if(is_null($entityMGR->findOneBy('App:CMPassenger',['pshenasname'=>$passenger[5]]))){
+                    if(is_null($entityMGR->findOneBy('App:CMPassenger',['pcodemeli'=>$passenger[5]]))){
                         $pass = new Entity\CMPassenger();
                         $pass->setPtype($ptype);
                         $pass->setPname($passenger[0]);
