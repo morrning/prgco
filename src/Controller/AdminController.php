@@ -1448,10 +1448,13 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/adm", name="adminP")
+     * @Route("/admin/imp", name="adminP")
      */
     public function adminP(Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger)
     {
+        if(! $userMgr->hasPermission('superAdmin'))
+            return $this->redirectToRoute('403');
+
         $ptype = $entityMGR->findOneBy('App:CMPassengerType',['typeName'=>'پرسنل شرکت']);
         $passportType = $entityMGR->findOneBy('App:CMPassengerDocType',['tname'=>'گذرنامه']);
         $pesonalPicType = $entityMGR->findOneBy('App:CMPassengerDocType',['tname'=>'عکس پرسنلی']);
