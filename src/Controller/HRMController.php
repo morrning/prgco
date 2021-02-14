@@ -468,6 +468,18 @@ class HRMController extends AbstractController
                 }
             }
         }
+        //get tickets
+        $tickets = [];
+        $lists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger]);
+        foreach ($lists as $list){
+            if($list->getCmlist()->getListLabel() == 'TicketRequest'){
+                $ticket = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list->getCmlist()]);
+                if(! is_null($visa)){
+                    array_push($tickets,$ticket);
+                }
+            }
+        }
+
         $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
         $alerts = [];
         if($msg == 1)
@@ -513,6 +525,7 @@ class HRMController extends AbstractController
             'alerts'=>$alerts,
             'docs'=>$passenger->getCMPassengerPersonalDocs(),
             'visas'=>$visas,
+            'tickets'=>$tickets,
             'letters'=> $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])]),
         ]);
     }

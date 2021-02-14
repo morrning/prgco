@@ -419,8 +419,8 @@ class CMRController extends AbstractController
         $idsArray = explode(',',$ids);
         $mlist = new Entity\CMList();
         $mlist->setSubmitter($userMGR->currentPosition());
-        $mlist->setDes('Visa Request');
-        $mlist->setListLabel('VisaRequest');
+        $mlist->setDes('Ticket Request');
+        $mlist->setListLabel('TicketRequest');
         $entityMGR->insertEntity($mlist);
 
         foreach ($idsArray as $id){

@@ -221,7 +221,34 @@
         </div>
         <div class="tab-pane fade show" id="nav-ticket" role="tabticket" aria-labelledby="nav-ticket-tab">
             <div class="container py-3">
-                <div class="row">bbb</div>
+                <div class="row">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered table-hover rounded text-center">
+                            <thead class="bg-blue text-light">
+                            <tr>
+                                <th>ردیف</th>
+                                <th>درخواست کننده</th>
+                                <th>وضعیت بلیط</th>
+                                <th>تاریخ درخواست</th>
+                                <th>امکانات</th>
+                            </tr>
+                            </thead>
+                            <tbody class="">
+                            {% for ticket in tickets %}
+                                <tr class="{% if ticket.ticketState.stateCode == 2 %}row-bg-success{% elseif ticket.ticketState.stateCode == -1 %}row-bg-danger{% endif %}">
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ ticket.submitter.publicLabel }}</td>
+                                    <td>{{ ticket.ticketState.stateName }}</td>
+                                    <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
+                                    <td>
+                                        <a class="btn btn-info rounded btn-small btn-sm" href="{{ path('HRMAirTicketView',{'id':ticket.id}) }}">مشاهده</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="tab-pane fade show" id="nav-visa" role="tabvisa" aria-labelledby="nav-visa-tab">
@@ -241,7 +268,6 @@
                             </thead>
                             <tbody class="">
                             {% for visa in visas %}
-
                                 <tr class="{% if visa.visaState.stateCode == 2 %}bg-success text-light{% elseif visa.visaState.StateCode == -1 %}bg-danger text-light{% endif %}">
                                     <td class="w-auto">{{ loop.index }}</td>
                                     <td class="w-auto">{{ visa.id }}</td>
