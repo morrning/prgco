@@ -249,7 +249,7 @@
                                     <td class="w-auto">{{ visa.visaState.stateName }}</td>
                                     <td class="w-auto">{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
                                     <td class="select-w200px">
-                                        <a class="btn btn-info rounded btn-small" href="{{ path('ceremonialREQVisaView',{'id':visa.id}) }}">مشاهده</a>
+                                        <a class="btn btn-info rounded btn-small" href="{{ path('HRMVisaView',{'id':visa.id}) }}">مشاهده</a>
                                     </td>
                                 </tr>
                             {% endfor %}

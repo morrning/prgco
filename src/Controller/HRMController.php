@@ -459,11 +459,13 @@ class HRMController extends AbstractController
 
         //get visas
         $visas = [];
-        $lists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger,'listLabel'=>'VisaRequest']);
+        $lists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger]);
         foreach ($lists as $list){
-            $visa = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list]);
-            if(! is_null($visa)){
-                array_push($visas,$visa);
+            if($list->getCmlist()->getListLabel() == 'VisaRequest'){
+                $visa = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list]);
+                if(! is_null($visa)){
+                    array_push($visas,$visa);
+                }
             }
         }
         $logMGR->addEvent('CERPASSENGER'.$passenger->getId(),'مشاهده','اطلاعات مسافر','CEREMONIAL',$request->getClientIp());
