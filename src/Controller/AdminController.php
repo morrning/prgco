@@ -1461,37 +1461,40 @@ class AdminController extends AbstractController
             if(!is_null($user)){
                 $pos = $entityMGR->findOneBy('App:SysPosition',['userID'=>$user]);
                 if(!is_null($pos)){
-                    $pass = new Entity\CMPassenger();
-                    $pass->setPtype($ptype);
-                    $pass->setPname($passenger[0]);
-                    $pass->setPfamily($passenger[1]);
-                    $pass->setPfather($passenger[2]);
-                    $pass->setPbirthday($passenger[3]);
-                    $pass->setPshenasname($passenger[4]);
-                    $pass->setPcodemeli($passenger[5]);
-                    $pass->setPassportExpireDate($passenger[6]);
-                    $pass->setTel1($passenger[7]);
-                    $pass->setTel2($passenger[8]);
-                    $pass->setAdr($passenger[9]);
-                    $pass->setLname($passenger[10]);
-                    $pass->setLfamily($passenger[11]);
-                    $pass->setLfather($passenger[12]);
-                    $pass->setPassNO($passenger[13]);
-                    $pass->setSubmitter($pos);
-                    $entityMGR->insertEntity($pass);
+                    if(is_null($entityMGR->findOneBy('App:CMPassenger',['pshenasname'=>$passenger[5]]))){
+                        $pass = new Entity\CMPassenger();
+                        $pass->setPtype($ptype);
+                        $pass->setPname($passenger[0]);
+                        $pass->setPfamily($passenger[1]);
+                        $pass->setPfather($passenger[2]);
+                        $pass->setPbirthday($passenger[3]);
+                        $pass->setPshenasname($passenger[4]);
+                        $pass->setPcodemeli($passenger[5]);
+                        $pass->setPassportExpireDate($passenger[6]);
+                        $pass->setTel1($passenger[7]);
+                        $pass->setTel2($passenger[8]);
+                        $pass->setAdr($passenger[9]);
+                        $pass->setLname($passenger[10]);
+                        $pass->setLfamily($passenger[11]);
+                        $pass->setLfather($passenger[12]);
+                        $pass->setPassNO($passenger[13]);
+                        $pass->setSubmitter($pos);
+                        $entityMGR->insertEntity($pass);
 
-                    $docPass = new Entity\CMPassengerPersonalDoc();
-                    $docPass->setPassenger($pass);
-                    $docPass->setDocName('ceremonial/' . $pass->getPcodemeli() . '.jpg');
-                    $docPass->setDoctype($passportType);
-                    $entityMGR->insertEntity($docPass);
+                        $docPass = new Entity\CMPassengerPersonalDoc();
+                        $docPass->setPassenger($pass);
+                        $docPass->setDocName('ceremonial/' . $pass->getPcodemeli() . '.jpg');
+                        $docPass->setDoctype($passportType);
+                        $entityMGR->insertEntity($docPass);
 
-                    $docPic = new Entity\CMPassengerPersonalDoc();
-                    $docPic->setPassenger($pass);
-                    $docPic->setDocName('ProfilePic/' . $pass->getPcodemeli() . '.jpg');
-                    $docPic->setDoctype($pesonalPicType);
-                    $entityMGR->insertEntity($docPic);
-                    echo 'user :' . $pass->getPcodemeli() . 'added <br>';
+                        $docPic = new Entity\CMPassengerPersonalDoc();
+                        $docPic->setPassenger($pass);
+                        $docPic->setDocName('ProfilePic/' . $pass->getPcodemeli() . '.jpg');
+                        $docPic->setDoctype($pesonalPicType);
+                        $entityMGR->insertEntity($docPic);
+                        echo 'user :' . $pass->getPcodemeli() . 'added <br>';
+                    }
+
                 }
             }
 
