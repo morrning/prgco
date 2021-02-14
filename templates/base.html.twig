@@ -36,7 +36,6 @@
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.theme.min.css') }}">
     <!---Switcher css-->
     <link href="{{ asset('newface/assets/switcher/css/switcher-rtl.css') }}" rel="stylesheet">
-    <link href="{{ asset('newface/assets/switcher/demo.css') }}" rel="stylesheet">
     <!-- Javascript JS Routing library -->
     <script src="{{ asset('bundles/fosjsrouting/js/router.min.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
@@ -52,6 +51,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/datatable/datatables.min.css') }}"/>
     <link rel="stylesheet" href="{{ asset('assets/jstree/themes/default/style.min.css') }}">
+    <!-- lightbox CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/lightbox/css/lightbox.min.css') }}">
 
     <!-- JQuery min js -->
     <script src="{{ asset('newface/assets/plugins/jquery/jquery.min.js') }}"></script>
@@ -76,7 +77,6 @@
     <script src="{{ asset('newface/assets/js/apexcharts.js') }}"></script>
     <!-- Internal Map -->
     <script src="{{ asset('newface/assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
-    <script src="{{ asset('newface/assets/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- Internal Chart js -->
     <script src="{{ asset('newface/assets/plugins/chart.js/Chart.bundle.min.js') }}"></script>
     <!--Internal  index js -->
@@ -144,6 +144,8 @@
             <div class="main-header-right">
 
                 <div class="nav nav-item  navbar-nav-right ml-auto">
+                    <div class="nav-item">
+                        <span class="nav nav-link badge badge-danger">{{ UserMGR.notificationCount() }}</span>                    </div>
                     <div class="dropdown nav-item main-header-notification">
                         <a class="new nav-link" href="#">
                             <svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg><span class=" pulse"></span></a>
