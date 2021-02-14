@@ -462,7 +462,7 @@ class HRMController extends AbstractController
         $lists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger]);
         foreach ($lists as $list){
             if($list->getCmlist()->getListLabel() == 'VisaRequest'){
-                $visa = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list]);
+                $visa = $entityMGR->findOneBy('App:CMVisaReq',['cmlist'=>$list->getCmlist()]);
                 if(! is_null($visa)){
                     array_push($visas,$visa);
                 }
