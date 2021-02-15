@@ -18,8 +18,8 @@
         <!-- Col -->
         <div class="col-lg-8">
             <div class="card">
+                <div class="card-header bg-primary text-white">{{ block('title') }}</div>
                 <div class="card-body">
-                    <div class="mb-4 main-content-label">{{ block('title') }}</div>
                     <div class="row">
                         <div class="col-12">
                             {% block alerts %}
@@ -34,6 +34,8 @@
                                 {% endif %}
                             {% endblock %}
                             <hr>
+                        </div>
+                        <div class="col-12">
                             {% block pageBody %}{% endblock %}
                         </div>
                     </div>
