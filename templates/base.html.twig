@@ -212,7 +212,7 @@
                                 <p class="dropdown-title-text subtext mb-0 text-white op-6 pb-0 tx-12 ">شما {{ UserMGR.notificationCount() }} اعلان خوانده نشده دارید</p>
                             </div>
                             <div class="main-notification-list Notification-scroll">
-                                {%  set notifis = UserMGR.lastNotifications() %}
+                                {%  set notifis = UserMGR.lastNotifications(3) %}
                                 {% for notifi in notifis %}
                                     <a class="d-flex p-3" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
                                         <div class="notifyimg bg-purple">
