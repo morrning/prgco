@@ -1,0 +1,38 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}لیست پرسنل پیمانکاران{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>پیمانکار</th>
+                    <th>کد ملی</th>
+                    <th>شماره تماس</th>
+                    <th>آدرس</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for user in users %}
+                    <tr class="">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
+                        <td>{{ user.submitter.userID.fullname }}</td>
+                        <td>{{ user.pcodemeli  }}</td>
+                        <td>{{ user.tel1  }}</td>
+                        <td>{{ user.adr  }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

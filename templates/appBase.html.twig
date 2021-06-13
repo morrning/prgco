@@ -7,7 +7,7 @@
     <!-- row -->
     <div class="row row-sm">
         <!-- Col -->
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <div class="card mg-b-20">
                 <div class="card-body">
                     {% block appMenu %}{% endblock %}
@@ -16,9 +16,9 @@
         </div>
 
         <!-- Col -->
-        <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">{{ block('title') }}</div>
+        <div class="col-lg-9">
+            <div class="card card-primary">
+                <div class="card-header">{{ block('title') }}</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12">
@@ -33,7 +33,6 @@
                                     {% endif %}
                                 {% endif %}
                             {% endblock %}
-                            <hr>
                         </div>
                         <div class="col-12">
                             {% block pageBody %}{% endblock %}

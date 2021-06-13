@@ -1,0 +1,36 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}لیست پرسنل{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>کد ملی</th>
+                    <th>شماره پرسنلی</th>
+                    <th>شماره تماس</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for user in users %}
+                    <tr class="">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.fullname }}</td>
+                        <td>{{ user.nationalCode }}</td>
+                        <td>{{ user.employeNum }}</td>
+                        <td>{{ user.mobileNum }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

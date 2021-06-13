@@ -198,8 +198,18 @@ class HRMController extends AbstractController
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
 
+        $users = [];
+        $poUsers = $entityMGR->findAll('App:SysUser');
+        foreach ($poUsers as $poUser){
+            $uofs = $entityMGR->findBy('App:SysPosition',['userID'=>$poUser,'constractor'=>0]);
+            foreach ($uofs as $uof){
+                if(array_search($poUser,$users) == false){
+                    array_push($users,$poUser);
+                }
+            }
+        }
         return $this->render('hrm/employes.html.twig', [
-            'users' => $entityMGR->findBy('App:SysUser',['contractor'=>null])
+            'users' => $users
         ]);
     }
 
@@ -527,6 +537,93 @@ class HRMController extends AbstractController
             'visas'=>$visas,
             'tickets'=>$tickets,
             'letters'=> $entityMGR->findBy('App:HRMLetterOutCountry',['user'=>$entityMGR->findOneBy('App:SysUser',['nationalCode'=>$passenger->getPcodemeli()])]),
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/list/reports", name="HRMListReports")
+     */
+    public function HRMListReports(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        //get info
+        $info['allUsers'] = count($entityMGR->findAll('App:SysPosition'));
+        $constractors = $entityMGR->findBy('App:SysPosition',['constractor'=>1]);
+        $info['contractor'] = count($constractors);
+        $info['employers'] =  $info['allUsers'] - $info['contractor'];
+        $info['contractorPassenger'] = 0;
+        foreach ($constractors as $constractor){
+            $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor]));
+        }
+
+        return $this->render('hrm/reportList.html.twig', [
+            'info' => $info
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/list/rpt/{type}", name="HRMPersonsReport")
+     */
+    public function HRMPersonsReport($type = 1,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->isLogedIn())
+            return $this->redirectToRoute('403');
+        if (!$userMGR->hasPermission('HRMACCESS', 'HRM'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hrm/employes.html.twig', [
+            'users' => $entityMGR->findBy('App:SysUser',['contractor'=>null])
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/employe/search/{type}", name="HRMEMployeREport")
+     */
+    public function HRMEMployeREport($type = 0, Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $users = [];
+        $poUsers = $entityMGR->findAll('App:SysUser');
+        foreach ($poUsers as $poUser){
+            $uofs = $entityMGR->findBy('App:SysPosition',['userID'=>$poUser,'constractor'=>$type]);
+            foreach ($uofs as $uof){
+                if(array_search($poUser,$users) == false){
+                    array_push($users,$poUser);
+                }
+            }
+        }
+        return $this->render('hrm/reportEploye.html.twig', [
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/employe/conctractors/search", name="HRMConsctractorPersons")
+     */
+    public function HRMConsctractorPersons( Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $passengers = [];
+        $positions = $entityMGR->findBy('App:SysPosition',['constractor'=>1]);
+        foreach ($positions as $position){
+            $tps = $entityMGR->findBy('App:CMPassenger',['submitter'=>$position]);
+            foreach ($tps as $tp){
+                if(array_search($tp,$passengers) == false){
+                    array_push($passengers,$tp);
+                }
+            }
+        }
+        echo count($passengers);
+        return $this->render('hrm/reportConstractorEmployes.html.twig', [
+            'users' => $passengers
         ]);
     }
 

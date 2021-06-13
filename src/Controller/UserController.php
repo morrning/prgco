@@ -11,7 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-
+use App\Form\Type\FileboxType;
 use App\Service;
 
 class UserController extends AbstractController
@@ -192,11 +192,38 @@ class UserController extends AbstractController
     {
         if(! $userMgr->isLogedIn())
             return $this->redirectToRoute('userLogin');
+        $defaultData = ['message' => 'Type your message here'];
+        $form = $this->createFormBuilder($defaultData)
+            ->add('docName', FileboxType::class,['label'=>'تصویر نمایه'])
+            ->add('submit', SubmitType::class,['label'=>'ثبت'])
+            ->getForm();
+        $alerts =[];
+        $form->handleRequest($request);
+        $file = $form->get('docName')->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            if($file->getClientOriginalExtension() == 'jpg'){
+                if($file->getSize() < 200971502){
+                    $tempFileName = $userMgr->currentUser()->getNationalCode() . '.jpg';
+                    $file->move(str_replace('src','public_html',dirname(__DIR__)) . '/files/ProfilePic',$tempFileName );
+                    $logMGR->addEvent('3gv5','ویرایش',' تصویر','USERS',$request->getClientIp());
+
+                    array_push($alerts,['type'=>'success','message'=>'فایل مورد نظر با موفقیت ذخیره شد.']);
+                }
+                else{
+                    array_push($alerts,['type'=>'danger','message'=>'فایل ارسال شده بسیار حجیم است.حداکثر حجم ارسال فایل 2 مگابایت می باشد.']);
+                }
+            }
+            else{
+                array_push($alerts, ['type'=>'danger','message'=>'نوع فایل وارد شده صحیح نیست.لطفا فایل ,jpg  ارسال فرمایید.']);
+            }
+        }
         $logMGR->addEvent('3gv5','مشاهده','پروفایل کاربری','USERS',$request->getClientIp());
         return $this->render('user/viewProfile.html.twig',
             [
+                'alert'=>$alerts,
                 'user'=>$userMgr->currentUser(),
-                'positions'=>$userMgr->currentUserPositions()
+                'positions'=>$userMgr->currentUserPositions(),
+                'form'=>$form->createView()
             ]
         );
     }

@@ -229,7 +229,7 @@ class UserMGR
         return $orm->createQueryBuilder('q')
             ->select('q')
             ->from('App:SysNotification','q')
-            ->where('q.userID=?1')
+            ->where('q.userID=?1 AND q.viewed IS NULL')
             ->setParameter('1',$this->currentPosition())
             ->setMaxResults($count)
             ->orderBy('q.id','DESC')

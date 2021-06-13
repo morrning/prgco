@@ -1,0 +1,56 @@
+{% extends 'hrm/base.html.twig' %}
+{% block title %}لیست گزارشات کارگزینی{% endblock %}
+{% block pageBody %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="card card-info">
+                    <div class="card-header">
+                        اطلاعات
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            تعداد پست های سازمانی:{{ info.allUsers }}پست
+                        </p>
+                        <p>
+                            پست های سازمانی شرکت:{{ info.employers }}پست
+                        </p>
+                        <p>
+                            تعداد پیمانکاران:{{ info.contractor }}نفر
+                        </p>
+                        <p>
+                            تعداد پرسنل پیمانکاران:{{ info.contractorPassenger }}نفر
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14">گرازشات پرسنل</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                    </a>
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMEMployeREport',{'type':0}) }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> پرسنل سازمانی</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">لیست پرسنل سازمان</p>
+                    </a>
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMEMployeREport',{'type':1}) }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> پرسنل پیمانکار</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">لیست پرسنل پیمانکار</p>
+                    </a>
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMConsctractorPersons') }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> پرسنل زیر مجموعه پیمانکاران</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">لیست کلیه پرسنل زیرمجموعه پیمانکاران </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

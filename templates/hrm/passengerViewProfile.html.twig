@@ -259,10 +259,11 @@
                             <thead class="bg-blue text-light">
                             <tr>
                                 <th>ردیف</th>
-                                <th>شماره درخواست</th>
                                 <th>درخواست کننده</th>
                                 <th>وضعیت درخواست</th>
                                 <th>تاریخ درخواست</th>
+                                <th>تاریخ شروع اعتبار</th>
+                                <th>تاریخ انقضا</th>
                                 <th>امکانات</th>
                             </tr>
                             </thead>
@@ -270,10 +271,11 @@
                             {% for visa in visas %}
                                 <tr class="{% if visa.visaState.stateCode == 2 %}bg-success text-light{% elseif visa.visaState.StateCode == -1 %}bg-danger text-light{% endif %}">
                                     <td class="w-auto">{{ loop.index }}</td>
-                                    <td class="w-auto">{{ visa.id }}</td>
                                     <td class="w-auto">{{ visa.submitter.publicLabel }}</td>
                                     <td class="w-auto">{{ visa.visaState.stateName }}</td>
                                     <td class="w-auto">{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
+                                    <td>{{ visa.dateStart }}</td>
+                                    <td>{{ visa.dateEnd }}</td>
                                     <td class="select-w200px">
                                         <a class="btn btn-info rounded btn-small" href="{{ path('HRMVisaView',{'id':visa.id}) }}">مشاهده</a>
                                     </td>

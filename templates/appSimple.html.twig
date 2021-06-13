@@ -2,9 +2,9 @@
 
 {% block body %}
     <!-- main-content opened -->
-    <div class="main-content horizontal-content">
+    <div class="main-content horizontal-content px-2 mx-2">
         <!-- container opened -->
-        <div class="container-fluid">
+        <div class="container">
             <!-- row -->
             <div class="row row-sm">
                 <div class="col-md-12 col-xl-12">
@@ -24,7 +24,14 @@
                                 {% endblock %}
                             </div>
                         </div>
-                        {% block appBody %}{% endblock %}
+                        <div class="container">
+                            <div class="row">
+                                <div class="col mx-2">
+                                    {% block appBody %}{% endblock %}
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div><!-- COL-END -->
             </div>

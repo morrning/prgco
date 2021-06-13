@@ -214,9 +214,6 @@
                                 {%  set notifis = UserMGR.lastNotifications(3) %}
                                 {% for notifi in notifis %}
                                     <a class="d-flex p-3" href="{{ path('userJumpNotification',{'id':notifi.id}) }}">
-                                        <div class="notifyimg bg-purple">
-                                            <i class="la la-gem text-white"></i>
-                                        </div>
                                         <div class="mr-3">
                                             <h5 class="notification-label mb-1">{{ notifi.des }}</h5>
                                         </div>
