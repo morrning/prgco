@@ -8,8 +8,9 @@
             <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
-                <th>شماره درخواست</th>
                 <th>درخواست کننده</th>
+                <th>مبدا</th>
+                <th>مقصد</th>
                 <th>وضعیت بلیط</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -19,8 +20,9 @@
             {% for ticket in tickets %}
                 <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success text-light{% elseif ticket.ticketState.stateCode == -1 %}bg-danger text-light{% endif %}">
                     <td class="w-auto">{{ loop.index }}</td>
-                    <td class="w-auto">{{ ticket.id }}</td>
                     <td class="w-auto">{{ ticket.submitter.publicLabel }}</td>
+                    <td class="w-auto">{{ ticket.source.cname }}</td>
+                    <td class="w-auto">{{ ticket.destination.cname }}</td>
                     <td class="w-auto">{{ ticket.ticketState.stateName }}</td>
                     <td class="w-auto">{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                     <td class="select-w200px">

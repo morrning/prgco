@@ -7,8 +7,8 @@
             <thead class="bg-blue text-light">
             <tr>
                 <th>ردیف</th>
-                <th>شماره درخواست</th>
                 <th>درخواست کننده</th>
+                <th>مقصد</th>
                 <th>وضعیت درخواست</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -18,8 +18,8 @@
             {% for visa in visas %}
                 <tr class="{% if visa.visaState.stateCode == 2 %}row-bg-success{% elseif visa.visaState.StateCode == -1 %}row-bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
-                    <td>{{ visa.id }}</td>
-                    <td>{{ visa.submitter.getPublicLabel() }}</td>
+                    <td>{{ visa.submitter.getPublicLabel }}</td>
+                    <td>{{ visa.countryDes.countryName }}</td>
                     <td>{{ visa.visaState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',visa.dateSubmit) }}</td>
                     <td>

@@ -31,10 +31,6 @@ body{
     background-color: #043a62; !important;
 }
 
-.btn{
-    border-radius: 0;
-}
-
 #samane .list-group-item-action:hover {
     color: #007df5;
     background-color: #f4fcff;

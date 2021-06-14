@@ -18,6 +18,8 @@
             <tr>
                 <th>ردیف</th>
                 <th>درخواست کننده</th>
+                <th>مبدا</th>
+                <th>مقصد</th>
                 <th>وضعیت بلیط</th>
                 <th>تاریخ درخواست</th>
                 <th>امکانات</th>
@@ -28,6 +30,8 @@
                 <tr class="{% if ticket.ticketState.stateCode == 2 %}row-bg-success{% elseif ticket.ticketState.stateCode == -1 %}row-bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ ticket.submitter.publicLabel }}</td>
+                    <td>{{ ticket.source.cname }}</td>
+                    <td>{{ ticket.destination.cname }}</td>
                     <td>{{ ticket.ticketState.stateName }}</td>
                     <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                     <td>
