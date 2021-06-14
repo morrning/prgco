@@ -451,6 +451,26 @@
             </div>
         </div>
     </div>
+    <a onclick="window.history.back();" class="float bg-primary text-white">
+        <i class="fa fa-undo-alt my-float"></i>
+    </a>
+    <style>
+        .float{
+            position:fixed;
+            width:60px;
+            height:60px;
+            bottom:40px;
+            right:40px;
+            color:#FFF;
+            border-radius:50px;
+            text-align:center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float{
+            margin-top:22px;
+        }
+    </style>
     <!--/Sidebar-right-->
     {% block javascripts %}{% endblock %}
 </body>
