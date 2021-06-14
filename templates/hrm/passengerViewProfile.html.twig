@@ -170,6 +170,7 @@
                     {% for doc in docs %}
                         <div class="col-3">
                             <a href="{{ asset('files/' ~ doc.docName) }}" data-lightbox="image-1" data-title="{{ doc.docType.tname }}"><img  style="max-height: 250px" class="img-thumbnail" src="{{ asset('files/' ~ doc.docName) }}"></a>
+                            <a class="btn btn-sm btn-danger" href="{{ path('HRMdocDelete',{'id':doc.id}) }}">حذف مدرک</a>
                         </div>
                     {% endfor %}
                 </div>

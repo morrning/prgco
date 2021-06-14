@@ -627,4 +627,20 @@ class HRMController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/hrm/employe/doc/delete/{id}", name="HRMdocDelete")
+     */
+    public function HRMdocDelete($id, Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+        $doc = $entityMGR->find('App:CMPassengerPersonalDoc',$id);
+        if(! is_null($doc)){
+            $userCode = $doc->getPassenger()->getPcodemeli();
+            $entityMGR->remove('App:CMPassengerPersonalDoc',$id);
+            return $this->redirectToRoute('HRMPassengerProfile',['id'=>$userCode,'msg'=>2]);
+        }
+        return $this->redirectToRoute('404');
+    }
+
 }
