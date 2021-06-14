@@ -27,7 +27,7 @@
             </thead>
             <tbody class="">
             {% for ticket in tickets %}
-                <tr class="{% if ticket.ticketState.stateCode == 2 %}row-bg-success{% elseif ticket.ticketState.stateCode == -1 %}row-bg-danger{% endif %}">
+                <tr class="{% if ticket.ticketState.stateCode == 2 %}bg-success{% elseif ticket.ticketState.stateCode == -1 %}bg-danger{% endif %}">
                     <td>{{ loop.index }}</td>
                     <td>{{ ticket.submitter.publicLabel }}</td>
                     <td>{{ ticket.source.cname }}</td>

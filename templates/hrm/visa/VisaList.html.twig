@@ -23,8 +23,9 @@
             </thead>
             <tbody class="">
             {% for visa in visas %}
-                <tr class="{% if visa.visaState.stateCode == 1 %} row-bg-success {% elseif visa.visaState.StateCode == -1 %} row-bg-danger {% endif %}">
-                    <td class="w-auto">{{ loop.index }}</td>
+                <tr class="{% if visa.visaState.stateCode == 2 %}bg-success {% elseif visa.visaState.StateCode == -1 %}bg-danger{% endif %}">
+
+                <td class="w-auto">{{ loop.index }}</td>
                     <td class="w-auto">{{ visa.id }}</td>
                     <td class="w-auto">{{ visa.submitter.publicLabel }}</td>
                     <td class="w-auto">{{ visa.visaState.stateName }}</td>
