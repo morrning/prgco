@@ -9,3 +9,4 @@ fos_ck_editor:
     configs:
         my_config:
             language: fa
+            toolbar: standard
