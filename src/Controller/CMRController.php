@@ -285,7 +285,7 @@ class CMRController extends AbstractController
     /**
      * @Route("/ceremonial/req/new/visa/{id}", name="ceremonialREQCompleteVisaRequest", options={"expose" = true})
      */
-    public function ceremonialREQCompleteVisaRequest($id,Request $request,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialREQCompleteVisaRequest($id,Request $request,Service\Eitaa  $eitaa, Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('CeremonailREQ','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
@@ -298,6 +298,7 @@ class CMRController extends AbstractController
             return $this->redirectToRoute('403');
 
         $visa = new Entity\CMVisaReq();
+        $passengers = $entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist]);
         $form = $this->createFormBuilder($visa)
             ->add('countryDes', EntityType::class, [
                 'class'=>Entity\CMVisaCountry::class,
@@ -330,13 +331,20 @@ class CMRController extends AbstractController
             $url = $this->generateUrl('ceremonialDOINGVisaView',['id'=>$visa->getId()]);
             $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
             $userMGR->sendSmsToGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$userMGR->currentPosition()->getDefaultArea());
+
+            //send to eitaa
+            $string = 'درخواست ویزا توسط ' . $userMGR->currentPosition()->getPublicLabel() . ' برای افراد ذیل ثبت شد. ';
+            foreach ($passengers as $key=>$item){
+                $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+            }
+            $eitaa->sendToGroup('ceremonial', $string);
             return $this->redirectToRoute('ceremonialREQVisaView',['id'=>$visa->getId(),'msg'=>1]);
         }
         return $this->render('cmr/visa/REQVisaNew.html.twig',[
             'mlist'=>$mlist,
             'form'=>$form->createView(),
             'alerts'=>$alerts,
-            'userLIsts'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$mlist])
+            'userLIsts'=>$passengers
         ]);
     }
 
@@ -444,7 +452,7 @@ class CMRController extends AbstractController
     /**
      * @Route("/ceremonial/req/air/ticket/new/{id}", name="ceremonialREQAIRpaneNew", options={"expose" = true})
      */
-    public function ceremonialREQAIRpaneNew($id,Request $request,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialREQAIRpaneNew($id,Request $request,Service\Eitaa $eitaa, Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('404');
@@ -503,6 +511,12 @@ class CMRController extends AbstractController
                 $userMGR->addNotificationForGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$url,$userMGR->currentPosition()->getDefaultArea());
                 $userMGR->sendSmsToGroup('CeremonailMNGDashboard','CEREMONIAL',$des,$userMGR->currentPosition()->getDefaultArea());
                 $userMGR->sendSmsToUser($userMGR->currentPosition(),'درخواست بلیط هواپیما برای شما ثبت شد.');
+                //send to eitaa
+                $string = 'درخواست بلیط هواپیما توسط ' . $userMGR->currentPosition()->getPublicLabel() . ' از مبدا ' . $ticket->getSource()->getCname() . ' به مقصد ' . $ticket->getDestination()->getCname() .' با تاریخ پرواز ' . $ticket->getDateSuggest() .  ' برای افزاد ذیل ثبت شد .';
+                foreach ($passengers as $key=>$item){
+                    $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+                }
+                $eitaa->sendToGroup('ceremonial', $string);
                 return $this->redirectToRoute('ceremonialREQTicketView',['id'=>$ticket->getId(),'msg'=>1]);
             }
         }

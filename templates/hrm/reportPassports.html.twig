@@ -1,0 +1,47 @@
+{% extends 'hrm/base.html.twig' %}
+
+{% block title %}وضعیت گذرنامه{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>زیرمجموعه</th>
+                    <th>کد ملی</th>
+                    <th>تاریخ اعتبار گذرنامه</th>
+                    <th>وضعیت گذرنامه</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for user in users %}
+                    <tr class="">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
+                        <td>{{ user.submitter.userID.fullname }}</td>
+                        <td>{{ user.pcodemeli  }}</td>
+                        {%  set expp = user.passportExpireDate | replace({'/': ''}) %}
+                        <td>{{ user.passportExpireDate  }}</td>
+                        <td>
+                            {% if  (expp) < timeNow %}
+                                <span class="badge badge-danger">فاقد اعتبار</span>
+                            {% elseif  (expp) < (timeNow + 90) %}
+                                <span class="badge badge-warning">کمتر از سه ماه</span>
+                            {% else %}
+                                <span class="badge badge-success">دارای اعتبار</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

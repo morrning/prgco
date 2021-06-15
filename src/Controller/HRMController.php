@@ -643,4 +643,44 @@ class HRMController extends AbstractController
         return $this->redirectToRoute('404');
     }
 
+    /**
+     * @Route("/hrm/employe/passports/list/{type}", name="HRMPassportList")
+     */
+    public function HRMPassportList($type = 0, Service\Jdate $jdate,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if(! $userMGR->hasPermission('HRMACCESS','HRM'))
+            return $this->redirectToRoute('403');
+
+        $passengers = [];
+        $positions = $entityMGR->findBy('App:SysPosition',['constractor'=>$type]);
+        //constractor
+        if($type ==1){
+            foreach ($positions as $position){
+                $tps = $entityMGR->findBy('App:CMPassenger',['submitter'=>$position]);
+                foreach ($tps as $tp){
+                    if(array_search($tp,$passengers) == false){
+                        array_push($passengers,$tp);
+                    }
+                }
+            }
+        }
+        else{
+            foreach ($positions as $position){
+                $ptype = $entityMGR->findOneBy('App:CMPassengerType',['typeName'=>'پرسنل شرکت']);
+                $tps = $entityMGR->findBy('App:CMPassenger',['submitter'=>$position,'ptype'=>$ptype]);
+                foreach ($tps as $tp){
+                    if(array_search($tp,$passengers) == false){
+                        array_push($passengers,$tp);
+                    }
+                }
+            }
+        }
+
+        echo count($passengers);
+        return $this->render('hrm/reportPassports.html.twig', [
+            'users' => $passengers,
+            'timeNow' => $jdate->jdate('Ymd',time())
+        ]);
+    }
+
 }

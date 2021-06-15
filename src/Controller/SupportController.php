@@ -50,7 +50,7 @@ class SupportController extends AbstractController
     /**
      * @Route("/support/ticket/new", name="supportNewTicket")
      */
-    public function supportNewTicket(Request $request, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function supportNewTicket(Request $request, Service\Eitaa $eitaa,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('userLogin');
@@ -71,6 +71,9 @@ class SupportController extends AbstractController
             $ticket->setMainTicket(true);
             $ticket->setUID($guid);
             $entityMGR->insertEntity($ticket);
+
+            //send to eita
+            $eitaa->sendToGroup('portalprgco','درخواست پشتیبانی توسط ' . $userMGR->currentPosition()->getPubliclabel() . ' با عنوان: ' . $ticket->getSubject() . ' ثبت شد. ');
             return $this->redirectToRoute('support',['msg'=>1]);
         }
         return $this->render('support/ticketNew.html.twig', [

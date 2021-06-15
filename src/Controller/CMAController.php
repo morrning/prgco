@@ -120,7 +120,7 @@ class CMAController extends AbstractController
     /**
      * @Route("/ceremonial/doing/visa/view/{id}/{msg}", name="ceremonialDOINGVisaView")
      */
-    public function ceremonialDOINGVisaView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialDOINGVisaView($id,$msg=0,Request $request,Service\Eitaa $eitaa, Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
@@ -171,6 +171,12 @@ class CMAController extends AbstractController
             $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
 
             array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت تایید شد.']);
+            //send to eitaa
+            $string = 'درخواست ویزا ' . $visa->getSubmitter()->getPublicLabel() . ' توسط ' . $userMGR->currentPosition()->getPublicLabel() .' برای افراد ذیل تایید شد. ';
+            foreach ($passengers as $key=>$item){
+                $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+            }
+            $eitaa->sendToGroup('ceremonial', $string);
         }
         if ($form1->isSubmitted() && $form1->isValid()) {
             $visa1->setADDateSubmit(time());
@@ -186,6 +192,12 @@ class CMAController extends AbstractController
             $userMGR->sendSmsToUser($visa->getSubmitter(),$des);
 
             array_push($alerts,['type'=>'success','message'=>'درخواست ویزا با موفقیت رد شد.']);
+            //send to eitaa
+            $string = 'درخواست ویزا ' . $visa->getSubmitter()->getPublicLabel() . ' توسط ' . $userMGR->currentPosition()->getPublicLabel() .' برای افراد ذیل رد شد. ';
+            foreach ($passengers as $key=>$item){
+                $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+            }
+            $eitaa->sendToGroup('ceremonial', $string);
 
         }
         return $this->render('cma/visa/DOINGVisaView.html.twig', [
@@ -222,7 +234,7 @@ class CMAController extends AbstractController
     /**
      * @Route("/ceremonial/doing/ticket/view/{id}/{msg}", name="ceremonialDOINGTicketView")
      */
-    public function ceremonialDOINGTicketView($id,$msg=0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialDOINGTicketView($id,$msg=0,Request $request,Service\Eitaa $eitaa,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
@@ -277,7 +289,14 @@ class CMAController extends AbstractController
             $url = $this->generateUrl('ceremonialOPTTicketView',['id'=>$ticket->getId()]);
             $userMGR->sendSmsToGroup('CeremonailOPTDashboard','CEREMONIAL',$des);
             $userMGR->addNotificationForGroup('CeremonailOPTDashboard','CEREMONIAL',$des,$url);
+            //send to eitaa
+            $string = 'درخواست بلیط هواپیما ' . $ticket->getSubmitter()->getPublicLabel(). ' توسط ' .$userMGR->currentPosition()->getPublicLabel() . ' از مبدا ' . $ticket->getSource()->getCname() . ' به مقصد ' . $ticket->getDestination()->getCname() .' با تاریخ پرواز ' . $ticket->getDateSuggest() .  ' برای افزاد ذیل تایید شد .';
+            foreach ($passengers as $key=>$item){
+                $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+            }
+            $eitaa->sendToGroup('ceremonial', $string);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>2]);
+
         }
 
         if ($form1->isSubmitted() && $form1->isValid()) {
@@ -291,6 +310,12 @@ class CMAController extends AbstractController
             $userMGR->sendSmsToUser($userMGR->currentPosition(),$des);
             $url = $this->generateUrl('ceremonialREQTicketView',['id'=>$ticket->getId()]);
             $userMGR->addNotificationForUser($ticket->getSubmitter(),$des,$url);
+            //send to eitaa
+            $string = 'درخواست بلیط هواپیما ' . $ticket->getSubmitter()->getPublicLabel(). ' توسط ' .$userMGR->currentPosition()->getPublicLabel() . ' از مبدا ' . $ticket->getSource()->getCname() . ' به مقصد ' . $ticket->getDestination()->getCname() .' با تاریخ پرواز ' . $ticket->getDateSuggest() .  ' برای افزاد ذیل رد شد .';
+            foreach ($passengers as $key=>$item){
+                $string = $string .  ' - ' .$item->getCmpassenger()->getPname() . ' ' . $item->getCmpassenger()->getPfamily() . ' با کد ملی ' . $item->getCmpassenger()->getPcodemeli() . ' ' ;
+            }
+            $eitaa->sendToGroup('ceremonial', $string);
             return $this->redirectToRoute('ceremonialDOINGTicketView',['id'=>$ticket->getId(),'msg'=>1]);
         }
 

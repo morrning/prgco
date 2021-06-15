@@ -4,8 +4,8 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-4">
-                <div class="card card-info">
-                    <div class="card-header">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
                         اطلاعات
                     </div>
                     <div class="card-body">
@@ -28,7 +28,7 @@
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-2 tx-14">گرازشات پرسنل</h5><small><i class="fas fa-chart-pie"></i></small>
+                            <h5 class="mb-2 tx-14">گرازشات پرسنل</h5><small><i class="fas fa-user-friends"></i></small>
                         </div>
                     </a>
                     <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMEMployeREport',{'type':0}) }}">
@@ -49,6 +49,28 @@
                         </div>
                         <p class="mb-1 tx-13">لیست کلیه پرسنل زیرمجموعه پیمانکاران </p>
                     </a>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14">گرازشات گذرنامه</h5><small><i class="fas fa-passport"></i></small>
+                        </div>
+                    </a>
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMPassportList',{'type':0}) }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> وضعیت گذرنامه</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">وضعیت گذرنامه پرسنل شرکت</p>
+                    </a>
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMPassportList',{'type':1}) }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> وضعیت گذرنامه</h5><small><i class="fas fa-chart-pie"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">وضعیت گذرنامه پرسنل پیمانکاران</p>
+                    </a>
+
                 </div>
             </div>
         </div>
