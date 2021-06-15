@@ -150,7 +150,7 @@ class IctController extends AbstractController
      */
     public function ictreqDashboard(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
 
         return $this->render('ict/dashboard.html.twig', [
@@ -161,9 +161,9 @@ class IctController extends AbstractController
     /**
      * @Route("/ictreq/new/req", name="ictreqNew")
      */
-    public function ictreqNew(Request $request,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger,Service\LogMGR $logMGR)
+    public function ictreqNew(Request $request,Service\Eitaa $eitaa, Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger,Service\LogMGR $logMGR)
     {
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
 
         $req = new Entity\ICTRequest();
@@ -201,6 +201,10 @@ class IctController extends AbstractController
             $des = sprintf('درخواست خدمات توسط %s ثبت شد.',$userMGR->currentPosition()->getPublicLabel());
             $url = $this->generateUrl('ictdoingView',['rid'=>$req->getId()]);
             $userMGR->addNotificationForGroup('ictDoing','ICT',$des,$url,$userMGR->currentPosition()->getDefaultArea()->getId());
+            //send to eitaa
+            $string = 'درخواست خدمات توسط ' . $userMGR->currentPosition()->getPublicLabel() . ' در ' . $userMGR->currentPosition()->getDefaultArea()->getAreaName() . ' با شرح ذیل ثبت شد: ' . $req->getDes();
+            $eitaa->sendToGroup('ictprgco', $string);
+
             return $this->redirectToRoute('ictreqArchive',['msg'=>'1']);
         }
 
@@ -215,7 +219,7 @@ class IctController extends AbstractController
     public function ictreqArchive($msg = 0,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
 
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
 
         $alerts = null;
@@ -238,7 +242,7 @@ class IctController extends AbstractController
      */
     public function ictreqView($rid, Request $req ,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR,LoggerInterface $logger)
     {
-        if(! $userMGR->hasPermission('ictRequest','ICT',null,$userMGR->currentPosition()->getDefaultArea()))
+        if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
         $rid = $entityMGR->find('App:ICTRequest',$rid);
         if(is_null($rid))
