@@ -4,31 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12 col-md-4">
-                <div class="card">
-                    <div class="card-header bg-info text-white">
-                        اطلاعات
-                    </div>
-                    <div class="card-body">
-                        <p>
-                            تعداد پست های سازمانی:{{ info.allUsers }}پست
-                        </p>
-                        <p>
-                            پست های سازمانی شرکت:{{ info.employers }}پست
-                        </p>
-                        <p>
-                            تعداد پیمانکاران:{{ info.contractor }}نفر
-                        </p>
-                        <p>
-                            تعداد پرسنل پیمانکاران:{{ info.contractorPassenger }}نفر
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-4">
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-2 tx-14">گرازشات پرسنل</h5><small><i class="fas fa-user-friends"></i></small>
+                            <h5 class="mb-2 tx-14">گزارشات پرسنل</h5><small><i class="fas fa-2x fa-user-friends"></i></small>
                         </div>
                     </a>
                     <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMEMployeREport',{'type':0}) }}">
@@ -55,7 +34,25 @@
                 <div class="list-group">
                     <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-2 tx-14">گرازشات گذرنامه</h5><small><i class="fas fa-passport"></i></small>
+                            <h5 class="mb-2 tx-14">گزارشات ویزا</h5><small><i class="fab fa-2x fa-cc-visa"></i></small>
+                        </div>
+                    </a>
+                    {% set des = EntityMGR.findAll('App:CMVisaCountry') %}
+                    {% for de in des %}
+                    <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMVisaReport',{'countryID': de.id }) }}">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14"> کشور {{ de.countryName }}</h5><small><i class="fas fa-chart-line"></i></small>
+                        </div>
+                        <p class="mb-1 tx-13">مشاهده وضعیت ویزا کشور {{ de.countryName }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action flex-column align-items-start active" href="">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-2 tx-14">گزارشات گذرنامه</h5><small><i class="fas fa-2x fa-passport"></i></small>
                         </div>
                     </a>
                     <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('HRMPassportList',{'type':0}) }}">

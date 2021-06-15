@@ -142,17 +142,31 @@ class HRMController extends AbstractController
     {
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
-
-        $info['allUsers'] = count($entityMGR->findAll('App:SysPosition'));
+        $positions = $entityMGR->findAll('App:SysPosition');
+        $users = [];
+        foreach ($positions as $position){
+            if(array_search($position->getUserID(),$users) == false){
+                array_push($users,$position->getUserID());
+            }
+        }
+        $info['allUsers'] = count($users);
         $constractors = $entityMGR->findBy('App:SysPosition',['constractor'=>1]);
-        $info['contractor'] = count($constractors);
+        $users = [];
+        foreach ($constractors as $constractor){
+            if(array_search($constractor->getUserID(),$users) == false){
+                array_push($users,$constractor->getUserID());
+            }
+        }
+        $info['contractor'] = count($users);
         $info['employers'] =  $info['allUsers'] - $info['contractor'];
         $info['contractorPassenger'] = 0;
+        $ptype = $entityMGR->findOneBy('App:CMPassengerType',['typeName'=>'پرسنل پیمانکار']);
         foreach ($constractors as $constractor){
-            $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor]));
+            $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor,'ptype'=>$ptype]));
         }
+        $info['contractorPassenger'] = $info['contractorPassenger'] - $info['contractor'];
         return $this->render('hrm/dashboard.html.twig', [
-            'info'=> $info
+            'info'=> $info,
         ]);
     }
 
@@ -550,18 +564,10 @@ class HRMController extends AbstractController
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
 
-        //get info
-        $info['allUsers'] = count($entityMGR->findAll('App:SysPosition'));
-        $constractors = $entityMGR->findBy('App:SysPosition',['constractor'=>1]);
-        $info['contractor'] = count($constractors);
-        $info['employers'] =  $info['allUsers'] - $info['contractor'];
-        $info['contractorPassenger'] = 0;
-        foreach ($constractors as $constractor){
-            $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor]));
-        }
+
 
         return $this->render('hrm/reportList.html.twig', [
-            'info' => $info
+
         ]);
     }
 
@@ -621,7 +627,6 @@ class HRMController extends AbstractController
                 }
             }
         }
-        echo count($passengers);
         return $this->render('hrm/reportConstractorEmployes.html.twig', [
             'users' => $passengers
         ]);
@@ -675,12 +680,30 @@ class HRMController extends AbstractController
                 }
             }
         }
-
-        echo count($passengers);
         return $this->render('hrm/reportPassports.html.twig', [
             'users' => $passengers,
             'timeNow' => $jdate->jdate('Ymd',time())
         ]);
+    }
+
+    /**
+     * @Route("/hrm/visa/report/list/{countryID}", name="HRMVisaReport")
+     */
+    public function HRMVisaReport($countryID = 0, Service\Jdate $jdate,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if (!$userMGR->hasPermission('HRMACCESS', 'HRM'))
+            return $this->redirectToRoute('403');
+        $country = $entityMGR->find('App:CMVisaCountry',$countryID);
+        if(is_null($country))
+            return $this->redirectToRoute('404');
+        $visas = $entityMGR->findBy('App:CMVisaLog',['country'=>$country],['id'=>'DESC']);
+        echo 100;
+        return $this->render('hrm/reportVisa.html.twig', [
+            'timeNow' => $jdate->jdate('Ymd',time()),
+            'visas' => $visas
+        ]);
+
+
     }
 
 }

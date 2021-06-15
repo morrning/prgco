@@ -82,13 +82,10 @@
     <script src="{{ asset('newface/assets/js/chart.flot.sampledata.js') }}"></script>
     <!--Internal Apexchart js-->
     <script src="{{ asset('newface/assets/js/apexcharts.js') }}"></script>
-    <!-- Internal Map -->
-    <script src="{{ asset('newface/assets/plugins/jqvmap/jquery.vmap.min.js') }}"></script>
+
     <!-- Internal Chart js -->
     <script src="{{ asset('newface/assets/plugins/chart.js/Chart.bundle.min.js') }}"></script>
-    <!--Internal  index js -->
-    <script src="{{ asset('newface/assets/js/index.js') }}"></script>
-    <script src="{{ asset('newface/assets/js/jquery.vmap.sampledata.js') }}"></script>
+
     <!-- Moment js -->
     <script src="{{ asset('newface/assets/plugins/moment/moment.js') }}"></script>
     <!--Internal Sparkline js -->
@@ -153,9 +150,9 @@
                     }
                 },
                 "pageLength": 32,
-                "autoWidth": false,
+                "autoWidth": true,
                 "colReorder": true,
-                "lengthMenu": [[10, 32, 100, -1], [10, 32, 100, "همه"]],
+                "lengthMenu": [[15, 32, 100, -1], [15, 32, 100, "همه"]],
                 dom: 'Blftip',
                 buttons: [
                     'copyHtml5',
@@ -164,8 +161,6 @@
                     'print'
                 ]
             });
-
-            new $.fn.dataTable.ColReorder(table);
         });
     </script>
 

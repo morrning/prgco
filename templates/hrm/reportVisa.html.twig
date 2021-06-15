@@ -1,6 +1,6 @@
 {% extends 'hrm/base.html.twig' %}
 
-{% block title %}وضعیت گذرنامه{% endblock %}
+{% block title %}وضعیت ویزای پرسنل{% endblock %}
 
 {% block appTop %}
 
@@ -15,20 +15,24 @@
                     <th>ردیف</th>
                     <th>نام و نام خانوادگی</th>
                     <th>زیرمجموعه</th>
+                    <th>نوع</th>
                     <th>کد ملی</th>
-                    <th>تاریخ اعتبار گذرنامه</th>
-                    <th>وضعیت گذرنامه</th>
+                    <th>شروع ویزا</th>
+                    <th>اتمام ویزا</th>
+                    <th>وضعیت ویزا</th>
                 </tr>
                 </thead>
                 <tbody class="">
-                {% for user in users %}
+                {% for visa in visas %}
                     <tr class="">
                         <td>{{ loop.index }}</td>
-                        <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
-                        <td>{{ user.submitter.userID.fullname }}</td>
-                        <td>{{ user.pcodemeli  }}</td>
-                        {%  set expp = user.passportExpireDate | replace({'/': ''}) %}
-                        <td>{{ user.passportExpireDate  }}</td>
+                        <td>{{ visa.passenger.pname ~ ' ' ~ visa.passenger.pfamily }}</td>
+                        <td>{{ visa.passenger.submitter.userID.fullname }}</td>
+                        <td>{{ visa.passenger.ptype.typeName  }}</td>
+                        <td>{{ visa.passenger.pcodemeli  }}</td>
+                        {%  set expp = visa.dateEnd | replace({'/': ''}) %}
+                        <td>{{ visa.dateStart  }}</td>
+                        <td>{{ visa.dateEnd  }}</td>
                         <td>
                             {% if  (expp) < timeNow %}
                                 <span class="badge badge-danger">فاقد اعتبار</span>
