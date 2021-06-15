@@ -7,7 +7,7 @@
 /.idea/
 /public_html/files/
 ###< symfony/framework-bundle ###
-
+/public_html/bundles/
 ###> symfony/phpunit-bridge ###
 .phpunit
 /phpunit.xml
