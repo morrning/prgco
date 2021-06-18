@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use Doctrine\ORM\EntityManagerInterface;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
@@ -281,5 +282,86 @@ class HotelingController extends AbstractController
                 'alerts'=>$alerts,
                 'hotel'=>$hotel
             ]);
+    }
+
+    /**
+     * @Route("/hoteling/addpassenger/{id}/{msg}", name="hotelingAddPassenger")
+     */
+    public function hotelingAddPassenger($id,$msg = 0,EntityManagerInterface $entityManager,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $hotel = $entityMGR->find('App:hotelingHotel',$id);
+        if(is_null($hotel))
+            return $this->redirectToRoute('404');
+
+        return $this->render('hoteling/OPTRES.html.twig',
+            [
+                'hotel'=>$hotel,
+                'passengers'=>$entityMGR->findAll('App:CMPassenger'),
+                'rooms' => $entityMGR->findBy('App:hotelingRoom', ['hotel' => $hotel]),
+                'reqs' => $entityManager->createQueryBuilder('a')
+                    ->select('a')
+                    ->from('App:HotelingPassenger','a')
+                    ->where('a.hotel = :hotel')
+                    ->andWhere('a.dateSubmit >= :tmr')
+                    ->setParameters(['hotel'=> $hotel,'tmr'=>time()-84600])
+                    ->orderBy('a.id', 'DESC')
+                    ->getQuery()
+                    ->getResult()
+            ]);
+    }
+
+    /**
+     * @Route("/hoteling/newreqopt/{hid}/{rid}/{day}/{pid}", name="hotelingOptReserveNewRequest", options={"expose" = true})
+     */
+    public function hotelingOptReserveNewRequest($hid,$rid,$day,$pid,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $hotel = $entityMGR->find('App:HotelingHotel',$hid);
+
+        $room = $entityMGR->find('App:HotelingRoom',$rid);
+
+        $passenger = $entityMGR->findOneBy('App:CMPassenger',['pcodemeli'=>$pid]);
+
+        $time = 86400;
+        for($i=1; $i<=$day;$i++){
+            $exist = $entityMGR->findOneBy('App:HotelingPassenger',[
+                'hotel'=>$hotel,
+                'room'=>$room,
+                'passenger'=>$passenger,
+                'day'=> $jdate->jdate('Y/m/d',time() + ($time * ($i-1)))
+            ]);
+            if(is_null($exist)){
+                $res = new Entity\HotelingPassenger();
+                $res->setPassenger($passenger);
+                $res->setRoom($room);
+                $res->setSubmiter($userMGR->currentPosition());
+                $res->setDateSubmit(time() + ($time * ($i-1)));
+                $res->setDay($jdate->jdate('Y/m/d',time() + ($time * ($i-1))));
+                $res->setArea($userMGR->currentPosition()->getDefaultArea());
+                $res->setHotel($hotel);
+                $entityMGR->insertEntity($res);
+            }
+
+        }
+        return new Response('ok');
+    }
+
+    /**
+     * @Route("/hoteling/deletereserve/{id}}", name="hotelingDeleteReserve", options={"expose" = true})
+     */
+    public function hotelingDeleteReserve($id,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->hasPermission('ceremonialHotelingOPT', 'CEREMONIAL', null, $userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+
+        $res = $entityMGR->find('App:HotelingPassenger',$id);
+        if(is_null($res))
+            return new Response('nf');
+        $entityMGR->remove('App:HotelingPassenger',$id);
+        return new Response('ok');
     }
 }

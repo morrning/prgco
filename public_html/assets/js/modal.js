@@ -8,7 +8,7 @@ function showModal(onclick,type='info',title=null,body=null){
     var modalTemplate ='<div class="modal fade" id="SystemModalCenter" tabindex="-1" role="dialog" aria-labelledby="SystemModalCenter" aria-hidden="true">\n' +
         '    <div class="modal-dialog" role="document">\n' +
         '        <div class="modal-content">\n' +
-        '            <div class="modal-header bg-success text-light">\n' +
+        '            <div class="modal-header bg-' + type +' text-light">\n' +
         '                <h5 class="modal-title" id="exampleModalLabel">' + title +'</h5>\n' +
         '                <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
         '                    <span aria-hidden="true">&times;</span>\n' +
@@ -62,8 +62,12 @@ function showModalNotification(title,body,type, reload=false){
         '</p>\n' +
         '            </div>\n' +
         '      <div class="modal-footer">\n' +
-        '        <button type="button" class="btn btn-primary" onclick="$(' + "'.modal').modal(" + "'toggle');"  +
-        '">قبول</button>\n' +
+        '        <button type="button" class="btn btn-primary" onclick="$(' + "'.modal').modal(" + "'toggle');";
+    if(reload){
+        modalTemplate = modalTemplate + 'location.reload();';
+    }
+
+    modalTemplate = modalTemplate + '">قبول</button>\n' +
         '      </div>\n' +
         '        </div>\n' +
         '    </div>\n' +

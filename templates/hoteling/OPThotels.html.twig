@@ -24,6 +24,7 @@
                     <td class="w-auto">{{ hotel.hotelingRooms | length }}</td>
                     <td class="w-auto">{{ hotel.dep }}</td>
                     <td class="w-auto">
+                        <a class="btn btn-success btn-small rounded" href="{{ path('hotelingAddPassenger',{'id':hotel.id}) }}">رزرو اتاق</a>
                         <a class="btn btn-info btn-small rounded" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">افزودن اتاق</a>
                         <a class="btn btn-info btn-small rounded" href="{{ path('hotelingRoomsList',{'id':hotel.id}) }}">لیست اتاق‌ها</a>
                         <a class="btn btn-info btn-small rounded" href="{{ path('hotelingHotelEditHotel',{'id':hotel.id}) }}">ویرایش</a>

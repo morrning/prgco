@@ -1,0 +1,174 @@
+{% extends 'hoteling/OPTbase.html.twig' %}
+
+{% block title %}رزرو اتاق در هتل :
+    {{ hotel.hotelName }}
+{% endblock %}
+{% block appTop %}
+    <a class="btn btn-warning" href="{{ path('hotelingHotelAddRoom',{'id':hotel.id}) }}">
+        <i class="fa fa-plus"></i>
+        افزودن اتاق جدید
+    </a>
+    <a class="btn btn-outline-light" href="{{ path('hotelingHotelList') }}">
+        <i class="fa fa-undo"></i>
+        بازگشت
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <script>
+        $(document).ready(function(){
+            $('#passenger-id').val('');
+            $('#project').val('');
+        });
+        selectForDelete = 0;
+
+        function deleteRes(){
+            $.ajax({
+                url: Routing.generate('hotelingDeleteReserve', {
+                    'id': selectForDelete,
+                }),
+                success: function(data) {
+                    if(data == 'ok'){
+                        showModalNotification('پیام','رزرو با موفقیت حذف شد.','success',true);
+                    }
+                }
+            });
+        }
+        function saveReq(){
+            $('.spinner-req').removeAttr('hidden');
+
+            if($('#passenger-id').val() == ''){
+                showModalNotification('خطا','لطفا ابتدا یک مسافر را انتخاب نمایید.در صورت بروز خطا صفحه را مجددا بارگزاری نمایید','warrning');
+            }
+            else{
+                $.ajax({
+                    url: Routing.generate('hotelingOptReserveNewRequest', {
+                        'hid': $('#hotel-id').val(),
+                        'pid': $('#passenger-id').val(),
+                        'rid':$('#roomNumber').find('option:selected').val(),
+                        'day':$('#day-reserve').find('option:selected').val()
+                    }),
+                    success: function(data) {
+                        if(data == 'ok'){
+                            showModalNotification('پیام','رزرو با موفقیت ثبت شد.','success',true);
+                        }
+                    }
+                });
+            }
+
+            $('.spinner-req').attr('hidden','hidden');
+        }
+        $( function() {
+            var projects = [
+                {% for passenger in passengers %}
+                    {
+                        value: "{{ passenger.pcodemeli }}",
+                        label: "{{ passenger.pname ~  ' ' ~ passenger.pfamily }}",
+                        desc: "{{ passenger.pcodemeli }}",
+                        icon: "{{ passenger.pcodemeli }}.jpg"
+                    },
+
+                {% endfor %}
+            ];
+
+            $( "#project" ).autocomplete({
+                minLength: 0,
+                source: projects,
+                focus: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    $( "#passenger-id" ).val( ui.item.value );
+                    $( "#project-description" ).html( ui.item.desc );
+                    $( "#project-icon" ).attr( "src", "../../files/ProfilePic/" + ui.item.icon );
+                    return false;
+                }
+            })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                return $( "<li>" )
+                    .append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
+                    .appendTo( ul );
+            };
+        } );
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-3">
+                <input type="hidden" id="passenger-id">
+                <input type="hidden" id="hotel-id" value="{{ hotel.id }}">
+                <img class="img-thumbnail img-fluid" width="" id="project-icon" src="../../assets/images/public/avatar.jpg">
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="form-group">
+                    <label for="project">نام و نام خانوادگی مسافر</label>
+                    <input type="email" class="form-control" id="project" aria-describedby="emailHelp" placeholder="نام و نام خانوادگی مسافر">
+                    <small id="emailHelp" class="form-text text-muted">برای جست و جوی مسافر می‌توانید قسمتی از نام و نام خانوادگی را وارد نمایید.</small>
+                </div>
+                <div class="information">
+                    <p class="text-dark">کد ملی: <span id="project-description"></span></p>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">شماره اتاق:</label>
+                            <select class="form-control" id="roomNumber">
+                                {% for room in rooms %}
+                                    <option {% if loop.first %}selected{% endif %} value="{{ room.id }}">{{ room.num }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">تعداد روز اقامت:</label>
+                            <select class="form-control" id="day-reserve">
+                                {% for i in 1..30 %}
+                                    <option {% if loop.first %}selected{% endif %} value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="mt-2">
+                    <button class="btn btn-success" onclick="saveReq()">
+                        <span class="spinner-req spinner-grow spinner-grow-sm" hidden=hidden role="status" aria-hidden="true"></span>
+                        ثبت رزرو
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h3 class="m-3">آخرین رزروها</h3>
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+                    <thead class="bg-blue text-light">
+                    <tr>
+                        <th>مسافر</th>
+                        <th>کدملی</th>
+                        <th>اتاق</th>
+                        <th>تاریخ</th>
+                        <th>امکانات</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for req in reqs %}
+                        <tr>
+                            <td class="w-auto">{{ req.passenger.pname ~ ' ' ~ req.passenger.pfamily }}</td>
+                            <td class="w-auto">{{ req.passenger.pcodemeli  }}</td>
+                            <td class="w-auto">{{ req.room.num  }}</td>
+                            <td class="w-auto">{{ req.day }}</td>
+                            <td class="w-auto"><button class="btn btn-sm btn-danger" onclick="showModal('deleteRes()','danger');selectForDelete = {{ req.id }};"><i class="fa fa-trash"></i> </button> </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

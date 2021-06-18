@@ -1,0 +1,3 @@
+entity: "App:CMPassenger"
+label:  "publicLabel"
+value: "id"

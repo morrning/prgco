@@ -1,73 +1,24 @@
 {% extends 'appBase.html.twig' %}
 {% block appName %}اپراتوری اسکان و اقامت{% endblock %}
 {% block appMenu %}
-<div class="d-none d-lg-block">
-    <ul class="navbar-nav side-bg-btn py-3">
-        <li class="nav-item side-bg-btn">
-            <a class="nav-link side-btn" href="{{ path('hotelingOPTDashboard') }}">
-                <i class="fas fa-chalkboard"></i>
-                <span>داشبورد</span>
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelAddHotel') }}">
-                <i class="fa fa-plus"></i>
-                افزودن هتل جدید
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelList') }}">
-                <i class="fas fa-hotel"></i>
-                <span>مراکز اسکان</span>
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="d-none d-sm-block d-md-block d-lg-none">
-    <ul class="nav side-bg-btn py-3">
-        <li class="nav-item side-bg-btn w-33">
-            <a class="nav-link side-btn" href="{{ path('hotelingOPTDashboard') }}">
-                <i class="fas fa-chalkboard"></i>
-                <span>داشبورد</span>
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn w-33 border-right brd-color">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelAddHotel') }}">
-                <i class="fa fa-plus"></i>
-                افزودن هتل جدید
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn w-33 border-right brd-color">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelList') }}">
-                <i class="fas fa-hotel"></i>
-                <span>مراکز اسکان</span>
-            </a>
-        </li>
-    </ul>
-</div>
-<div class="d-block d-sm-none">
-    <ul class="nav side-bg-btn py-3">
-        <li class="nav-item side-bg-btn w-50">
-            <a class="nav-link side-btn" href="{{ path('hotelingOPTDashboard') }}">
-                <i class="fas fa-chalkboard"></i>
-                <span>داشبورد</span>
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn w-50 border-right brd-color">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelAddHotel') }}">
-                <i class="fa fa-plus"></i>
-                افزودن هتل جدید
-            </a>
-        </li>
-        <li class="nav-item side-bg-btn w-50">
-            <a class="nav-link side-btn" href="{{ path('hotelingHotelList') }}">
-                <i class="fas fa-hotel"></i>
-                <span>مراکز اسکان</span>
-            </a>
-        </li>
-    </ul>
-</div>
-
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action flex-column align-items-start active" href="{{ path('hotelingOPTDashboard') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">داشبورد اصلی</h5><small><i class="fas fa-chalkboard fa-2x"></i></small>
+            </div>
+            <p class="mb-1 tx-13">دسترسی به منو اصلی داشبورد</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('hotelingHotelAddHotel') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">افزودن اقامتگاه</h5><small><i class="fas fa-plus fa-2x"></i></small>
+            </div>
+            <p class="mb-1 tx-13">افزودن اقامتگاه جدید</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('hotelingHotelList') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">لیست اقامتگاه‌ها</h5><small><i class="fas fa-hotel fa-2x"></i></small>
+            </div>
+            <p class="mb-1 tx-13">دسترسی به اقامتگاه‌ها و رزرو و ...</p>
+        </a>
+    </div>
 {% endblock %}
-
-
