@@ -29,19 +29,41 @@ class HotelingController extends AbstractController
     /**
      * @Route("/hoteling/opt", name="hotelingOPTDashboard")
      */
-    public function hotelingOPTDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function hotelingOPTDashboard(Request $request,Service\Jdate $jdate,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
-
+        $dayNow = $jdate->jdate('Y/m/d',time());
         $hotels = $entityMGR->findBy('App:HotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
         $roomCount = 0;
+        $hn =[];
+        $hc =[];
+        $hp =[];
+        $dipAll = 0;
+        $passengerTodayAll = 0;
         foreach ($hotels as $hotel){
-            $roomCount = $roomCount + count($entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]));
+            $rooms = $entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]);
+            $roomCount = $roomCount + count($rooms);
+            $dip = 0;
+            $passengerCountToday = 0;
+            foreach ($rooms as $item){
+                $dip += $item->getDep();
+                $passengerCountToday += count($entityMGR->findBy('App:HotelingPassenger',['day'=>$dayNow,'hotel'=>$hotel,'room'=>$item]));
+            }
+            array_push($hn,$hotel->getHotelName());
+            array_push($hp,$passengerCountToday);
+            array_push($hc,$dip);
+            $dipAll += $dip;
+            $passengerTodayAll += $passengerCountToday;
         }
         return $this->render('hoteling/OPTDashboard.html.twig', [
             'hotels'=>$hotels,
-            'roomsCount'=>$roomCount
+            'roomsCount'=>$roomCount,
+            'hn'=>$hn,
+            'hc'=>$hc,
+            'hp'=>$hp,
+            'dipAll'=>$dipAll,
+            'passengerTodayAll'=>$passengerTodayAll
         ]);
     }
 
