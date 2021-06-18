@@ -75,6 +75,27 @@ class SysRoll
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
+    private $ceremonialHotelingOPT;
+
+    /**
+     * @return mixed
+     */
+    public function getCeremonialHotelingOPT()
+    {
+        return $this->ceremonialHotelingOPT;
+    }
+
+    /**
+     * @param mixed $ceremonialHotelingOPT
+     */
+    public function setCeremonialHotelingOPT($ceremonialHotelingOPT): void
+    {
+        $this->ceremonialHotelingOPT = $ceremonialHotelingOPT;
+    }
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
     private $CeremonailREQ;
 
     /**
