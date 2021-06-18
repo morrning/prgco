@@ -29,7 +29,7 @@ class HotelingController extends AbstractController
     /**
      * @Route("/hoteling/opt", name="hotelingOPTDashboard")
      */
-    public function hotelingOPTDashboard(Request $request,Service\Jdate $jdate,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function hotelingOPTDashboard(EntityManagerInterface $entityManager,Service\Jdate $jdate,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('ceremonialHotelingOPT','CEREMONIAL',null,$userMGR->currentPosition()->getDefaultArea()))
             return $this->redirectToRoute('403');
@@ -63,7 +63,15 @@ class HotelingController extends AbstractController
             'hc'=>$hc,
             'hp'=>$hp,
             'dipAll'=>$dipAll,
-            'passengerTodayAll'=>$passengerTodayAll
+            'passengerTodayAll'=>$passengerTodayAll,
+            'reqs' => $entityManager->createQueryBuilder('a')
+                ->select('a')
+                ->from('App:HotelingPassenger','a')
+                ->andWhere('a.day = :tmr')
+                ->setParameter('tmr',$jdate->jdate('Y/m/d',time()))
+                ->orderBy('a.id', 'DESC')
+                ->getQuery()
+                ->getResult()
         ]);
     }
 
