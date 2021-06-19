@@ -205,9 +205,9 @@ class HRMController extends AbstractController
     }
 
     /**
-     * @Route("/hrm/employe/list", name="HRMEmployelist")
+     * @Route("/hrm/employe/list/{msg}", name="HRMEmployelist")
      */
-    public function employes(Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    public function employes($msg=0,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
     {
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
@@ -223,7 +223,8 @@ class HRMController extends AbstractController
             }
         }
         return $this->render('hrm/employes.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'msg' => $msg
         ]);
     }
 
@@ -479,7 +480,7 @@ class HRMController extends AbstractController
 
         $passenger = $entityMGR->findOneBy('App:CMPassenger',['pcodemeli'=>$id]);
         if(is_null($passenger))
-            return $this->redirectToRoute('404');
+            return $this->redirectToRoute('HRMEmployelist',['msg'=>1]);
 
         //get visas
         $visas = [];

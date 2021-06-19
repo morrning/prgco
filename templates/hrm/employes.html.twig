@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block pageBody %}
+    {% if msg == 1 %}
+        <div class="alert alert-danger">اطلاعات مسافر تکمیل نشده است. لطفا از بخش جایگاه های سازمانی نسبت به ثبت اطلاعات اقدام نمایید.</div>
+    {% endif %}
     <div class="p-2">
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
