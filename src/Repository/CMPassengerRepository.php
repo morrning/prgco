@@ -19,11 +19,10 @@ class CMPassengerRepository extends ServiceEntityRepository
         parent::__construct($registry, CMPassenger::class);
     }
 
-    // /**
-    //  * @return CMPassenger[] Returns an array of CMPassenger objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return CMPassenger[] Returns an array of CMPassenger objects
+    */
+    public function getNearPassportExpire()
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')
@@ -34,7 +33,7 @@ class CMPassengerRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?CMPassenger

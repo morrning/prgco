@@ -8,20 +8,37 @@
             <div class="col-sm-12 col-md-4">
                 <div class="card">
                     <div class="card-header bg-info text-white">
+                        <i class="fa fa-info-circle"></i>
                         اطلاعات
                     </div>
                     <div class="card-body">
                         <p>
+                            <i class="fa fa-tree"></i>
                             تعداد پست های سازمانی:{{ info.allUsers }}نفر
                         </p>
                         <p>
-                             پست های سازمانی شرکت:{{ info.employers }}نفر
+                            <i class="fa fa-user-friends"></i>
+                             پرسنل سازمانی شرکت:{{ info.employers }}نفر
                         </p>
                         <p>
+                            <i class="fa fa-user-friends"></i>
                             تعداد پیمانکاران:{{ info.contractor }}نفر
                         </p>
                         <p>
+                            <i class="fa fa-user-friends"></i>
                             تعداد پرسنل پیمانکاران:{{ info.contractorPassenger }}نفر
+                        </p>
+                        <p>
+                            <i class="fa fa-passport"></i>
+                            گذرنامه‌های با اعتبار کمتر از 6 ماه:{{ users | length }}عدد
+                        </p>
+                        <p>
+                            <div class="fa fa-ticket-alt"></div>
+                            ویزاهای با اعتبار کمتر از 3 ماه:{{ visas | length }}عدد
+                        </p>
+                        <p>
+                            <i class="fa fa-door-open"></i>
+                            مجوزهای با اعتبار کمتر از 3 ماه:{{ letters | length }}عدد
                         </p>
                     </div>
                 </div>
@@ -29,6 +46,7 @@
             <div class="col-sm-12 col-md-8">
                 <div class="card">
                     <div class="card-header bg-info text-white">
+                        <i class="fa fa-chart-line"></i>
                         گزارش نیروی انسانی
                     </div>
                     <div class="card-body">
@@ -74,6 +92,139 @@
                                 }
                             });
                         </script>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12">
+                <div class="">
+                    <div class="border">
+                        <div class="bg-gray-100 nav-bg">
+                            <nav class="nav nav-tabs">
+                                <a class="nav-link" data-toggle="tab" href="#tabCont1">
+                                    <i class="fa fa-passport"></i>
+                                    گذرنامه‌های با اعتبار کمتر از 6 ماه یا فاقد اعتبار
+                                </a>
+                                <a class="nav-link" data-toggle="tab" href="#tabCont2">
+                                    <i class="fa fa-ticket-alt"></i>
+                                    ویزاهای با اعتبار کمتر از 3 ماه
+                                </a>
+                                <a class="nav-link active" data-toggle="tab" href="#tabCont3">
+                                    <i class="fa fa-door-open"></i>
+                                    مجوز‌های با اعتبار کمتر از 3 ماه
+                                </a>
+                            </nav>
+                        </div>
+                        <div class="card-body tab-content">
+                            <div class="tab-pane show" id="tabCont1">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-bordered datatable-select-inputs table-hover rounded text-center">
+                                        <thead class="bg-blue text-light">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام و نام خانوادگی</th>
+                                            <th>زیرمجموعه</th>
+                                            <th>کد ملی</th>
+                                            <th>تاریخ اعتبار گذرنامه</th>
+                                            <th>وضعیت گذرنامه</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for user in users %}
+                                            <tr class="">
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
+                                                <td>{{ user.submitter.userID.fullname }}</td>
+                                                <td>{{ user.pcodemeli  }}</td>
+                                                {%  set expp = user.passportExpireDate | replace({'/': ''}) %}
+                                                <td>{{ user.passportExpireDate  }}</td>
+                                                <td>
+                                                    {% if  (expp) < timeNow %}
+                                                        <span class="badge badge-danger">فاقد اعتبار</span>
+                                                    {% else %}
+                                                        <span class="badge badge-success">دارای اعتبار</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="tabCont2">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-bordered datatable-select-inputs table-hover rounded text-center">
+                                        <thead class="bg-blue text-light">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام و نام خانوادگی</th>
+                                            <th>زیرمجموعه</th>
+                                            <th>نوع</th>
+                                            <th>کد ملی</th>
+                                            <th>شروع ویزا</th>
+                                            <th>اتمام ویزا</th>
+                                            <th>کشور مقصد</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for visa in visas %}
+                                            <tr class="">
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ visa.passenger.pname ~ ' ' ~ visa.passenger.pfamily }}</td>
+                                                <td>{{ visa.passenger.submitter.userID.fullname }}</td>
+                                                <td>{{ visa.passenger.ptype.typeName  }}</td>
+                                                <td>{{ visa.passenger.pcodemeli  }}</td>
+                                                {%  set expp = visa.dateEnd | replace({'/': ''}) %}
+                                                <td>{{ visa.dateStart  }}</td>
+                                                <td>{{ visa.dateEnd  }}</td>
+                                                <td>
+                                                    {{ visa.country.countryName }}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane active" id="tabCont3">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+                                        <thead class="bg-blue text-light">
+                                        <tr>
+                                            <th>ردیف</th>
+                                            <th>نام و نام‌خانوادگی</th>
+                                            <th>شماره نامه</th>
+                                            <th>تاریخ صدور</th>
+                                            <th>تاریخ پایان اعتبار</th>
+                                            <th>مرجع صدور</th>
+                                            <th>وضعیت مجوز</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody class="">
+                                        {% for letter in letters %}
+                                            <tr class="">
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ letter.user.fullname }}</td>
+                                                <td>{{ letter.letterNum }}</td>
+                                                <td>{{ letter.letterStartDate }}</td>
+                                                <td>{{ letter.letterEndDate }}</td>
+                                                <td>{{ letter.letterSource }}</td>
+                                                <td>
+                                                    {% set valueStart = letter.letterStartDate |replace({'/': ''}) %}
+                                                    {% set valueEnd = letter.letterEndDate |replace({'/': ''}) %}
+                                                    {% set valueNow = Jdate.jdate('Ymd','now'|date('U'))%}
+                                                    {% if  valueNow >= valueStart and valueNow < valueEnd %}
+                                                        <span class="badge badge-success">دارای اعتبار</span>
+                                                    {% else %}
+                                                        <span class="badge badge-danger">منقضی شده</span>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

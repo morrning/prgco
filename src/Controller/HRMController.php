@@ -138,7 +138,7 @@ class HRMController extends AbstractController
     /**
      * @Route("/hrm/admin", name="HRMadmin")
      */
-    public function HRMadmin(Service\EntityMGR $entityMGR, Service\UserMGR $userMGR)
+    public function HRMadmin(Service\Jdate $jdate,Service\EntityMGR $entityMGR, Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
@@ -165,8 +165,52 @@ class HRMController extends AbstractController
             $info['contractorPassenger'] = $info['contractorPassenger'] + count($entityMGR->findBy('App:CMPassenger',['submitter'=>$constractor,'ptype'=>$ptype]));
         }
         $info['contractorPassenger'] = $info['contractorPassenger'] - $info['contractor'];
+
+        //get near expire passports
+        $passengers = $entityMGR->findAll('App:CMPassenger');
+        $passengersPassportExpire = [];
+        foreach($passengers as $passenger){
+            $date = explode('/',$passenger->getPassportExpireDate());
+            if(count($date) == 3){
+                $passportDate = $jdate->jmktime(12,12,12,$date[1],$date[2],$date[0]);
+                if($passportDate <= time() + 15552000 ){
+                    array_push($passengersPassportExpire,$passenger);
+                }
+            }
+        }
+
+        //get visa near expire
+        $visas = $entityMGR->findAll('App:CMVisaLog');
+        $visaNearExpire = [];
+        foreach ($visas as $visa) {
+            $date = explode('/',$visa->getDateEnd());
+            if(count($date) == 3){
+                $passportDate = $jdate->jmktime(12,12,12,$date[1],$date[2],$date[0]);
+                if($passportDate <= time() + 15552000 && $passportDate > time()  ){
+                    array_push($visaNearExpire,$visa);
+                }
+            }
+        }
+
+        //get letters numbers
+        $letters = $entityMGR->findAll('App:HRMLetterOutCountry');
+        $letterNearExpire = [];
+        foreach ($letters as $letter){
+            $date = explode('/',$letter->getLetterEndDate());
+            if(count($date) == 3){
+                $letterDate = $jdate->jmktime(12,12,12,$date[1],$date[2],$date[0]);
+                if($letterDate <= time() + 7776000 && $letterDate > time()  ){
+                    array_push($letterNearExpire,$letter);
+                }
+            }
+        }
         return $this->render('hrm/dashboard.html.twig', [
             'info'=> $info,
+            'users' => $passengersPassportExpire,
+            'timeNow' => $jdate->jdate('Ymd',time()),
+            'visas' => $visaNearExpire,
+            'letters'=> $letterNearExpire
+
         ]);
     }
 
@@ -698,7 +742,24 @@ class HRMController extends AbstractController
         if(is_null($country))
             return $this->redirectToRoute('404');
         $visas = $entityMGR->findBy('App:CMVisaLog',['country'=>$country],['id'=>'DESC']);
-        echo 100;
+        return $this->render('hrm/reportVisa.html.twig', [
+            'timeNow' => $jdate->jdate('Ymd',time()),
+            'visas' => $visas
+        ]);
+    }
+
+    /**
+     * @Route("/hrm/passport/report/low", name="HRMPassportnearExpire")
+     */
+    public function HRMPassportnearExpire( Service\Jdate $jdate,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    {
+        if (!$userMGR->hasPermission('HRMACCESS', 'HRM'))
+            return $this->redirectToRoute('403');
+
+        $country = $entityMGR->find('App:CMVisaCountry',$countryID);
+        if(is_null($country))
+            return $this->redirectToRoute('404');
+        $visas = $entityMGR->findBy('App:CMVisaLog',['country'=>$country],['id'=>'DESC']);
         return $this->render('hrm/reportVisa.html.twig', [
             'timeNow' => $jdate->jdate('Ymd',time()),
             'visas' => $visas
