@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use http\Client;
 use Psr\Log\NullLogger;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -30,7 +31,7 @@ class CMAController extends AbstractController
     /**
      * @Route("/ceremonial/doing/dashboard", name="ceremonialDOINGDashboard")
      */
-    public function ceremonialDOINGDashboard(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function ceremonialDOINGDashboard(Request $request,Service\Jdate $jdate,EntityManagerInterface $entityManager,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
@@ -38,7 +39,46 @@ class CMAController extends AbstractController
             return $this->redirectToRoute('403');
         $logMGR->addEvent('FRE56','مشاهده','داشبورد سامانه درخواست تشریفات','CEREMONIAL',$request->getClientIp());
 
+        $dayNow = $jdate->jdate('Y/m/d',time());
+        $hotels = $entityMGR->findBy('App:HotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        $roomCount = 0;
+        $hn =[];
+        $hc =[];
+        $hp =[];
+        $dipAll = 0;
+        $passengerTodayAll = 0;
+        foreach ($hotels as $hotel){
+            $rooms = $entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]);
+            $roomCount = $roomCount + count($rooms);
+            $dip = 0;
+            $passengerCountToday = 0;
+            foreach ($rooms as $item){
+                $dip += $item->getDep();
+                $passengerCountToday += count($entityMGR->findBy('App:HotelingPassenger',['day'=>$dayNow,'hotel'=>$hotel,'room'=>$item]));
+            }
+            array_push($hn,$hotel->getHotelName());
+            array_push($hp,$passengerCountToday);
+            array_push($hc,$dip);
+            $dipAll += $dip;
+            $passengerTodayAll += $passengerCountToday;
+        }
+
         return $this->render('cma/DOINGDashboard.html.twig', [
+            'hotels'=>$hotels,
+            'roomsCount'=>$roomCount,
+            'hn'=>$hn,
+            'hc'=>$hc,
+            'hp'=>$hp,
+            'dipAll'=>$dipAll,
+            'passengerTodayAll'=>$passengerTodayAll,
+            'reqs' => $entityManager->createQueryBuilder('a')
+                ->select('a')
+                ->from('App:HotelingPassenger','a')
+                ->andWhere('a.day = :tmr')
+                ->setParameter('tmr',$jdate->jdate('Y/m/d',time()))
+                ->orderBy('a.id', 'DESC')
+                ->getQuery()
+                ->getResult()
         ]);
     }
     /**
