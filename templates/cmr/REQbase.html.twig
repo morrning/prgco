@@ -1,62 +1,38 @@
 {% extends 'appBase.html.twig' %}
 {% block appName %}درخواست تشریفات{% endblock %}
 {% block appMenu %}
-<div class="main-profile-contact-list">
-    <a class="" href="{{ path('ceremonialREQDashboard') }}">
-        <div class="media">
-            <div class="media-body">
-                <span>داشبورد</span>
-                <div>
-                    صفحه اصلی
-                </div>
+    <div class="list-group">
+        <a class="list-group-item list-group-item-action flex-column align-items-start active" href="{{ path('ceremonialREQDashboard') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">داشبورد اصلی</h5><small><i class="fas fa-chalkboard fa-2x"></i></small>
             </div>
-        </div>
-    </a>
-    <hr>
-    <a class="" href="{{ path('ceremonialREQpasengerNew') }}">
-        <div class="media">
-            <div class="media-body">
-                <span>مسافر جدید</span>
-                <div>
-                    افزودن مسافر جدید
-                </div>
+            <p class="mb-1 tx-13">دسترسی به منو اصلی داشبورد</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('ceremonialREQpasengerNew') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">مسافر جدید</h5><small><i class="fas fa-user-plus fa-2x"></i></small>
             </div>
-        </div>
-    </a>
-    <hr>
-    <a class="" href="{{ path('ceremonialREQpasengers') }}">
-        <div class="media">
-            <div class="media-body">
-                <span>لیست مسافران</span>
-                <div>
-                    مشاهده لیست افراد
-                </div>
+            <p class="mb-1 tx-13">افزودن مسافر جدید</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('ceremonialREQpasengers') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">مسافران</h5><small><i class="fas fa-user-friends fa-2x"></i></small>
             </div>
-        </div>
-    </a>
-    <hr>
-    <a class="" href="{{ path('ceremonialREQVisaList') }}">
-        <div class="media">
-            <div class="media-body">
-                <span>درخواست‌های ویزا</span>
-                <div>
-                    آرشیو درخواست‌های ویزا
-                </div>
+            <p class="mb-1 tx-13">لیست مسافرهای ثبت شده</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('ceremonialREQVisaList') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">ویزاها</h5><small><i class="fas fa-passport fa-2x"></i></small>
             </div>
-        </div>
-    </a>
-    <hr>
-    <a class="" href="{{ path('ceremonialREQAIRpaneList') }}">
-        <div class="media">
-            <div class="media-body">
-                <span>درخواست‌های بلیط هواپیما</span>
-                <div>
-                    آرشیو درخواست‌های بلیط
-                </div>
+            <p class="mb-1 tx-13">آرشیو ویزاهای ثبت شده</p>
+        </a>
+        <a class="list-group-item list-group-item-action flex-column align-items-start" href="{{ path('ceremonialREQAIRpaneList') }}">
+            <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-2 tx-14">بلیط‌های هواپیما</h5><small><i class="fas fa-ticket-alt fa-2x"></i></small>
             </div>
-        </div>
-    </a>
-</div>
+            <p class="mb-1 tx-13">آرشیو بلیط‌های هواپیمای ثبت شده</p>
+        </a>
+    </div>
 {% endblock %}
 
 
