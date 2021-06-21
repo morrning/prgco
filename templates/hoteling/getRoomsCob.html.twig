@@ -1,0 +1,3 @@
+{% for room in roms %}
+    <option {% if loop.first %}selected{% endif %} value="{{ room.id }}">{{ room.num }}</option>
+{% endfor %}

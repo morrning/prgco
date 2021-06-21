@@ -1,0 +1,104 @@
+{% extends 'hoteling/OPTbase.html.twig' %}
+
+{% block title %}
+    گزارش اتاق
+    {{ room.num }}
+     در هتل
+    {{ hotel.hotelName }}
+{% endblock %}
+{% block appTop %}
+    <a class="btn btn-sm btn-outline-light" href="{{ path('hotelingRoomsList',{'id':hotel.id}) }}">
+        <i class="fa fa-undo"></i>
+        بازگشت به لیست اتاق‌ها
+    </a>
+{% endblock %}
+{% block pageBody %}
+    <script>
+        function refreshList(){
+            $.ajax({
+                url: Routing.generate('hotelingGetReserveOfRoom', {
+                    'rid': $('#cmbRooms').find('option:selected').val(),
+                }),
+                success: function(data) {
+                    $('.table-reqs').html(data);
+                }
+            });
+        }
+        $(document).ready(function(){
+            $('#cmbHotels').change(function (){
+                $.ajax({
+                    url: Routing.generate('hotelingGetRooms', {
+                        'hid': $('#cmbHotels').find('option:selected').val(),
+                    }),
+                    success: function(data) {
+                        $('#cmbRooms').html(data);
+                        refreshList();
+                    }
+                });
+            });
+            $('#cmbRooms').change(function (){
+                $.ajax({
+                    url: Routing.generate('hotelingGetReserveOfRoom', {
+                        'rid': $('#cmbRooms').find('option:selected').val(),
+                    }),
+                    success: function(data) {
+                        $('.table-reqs').html(data);
+                        refreshList();
+                    }
+                });
+            });
+        });
+    </script>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">نام اقامتگاه:</label>
+                    <select class="form-control" id="cmbHotels">
+                        {% for htl in htls %}
+                            <option {% if loop.first %}selected{% endif %} value="{{ htl.id }}">{{ htl.hotelName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-4">
+                <div class="form-group">
+                    <label for="exampleFormControlSelect1">شماره اتاق:</label>
+                    <select class="form-control" id="cmbRooms">
+                        {% for room in roms %}
+                            <option {% if loop.first %}selected{% endif %} value="{{ room.id }}">{{ room.num }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <h3 class="m-3">آخرین رزروها</h3>
+        <div class="col">
+            <div class="table-responsive table-reqs">
+                <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+                    <thead class="bg-blue text-light">
+                    <tr>
+                        <th>مسافر</th>
+                        <th>کدملی</th>
+                        <th>اتاق</th>
+                        <th>تاریخ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for req in reqs %}
+                        <tr>
+                            <td class="w-auto">{{ req.passenger.pname ~ ' ' ~ req.passenger.pfamily }}</td>
+                            <td class="w-auto">{{ req.passenger.pcodemeli  }}</td>
+                            <td class="w-auto">{{ req.room.num  }}</td>
+                            <td class="w-auto">{{ req.day }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

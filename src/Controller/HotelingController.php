@@ -394,4 +394,68 @@ class HotelingController extends AbstractController
         $entityMGR->remove('App:HotelingPassenger',$id);
         return new Response('ok');
     }
+
+
+    /**
+     * @Route("/hoteling/report/room/{hid}/{rid}", name="HotelingReportRoomPassengers", options={"expose" = true})
+     */
+    public function HotelingReportRoomPassengers($hid=0,$rid=0,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->hasPermission('ceremonialHotelingOPT', 'CEREMONIAL', null, $userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $hotels =$entityMGR->findBy('App:HotelingHotel',['area'=>$userMGR->currentPosition()->getDefaultArea()]);
+
+        if($hid == 0 && $rid == 0){
+            $hotel = $hotels[0];
+        }
+        else{
+            $hotel = $entityMGR->find('App:HotelingHotel',$hid);
+        }
+
+        $rooms = $entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel]);
+        if($hid == 0 && $rid == 0){
+            $room = $rooms[0];
+        }
+        else{
+            $room = $entityMGR->find('App:HotelingRoom',$rid);
+        }
+
+        return $this->render('hoteling/roomReport.html.twig',[
+            'htls' => $hotels,
+            'hotel' => $hotel,
+            'room'=> $room,
+            'roms' => $rooms,
+            'reqs' => $entityMGR->findBy('App:HotelingPassenger',['room'=>$room])
+        ]);
+    }
+
+    /**
+     * @Route("/hoteling/get/rooms/{hid}", name="hotelingGetRooms", options={"expose" = true})
+     */
+    public function hotelingGetRooms($hid,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->hasPermission('ceremonialHotelingOPT', 'CEREMONIAL', null, $userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $hotel = $entityMGR->find('App:HotelingHotel',$hid);
+        if(is_null($hotel))
+            return $this->redirectToRoute('404');
+        return $this->render('hoteling/getRoomsCob.html.twig',[
+            'roms' => $entityMGR->findBy('App:HotelingRoom',['hotel'=>$hotel])
+        ]);
+    }
+
+    /**
+     * @Route("/hoteling/get/resv/{rid}", name="hotelingGetReserveOfRoom", options={"expose" = true})
+     */
+    public function hotelingGetReserveOfRoom($rid,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if (!$userMGR->hasPermission('ceremonialHotelingOPT', 'CEREMONIAL', null, $userMGR->currentPosition()->getDefaultArea()))
+            return $this->redirectToRoute('403');
+        $room = $entityMGR->find('App:HotelingRoom',$rid);
+        if(is_null($room))
+            return $this->redirectToRoute('404');
+        return $this->render('hoteling/getReqsTable.html.twig',[
+            'reqs' => $entityMGR->findBy('App:HotelingPassenger',['room'=>$room])
+        ]);
+    }
 }

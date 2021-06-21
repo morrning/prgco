@@ -1,0 +1,20 @@
+<table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+    <thead class="bg-blue text-light">
+    <tr>
+        <th>مسافر</th>
+        <th>کدملی</th>
+        <th>اتاق</th>
+        <th>تاریخ</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for req in reqs %}
+        <tr>
+            <td class="w-auto">{{ req.passenger.pname ~ ' ' ~ req.passenger.pfamily }}</td>
+            <td class="w-auto">{{ req.passenger.pcodemeli  }}</td>
+            <td class="w-auto">{{ req.room.num  }}</td>
+            <td class="w-auto">{{ req.day }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

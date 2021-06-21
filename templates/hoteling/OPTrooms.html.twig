@@ -35,6 +35,7 @@
                     <td>{{ room.WC.typeName }}</td>
                     <td>{{ room.canUse.typeName }}</td>
                     <td>
+                        <a class="btn btn-success" href="{{ path('HotelingReportRoomPassengers',{'hid':hotel.id,'rid':room.id}) }}"><i class="fa fa-chart-line"></i>گزارش اتاق</a>
                         <a class="btn btn-warning" href="{{ path('hotelingHotelEditRoom',{'id':room.id}) }}"> ویرایش اتاق</a>
                     </td>
                 </tr>
