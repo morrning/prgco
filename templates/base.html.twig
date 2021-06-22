@@ -224,8 +224,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nav-item full-screen fullscreen-button">
-                        <a class="new nav-link full-screen-link" href="#"><svg xmlns="http://www.w3.org/2000/svg" class="header-icon-svgs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></a>
+                    <div class="nav-item full-screen ">
+                        <a class="new nav-link" href="{{ path('help') }}"><i class="fa fa-question-circle"></i> </a>
                     </div>
                     <div class="dropdown main-profile-menu nav nav-item nav-link">
                         <a class="profile-user d-flex" href="#"><img alt="" src="{{ asset('files/ProfilePic/' ~ UserMGR.currentUser.nationalCode ~ '.jpg') }}"></a>
@@ -343,9 +343,15 @@
                                         </a>
                                     </li>
                                 {% endif %}
+                                <li>
+                                    <a class="slide-item" href="{{ path('support') }}">
+                                        <i class="fas fa-question-circle"></i>
+                                        پشتیبانی
+                                    </a>
+                                </li>
                             </ul>
                         </li>
-                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> سامانه تشریفات<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> تشریفات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                             <ul class="sub-menu">
 
                                 {% if UserMGR.hasPermission('CeremonailMNGDashboard','CEREMONIAL',null,area.id) == true %}
@@ -385,9 +391,11 @@
                                 {% endif %}
                             </ul>
                         </li>
-                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> سامانه ICT<i class="fe fe-chevron-down horizontal-icon"></i></a>
+                        {% if UserMGR.hasPermission('HSSEAREA','HSSE',null,area.id) == true %}
+                            <li aria-haspopup="true"><a href="{{ path('HSSEDashboard') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg> ایمنی و اقدامات تامینی</a></li>
+                        {% endif %}
+                        <li aria-haspopup="true"><a href="#" class="sub-icon"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>فناوری اطلاعات<i class="fe fe-chevron-down horizontal-icon"></i></a>
                             <ul class="sub-menu">
-
                                 <li>
                                     <a class="slide-item" href="{{ path('ictreqNew') }}">
                                         <i class="fa fa-ticket-alt"></i>
@@ -410,8 +418,6 @@
                                 {% endif %}
                             </ul>
                         </li>
-                        <li aria-haspopup="true"><a href="{{ path('support') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>درخواست پشتیبانی</a></li>
-                        <li aria-haspopup="true"><a href="{{ path('help') }}"><svg xmlns="http://www.w3.org/2000/svg" class="side-menu__icon" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 5H5v14h14V5zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" opacity=".3"/><path d="M3 5v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2zm2 0h14v14H5V5zm2 5h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z"/></svg>راهنمای پورتال</a></li>
                     </ul>
                 </nav>
                 <!--Nav-->

@@ -255,7 +255,6 @@ class HRMController extends AbstractController
     {
         if(! $userMGR->hasPermission('HRMACCESS','HRM'))
             return $this->redirectToRoute('403');
-
         $users = [];
         $poUsers = $entityMGR->findAll('App:SysUser');
         foreach ($poUsers as $poUser){

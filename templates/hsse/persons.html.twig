@@ -1,0 +1,43 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}لیست پرسنل{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>کد ملی</th>
+                    <th>شماره تماس</th>
+                    <th>امکانات</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for user in users %}
+                    <tr class="">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
+                        <td>{{ user.pcodemeli }}</td>
+                        <td>{{ user.tel1 }}</td>
+                        <td>
+                            <a class="btn btn-primary" href="{{ path('HSSEPersonsToolsSubmit',{'id':user.id}) }}"><i class="fa fa-tools"></i>  تجهیزات</a>
+                            <a class="btn btn-success" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-book-reader"></i  >آموزش</a>
+                            <a class="btn btn-danger" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>
+                            <a class="btn btn-info" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-list"></i>  پرونده </a>
+
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

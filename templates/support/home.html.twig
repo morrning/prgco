@@ -23,12 +23,15 @@
                         <th>ردیف</th>
                         <th>عنوان</th>
                         <th>ایجاد کننده</th>
+                        <th>پاسخ‌ها</th>
+                        <th>آخرین پاسخ دهنده</th>
                         <th>تاریخ</th>
                         <th>امکانات</th>
                     </tr>
                     </thead>
                     <tbody class="">
                     {% for ticket in tickets %}
+                        {% set replays = EntityMGR.findBy('App:suuportTicket',{'mainTicket':0,'UID':ticket.uid}) %}
                         <tr class="">
                             <td>{{ loop.index }}</td>
                             <td>
@@ -38,6 +41,8 @@
                                 </a>
                             </td>
                             <td>{{ ticket.submitter.fullName}}</td>
+                            <td>{{ replays | length }}</td>
+                            <td>{{ replays | last .submitter.fullName}}</td>
                             <td>{{ Jdate.jdate('Y/n/d',ticket.dateSubmit) }}</td>
                             <td>
                                 <a class="btn btn-primary" href="{{ path('supportViewicket',{'id':ticket.UID}) }}">
