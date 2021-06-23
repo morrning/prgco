@@ -19,7 +19,7 @@
                     <th>کد ملی</th>
                     <th>عنوان</th>
                     <th>نوع تخلف</th>
-                    <th>جریمه</th>
+                    <th>جریمه(ریال)</th>
                     <th>تاریخ</th>
                     <th>امکانات</th>
                 </tr>
@@ -32,7 +32,7 @@
                         <td>{{ penalty.passenger.pcodemeli }}</td>
                         <td>{{ penalty.work }}</td>
                         <td>{{ penalty.penaltyType }}</td>
-                        <td>{{ penalty.price }}</td>
+                        <td>{{ penalty.price | number_format(0) }}</td>
                         <td>{{ Jdate.jdate('Y/n/d',penalty.dateSubmit) }}</td>
                         <td>
                             <a class="btn btn-sm btn-success" target="_blank" href="{{ path('HSSEViewPenalty',{'id':penalty.id}) }}"><i class="fa fa-eye"></i> </a>
