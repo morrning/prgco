@@ -7,6 +7,15 @@
 {% endblock %}
 
 {% block pageBody %}
+    {% if msg == 1 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>حذف شد!</strong> جریمه با موفقیت حذف شد.
+        </div>
+
+    {% endif %}
     <div class="p-2">
         <div class="table-responsive">
             <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
@@ -29,10 +38,8 @@
                         <td>
                             <a class="btn btn-primary" href="{{ path('HSSEPersonsToolsSubmit',{'id':user.id}) }}"><i class="fa fa-tools"></i>  تجهیزات</a>
                             <a class="btn btn-success" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-book-reader"></i  >آموزش</a>
-                            <a class="btn btn-danger" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>
+                            <a class="btn btn-danger" href="{{ path('HSSEPersonspenaltySubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>
                             <a class="btn btn-info" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-list"></i>  پرونده </a>
-
-
                         </td>
                     </tr>
                 {% endfor %}
