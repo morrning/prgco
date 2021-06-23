@@ -2,16 +2,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
-        body { font-family: DejaVu Sans, sans-serif;
-                direction: rtl;
+        body {
+            font-family: Sans-Serif;
+            direction: rtl;
             text-align: right;
+        }
+        table{
+            border: black 1px solid;
+        }
+        td{
             float: right;
-            }
+            border: black 1px solid;
+        }
     </style>
+    <title>برگه جریمه</title>
+</head>
 <body>
-<h4>سلام</h4>
-<p>Lorem Ipsum</p>
+<h3 style="text-align: center;">برگه جریمه واحد ایمنی و اقدامات تامینی</h3>
+<h5 style="text-align: center;">{{ penalty.area.areaName }}</h5>
+<h5 style="text-align: center">تاریخ جریمه: {{ Jdate.jdate('Y/n/d',penalty.dateSubmit) }}</h5>
+<hr>
+<div>
+    <p style="text-align: center;">مشخصات متخلف</p>
+    <p>نام و نام‌خانوادگی:  <b>{{ penalty.passenger.pname ~ ' ' ~ penalty.passenger.pfamily }}</b></p>
+    <p>کدملی:  <b>{{ penalty.passenger.pcodemeli }}</b></p>
+    <p>زیرمجموعه:  <b>{{ penalty.passenger.submitter.publicLabel }}</b></p>
+</div>
+<hr>
+<div>
+    <p style="text-align: center;">توضیحات</p>
+    <p>نوع: <b>{{ penalty.penaltyType }}</b></p>
+    <p>محل تخلف: <b>{{ penalty.place }}</b></p>
+    <p>عنوان: <b>{{ penalty.work }}</b></p>
+    <p>توضیحات: <b>{{ penalty.des }}</b></p>
+    <p>جریمه: <b>{{ penalty.price | number_format(0)}} ریال</b></p>
+</div>
+<hr>
+<p style="text-align: center">ثبت کننده</p>
+<p style="text-align: center">{{ penalty.submiter.publicLabel }}</p>
 </body>
 </html>

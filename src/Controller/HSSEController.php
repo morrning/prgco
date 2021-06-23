@@ -16,9 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
-// Include Dompdf required namespaces
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
 
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
@@ -125,34 +123,21 @@ class HSSEController extends AbstractController
     /**
      * @Route("/hsse/viewepenalty/{id}", name="HSSEViewPenalty", options={"expose" = true})
      */
-    public function HSSEViewPenalty($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    public function HSSEViewPenalty($id,\Knp\Snappy\Pdf $knpSnappyPdf,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
             return $this->redirectToRoute('403');
         $penalty = $entityMGR->find('App:HssePenalty',$id);
 
-        // Configure Dompdf according to your needs
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        $pdfOptions->set('DOMPDF_UNICODE_ENABLED',true);
-        // Instantiate Dompdf with our options
-        $dompdf = new Dompdf($pdfOptions);
+
         $html = $this->renderView('hsse/viewPenalty.html.twig',[
             'penalty' => $penalty
         ]);
-
-        // Load HTML to Dompdf
-        $dompdf->loadHtml($html);
-        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
-        $dompdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $dompdf->render();
-
-        // Output the generated PDF to Browser (force download)
-        $dompdf->stream("mypdf.pdf", [
-            "Attachment" => false
-        ]);
+        $knpSnappyPdf->setOption('page-size','A5');
+        return new PdfResponse(
+            $knpSnappyPdf->getOutputFromHtml($html),
+            'file.pdf','application/pdf','inline'
+        );
 
     }
     /**
