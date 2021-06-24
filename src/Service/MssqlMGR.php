@@ -32,7 +32,7 @@ class MssqlMGR
         $config = new \Doctrine\DBAL\Configuration();
 
         $connectionParams = array(
-            'driver'=>'sqlsrv',
+            'driver'=>'pdo_sqlsrv',
             'user'=>$this->user,
             'password'=>$this->pwd,
             'host'=>$this->servername,
