@@ -123,6 +123,11 @@ class SysRoll
      */
     private $HRMACCESSTOTAL;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $HSSEAREA;
+
 
     public function getId(): ?int
     {
@@ -329,6 +334,18 @@ class SysRoll
     public function setHRMACCESSTOTAL(?bool $HRMACCESSTOTAL): self
     {
         $this->HRMACCESSTOTAL = $HRMACCESSTOTAL;
+
+        return $this;
+    }
+
+    public function getHSSEAREA(): ?int
+    {
+        return $this->HSSEAREA;
+    }
+
+    public function setHSSEAREA(?int $HSSEAREA): self
+    {
+        $this->HSSEAREA = $HSSEAREA;
 
         return $this;
     }
