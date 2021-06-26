@@ -88,6 +88,16 @@ class SysUser
      */
     private $SocialMobile;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $PMSusername;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $PMSpassword;
+
     public function __construct()
     {
         $this->sysPositions = new ArrayCollection();
@@ -341,6 +351,30 @@ class SysUser
     public function setSocialMobile(?string $SocialMobile): self
     {
         $this->SocialMobile = $SocialMobile;
+
+        return $this;
+    }
+
+    public function getPMSusername(): ?string
+    {
+        return $this->PMSusername;
+    }
+
+    public function setPMSusername(?string $PMSusername): self
+    {
+        $this->PMSusername = $PMSusername;
+
+        return $this;
+    }
+
+    public function getPMSpassword(): ?string
+    {
+        return $this->PMSpassword;
+    }
+
+    public function setPMSpassword(?string $PMSpassword): self
+    {
+        $this->PMSpassword = $PMSpassword;
 
         return $this;
     }

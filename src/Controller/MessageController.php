@@ -174,4 +174,114 @@ class MessageController extends AbstractController
         }
         return $this->redirectToRoute('403');
     }
+
+    /**
+     * @Route("/message/chat", name="messageChat")
+     */
+    public function messageChat( Request $request,Service\LogMGR $logMGR,Service\UserMGR $userMgr,Service\EntityMGR $entityMGR,LoggerInterface $logger)
+    {
+        if (!$userMgr->isLogedIn())
+            return $this->redirectToRoute('403');
+        $messages = $entityMGR->getORM()->createQueryBuilder('m')
+            ->select('m')
+            ->from('App:SysMessage','m')
+            ->where('m.sender = :user AND m.sender != m.reciver')
+            ->orWhere('m.reciver = :user AND m.sender != m.reciver')
+            ->setParameters(['user'=>$userMgr->currentPosition()])
+            ->orderBy('m.dateSend','DESC')
+            ->getQuery()
+            ->getResult();
+        $peoples = [];
+        foreach ($messages as $message){
+            if((!key_exists($message->getSender()->getId(),$peoples)) && ($message->getSender()->getId() != $userMgr->currentPosition()->getId())){
+                $temp = ['0'=>$message->getMdes(),'1'=>$message->getSender()];
+                $peoples[$message->getSender()->getId()] = $temp;
+            }
+            elseif((!key_exists($message->getReciver()->getId(),$peoples)) && ($message->getReciver()->getId() != $userMgr->currentPosition()->getId())){
+                $temp = ['0'=>$message->getMdes(),'1'=>$message->getReciver()];
+                $peoples[$message->getReciver()->getId()] = $temp;
+            }
+        }
+        return $this->render('message/chat.html.twig',[
+            'peoples' => $peoples,
+            'cuser'=>$userMgr->currentPosition(),
+            'positions'=>$entityMGR->findAll('App:SysPosition')
+        ]);
+
+    }
+
+    /**
+     * @Route("/message/getchat/history/{id}", name="messageGetChatHistory", options={"expose" = true})
+     */
+    public function messageGetChatHistory($id,Request $request, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if (!$userMgr->isLogedIn())
+            return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:SysPosition',$id);
+
+        $messages = $entityMGR->getORM()->createQueryBuilder('m')
+            ->select('m')
+            ->from('App:SysMessage','m')
+            ->where('m.sender = :user AND m.reciver = :au')
+            ->orWhere('m.sender = :au AND m.reciver = :user')
+            ->setParameters(['au'=>$userMgr->currentPosition(),'user'=>$user])
+            ->orderBy('m.dateSend','ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('message/chatHistory.html.twig',[
+            'messages'=>$messages,
+            'cuser'=>$userMgr->currentPosition(),
+            'duser'=>$user
+        ]);
+    }
+    /**
+     * @Route("/message/sendchat/{id}/{msg}", name="messageSendChat", options={"expose" = true})
+     */
+    public function messageSendChat($id,$msg,Request $request, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('403');
+        $reciver = $entityMGR->find('App:SysPosition',$id);
+        if(is_null($reciver))
+            return $this->redirectToRoute('404');
+
+        $message = new Entity\SysMessage();
+        $message->setDateSend(time());
+        $message->setMdes($msg);
+        $message->setMtitle('بدون عنوان');
+        $message->setReciver($reciver);
+        $message->setSender($userMgr->currentPosition());
+
+        $entityMGR->insertEntity($message);
+
+        //send notification
+        $des = sprintf('پیام جدید از %s دریافت شد.',$userMgr->currentPosition()->getPublicLabel());
+        $url = $this->generateUrl('messageView',['id'=>$message->getId()]);
+        $userMgr->addNotificationForUser($message->getReciver(),$des,$url);
+        $logMGR->addEvent('message','ارسال','ارسال پیام داخلی','message',$request->getClientIp());
+        $logger->info(sprintf('user %s send message with id %s', $userMgr->currentUser()->getUsername() , $message->getId()));
+
+        return $this->render('message/messageCalback.html.twig',[
+            'message' => $message,
+        ]);
+
+    }
+
+    /**
+     * @Route("/message/getfirstContact/{id}", name="messagegetfirstchatContent", options={"expose" = true})
+     */
+    public function messagegetfirstchatContent($id,Request $request, Service\UserMGR $userMgr,Service\EntityMGR $entityMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMgr->isLogedIn())
+            return $this->redirectToRoute('403');
+        $message = $entityMGR->find('App:SysMessage',$id);
+        if(is_null($message))
+            return $this->redirectToRoute('404');
+
+        return $this->render('message/firstContact.html.twig',[
+            'message' => $message,
+        ]);
+
+    }
 }

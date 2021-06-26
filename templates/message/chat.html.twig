@@ -1,0 +1,176 @@
+{% extends 'appSimple.html.twig' %}
+{% block title %}گفت‌و‌گوی زنده{% endblock %}
+{% block appBody %}
+    <!-- container opened -->
+    <div class="container mt-2">
+        <!-- row -->
+        <div class="row row-sm main-content-app mb-4">
+            <div class="col-xl-4 col-lg-5">
+                <div class="card">
+                    <div class="main-content-left main-content-left-chat">
+                        <nav class="nav main-nav-line main-nav-line-chat">
+                            <a class="nav-link active" data-toggle="tab" href="#">گفت‌و‌گوها</a>
+                            <a class="nav-link"  data-toggle="tab" href="#" onclick="$('#exampleModal').modal('show');">گفت‌و‌گوی جدید</a>
+                        </nav>
+                        <div class="main-chat-list chat-scroll" id="ChatList">
+                            {% for item in peoples %}
+                                <div class="media new content{{ item.1.id }}" onclick="getHistory({{ item.1.id }},'{{ item.1.userID.fullname }}','{{ asset('files/ProfilePic/' ~ item.1.userID.nationalCode ~ '.jpg') }}','{{ item.1.label }}')">
+                                    <div class="main-img-user online">
+                                        <img alt="" src="{{ asset('files/ProfilePic/' ~ item.1.userID.nationalCode ~ '.jpg') }}">
+                                    </div>
+                                    <div class="media-body">
+                                        <div class="media-contact-name">
+                                            <span>{{ item.1.userID.fullname }} </span>
+                                        </div>
+                                        <p>{{ item.0 }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div><!-- main-chat-list -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-8 col-lg-7">
+                <div class="card">
+                    <a class="main-header-arrow" href="#" id="ChatBodyHide"><i class="icon ion-md-arrow-back"></i></a>
+                    <div class="main-content-body main-content-body-chat">
+                        <div class="main-chat-header">
+                            <div class="main-img-user"><img class="active-image-chat" alt="" src="{{ asset('files/ProfilePic/' ~ cuser.userID.nationalCode ~ '.jpg') }}"></div>
+                            <div class="main-chat-msg-name">
+                                <h6 class="active-chat-name">نام کاربر</h6>
+                                <small class="lblPosition">پست سازمانی</small>
+                            </div>
+                            <nav class="nav">
+                            </nav>
+                        </div><!-- main-chat-header -->
+                        <div class="main-chat-body" id="ChatBody">
+                            <div class="content-inner chat-scroll"></div>
+                        </div>
+                    </div>
+                    <div class="main-chat-footer">
+                        <nav class="nav">
+                        </nav>
+                        <input class="form-control txtMSG" placeholder="پیام خود را اینجا بنویسید ..." type="text">
+                        <a class="main-msg-send" href="#" onclick="send()"><i class="far fa-paper-plane"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+    </div>
+    <!-- Container closed -->
+    </div>
+    <!-- main-content closed -->
+    <script>
+        var activeUser = 0;
+        timerVar = 0;
+
+        function getHistory(id,name,image,label){
+            activeUser = id;
+            $('.lblPosition').html(label);
+            $('.active-chat-name').html(name);
+            $('.active-image-chat').attr('src',image);
+            refreshChat(id);
+            clearInterval(timerVar);
+            timerVar = window.setInterval('refreshChat(' + id + ')', 3000);
+        }
+
+        function refreshChat(id){
+            $.ajax( {
+                url: Routing.generate('messageGetChatHistory', { 'id': id }),
+                dataType: "html",
+                success: function( data ) {
+                    $('.content-inner').html('');
+                    $('.content-inner').html(data);
+                }
+            } );
+        }
+        function send(){
+            if($('.txtMSG').val() != '' && activeUser != 0){
+                $.ajax( {
+                    url: Routing.generate('messageSendChat', { 'id': activeUser, 'msg' : $('.txtMSG').val()}),
+                    dataType: "html",
+                    success: function( data ) {
+                        if ($(".content" + activeUser).length == 0){
+                            $.ajax( {
+                                url: Routing.generate('messagegetfirstchatContent', { 'id': $($.parseHTML(data)).filter('.mid').val()}),
+                                dataType: "html",
+                                success: function( data ) {
+                                    $('#ChatList').append(data);
+                                }
+                            } );
+                        }
+                        $('.txtMSG').val('');
+                        $('.content-inner').append(data);
+                    }
+                } );
+            }
+        }
+
+        $( function() {
+            var projects = [
+                {% for position in positions %}
+                {
+                    value: "{{ position.id }}",
+                    label: "{{ position.userID.fullname }}",
+                    desc:  "{{ position.label }}",
+                    image: "{{ asset('files/ProfilePic/' ~ position.userID.nationalCode ~ '.jpg') }}"
+                },
+
+                {% endfor %}
+            ];
+
+            $( "#project" ).autocomplete({
+                minLength: 0,
+                source: projects,
+                appendTo : '.modal-body',
+                focus: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    activeUser = ui.item.value ;
+                    $('.lblPosition').html(ui.item.desc);
+                    $('.active-chat-name').html(ui.item.label);
+                    $('.active-image-chat').attr('src',ui.item.image);
+                    refreshChat(ui.item.value);
+                    clearInterval(timerVar);
+                    timerVar = window.setInterval('refreshChat(' + ui.item.value + ')', 3000);
+                    return false;
+                }
+            })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                return $( "<li style=''>" )
+                    .append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
+                    .appendTo( ul );
+            };
+        } );
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-success text-white">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">گفت‌و‌گوی جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 col-md-3">
+                        <input type="hidden" id="passenger-id">
+                    </div>
+                    <div class="form-group" style="z-index: 2500 !important;">
+                        <label for="project">مخاطب</label>
+                        <input type="text" class="form-control" id="project" aria-describedby="emailHelp" placeholder="نام و نام خانوادگی مسئول جایگاه">
+                        <small id="emailHelp" class="form-text text-muted">برای جست و جوی مخاطب می‌توانید قسمتی از نام و نام خانوادگی یا عنوان جایگاه را وارد نمایید.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="$('#project').val('');$('.txtMSG').val('');" data-dismiss="modal">شروع گفت و گو</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

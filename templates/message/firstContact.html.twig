@@ -1,0 +1,11 @@
+<div class="media new content{{ message.id }}" onclick="getHistory({{ message.reciver.id }},'{{ message.reciver.userID.fullname }}','{{ asset('files/ProfilePic/' ~ message.reciver.userID.nationalCode ~ '.jpg') }}','{{ message.reciver.label }}')">
+    <div class="main-img-user online">
+        <img alt="" src="{{ asset('files/ProfilePic/' ~ message.reciver.userID.nationalCode ~ '.jpg') }}">
+    </div>
+    <div class="media-body">
+        <div class="media-contact-name">
+            <span>{{ message.reciver.userID.fullname }} </span>
+        </div>
+        <p>{{ message.mdes }}</p>
+    </div>
+</div>

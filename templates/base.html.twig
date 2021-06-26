@@ -97,12 +97,7 @@
     <!-- Rating js-->
     <script src="{{ asset('newface/assets/plugins/rating/jquery.rating-stars.js') }}"></script>
     <script src="{{ asset('newface/assets/plugins/rating/jquery.barrating.js') }}"></script>
-    <!-- P-scroll js -->
-    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
-    <!-- Horizontalmenu js-->
-    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-rtl.js') }}"></script>
-    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-custom.js') }}"></script>
+
     <!-- Eva-icons js -->
     <script src="{{ asset('newface/assets/js/eva-icons.min.js') }}"></script>
     <!-- Horizontalmenu js-->
@@ -139,6 +134,10 @@
     <script src="{{ asset('assets/js/typed/typed.min.js') }}"></script>
     <script src="{{ asset('assets/jstree/jstree.min.js') }}"></script>
     <script src="{{ asset('assets/taginput/jquery.tagsinput-revisited.js') }}"></script>
+    <!-- P-scroll js -->
+    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
+
+    <!-- Horizontalmenu js-->
 
     <style>
         thead input {
@@ -232,6 +231,8 @@
                         </div>
                     </div>
                     <div class="nav-item full-screen ">
+                        <a class="new nav-link" href="{{ path('messageChat') }}"><i class="fas fa-comments"></i> </a>
+                    </div>                    <div class="nav-item full-screen ">
                         <a class="new nav-link" href="{{ path('help') }}"><i class="fa fa-question-circle"></i> </a>
                     </div>
                     <div class="dropdown main-profile-menu nav nav-item nav-link">
@@ -505,4 +506,5 @@
     </style>
     <!--/Sidebar-right-->
     {% block javascripts %}{% endblock %}
+    <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
 </body>

@@ -1,0 +1,12 @@
+<input class="mid{{ message.id }} mid" type="hidden" value="{{ message.id }}">
+<div class="media">
+    <div class="main-img-user online"><img alt="" src="{{ asset('files/ProfilePic/' ~ message.sender.userID.nationalCode ~ '.jpg') }}"></div>
+    <div class="media-body">
+        <div class="main-msg-wrapper left">
+            {{ message.mdes }}.
+        </div>
+        <div>
+            <span>{{ Jdate.jdate('Y/n/d H:i',message.dateSend) }}</span> <a href="#"><i class="icon ion-android-more-horizontal"></i></a>
+        </div>
+    </div>
+</div>
