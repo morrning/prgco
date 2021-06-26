@@ -75,6 +75,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
+                                    <button class="btn btn-sm btn-info" onclick="activeID = {{ passenger.id }};$('#exampleModal').modal();" >تغییر جایگاه</button>
                                     <a class="btn btn-primary" href="{{ path('HRMPassengerProfile',{'id':passenger.pcodemeli}) }}">
                                         <i class="fa fa-eye"></i>
                                     </a>
@@ -83,6 +84,92 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        activeID = 0;
+        positionID = 0;
+        function changePosition(){
+            $.ajax({
+                url: Routing.generate('HRMTransferpassengerTonewposition', {
+                    'passengerID': activeID,
+                    'positionID' : positionID
+                }),
+                success: function(data) {
+                    $('.trp' + activeID).remove();
+                    $('#exampleModal').modal('hide');
+                    $('#modaldemo4').modal('show');
+                }
+            });
+        }
+        $( function() {
+            var projects = [
+                {% for position in positions %}
+                {
+                    value: "{{ position.id }}",
+                    label: "{{ position.userID.fullname }}",
+                    desc:  "{{ position.label }}",
+                },
+
+                {% endfor %}
+            ];
+
+            $( "#project" ).autocomplete({
+                minLength: 0,
+                source: projects,
+                appendTo : '.modal-body',
+                focus: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    positionID = ui.item.value ;
+                    return false;
+                }
+            })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                return $( "<li style=''>" )
+                    .append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
+                    .appendTo( ul );
+            };
+        } );
+    </script>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title text-white" id="exampleModalLabel">انتقال مسافر به زیر مجموعه جدید</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12 col-md-3">
+                        <input type="hidden" id="passenger-id">
+                    </div>
+                    <div class="form-group" style="z-index: 2500 !important;">
+                        <label for="project">جایگاه شغلی</label>
+                        <input type="text" class="form-control" id="project" aria-describedby="emailHelp" placeholder="نام و نام خانوادگی مسئول جایگاه">
+                        <small id="emailHelp" class="form-text text-muted">برای جست و جوی جایگاه می‌توانید قسمتی از نام و نام خانوادگی یا عنوان جایگاه را وارد نمایید.</small>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="changePosition();">انتقال زیر مجموعه</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="modaldemo4">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-body tx-center pd-y-20 pd-x-20">
+                    <button aria-label="بستن" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button> <i class="icon ion-ios-checkmark-circle-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
+                    <h4 class="tx-success tx-semibold mg-b-20">تغییر جایگاه</h4>
+                    <p class="mg-b-20 mg-x-20">مسافر با موفقیت به جایگاه شغلی جدید منتقل شد..</p><button aria-label="بستن" class="btn ripple btn-success pd-x-25" data-dismiss="modal" type="button">ادامه هید</button>
                 </div>
             </div>
         </div>

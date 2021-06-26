@@ -45,6 +45,7 @@
             font-family: 'tahoma' !important;
         </style>
     {% endif %}
+    <link href="{{ asset('assets/taginput/jquery.tagsinput-revisited.css') }}" rel="stylesheet">
     <!-- chartist CSS -->
     <link rel="stylesheet" href="{{ asset('assets/chartjs/Chart.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
@@ -137,6 +138,8 @@
     <script src="{{ asset('assets/js/jquery.mask.min.js') }}"></script>
     <script src="{{ asset('assets/js/typed/typed.min.js') }}"></script>
     <script src="{{ asset('assets/jstree/jstree.min.js') }}"></script>
+    <script src="{{ asset('assets/taginput/jquery.tagsinput-revisited.js') }}"></script>
+
     <style>
         thead input {
             width: 100%;
@@ -328,6 +331,14 @@
                                         <a class="slide-item" href="{{ path('newsDashboard') }}">
                                             <i class="fas fa-newspaper"></i>
                                             سامانه انتشار خبر
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                {% if UserMGR.isLogedin() == true %}
+                                    <li>
+                                        <a class="slide-item" href="{{ path('suggestion') }}">
+                                            <i class="fas fa-inbox"></i>
+                                            صندوق پیشنهادات و انتقادات
                                         </a>
                                     </li>
                                 {% endif %}

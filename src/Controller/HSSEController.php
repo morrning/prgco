@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\HSSEHealthEditType;
+use App\Form\HSSEHealthType;
 use App\Form\HSSEPenaltyType;
+use App\Form\HSSEToolType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -76,7 +79,9 @@ class HSSEController extends AbstractController
     {
         if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
             return $this->redirectToRoute('403');
-
+        $user = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
         $penalty = new Entity\HssePenalty();
         $form = $this->createForm(HSSEPenaltyType::class,$penalty);
         $form->handleRequest($request);
@@ -89,7 +94,7 @@ class HSSEController extends AbstractController
             return $this->redirectToRoute('HSSEPersons',['msg'=>1]);
         }
         return $this->render('hsse/penalty.html.twig', [
-            'user' => $entityMGR->find('App:CMPassenger',$id),
+            'user' => $user,
             'form'=>$form->createView()
         ]);
     }
@@ -147,9 +152,135 @@ class HSSEController extends AbstractController
     {
         if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
             return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+
+        $tool = new Entity\HsseTool();
+        $tool->setNum(1);
+        $form = $this->createForm(HSSEToolType::class,$tool);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $tool->setPassenger($user);
+            $tool->setSubmitter($userMGR->currentPosition());
+            $tool->setDateSubmit(time());
+            $tool->setArea($userMGR->currentPosition()->getDefaultArea());
+            $entityMGR->insertEntity($tool);
+            return $this->redirectToRoute('HSSEPersons',['msg'=>2]);
+        }
 
         return $this->render('hsse/personsToolSubmit.html.twig', [
-            'user' => $entityMGR->find('App:CMPassenger',$id),
+            'user' => $user,
+            'form' => $form->createView(),
+            'items' => $entityMGR->findBy('App:HsseTool',['passenger'=>$user])
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/deleteToolSubmit/{id}", name="HSSEDeleteToolSubmit", options={"expose" = true})
+     */
+    public function HSSEDeleteToolSubmit($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $entityMGR->remove('App:HsseTool',$id);
+        return new Response('ok');
+    }
+
+    /**
+     * @Route("/hsse/personslistTools/{msg}", name="HSSEToolsList")
+     */
+    public function HSSEToolsList($msg = 0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hsse/listTools.html.twig', [
+            'items' => $entityMGR->findBy('App:HsseTool',[
+                'area'=>$userMGR->currentPosition()->getDefaultArea()
+            ]),
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/health/submit/{id}", name="HSSEPersonHealthSubmit")
+     */
+    public function HSSEPersonHealthSubmit($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $user = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($user))
+            return $this->redirectToRoute('404');
+        $health = new Entity\HsseHealth();
+        $form = $this->createForm(HSSEHealthType::class,$health);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $health->setDateSubmit(time());
+            $health->setSubmitter($userMGR->currentPosition());
+            $health->setArea($userMGR->currentPosition()->getDefaultArea());
+            $health->setPassenger($entityMGR->find('App:CMPassenger',$id));
+            $entityMGR->insertEntity($health);
+            return $this->redirectToRoute('HSSEHealthList',['msg'=>1]);
+        }
+        return $this->render('hsse/health.html.twig', [
+            'user' => $user,
+            'form'=>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/health/edit/{id}/{msg}", name="HSSEPersonHealthEdit")
+     */
+    public function HSSEPersonHealthEdit($id,$msg = 0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $health = $entityMGR->find('App:HsseHealth',$id);
+        if(is_null($health))
+            return $this->redirectToRoute('404');
+        $form = $this->createForm(HSSEHealthEditType::class,$health);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $entityMGR->insertEntity($health);
+            return $this->redirectToRoute('HSSEHealthList',['msg'=>2]);
+        }
+        return $this->render('hsse/healthEdit.html.twig', [
+            'user' => $health->getPassenger(),
+            'form'=>$form->createView(),
+            'health' => $health,
+            'msg' => $msg
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/health/outSubmit/{id}", name="HSSEPersonHealthEditoutSubmit")
+     */
+    public function HSSEPersonHealthEditoutSubmit($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $health = $entityMGR->find('App:HsseHealth',$id);
+        if(is_null($health))
+            return $this->redirectToRoute('404');
+        $health->setDateOut(time());
+        $entityMGR->update($health);
+        return $this->redirectToRoute('HSSEPersonHealthEdit',['id'=>$health->getId(),'msg'=>1]);
+    }
+
+    /**
+     * @Route("/hsse/personslistHealth/{msg}", name="HSSEHealthList")
+     */
+    public function HSSEHealthList($msg = 0,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hsse/listHealth.html.twig', [
+            'items' => $entityMGR->findBy('App:HsseHealth',[
+                'area'=>$userMGR->currentPosition()->getDefaultArea()
+            ]),
+            'msg'=>$msg
         ]);
     }
 }

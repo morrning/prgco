@@ -14,7 +14,20 @@
             </button>
             <strong>ثبت شد!</strong> جریمه با موفقیت ثبت شد.
         </div>
-
+    {% elseif msg == 2 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ثبت شد!</strong> تحویل تجهیزات با موفقیت ثبت شد.
+        </div>
+    {% elseif msg == 3 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ثبت شد!</strong> ثبت ورود به بهداری با موفقیت انجام شد.
+        </div>
     {% endif %}
     <div class="p-2">
         <div class="table-responsive">
@@ -36,6 +49,7 @@
                         <td>{{ user.pcodemeli }}</td>
                         <td>{{ user.tel1 }}</td>
                         <td>
+                            <a class="btn btn-info" href="{{ path('HSSEPersonHealthSubmit',{'id':user.id}) }}"><i class="fa fa-book-dead"></i>  بهداری </a>
                             <a class="btn btn-primary" href="{{ path('HSSEPersonsToolsSubmit',{'id':user.id}) }}"><i class="fa fa-tools"></i>  تجهیزات</a>
                             <a class="btn btn-success" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-book-reader"></i  >آموزش</a>
                             <a class="btn btn-danger" href="{{ path('HSSEPersonspenaltySubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>

@@ -244,7 +244,8 @@ class HRMController extends AbstractController
 
         return $this->render('hrm/positionFolder.html.twig', [
             'user' => $user,
-            'passengers'=>$entityMGR->findBy('App:CMPassenger',['submitter'=>$user])
+            'passengers'=>$entityMGR->findBy('App:CMPassenger',['submitter'=>$user]),
+            'positions' => $entityMGR->findAll('App:SysPosition')
         ]);
     }
 
@@ -748,23 +749,22 @@ class HRMController extends AbstractController
     }
 
     /**
-     * @Route("/hrm/passport/report/low", name="HRMPassportnearExpire")
+     * @Route("/hrm/passengertransferposition/{passengerID}/{positionID}", name="HRMTransferpassengerTonewposition", options={"expose" = true})
      */
-    public function HRMPassportnearExpire( Service\Jdate $jdate,Service\UserMGR $userMGR,Service\EntityMGR $entityMGR)
+    public function HRMTransferpassengerTonewposition($passengerID,$positionID,Service\Jdate $jdate,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         if (!$userMGR->hasPermission('HRMACCESS', 'HRM'))
             return $this->redirectToRoute('403');
-
-        $country = $entityMGR->find('App:CMVisaCountry',$countryID);
-        if(is_null($country))
+        $passenger = $entityMGR->find('App:CMPassenger',$passengerID);
+        if(is_null($passenger))
             return $this->redirectToRoute('404');
-        $visas = $entityMGR->findBy('App:CMVisaLog',['country'=>$country],['id'=>'DESC']);
-        return $this->render('hrm/reportVisa.html.twig', [
-            'timeNow' => $jdate->jdate('Ymd',time()),
-            'visas' => $visas
-        ]);
+        $position = $entityMGR->find('App:SysPosition',$positionID);
+        if(is_null($position))
+            $this->redirectToRoute('404');
+        $passenger->setSubmitter($position);
 
-
+        $entityMGR->update($passenger);
+        return new Response('ok');
     }
 
 }

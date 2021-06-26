@@ -1,0 +1,60 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}
+    ویرایش  وضعیت
+    {{ user.pname ~ ' ' ~ user.pfamily }}
+    با کد ملی
+    {{ user.pcodemeli }}
+{% endblock %}
+
+{% block appTop %}
+    {% if health.dateOut is null %}
+    <a class="btn btn-success" href="{{ path('HSSEPersonHealthEditoutSubmit',{'id':health.id}) }}">
+        <i class="fa fa-door-open"></i>
+        ثبت ترخیص
+    </a>
+    {% endif %}
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container">
+        {% if msg == 1 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ثبت شد!</strong> ترخیص با موفقیت ثبت شد.
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col">
+                <h5>
+                    تاریخ مراجعه:
+                    <b class="text-danger">{{ Jdate.jdate('Y/n/d',health.dateSubmit) }}</b>
+                </h5>
+                <h5>
+                    ثبت کننده :
+                    <b class="text-danger">{{ health.submitter.publicLabel }}</b>
+                </h5>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-12 col-md-4">
+                <img class="img-fluid img- img-fit-cover" src="{{ asset('files/ProfilePic/' ~ user.pcodemeli ~ '.jpg') }}">
+            </div>
+            <div class="col-sm-12 col-md-8">
+                {{ form_start(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </div>
+    <script>
+        $(function() {
+            $('.taginput').tagsInput({
+                'delimiter': [',']
+            });
+        });
+    </script>
+{% endblock %}

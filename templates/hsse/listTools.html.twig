@@ -1,10 +1,7 @@
 {% extends 'hsse/HSSEbase.html.twig' %}
 
 {% block title %}
-تحویل تجهیزات به
-    {{ user.pname ~ ' ' ~ user.pfamily }}
-     با کد ملی
-    {{ user.pcodemeli }}
+    لیست اقلام و تجهیزات تحویلی به پرسنل
 {% endblock %}
 
 {% block appTop %}
@@ -14,27 +11,18 @@
 {% block pageBody %}
     <div class="container">
         <div class="row">
-            <div class="col-sm-12 col-md-4">
-                <img class="img-fluid img- img-fit-cover" src="{{ asset('files/ProfilePic/' ~ user.pcodemeli ~ '.jpg') }}">
-            </div>
-            <div class="col-sm-12 col-md-8">
-                {{ form_start(form) }}
-                {{ form_end(form) }}
-            </div>
-        </div>
-        <div class="row">
             <div class="col">
-                <h3 class="my-2">سوابق تحویل قبلی:</h3>
                 <div class="p-2">
                     <div class="table-responsive">
                         <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
                             <thead class="bg-blue text-light">
                             <tr>
                                 <th>ردیف</th>
+                                <th>نام و نام خانوادگی</th>
+                                <th>زیر مجموعه</th>
                                 <th>نام تجهیزات</th>
                                 <th>تعداد</th>
                                 <th>تاریخ تحویل</th>
-                                <th>تحویل دهنده</th>
                                 <th>امکانات</th>
                             </tr>
                             </thead>
@@ -42,10 +30,11 @@
                             {% for item in items %}
                                 <tr class="tr{{ item.id }}">
                                     <td>{{ loop.index }}</td>
+                                    <td>{{ item.passenger.pname ~ ' ' ~ item.passenger.pfamily }}</td>
+                                    <td>{{ item.passenger.submitter.publicLabel }}</td>
                                     <td>{{ item.toolName }}</td>
                                     <td>{{ item.num }}</td>
                                     <td>{{ Jdate.jdate('Y/m/d',item.dateSubmit) }}</td>
-                                    <td>{{ item.submitter.publicLabel }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-danger" onclick="activeID={{ item.id }};$('#exampleModal').modal();"><i class="fa fa-trash"></i> </button>
                                     </td>

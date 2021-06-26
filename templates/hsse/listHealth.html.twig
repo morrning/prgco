@@ -1,0 +1,112 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}
+    لیست مراجعین بهداری
+{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    {% if msg == 1 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ثبت شد!</strong> ثبت ورود بیمار با موفقیت انجام شد.
+        </div>
+    {% elseif msg == 2 %}
+        <div class="alert alert-success" role="alert">
+            <button aria-label="Close" class="close" data-dismiss="alert" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <strong>ثبت شد!</strong> وضعیت بیمار به روزرسانی شد.
+        </div>
+    {% endif %}
+    <div class="p-2">
+        <div class="table-responsive">
+            <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+                <thead class="bg-blue text-light">
+                <tr>
+                    <th>ردیف</th>
+                    <th>نام و نام خانوادگی</th>
+                    <th>کد ملی</th>
+                    <th>زیر مجموعه</th>
+                    <th>تاریخ ورود</th>
+                    <th>تاریخ ترخیص</th>
+                    <th>وضعیت</th>
+                    <th>امکانات</th>
+                </tr>
+                </thead>
+                <tbody class="">
+                {% for item in items %}
+                    <tr class="tr{{ item.id }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ item.passenger.pname ~ ' ' ~ item.passenger.pfamily }}</td>
+                        <td>{{ item.passenger.pcodemeli }}</td>
+                        <td>{{ item.passenger.submitter.publicLabel }}</td>
+                        <td>{{ Jdate.jdate('Y/n/d',item.dateSubmit) }}</td>
+                        {% if item.dateOut is null %}
+                            <td></td>
+                            <td>در حال درمان</td>
+                        {% else %}
+                            <td>{{ Jdate.jdate('Y/n/d',item.dateOut) }}</td>
+                            <td>ترخیص شده</td>
+                        {% endif %}
+                        <td>
+                            <a class="btn btn-sm btn-success" href="{{ path('HSSEPersonHealthEdit',{'id':item.id}) }}"><i class="fa fa-eye"></i> </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        activeID = 0;
+        function deletePenalty(){
+            $.ajax({
+                url: Routing.generate('HSSEDeletePenalty', {
+                    'id': activeID,
+                }),
+                success: function(data) {
+                    $('.tr' + activeID).remove();
+                    $('#exampleModal').modal('hide');
+                    $('#modaldemo4').modal('show');
+                }
+            });
+        }
+    </script>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-light">
+                    <h5 class="modal-title" id="exampleModalLabel">حذف جریمه</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    آیا برای حذف جریمه مطمئن هستید؟
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="deletePenalty();">حذف</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بازگشت</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" id="modaldemo4">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content tx-size-sm">
+                <div class="modal-body tx-center pd-y-20 pd-x-20">
+                    <button aria-label="بستن" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button> <i class="icon ion-ios-checkmark-circle-outline tx-100 tx-success lh-1 mg-t-20 d-inline-block"></i>
+                    <h4 class="tx-success tx-semibold mg-b-20">حذف</h4>
+                    <p class="mg-b-20 mg-x-20">جریمه با موفقیت حذف شد.</p><button aria-label="بستن" class="btn ripple btn-success pd-x-25" data-dismiss="modal" type="button">ادامه هید</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
