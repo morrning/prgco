@@ -1,67 +1,118 @@
-{% extends 'withoutNavbar.html.twig' %}
+<!DOCTYPE html>
+<html class="no-js" lang=""><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title> ورود به پورتال</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="http://atiyehahmadi.ir/xmee/demo-rtl/img/favicon.png">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('login/bootstrap-rtl.css')}}">
+    <!-- Icons css -->
+    <link href="{{ asset('newface/assets/css/icons.css') }}" rel="stylesheet">
+    <!-- Google Web Fonts -->
+    <link href="{{ asset('login/css.css')}}" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('login/style.css')}}">
+</head>
 
-{% block title %}ورود{% endblock %}
-
-{% block pageBody %}
-    <div class="row">
-        <div class="col-12">
-            {% if alerts is defined %}
-                {% if alerts|length != 0 %}
-                    {% for alt in alerts %}
-                        <div class="alert alert-{{ alt.type }}" role="alert">
-                            {{ alt.message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% endif %}
-        </div>
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header text-center bg-success text-light">
-                    <i class="fas fa-question-square" onclick="SysLoadMsg('1002');"></i>
-                    ورود به پورتال
+<body>
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+<![endif]-->
+<section class="fxt-template-animation fxt-template-layout9 loaded" data-bg-image="{{ asset('login/bg9-l.jpg') }}" style='background-image: url('../../login/bg9-l.jpg');">
+    <div class="container">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-lg-3">
+                <div class="fxt-header">
+                    <a href="{{ path('home') }}" class="fxt-logo"><img src="{{ asset('newface/assets/img/brand/logo.png') }}" alt="Logo"></a>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-12 justify-content-center">
-                            {{ form_start(form) }}
-                            <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                </div>
-                                {{ form_widget(form.username) }}
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-key"></i>
-                                    </div>
-                                </div>
-                                {{ form_widget(form.password) }}
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" onclick="SysLoadMsg('1003');">
-                                        <i class="fa fa-question-circle"></i>
-                                    </span>
+            </div>
+            <div class="col-lg-6">
+                <div class="fxt-content">
+                    <h2> به حساب کاربری خود وارد شوید. </h2>
+                    <div class="fxt-form">
+                        {{ form_start(form) }}
+                            <div class="form-group">
+                                <div class="fxt-transformY-50 fxt-transition-delay-1">
+                                    {{ form_widget(form.username) }}
                                 </div>
                             </div>
-                            <br>
-                            {{ form_widget(form.submit) }}
-                            <a class="btn btn-warning" href="{{ path('home') }}">
-                                <i class="fa fa-undo"></i>
-                                بازگشت
-                            </a>
-                            {{ form_end(form) }}
-                        </div>
+                            <div class="form-group">
+                                <div class="fxt-transformY-50 fxt-transition-delay-2">
+                                    {{ form_widget(form.password,{'attr':{'class':'pwd'}}) }}
+                                    <i  toggle="#password" class="eyepwd fa fa-fw toggle-password field-icon fa-eye"></i>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="fxt-transformY-50 fxt-transition-delay-4">
+                                    {{ form_row(form.submit,{'attr':{'class' : 'fxt-btn-fill'}}) }}
+                                </div>
+                            </div>
+                        {{ form_end(form) }}
                     </div>
-                </div>
-                <div class="card-footer">
-                    <b>
-                        سامانه مدیریت یکپارچه راهکار
-                    </b>
+
                 </div>
             </div>
         </div>
     </div>
-{% endblock %}
+</section>
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title text-white" id="exampleModalCenterTitle">
+                    <i class="fa fa-exclamation-triangle"></i>
+                    خطای اعتبارسنجی
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                نام کاربری یا کلمه عبور اشتباه است!
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">بازگشت</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jquery-->
+<script src="{{ asset('login/jquery-3.js')}}"></script>
+<!-- Popper js -->
+<script src="{{ asset('login/popper.js')}}"></script>
+<!-- Bootstrap js -->
+<script src="{{ asset('login/bootstrap.js')}}"></script>
+<!-- Imagesloaded js -->
+<script src="{{ asset('login/imagesloaded.js')}}"></script>
+<!-- Validator js -->
+<script src="{{ asset('login/validator.js')}}"></script>
+<!-- Custom Js -->
+<script src="{{ asset('login/main.js')}}"></script>
+
+{% if alerts is defined %}
+    {% if alerts|length != 0 %}
+        <script>
+            $( document ).ready(function() {
+                $('#exampleModalCenter').modal('show');
+            });
+        </script>
+    {% endif %}
+{% endif %}
+<script>
+    $(document).ready(function(){
+        $('.eyepwd').click(function(){
+            if($('.pwd').attr('type') == 'password'){
+                $('.pwd').attr('type','text');
+            }
+            else{
+                $('.pwd').attr('type','password');
+            }
+        });
+    });
+</script>
+</body></html>
