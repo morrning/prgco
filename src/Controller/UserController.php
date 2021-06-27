@@ -76,9 +76,11 @@ class UserController extends AbstractController
      */
     public function logout(Request $request,Service\LogMGR $logMGR, Service\UserMGR $userMGR, LoggerInterface $logger)
     {
-        $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' logout.');
-        $logMGR->addEvent('3gv5','خروج از سامانه',sprintf('کاربر با نام کاربری %s از سامانه خارج شد.',$userMGR->currentUser()->getUsername()),'USERS',$request->getClientIp());
-        $userMGR->logout();
+        if($userMGR->isLogedIn()){
+            $logger->info('user ' . $userMGR->currentUser()->getUsername() . ' logout.');
+            $logMGR->addEvent('3gv5','خروج از سامانه',sprintf('کاربر با نام کاربری %s از سامانه خارج شد.',$userMGR->currentUser()->getUsername()),'USERS',$request->getClientIp());
+            $userMGR->logout();
+        }
         return $this->redirectToRoute('home');
     }
 
