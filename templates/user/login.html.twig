@@ -40,7 +40,6 @@
                             <div class="form-group">
                                 <div class="fxt-transformY-50 fxt-transition-delay-2">
                                     {{ form_widget(form.password,{'attr':{'class':'pwd'}}) }}
-                                    <i  toggle="#password" class="eyepwd fa fa-fw toggle-password field-icon fa-eye"></i>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -100,16 +99,4 @@
         </script>
     {% endif %}
 {% endif %}
-<script>
-    $(document).ready(function(){
-        $('.eyepwd').click(function(){
-            if($('.pwd').attr('type') == 'password'){
-                $('.pwd').attr('type','text');
-            }
-            else{
-                $('.pwd').attr('type','password');
-            }
-        });
-    });
-</script>
 </body></html>
