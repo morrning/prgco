@@ -31,29 +31,33 @@
     {% endif %}
     <div class="p-2">
         <div class="table-responsive">
-            <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+            <table class="table table-data table-sm table-striped table-bordered table-hover rounded text-center">
                 <thead class="bg-blue text-light">
                 <tr>
-                    <th>ردیف</th>
+                    <th class="d-none d-lg-table-cell">ردیف</th>
                     <th>نام و نام خانوادگی</th>
-                    <th>کد ملی</th>
-                    <th>شماره تماس</th>
+                    <th class="d-none d-lg-table-cell">کد ملی</th>
+                    <th class="d-none d-lg-table-cell">شماره تماس</th>
                     <th>امکانات</th>
                 </tr>
                 </thead>
                 <tbody class="">
                 {% for user in users %}
                     <tr class="">
-                        <td>{{ loop.index }}</td>
+                        <td class="d-none d-lg-table-cell">{{ loop.index }}</td>
                         <td>{{ user.pname ~ ' ' ~ user.pfamily }}</td>
-                        <td>{{ user.pcodemeli }}</td>
-                        <td>{{ user.tel1 }}</td>
+                        <td class="d-none d-lg-table-cell">{{ user.pcodemeli }}</td>
+                        <td class="d-none d-lg-table-cell">{{ user.tel1 }}</td>
                         <td>
-                            <a class="btn btn-info" href="{{ path('HSSEPersonHealthSubmit',{'id':user.id}) }}"><i class="fa fa-book-dead"></i>  بهداری </a>
-                            <a class="btn btn-primary" href="{{ path('HSSEPersonsToolsSubmit',{'id':user.id}) }}"><i class="fa fa-tools"></i>  تجهیزات</a>
-                            <a class="btn btn-success" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-book-reader"></i  >آموزش</a>
-                            <a class="btn btn-danger" href="{{ path('HSSEPersonspenaltySubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>
-                            <a class="btn btn-info" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-list"></i>  پرونده </a>
+                            <button data-toggle="dropdown" class="btn btn-sm btn-primary btn-block"><i class="fa fa-list"></i>  اقدام    <i class="icon ion-ios-arrow-down tx-11 mg-l-3"></i></button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="{{ path('HSSEPersonHealthSubmit',{'id':user.id}) }}"><i class="fa fa-book-dead"></i>  بهداری </a>
+                                <a class="dropdown-item" href="{{ path('HSSEPersonsToolsSubmit',{'id':user.id}) }}"><i class="fa fa-tools"></i>  تجهیزات</a>
+                                <a class="dropdown-item" href="{{ path('HSSEPersonsGuidSubmit',{'id':user.id}) }}"><i class="fa fa-book-reader"></i  >آموزش</a>
+                                <a class="dropdown-item" href="{{ path('HSSEPersonspenaltySubmit',{'id':user.id}) }}"><i class="fa fa-info-circle"></i>  جریمه</a>
+                                <a class="dropdown-item" href="{{ path('HSSEPersonfolder',{'id':user.id}) }}"><i class="fa fa-list"></i>  پرونده </a>
+                            </div><!-- dropdown-menu -->
+
                         </td>
                     </tr>
                 {% endfor %}

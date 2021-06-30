@@ -57,6 +57,8 @@
     <link href="{{ asset('newface/assets/plugins/datatable/css/jquery.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('newface/assets/plugins/datatable/css/responsive.dataTables.min.css') }}" rel="stylesheet">
     <link href="{{ asset('newface/assets/plugins/select2/css/select2.min.css') }}" rel="stylesheet">
+    <!--Internal   Notify -->
+    <link href="{{ asset('newface/assets/plugins/notify/css/notifIt.css') }}" rel="stylesheet"/>
 
     <!-- lightbox CSS -->
     <link rel="stylesheet" href="{{ asset('assets/lightbox/css/lightbox.min.css') }}">
@@ -97,9 +99,6 @@
     <!-- Rating js-->
     <script src="{{ asset('newface/assets/plugins/rating/jquery.rating-stars.js') }}"></script>
     <script src="{{ asset('newface/assets/plugins/rating/jquery.barrating.js') }}"></script>
-    <!-- Horizontalmenu js-->
-    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-rtl.js') }}"></script>
-    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-custom.js') }}"></script>
     <!-- Eva-icons js -->
     <script src="{{ asset('newface/assets/js/eva-icons.min.js') }}"></script>
     <!-- Horizontalmenu js-->
@@ -139,7 +138,8 @@
     <!-- P-scroll js -->
     <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
-    <!-- Horizontalmenu js-->
+    <!--Internal  Notify js -->
+    <script src="{{ asset('newface/assets/plugins/notify/js/notifIt.js') }}"></script>
 
     <style>
         thead input {
@@ -147,9 +147,9 @@
         }
     </style>
     <script>
-        $(document).ready(function(){
+        function refreshTable(){
             //create datatable
-            var table = $('.table').DataTable({
+            var table = $('.table-data').DataTable({
                 "language": {
                     "url": "{{ asset('assets/datatable/datatable.farsi.json') }}",
                     buttons: {
@@ -171,6 +171,9 @@
                     'print'
                 ]
             });
+        }
+        $(document).ready(function(){
+            refreshTable();
         });
     </script>
 
@@ -195,6 +198,9 @@
                     <img src="{{ asset('newface/assets/img/brand/favicon.png') }}" class="desktop-logo-1">
                     <img src="{{ asset('newface/assets/img/brand/favicon-white.png') }}" class="desktop-logo-dark">
                 </a>
+                <span class="d-none d-sm-none d-md-inline text-primary pr-3"> <i class="fa fa-home"></i> {{ area.areaName }}</span>
+                <span class="d-none d-sm-none d-md-inline text-primary pr-3"> <i class="fa fa-user"></i> {{ UserMGR.currentPosition.label }}</span>
+
             </div><!-- search -->
             <div class="main-header-right">
                 <div class="nav nav-item  navbar-nav-right ml-auto">
@@ -508,4 +514,7 @@
     <!--/Sidebar-right-->
     {% block javascripts %}{% endblock %}
     <script src="{{ asset('newface/assets/plugins/perfect-scrollbar/p-scroll.js') }}"></script>
+    <!-- Horizontalmenu js-->
+    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-rtl.js') }}"></script>
+    <script src="{{ asset('newface/assets/plugins/sidebar/sidebar-custom.js') }}"></script>
 </body>

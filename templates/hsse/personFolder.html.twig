@@ -1,0 +1,168 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}سوابق {{ passenger.pname ~ ' ' ~ passenger.pfamily }} در {{ UserMGR.currentPosition.defaultArea.AreaName }}{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <!-- row -->
+    <div class="row row-sm">
+        <div class="col-lg-4">
+            <div class="card mg-b-20">
+                <div class="card-body">
+                    <div class="pl-0">
+                        <div class="main-profile-overview text-center">
+                            <div class="main-img-user profile-user">
+                                <img alt="" src="{{ asset('files/ProfilePic/' ~ passenger.pcodemeli ~ '.jpg') }}">
+                            </div>
+                            <div class="d-flex justify-content-center mg-b-20">
+                                <div>
+                                    <h5 class="main-profile-name">{{ passenger.pname ~ ' ' ~ passenger.pfamily }}</h5>
+                                    <p class="main-profile-name-text">کدملی: {{ passenger.pcodemeli }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3 col mb20 text-center">
+                                    <h5>{{ tools | length }}</h5>
+                                    <h6 class="text-small text-muted mb-0">تجهیزات</h6>
+                                </div>
+                                <div class="col-md-3 col mb20 text-center">
+                                    <h5>{{ penaltys | length }}</h5>
+                                    <h6 class="text-small text-muted mb-0">جرائم</h6>
+                                </div>
+                                <div class="col-md-3 col mb20 text-center">
+                                    <h5>{{ healths | length }}</h5>
+                                    <h6 class="text-small text-muted mb-0">بهداری</h6>
+                                </div>
+                                <div class="col-md-3 col mb20 text-center">
+                                    <h5>{{ guids | length }}</h5>
+                                    <h6 class="text-small text-muted mb-0">آموزش</h6>
+                                </div>
+                            </div>
+                            <hr class="mg-y-30">
+                            <h6>نمای کلی</h6>
+                            <!--skill bar-->
+                            <div class="skill-bar mb-4 clearfix">
+                                <span>جرائم</span>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-danger-gradient" role="progressbar" aria-valuenow="{{ (100 - penaltys | length) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - penaltys | length) }}%"></div>
+                                </div>
+                            </div>
+                            <!--skill bar-->
+                            <div class="skill-bar mb-4 clearfix">
+                                <span>بهداری</span>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-primary-gradient" role="progressbar" aria-valuenow="{{ (100 - healths | length) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ (100 - healths | length) }}%"></div>
+                                </div>
+                            </div>
+                            <!--skill bar-->
+                            <div class="skill-bar mb-4 clearfix">
+                                <span>تجهیزات ایمنی</span>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-warning-gradient" role="progressbar" aria-valuenow="{{ (100 - penaltys | length) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{  penaltys | length }}%"></div>
+                                </div>
+                            </div>
+                            <!--skill bar-->
+                            <div class="skill-bar mb-4 clearfix">
+                                <span>آموزش ها</span>
+                                <div class="progress mt-2">
+                                    <div class="progress-bar bg-warning-gradient" role="progressbar" aria-valuenow="{{ (guids | length) }}" aria-valuemin="0" aria-valuemax="100" style="width: {{  guids | length }}%"></div>
+                                </div>
+                            </div>
+                        </div><!-- main-profile-overview -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="">
+                <div class="tabs-menu ">
+                    <!-- Tabs -->
+                    <ul class="nav nav-tabs profile navtab-custom panel-tabs">
+                        <li class="">
+                            <a href="#home" data-toggle="tab" aria-expanded="true"> <span class="visible-xs"><i class="las la-tools tx-16 mr-1"></i></span> <span class="hidden-xs">تجهیزات ایمنی</span> </a>
+                        </li>
+                        <li class="">
+                            <a href="#profile" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-walking tx-15 mr-1"></i></span> <span class="hidden-xs">جرائم </span> </a>
+                        </li>
+                        <li class="">
+                            <a href="#settings" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-ambulance tx-16 mr-1"></i></span> <span class="hidden-xs">بهداری </span> </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content border-left border-bottom border-right border-top-0 p-4">
+                    <div class="tab-pane active" id="home">
+                        <div class="list-group">
+                            {% for tool in tools %}
+                            <div class="list-group-item pd-y-20">
+                                    <div class="media">
+                                        <div class="d-flex mg-l-10 wd-50">
+                                            <img class="ml-4 rounded-circle avatar-md" src="{{ asset('assets/images/hseTool.png') }}" alt="avatar">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-body d-flex">
+                                                <h6 class="tx-15 mb-2">{{ tool.toolName }}</h6>
+                                                <span class="tx-12 float-left mr-auto text-muted">{{ Jdate.jdate('Y/m/d',tool.dateSubmit) }}</span>
+                                            </div>
+                                            <p class="tx-13 mg-b-10 text-muted mb-0">تحویل {{ tool.toolName }} به تعداد {{ tool.num }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="profile">
+                        <div class="list-group">
+                            {% for penalty in penaltys %}
+                            <div class="list-group-item pd-y-20">
+                                    <div class="media">
+                                        <div class="d-flex mg-l-10 wd-50">
+                                            <img class="ml-4 rounded-circle avatar-md" src="{{ asset('assets/images/hseWarning.jpeg') }}" alt="avatar">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-body d-flex">
+                                                <h6 class="tx-15 mb-2">{{ penalty.work }}</h6>
+                                                <span class="tx-12 float-left mr-auto text-muted">
+                                                    {{ Jdate.jdate('Y/m/d',penalty.dateSubmit) }}
+                                                    <a class="btn btn-sm btn-success" target="_blank" href="{{ path('HSSEViewPenalty',{'id':penalty.id}) }}"><i class="fa fa-eye"></i> </a>
+                                                </span>
+                                            </div>
+                                            <p class="tx-13 mg-b-10 text-muted mb-0">{{ penalty.des }}</p>
+                                            <p class="tx-13 mg-b-10 text-muted mb-0">جریمه: {{ penalty.price | number_format(0) }} ریال</p>
+                                        </div>
+                                    </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="settings">
+                        <div class="list-group">
+                            {% for health in healths %}
+                                <div class="list-group-item pd-y-20">
+                                    <div class="media">
+                                        <div class="d-flex mg-l-10 wd-50">
+                                            <img class="ml-4 rounded-circle avatar-md" src="{{ asset('assets/images/hseHealth.jpg') }}" alt="avatar">
+                                        </div>
+                                        <div class="media-body">
+                                            <div class="media-body d-flex">
+                                                <h6 class="tx-15 mb-2">{{ health.whyCome }}</h6>
+                                                <span class="tx-12 float-left mr-auto text-muted">
+                                                    {{ Jdate.jdate('Y/m/d',health.dateSubmit) }}
+                                                </span>
+                                            </div>
+                                            <p class="tx-13 mg-b-10 text-muted mb-0">نتیجه: {{ health.result }}</p>
+                                            <p class="tx-13 mg-b-10 text-muted mb-0">توضیحات:{{ health.des }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- row closed -->
+{% endblock %}

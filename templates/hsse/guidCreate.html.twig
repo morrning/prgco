@@ -1,0 +1,19 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}ثبت دوره آموزشی جدید{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <div class="card  box-shadow-0">
+        <div class="card-header">
+            <p class="mb-2">اطلاعات دوره آموزشی را وارد نمایید.</p>
+        </div>
+        <div class="card-body pt-0">
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}

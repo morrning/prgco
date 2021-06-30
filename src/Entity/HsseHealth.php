@@ -65,6 +65,21 @@ class HsseHealth
      */
     private $dateOut;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $result;
+
+    /**
+     * @ORM\Column(type="string", length=10, nullable=true)
+     */
+    private $AMP;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $services;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -174,6 +189,42 @@ class HsseHealth
     public function setDateOut(?string $dateOut): self
     {
         $this->dateOut = $dateOut;
+
+        return $this;
+    }
+
+    public function getResult(): ?string
+    {
+        return $this->result;
+    }
+
+    public function setResult(?string $result): self
+    {
+        $this->result = $result;
+
+        return $this;
+    }
+
+    public function getAMP(): ?string
+    {
+        return $this->AMP;
+    }
+
+    public function setAMP(?string $AMP): self
+    {
+        $this->AMP = $AMP;
+
+        return $this;
+    }
+
+    public function getServices(): ?string
+    {
+        return $this->services;
+    }
+
+    public function setServices(?string $services): self
+    {
+        $this->services = $services;
 
         return $this;
     }

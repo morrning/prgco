@@ -134,7 +134,7 @@ class MessageController extends AbstractController
 
                 //send notification
                 $des = sprintf('پیام جدید از %s دریافت شد.',$userMgr->currentPosition()->getPublicLabel());
-                $url = $this->generateUrl('messageView',['id'=>$message->getId()]);
+                $url = $this->generateUrl('messageChat');
                 $userMgr->addNotificationForUser($message->getReciver(),$des,$url);
                 $logMGR->addEvent('message','ارسال','ارسال پیام داخلی','message',$request->getClientIp());
                 $logger->info(sprintf('user %s send message with id %s', $userMgr->currentUser()->getUsername() , $message->getId()));
@@ -257,7 +257,7 @@ class MessageController extends AbstractController
 
         //send notification
         $des = sprintf('پیام جدید از %s دریافت شد.',$userMgr->currentPosition()->getPublicLabel());
-        $url = $this->generateUrl('messageView',['id'=>$message->getId()]);
+        $url = $this->generateUrl('messageChat');
         $userMgr->addNotificationForUser($message->getReciver(),$des,$url);
         $logMGR->addEvent('message','ارسال','ارسال پیام داخلی','message',$request->getClientIp());
         $logger->info(sprintf('user %s send message with id %s', $userMgr->currentUser()->getUsername() , $message->getId()));

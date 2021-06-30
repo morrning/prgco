@@ -170,7 +170,8 @@ function not18() {
 				'type': 'error',
 				'msg': 'خالی یا کنسل',
 				'position': 'center'
-			})
+			});
+			alert();
 		}
 	}
 

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Form\HsseGuidSubmitType;
 use App\Form\HSSEHealthEditType;
 use App\Form\HSSEHealthType;
+use App\Form\HsseHurtSubmitType;
 use App\Form\HSSEPenaltyType;
 use App\Form\HSSEToolType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -20,13 +22,16 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Knp\Bundle\SnappyBundle\Snappy\Response\PdfResponse;
-
+use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use App\Form\Type as Type;
 
 
 use App\Service;
 use App\Entity;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class HSSEController extends AbstractController
@@ -57,19 +62,6 @@ class HSSEController extends AbstractController
             'msg' => $msg
         ]);
 
-    }
-
-    /**
-     * @Route("/hsse/persons/guid/submit/{id}", name="HSSEPersonsGuidSubmit")
-     */
-    public function HSSEPersonsGuidSubmit($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
-    {
-        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
-            return $this->redirectToRoute('403');
-
-        return $this->render('hsse/persons.html.twig', [
-            'users' => $entityMGR->findAll('App:CMPassenger'),
-        ]);
     }
 
     /**
@@ -281,6 +273,250 @@ class HSSEController extends AbstractController
                 'area'=>$userMGR->currentPosition()->getDefaultArea()
             ]),
             'msg'=>$msg
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/folder/{id}", name="HSSEPersonfolder")
+     */
+    public function HSSEPersonfolder($id,Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $passenger = $entityMGR->find('App:CMPassenger',$id);
+        if(is_null($passenger))
+            return $this->redirectToRoute('404');
+        $healths = $entityMGR->findBy('App:HsseHealth',['passenger'=>$passenger,'area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        $tools = $entityMGR->findBy('App:HsseTool',['passenger'=>$passenger,'area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        $penaltys = $entityMGR->findBy('App:HssePenalty',['Passenger'=>$passenger,'area'=>$userMGR->currentPosition()->getDefaultArea()]);
+        //get guids
+        $cmLists = $entityMGR->findBy('App:CMListUser',['cmpassenger'=>$passenger]);
+        $guidLists = [];
+        foreach ($cmLists as $cmList){
+            $guid = $entityMGR->findOneBy('App:HsseGuid',['area'=>$userMGR->currentPosition()->getDefaultArea(),'cmlist'=>$cmList->getCmlist()]);
+            if(!is_null($guid))
+                array_push($guidLists,$guid);
+        }
+
+        return $this->render('hsse/personFolder.html.twig',[
+            'penaltys'=>$penaltys,
+            'tools'=>$tools,
+            'healths'=>$healths,
+            'passenger'=>$passenger,
+            'guids' => $guidLists
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/guid/submit/{id}", name="HSSEPersonsGuidSubmit")
+     */
+    public function HSSEPersonsGuidSubmit($id = 0, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $list = new Entity\CMList();
+        $list->setSubmitter($userMGR->currentPosition());
+        $list->setListLabel('لیست آموزش ایمنی');
+        $list->setDes('لیست آموزش ایمنی');
+        $entityMGR->insertEntity($list);
+        $plList = [];
+        if($id != 0){
+            $passenger = $entityMGR->find('App:CMPassenger',$id);
+            if(!is_null($passenger)){
+                $pl = new Entity\CMListUser();
+                $pl->setCmpassenger($passenger);
+                $pl->setCmlist($list);
+                $entityMGR->insertEntity($pl);
+                array_push($plList,$pl);
+            }
+
+        }
+        return $this->render('hsse/guidSubmit.html.twig', [
+            'passengers' => $entityMGR->findAll('App:CMPassenger'),
+            'activeListID' => $list->getId(),
+            'pls' => $plList
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/cmlist/existpassenger/{lid}/{pid}", name="hsseCMLISTexistPassenger", options={"expose" = true})
+     */
+    public function hsseCMLISTexistPassenger($lid,$pid,Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $passenger = $entityMGR->find('App:CMPassenger',$pid);
+        if(is_null($passenger))
+            return new Response('er');
+        $list = $entityMGR->find('App:CMList',$lid);
+        if(is_null($list))
+            return new Response('er');
+        $lu = $entityMGR->findOneBy('App:CMListUser',['cmlist'=>$list,'cmpassenger'=>$passenger]);
+        if(is_null($lu))
+            return new Response('nf');
+        return new Response('exist');
+    }
+
+    /**
+     * @Route("/hsse/cmlist/addpassenger/{lid}/{pid}", name="hsseCMLISTaddPassenger", options={"expose" = true})
+     */
+    public function hsseCMLISTaddPassenger($lid,$pid,SerializerInterface $serializer,Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $passenger = $entityMGR->find('App:CMPassenger',$pid);
+        if(is_null($passenger))
+            return new Response('er');
+        $list = $entityMGR->find('App:CMList',$lid);
+        if(is_null($list))
+            return new Response('er');
+        $lu = $entityMGR->findOneBy('App:CMListUser',['cmlist'=>$list,'cmpassenger'=>$passenger]);
+        if(is_null($lu)){
+            $lp = new Entity\CMListUser();
+            $lp->setCmlist($list);
+            $lp->setCmpassenger($passenger);
+            $entityMGR->insertEntity($lp);
+            $resp = [];
+            $resp['id'] = $lp->getId();
+            $resp['name'] = $passenger->getPname() . ' ' . $passenger->getPfamily();
+            $resp['father'] = $passenger->getPfather();
+            $resp['codemeli'] = $passenger->getPcodemeli();
+            $resp['upper'] = $passenger->getSubmitter()->getPublicLabel();
+            return new Response($serializer->serialize($resp, 'json'));
+        }
+        return new Response('exist');
+    }
+
+    /**
+     * @Route("/hsse/cmlist/removepassenger/{id}", name="hsseCMLISTremovePassenger", options={"expose" = true})
+     */
+    public function hsseCMLISTremovePassenger($id,SerializerInterface $serializer,Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $entityMGR->remove('App:CMListUser',$id);
+        return new Response('ok');
+    }
+
+    /**
+     * @Route("/hsse/cmlist/hasmember/{id}", name="hsseCMLISThasmember", options={"expose" = true})
+     */
+    public function hsseCMLISThasmember($id,SerializerInterface $serializer,Request $request, Service\EntityMGR $entityMGR, Service\UserMGR $userMGR, LoggerInterface $logger,Service\LogMGR $logMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $list = $entityMGR->find('App:CMList',$id);
+        if(!is_null($list)){
+            $result = $entityMGR->findBy('App:CMListUser',['cmlist'=>$list]);
+            if(count($result) != 0)
+                return new Response('ok');
+        }
+        return new Response('null');
+    }
+
+    /**
+     * @Route("/hsse/persons/guid/create/{id}", name="HSSEPersonsGuidCreate", options={"expose" = true})
+     */
+    public function HSSEPersonsGuidCreate($id, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+
+        $list = $entityMGR->find('App:CMList',$id);
+        if(is_null($list))
+            return $this->redirectToRoute('404');
+
+        $guid = new Entity\HsseGuid();
+        $form = $this->createForm(HsseGuidSubmitType::class,$guid);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $guid->setCmlist($list);
+            $guid->setSubmitter($userMGR->currentPosition());
+            $guid->setDateSubmit(time());
+            $guid->setArea($userMGR->currentPosition()->getDefaultArea());
+            $entityMGR->insertEntity($guid);
+            return $this->redirectToRoute('HSSEPersonsGuidList',['msg'=>1]);
+        }
+
+        return $this->render('hsse/guidCreate.html.twig', [
+            'form'=>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/guid/list/{msg}", name="HSSEPersonsGuidList", options={"expose" = true})
+     */
+    public function HSSEPersonsGuidList($msg=0, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hsse/guidsList.html.twig',[
+            'items'=>$entityMGR->findBy('App:HsseGuid',['area'=>$userMGR->currentPosition()->getDefaultArea()])
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/persons/guid/view/{id}/{msg}", name="HSSEPersonsGuidView", options={"expose" = true})
+     */
+    public function HSSEPersonsGuidView($id,$msg=0, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $guid = $entityMGR->find('App:HsseGuid',$id);
+        if(is_null($guid))
+            return $this->redirectToRoute('404');
+
+        return $this->render('hsse/guidView.html.twig',[
+            'guid' => $guid,
+            'passengers'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$guid->getCmlist()])
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/hurt/create", name="HSSEHurtSubmit", options={"expose" = true})
+     */
+    public function HSSEHurtSubmit(Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $hurt = new Entity\HsseHurt();
+        $form = $this->createForm(HsseHurtSubmitType::class,$hurt);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            $list = new Entity\CMList();
+            $list->setSubmitter($userMGR->currentPosition());
+            $list->setListLabel('حوادث ایمنی');
+            $list->setDes('حوادث ایمنی');
+            $entityMGR->insertEntity($list);
+
+            $hurt->setCmlist($list);
+            $hurt->setSubmitter($userMGR->currentPosition());
+            $hurt->setDateSubmit(time());
+            $hurt->setArea($userMGR->currentPosition()->getDefaultArea());
+            $entityMGR->insertEntity($hurt);
+            return $this->redirectToRoute('HSSEHurtView',['id'=>$hurt->getId(),'msg'=>1]);
+        }
+
+        return $this->render('hsse/hurtCreate.html.twig', [
+            'form'=>$form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("/hsse/hurt/view/{id}/{msg}", name="HSSEHurtView", options={"expose" = true})
+     */
+    public function HSSEHurtView($id,$msg=0, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+        $hurt = $entityMGR->find('App:HsseHurt',$id);
+        if(is_null($hurt))
+            return $this->redirectToRoute('404');
+
+        return $this->render('hsse/HurtView.html.twig',[
+            'hurt' => $hurt,
+            'passengers'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$hurt->getCmlist()])
         ]);
     }
 }

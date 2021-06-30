@@ -1,0 +1,40 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}دوره‌های آموزشی{% endblock %}
+
+{% block appTop %}
+<a class="btn btn-sm btn-success" href="{{ path('HSSEPersonsGuidSubmit') }}">
+    <i class="fa fa-plus"></i>
+    کلاس جدید
+</a>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="table-responsive">
+        <table class="table table-data table-sm table-striped table-bordered table-hover rounded text-center">
+            <thead class="bg-blue text-light">
+            <tr>
+                <th>ردیف</th>
+                <th>مدرس</th>
+                <th>تاریخ تشکیل</th>
+                <th>شرکت کنندگان</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in items %}
+                <tr class="">
+                    <td class="">{{ loop.index }}</td>
+                    <td>{{ item.teacher }}</td>
+                    <td>{{ Jdate.jdate('Y/n/d',item.dateSubmit) }}</td>
+                    {% set passengers = EntityMGR.findBy('App:CMListUser',{'cmlist':item.cmlist}) %}
+                    <td>{{ passengers | length }}</td>
+                    <td>
+                        <a class="btn btn-sm btn-success" href="{{ path('HSSEPersonsGuidView',{'id':item.id}) }}"><i class="fa fa-eye"></i> </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

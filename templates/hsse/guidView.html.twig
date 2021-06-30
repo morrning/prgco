@@ -1,0 +1,71 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}کلاس آموزشی{% endblock %}
+
+{% block appTop %}
+    <a class="btn btn-sm btn-success" href="{{ path('HSSEPersonsGuidList') }}">
+        <i class="fa fa-undo"></i>
+        بازگشت به لیست کلاس‌ها
+    </a>
+{% endblock %}
+
+{% block pageBody %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 col-md-6">
+                <div class="card card-primary">
+                    <div class="card-header">اطلاعات کلاس</div>
+                    <div class="card-body listgroup-example">
+                        <ul class="list-group px-2">
+                            <li>موضوع:{{ guid.title }}</li>
+                            <li>مدرس:{{ guid.teacher }}</li>
+                            <li>تاریخ برگزاری:{{ guid.dateDoing }}</li>
+                            <li>توضیحات:{{ guid.des }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6">
+                <div class="card">
+                    <div class="card-header pb-0">
+                        <div class="d-flex justify-content-between">
+                            <h4 class="card-title mg-b-0">اعضا کلاس</h4>
+                            <i class="mdi mdi-dots-horizontal text-gray"></i>
+                        </div>
+                        <p class="tx-12 tx-gray-500 mb-2">لیست شرکت کنندگان در این کلاس آموزشی</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive border-top userlist-table">
+                            <table class="table card-table table-striped table-vcenter text-nowrap mb-0">
+                                <thead>
+                                <tr>
+                                    <th class="wd-lg-8p"><span>نام و نام خانوادگی</span></th>
+                                    <th class="wd-lg-20p"><span>کد ملی</span></th>
+                                    <th class="wd-lg-20p"><span>امکانات</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for passenger in passengers %}
+                                <tr>
+                                    <td>{{ passenger.cmpassenger.pname ~ ' ' ~ passenger.cmpassenger.pfamily }}</td>
+                                    <td>
+                                        {{ passenger.cmpassenger.pcodemeli }}
+                                    </td>
+                                    <td class="text-center">
+                                        <button data-toggle="dropdown" class="btn btn-sm btn-primary btn-block"><i class="fa fa-list"></i>  اقدام    <i class="icon ion-ios-arrow-down tx-11 mg-l-3"></i></button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="#"><i class="fa fa-trash"></i>  حذف از کلاس</a>
+                                            <a class="dropdown-item" href="{{ path('HSSEPersonfolder',{'id':passenger.cmpassenger.id}) }}"><i class="fa fa-list"></i>  پرونده </a>
+                                        </div><!-- dropdown-menu -->
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

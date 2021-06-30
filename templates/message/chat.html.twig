@@ -12,7 +12,7 @@
                             <a class="nav-link active" data-toggle="tab" href="#">گفت‌و‌گوها</a>
                             <a class="nav-link"  data-toggle="tab" href="#" onclick="$('#exampleModal').modal('show');">گفت‌و‌گوی جدید</a>
                         </nav>
-                        <div class="main-chat-list chat-scroll" id="ChatList">
+                        <div class="main-chat-list chat-scroll" id="ChatList" style="overflow-y: auto;">
                             {% for item in peoples %}
                                 <div class="media new content{{ item.1.id }}" onclick="getHistory({{ item.1.id }},'{{ item.1.userID.fullname }}','{{ asset('files/ProfilePic/' ~ item.1.userID.nationalCode ~ '.jpg') }}','{{ item.1.label }}')">
                                     <div class="main-img-user online">
@@ -44,7 +44,7 @@
                             </nav>
                         </div><!-- main-chat-header -->
                         <div class="main-chat-body" id="ChatBody">
-                            <div class="content-inner chat-scroll"></div>
+                            <div class="content-inner chat-scroll" style="overflow-y: auto;"></div>
                         </div>
                     </div>
                     <div class="main-chat-footer">

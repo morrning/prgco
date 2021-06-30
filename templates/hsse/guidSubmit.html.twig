@@ -1,0 +1,167 @@
+{% extends 'hsse/HSSEbase.html.twig' %}
+
+{% block title %}افراد مشارکت کننده در کلاس آموزشی{% endblock %}
+
+{% block appTop %}
+
+{% endblock %}
+
+{% block pageBody %}
+    <b for="exampleInputEmail1">افزودن نفر به کلاس آموزشی</b>
+    <div class="input-group mb-3">
+        <input type="text" id="project" class="form-control" placeholder="نام و نام خانوادگی ..." aria-label="" aria-describedby="basic-addon1">
+        <div class="input-group-prepend">
+            <button class="btn btn-success" type="button" onclick="add_passenger();">افزودن</button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-striped table-bordered table-hover rounded text-center">
+            <thead class="bg-blue text-light">
+            <tr>
+                <th>ردیف</th>
+                <th>نام و نام‌خانوادگی</th>
+                <th>نام پدر</th>
+                <th>کد ملی</th>
+                <th>زیر مجموعه</th>
+                <th>امکانات</th>
+            </tr>
+            </thead>
+            <tbody class="tb">
+                {% for pl in pls %}
+                    <tr class="pl{{ pl.id }}">
+                        <td>{{ loop.index }}</td>
+                        <td>{{ pl.cmpassenger.pname ~ ' ' ~ pl.cmpassenger.pfamily }}</td>
+                        <td>{{ pl.cmpassenger.pfather }}</td>
+                        <td>{{ pl.cmpassenger.pcodemeli }}</td>
+                        <td>{{ pl.cmpassenger.submitter.publicLabel }}</td>
+                        <td><button class="btn btn-sm btn-danger" onclick="remove_passenger({{ pl.id }})"><i class="fa fa-trash"></i></button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <button class="btn btn-success" onclick="nextStep();"><i class="fa fa-arrow-right"></i> مرحله بعد</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function(){
+            $( "#project" ).val( '' );
+        });
+        var activeAddID = 0;
+        var activeListId = {{ activeListID }};
+
+        function nextStep(){
+            $.ajax({
+                url: Routing.generate('hsseCMLISThasmember', {
+                    'id': activeListId
+                }),
+                success: function(data) {
+                    if(data == 'ok'){
+                        window.location.href = Routing.generate('HSSEPersonsGuidCreate', {
+                            'id': activeListId
+                        });
+                    }
+                    else{
+                        notif({
+                            type: "warning",
+                            msg: "لیست انتخابی خالی است.",
+                            position: "right",
+                            bottom:'10',
+                            fade: true
+                        });
+                    }
+                }
+            });
+        }
+        function remove_passenger(id){
+            $.ajax({
+                url: Routing.generate('hsseCMLISTremovePassenger', {
+                    'id': id
+                }),
+                success: function(data) {
+                    if(data == 'ok'){
+                        $('.pl' + id).remove();
+                    }
+                }
+            });
+        }
+        function add_passenger(){
+            if(activeAddID == 0){
+                alert('noting selected');
+            }
+            else{
+                //check for that added before
+                $.ajax({
+                    url: Routing.generate('hsseCMLISTexistPassenger', {
+                        'lid': activeListId,
+                        'pid': activeAddID
+                    }),
+                    success: function(data) {
+                        if(data == 'nf'){
+                            //insert passenger to list
+                            $.ajax({
+                                url: Routing.generate('hsseCMLISTaddPassenger', {
+                                    'lid': activeListId,
+                                    'pid': activeAddID
+                                }),
+                                success: function(data) {
+                                    if(data == 'nf'){
+                                        alert(data);
+                                    }
+                                    else{
+                                        //add user to table
+                                        var data = jQuery.parseJSON( data );
+                                        var row = '<tr class="pl' + data.id + '"><td>-</td><td>' + data.name + '</td><td>' + data.father + '</td><td>' + data.codemeli + '</td><td>' + data.upper + '</td><td><button class="btn btn-sm btn-danger" onclick="remove_passenger(' + data.id + ')"><i class="fa fa-trash"></i></button></td></tr>';
+                                        $('.tb').append(row);
+                                    }
+                                    $( "#project" ).val( '' );
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+        $( function() {
+            var projects = [
+                {% for passenger in passengers %}
+                {
+                    value: "{{ passenger.id }}",
+                    label: "{{ passenger.pname ~  ' ' ~ passenger.pfamily }}",
+                    desc: "{{ passenger.pcodemeli }}",
+                    icon: "{{ passenger.pcodemeli }}.jpg"
+                },
+
+                {% endfor %}
+            ];
+
+            $( "#project" ).autocomplete({
+                minLength: 0,
+                source: projects,
+                focus: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    return false;
+                },
+                select: function( event, ui ) {
+                    $( "#project" ).val( ui.item.label );
+                    activeAddID = ui.item.value;
+
+                    $( "#passenger-id" ).val( ui.item.value );
+                    $( "#project-description" ).html( ui.item.desc );
+                    $( "#project-icon" ).attr( "src", "../../files/ProfilePic/" + ui.item.icon );
+                    return false;
+                }
+            })
+                .autocomplete( "instance" )._renderItem = function( ul, item ) {
+                return $( "<li>" )
+                    .append( "<div>" + item.label + "<br>" + item.desc + "</div>" )
+                    .appendTo( ul );
+            };
+        } );
+    </script>
+{% endblock %}
