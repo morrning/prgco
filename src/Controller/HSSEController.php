@@ -519,4 +519,17 @@ class HSSEController extends AbstractController
             'passengers'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$hurt->getCmlist()])
         ]);
     }
+
+    /**
+     * @Route("/hsse/persons/hurt/list/{msg}", name="HSSEPersonsHurtList", options={"expose" = true})
+     */
+    public function HSSEPersonsHurtList($msg=0, Request $request,Service\LogMGR $logMGR,Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
+    {
+        if(! $userMGR->hasPermission('HSSEAREA','HSSE'))
+            return $this->redirectToRoute('403');
+
+        return $this->render('hsse/hurtList.html.twig',[
+            'items'=>$entityMGR->findBy('App:HsseHurt',['area'=>$userMGR->currentPosition()->getDefaultArea()])
+        ]);
+    }
 }
