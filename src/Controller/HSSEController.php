@@ -516,7 +516,8 @@ class HSSEController extends AbstractController
 
         return $this->render('hsse/HurtView.html.twig',[
             'hurt' => $hurt,
-            'passengers'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$hurt->getCmlist()])
+            'passengersList'=>$entityMGR->findBy('App:CMListUser',['cmlist'=>$hurt->getCmlist()]),
+            'passengers' => $entityMGR->findAll('App:CMPassenger'),
         ]);
     }
 
@@ -529,7 +530,7 @@ class HSSEController extends AbstractController
             return $this->redirectToRoute('403');
 
         return $this->render('hsse/hurtList.html.twig',[
-            'items'=>$entityMGR->findBy('App:HsseHurt',['area'=>$userMGR->currentPosition()->getDefaultArea()])
+            'items'=>$entityMGR->findBy('App:HsseHurt',['area'=>$userMGR->currentPosition()->getDefaultArea()]),
         ]);
     }
 }

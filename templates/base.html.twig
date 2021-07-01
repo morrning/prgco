@@ -140,6 +140,8 @@
 
     <!--Internal  Notify js -->
     <script src="{{ asset('newface/assets/plugins/notify/js/notifIt.js') }}"></script>
+    <!--Internal  VIDEO PLAYER -->
+    <script src="{{ asset('newface/assets/jquery.vide.min.js') }}"></script>
 
     <style>
         thead input {
@@ -258,9 +260,6 @@
                             {% endif %}
                             <a class="dropdown-item" href="{{ path('userViewProfile') }}"><i class="bx bx-user-circle"></i>مشخصات</a>
                             <a class="dropdown-item" href="{{ path('userEvents') }}"><i class="bx bx-history"></i> تاریخچه رویدادها</a>
-                            <a class="dropdown-item" href="{{ path('messageNew') }}"><i class="bx bxs-plus-circle"></i>پیام جدید</a>
-                            <a class="dropdown-item" href="{{ path('messageIbox') }}"><i class="bx bxs-inbox"></i>صندوق ورودی</a>
-                            <a class="dropdown-item" href="{{ path('messageOutbox') }}"><i class="bx bx-message"></i>پیام های ارسالی</a>
                             <a class="dropdown-item" href="{{ path('userPositions') }}"><i class="bx bx-list-ul"></i>سمت‌ها و جایگاه‌ها</a>
                             <a class="dropdown-item" href="{{ path('userChangePassword') }}"><i class="bx bx-key"></i> تغییر کلمه عبور</a>
                             <a class="dropdown-item" href="{{ path('userLogout') }}"><i class="bx bx-log-out"></i> خروج از سیستم</a>
