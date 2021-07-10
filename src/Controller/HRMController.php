@@ -58,7 +58,7 @@ class HRMController extends AbstractController
                 if($io['Date'] == $dayStr)
                     array_push($temp,$io);
             }
-            $days[$jdate->jdate('Y/m/d',time() - ($i * $daySec))] = $temp;
+            $days[$jdate->jdate('Y/m/d (l)',time() - ($i * $daySec))] = $temp;
         }
         return $this->render('hrm/employe/io.html.twig', [
             'days'  =>  $days
