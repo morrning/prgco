@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -35,24 +36,20 @@ class HRMController extends AbstractController
     /**
      * @Route("/hrm/report/user/io", name="HRMReportUserIO")
      */
-    public function HRMReportUserIO(Request $request,Service\MssqlMGR $mssqlMGR,Service\ConfigMGR $configMGR,Service\UserMGR $userMGR,Service\Jdate $jdate)
+    public function HRMReportUserIO(Request $request,HttpClientInterface $client,Service\ConfigMGR $configMGR,Service\UserMGR $userMGR,Service\Jdate $jdate)
     {
         if(! $userMGR->isLogedIn())
             return $this->redirectToRoute('403');
         $siteConfig = $configMGR->getConfig();
-        $mssqlMGR->configure($siteConfig->getHRMPWSERVERNAME(),$siteConfig->getHRMPWDATABASE(),$siteConfig->getHRMPWUSERNAME(),$siteConfig->getHRMPWPASSWORD());
-        //get years from SG SERVER
-        $conn = $mssqlMGR->getConnection();
-        if(is_null($conn))
+        $response = $client->request(
+            'GET',
+            'http://' . $siteConfig->getHRMPWSERVERNAME() . ':' . $siteConfig->getHRMPWDATABASE() . '/api/30day/io/' . $userMGR->currentUser()->getEmployeNum()
+        );
+        if($response->getStatusCode() != 200)
             return $this->redirectToRoute('500');
 
-
-        $selectQuery1 = "SELECT * FROM DataFile WHERE (Emp_No = ?) ORDER BY Date ASC";
-        $stmt = $conn->prepare($selectQuery1);
-        $stmt->bindValue(1, $userMGR->currentUser()->getEmployeNum());
-        $stmt->execute();
-        $ioData = $stmt->fetchAll();
-
+        $ioData = $response->toArray();
+        var_dump($ioData);
         //create Date Array
         $daySec = 24 * 60 * 60;
         $days =[];
