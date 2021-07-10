@@ -47,7 +47,7 @@ class HRMController extends AbstractController
         );
         if($response->getStatusCode() != 200)
             return $this->redirectToRoute('500');
-
+        var_dump($response->getContent());
         $ioData = $response->toArray();
         var_dump($ioData);
         //create Date Array
