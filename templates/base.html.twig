@@ -331,10 +331,16 @@
                                         </a>
                                     </li>
                                 {% endif %}
+                                <li>
+                                    <a class="slide-item" href="{{ path('ISOformsView') }}">
+                                        <i class="fas fa-file"></i>
+                                         سامانه IMS
+                                    </a>
+                                </li>
                                 {% if UserMGR.hasPermission('ISOfORMS','ISOFORM') == true %}
                                     <li>
                                         <a class="slide-item" href="{{ path('isoformsDashboard') }}">
-                                            <span class="badge badge-danger">آزمایشی</span>
+                                            <i class="fas fa-file"></i>
                                             مدیریت سامانه IMS
                                         </a>
                                     </li>

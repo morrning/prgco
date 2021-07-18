@@ -35,8 +35,8 @@ class ISOFormController extends AbstractController
     public function ISOformsView(Service\EntityMGR $entityMGR,Service\UserMGR $userMGR)
     {
         return $this->render('iso_form/mostUsedFiles.html.twig', [
-            'files' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>1])],['dateSubmit'=>'DESC']),
-            'insts' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>2])],['dateSubmit'=>'DESC']),
+            'files' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>1])],['ISOCode'=>'ASC']),
+            'insts' => $entityMGR->findBy('App:ISOForm',['formType'=>$entityMGR->findOneBy('App:ISOFormType',['typeCode'=>2])],['ISOCode'=>'ASC']),
         ]);
     }
 
